@@ -9,6 +9,8 @@
 import Foundation
 import CoreData
 
+typealias PropertiesDictionary = [String: [String]]
+
 extension NSManagedObjectContext {
 
   /// - parameter withLinebreaks: true for print, false for os_log
@@ -16,7 +18,7 @@ extension NSManagedObjectContext {
     let insertCountByEntity: [String: Int] = countByEntityDictionary(for: self.insertedObjects)
     let updateCountByEntity: [String: Int] = countByEntityDictionary(for: self.persistentUpdatedObjects)
     let deleteCountByEntity: [String: Int] = countByEntityDictionary(for: self.deletedObjects)
-    let updatedProperties = self.updatedPropertiesDescription()
+    let updatedProperties = self.updatedPropertiesDescription(ignoring: updatedPropertiesToIgnore)
 
     if withLinebreaks {
       return """
@@ -52,15 +54,25 @@ extension NSManagedObjectContext {
     }
   }
 
-  private func updatedPropertiesDescription() -> String {
+  private var updatedPropertiesToIgnore: PropertiesDictionary {
+    var dict: PropertiesDictionary = [:]
+    dict[CKMTransaction.entityName()] = [String(#keyPath(CKMTransaction.confirmations))]
+    dict[CKMWalletEntry.entityName()] = [String(#keyPath(CKMWalletEntry.lastCheckedSharedPayload))]
+    return dict
+  }
+
+  private func updatedPropertiesDescription(ignoring: PropertiesDictionary) -> String {
     let sortedObjects = self.persistentUpdatedObjects.sorted(by: { $0.entity.name ?? "" < $1.entity.name ?? "" })
     let objectDescriptions = sortedObjects.compactMap { object -> String? in
       let changedKeys = object.changedValues().map { $0.key }
       guard changedKeys.isNotEmpty else { return nil }
       let objectType = object.entity.name ?? ""
-      let keyValueDescriptions: [String] = changedKeys.map { key in
+      let propertiesToIgnore = ignoring[objectType] ?? []
+      let keyValueDescriptions: [String] = changedKeys.compactMap { key in
+        guard !propertiesToIgnore.contains(key) else { return nil }
         return self.propertyDescription(for: object, key: key)
       }
+      guard keyValueDescriptions.isNotEmpty else { return nil }
       let joinedPropertyDescriptions = keyValueDescriptions.joined(separator: ", ")
       let objectDesc = "[\(joinedPropertyDescriptions)]"
       return "\(objectType) - \(objectDesc)"
