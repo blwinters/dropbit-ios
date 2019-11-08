@@ -47,12 +47,26 @@ class CKLogger: Logger {
     self.info("Did initialize logger: \(VersionInfo().debugDescription)")
   }
 
-  private var fileWriter: CKLogFileWriter? {
-    return writers.compactMap({ $0 as? CKLogFileWriter }).first
+  func prepareForExport() {
+    fileWriter?.fileHandle.synchronizeFile()
   }
 
-  func fileData() -> Data? {
-    return fileWriter?.fileData()
+  func logFileURLs(maxCount: Int) throws -> [URL] {
+    let directory = CKLogFileWriter.logFileDirectory()
+    let contents = try FileManager.default.contentsOfDirectory(at: directory,
+                                                               includingPropertiesForKeys: [.isDirectoryKey],
+                                                               options: [.skipsSubdirectoryDescendants, .skipsHiddenFiles])
+    let sortedURLs = contents.sorted { a, b in
+      let result = a.lastPathComponent.localizedStandardCompare(b.lastPathComponent)
+      return result == ComparisonResult.orderedDescending
+    }
+
+    let sortedLogURLs = sortedURLs.filter { $0.lastPathComponent.starts(with: CKLogFileWriter.fileNamePrefix) }
+    return Array(sortedLogURLs.prefix(maxCount))
+  }
+
+  var fileWriter: CKLogFileWriter? {
+    return writers.compactMap({ $0 as? CKLogFileWriter }).first
   }
 
   func multilineTokenString(for args: [CVarArg]) -> String {
@@ -213,20 +227,8 @@ class CKLogFileWriter: LogModifierWriter {
 
   var modifiers: [LogModifier] = [CKLogLevelModifier(), CKLogTimestampModifier()]
 
-  static var fileName: String {
-    return "DropBitLog.txt"
-  }
-
-  static var fileURL: URL = {
-    let documentURLs = FileManager.default.urls(for: .documentDirectory, in: .allDomainsMask)
-    return documentURLs.first!.appendingPathComponent(fileName)
-  }()
-
-  func fileData() -> Data? {
-    fileHandle.synchronizeFile()
-    return try? Data(contentsOf: CKLogFileWriter.fileURL)
-  }
-
+  static let fileNamePrefix = "DropBitLog_"
+  let fileName: String
   let fileHandle: FileHandle
 
   var lineCount: Int
@@ -238,7 +240,11 @@ class CKLogFileWriter: LogModifierWriter {
   }()
 
   init() throws {
-    let url = CKLogFileWriter.fileURL
+    //Create a new log file with each launch/init
+    let dateString = CKDateFormatter.fileName.string(from: Date())
+    let name = CKLogFileWriter.fileNamePrefix + dateString + ".txt"
+    fileName = name
+    let url = CKLogFileWriter.fileURL(with: name)
     if !FileManager.default.fileExists(atPath: url.path) {
       _ = FileManager.default.createFile(atPath: url.path, contents: nil)
     }
@@ -246,6 +252,19 @@ class CKLogFileWriter: LogModifierWriter {
     self.fileHandle.seekToEndOfFile()
     self.lineCount = try Data(contentsOf: url).lineCount() ?? 0
   }
+
+    static func logFileDirectory() -> URL {
+      let documentURLs = FileManager.default.urls(for: .documentDirectory, in: .allDomainsMask)
+      return documentURLs.first!
+    }
+
+    static func fileURL(with fileName: String) -> URL {
+      return logFileDirectory().appendingPathComponent(fileName)
+    }
+
+    func fileURL() -> URL {
+      return CKLogFileWriter.fileURL(with: fileName)
+    }
 
   func writeMessage(_ message: String, logLevel: LogLevel) {
     removeLinesFromFileIfNeeded()
@@ -266,11 +285,11 @@ class CKLogFileWriter: LogModifierWriter {
   func removeLinesFromFileIfNeeded() {
     guard self.lineCount > lineCountUpperBound else { return } //limit frequency of removals
     let numberOfLinesToRemove = self.lineCount - lineCountLowerBound
-    let fileURL = CKLogFileWriter.fileURL
+    let url = fileURL()
     self.fileHandle.synchronizeFile()
 
     do {
-      let fileData = try Data(contentsOf: fileURL, options: .dataReadingMapped)
+      let fileData = try Data(contentsOf: url, options: .dataReadingMapped)
       let newLineData = "\n".data(using: .utf8)!
 
       var lineNumber = 0
@@ -288,7 +307,7 @@ class CKLogFileWriter: LogModifierWriter {
 
       // Now `pos` is the position where `numberOfLinesToRemove` ends.
       let trimmedData = fileData.subdata(in: pos..<fileData.count)
-      try trimmedData.write(to: fileURL, options: [.atomic])
+      try trimmedData.write(to: url, options: [.atomic])
       self.lineCount = trimmedData.lineCount() ?? 0
 
     } catch {

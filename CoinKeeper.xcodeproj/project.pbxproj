@@ -1046,6 +1046,8 @@
 		B5D834082249680600C45ABE /* SettingSwitchWithInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5D834062249680600C45ABE /* SettingSwitchWithInfoCell.xib */; };
 		B5D8340A224971E400C45ABE /* SettingsViewController+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D83409224971E400C45ABE /* SettingsViewController+TableView.swift */; };
 		B5DB5342232E8C1C0088C8A1 /* TransactionCellStructsAndEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DB5341232E8C1C0088C8A1 /* TransactionCellStructsAndEnums.swift */; };
+		B5DC77922375FAC3008CF7AA /* DebugFileProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DC77912375FAC3008CF7AA /* DebugFileProvider.swift */; };
+		B5DC7794237604BA008CF7AA /* FileZipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DC7793237604BA008CF7AA /* FileZipper.swift */; };
 		B5DC877A22F093D700FDDEED /* LNLedgerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DC877922F093D700FDDEED /* LNLedgerResponse.swift */; };
 		B5DDB0F521DE5ED200A25929 /* KeychainMigrationWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DDB0F421DE5ED200A25929 /* KeychainMigrationWorker.swift */; };
 		B5DDB0F721DE69C100A25929 /* KeychainMigratorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DDB0F621DE69C100A25929 /* KeychainMigratorFactory.swift */; };
@@ -2135,6 +2137,8 @@
 		B5D834062249680600C45ABE /* SettingSwitchWithInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingSwitchWithInfoCell.xib; sourceTree = "<group>"; };
 		B5D83409224971E400C45ABE /* SettingsViewController+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsViewController+TableView.swift"; sourceTree = "<group>"; };
 		B5DB5341232E8C1C0088C8A1 /* TransactionCellStructsAndEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCellStructsAndEnums.swift; sourceTree = "<group>"; };
+		B5DC77912375FAC3008CF7AA /* DebugFileProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugFileProvider.swift; sourceTree = "<group>"; };
+		B5DC7793237604BA008CF7AA /* FileZipper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileZipper.swift; sourceTree = "<group>"; };
 		B5DC877922F093D700FDDEED /* LNLedgerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNLedgerResponse.swift; sourceTree = "<group>"; };
 		B5DDB0F421DE5ED200A25929 /* KeychainMigrationWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainMigrationWorker.swift; sourceTree = "<group>"; };
 		B5DDB0F621DE69C100A25929 /* KeychainMigratorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainMigratorFactory.swift; sourceTree = "<group>"; };
@@ -2722,6 +2726,8 @@
 				3BB05AC0209CF407000297E1 /* Typealiases.swift */,
 				307DF11E2151676900260369 /* JSONValue.swift */,
 				B509262822CA57CF00126250 /* CKLogger.swift */,
+				B5DC77912375FAC3008CF7AA /* DebugFileProvider.swift */,
+				B5DC7793237604BA008CF7AA /* FileZipper.swift */,
 				307DF12021517A8800260369 /* VersionInfo.swift */,
 			);
 			path = Helpers;
@@ -4667,6 +4673,7 @@
 				5BE594E5207FBE2D00862A0A /* ScanQRViewController.swift in Sources */,
 				3B6FDADD205029A40091916A /* Sequence+Shuffled.swift in Sources */,
 				30B08FB821F23F3C0012B4CF /* AppCoordinator+SyncManagerTypeDelegate.swift in Sources */,
+				B5DC77922375FAC3008CF7AA /* DebugFileProvider.swift in Sources */,
 				B54159CC20A5DEBF0048F495 /* CKMUser+CoreDataProperties.swift in Sources */,
 				3BCBFCC8229EF15400F633BA /* SettingsBaseCell.swift in Sources */,
 				230DE9FD207E786300CA8B03 /* NotificationToken.swift in Sources */,
@@ -5011,6 +5018,7 @@
 				B514536422A7207500F7DA41 /* UIColor+Theme.swift in Sources */,
 				3B934D2220EFE53A00979ADC /* TransactionDataWorkerDTO.swift in Sources */,
 				B5DB5342232E8C1C0088C8A1 /* TransactionCellStructsAndEnums.swift in Sources */,
+				B5DC7794237604BA008CF7AA /* FileZipper.swift in Sources */,
 				A2A530AE2092A84800B6F4DE /* String+TrimSymbol.swift in Sources */,
 				3B6749E120AA5CA40032FE02 /* CKMVin+CoreDataClass.swift in Sources */,
 				3093B07C21EE36CF00B3EF9C /* TransactionHistoryRefreshView.swift in Sources */,

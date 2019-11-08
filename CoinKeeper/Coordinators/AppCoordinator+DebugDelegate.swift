@@ -17,8 +17,15 @@ extension AppCoordinator: DebugDelegate {
     let message = "The debug report will not include any data allowing us access to your Bitcoin. However, " +
     "it may contain personal information, such as phone numbers and memos.\n"
     let cancelAction = AlertActionConfiguration(title: "Cancel", style: .cancel, action: nil)
-    let okAction = AlertActionConfiguration(title: "OK", style: .default) { [weak self] in
-      self?.presentDebugInfo(from: viewController)
+    let okAction = AlertActionConfiguration(title: "OK", style: .default) { [unowned self] in
+      do {
+        try self.presentDebugInfo(from: viewController)
+      } catch {
+        let message = (error as? SendDebugInfoError)?.message ?? error.localizedDescription
+        self.alertManager.hideActivityHUD(withDelay: 0) {
+          self.alertManager.showError(message: message, forDuration: 4.0)
+        }
+      }
     }
     let actions: [AlertActionConfigurationType] = [cancelAction, okAction]
     let alertViewModel = AlertControllerViewModel(title: message, description: nil, image: nil, style: .alert, actions: actions)
@@ -26,20 +33,13 @@ extension AppCoordinator: DebugDelegate {
     viewController.present(alertController, animated: true, completion: nil)
   }
 
-  private func presentDebugInfo(from viewController: UIViewController) {
+  private func presentDebugInfo(from viewController: UIViewController) throws {
     guard let dbFileURL = self.persistenceManager.persistentStore()?.url else {
-      self.alertManager.hideActivityHUD(withDelay: 0) {
-        self.alertManager.showError(message: "Failed to find database", forDuration: 4.0)
-      }
-      return
+      throw SendDebugInfoError.databaseNotFound
     }
-    let shmFileURL = URL(string: dbFileURL.absoluteString + "-shm")
-    let walFileURL = URL(string: dbFileURL.absoluteString + "-wal")
+
     guard MFMailComposeViewController.canSendMail() else {
-      self.alertManager.hideActivityHUD(withDelay: 0) {
-        self.alertManager.showError(message: "Your mail client is not configured", forDuration: 4.0)
-      }
-      return
+      throw SendDebugInfoError.mailNotConfigured
     }
 
     let mailVC = MFMailComposeViewController()
@@ -60,22 +60,30 @@ extension AppCoordinator: DebugDelegate {
     """
     mailVC.setMessageBody(body, isHTML: false)
 
-    if let dbData = try? Data(contentsOf: dbFileURL) {
-      mailVC.addAttachmentData(dbData, mimeType: "application/vnd.sqlite3", fileName: "CoinNinjaDB.sqlite")
-    }
-    if let walURL = walFileURL, let walData = try? Data(contentsOf: walURL) {
-      mailVC.addAttachmentData(walData, mimeType: "application/vnd.sqlite3", fileName: "CoinNinjaDB.sqlite-wal")
-    }
-    if let shmURL = shmFileURL, let shmData = try? Data(contentsOf: shmURL) {
-      mailVC.addAttachmentData(shmData, mimeType: "application/vnd.sqlite3", fileName: "CoinNinjaDB.sqlite-shm")
-    }
-
-    if let logData = log.fileData() {
-      mailVC.addAttachmentData(logData, mimeType: "text/txt", fileName: CKLogFileWriter.fileName)
-    }
+    let fileProvider = DebugFileProvider(databaseURL: dbFileURL)
+    fileProvider.databaseFiles().flatMap { mailVC.addAttachment($0) }
+    fileProvider.logFiles().flatMap { mailVC.addAttachment($0) }
 
     mailVC.mailComposeDelegate = self.mailComposeDelegate
 
     viewController.present(mailVC, animated: true, completion: nil)
+  }
+}
+
+enum SendDebugInfoError: Error {
+  case databaseNotFound
+  case mailNotConfigured
+
+  var message: String {
+    switch self {
+    case .databaseNotFound: return "Failed to find database"
+    case .mailNotConfigured:  return "Your mail client is not configured"
+    }
+  }
+}
+
+extension MFMailComposeViewController {
+  func addAttachment(_ attachment: FileAttachment) {
+    self.addAttachmentData(attachment.data, mimeType: attachment.mimeType, fileName: attachment.fileName)
   }
 }
