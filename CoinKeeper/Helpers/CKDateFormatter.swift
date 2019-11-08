@@ -43,4 +43,10 @@ struct CKDateFormatter {
     return formatter
   }()
 
+  static let fileName: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy_MM_dd_HH_mm_ss"
+    formatter.timeZone = TimeZone(identifier: "America/New_York")
+    return formatter
+  }()
 }
