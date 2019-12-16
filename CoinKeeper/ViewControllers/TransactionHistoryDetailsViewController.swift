@@ -187,12 +187,7 @@ extension TransactionHistoryDetailsViewController: TransactionHistoryDetailCellD
 
   private func updateItem(_ item: TransactionDetailCellActionable) {
     guard let context = item.managedObjectContext else { return }
-
-    do {
-      try context.saveRecursively()
-    } catch {
-      log.contextSaveError(error)
-    }
+    context.saveRecursively()
   }
 
 }

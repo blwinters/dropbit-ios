@@ -24,7 +24,7 @@ extension AppCoordinator: DropBitMeViewControllerDelegate {
         self.analyticsManager.track(property: MixpanelProperty(key: .isDropBitMeEnabled, value: !isPrivate))
       }
       .done(in: bgContext) { _ in
-        try bgContext.saveRecursively()
+        bgContext.saveRecursively()
         if let urlInfo = self.persistenceManager.brokers.user.getUserPublicURLInfo(in: bgContext) {
           let user = CKMUser.find(in: bgContext)
           let avatarData = user?.avatar

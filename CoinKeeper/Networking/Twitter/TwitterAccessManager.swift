@@ -46,11 +46,9 @@ class TwitterAccessManager: TwitterAccessManagerType {
     return authorize()
       .then { self.networkManager.retrieveTwitterUser(with: $0.twitterUserId) }
       .get({ (twitterUser: TwitterUser) in
-        try context.performThrowingAndWait {
-          let user = CKMUser.find(in: context)
-          user?.avatar = twitterUser.profileImageData
-          try context.saveRecursively()
-        }
+        let user = CKMUser.find(in: context)
+        user?.avatar = twitterUser.profileImageData
+        context.saveRecursively()
       })
   }
 

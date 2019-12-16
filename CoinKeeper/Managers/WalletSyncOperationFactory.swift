@@ -78,13 +78,9 @@ class WalletSyncOperationFactory {
                 let receivedOnChain = bgContext.insertedObjects.compactMap { $0 as? CKMTransaction }.isNotEmpty
                 let receivedLightning = bgContext.insertedObjects.compactMap { $0 as? CKMLNLedgerEntry }.isNotEmpty
                 receivedFunds = receivedOnChain || receivedLightning
-                do {
-                  log.info("Sync routine: Saving database...")
-                  try bgContext.saveRecursively()
-                  log.info("Sync routine: Database saved.")
-                } catch {
-                  log.contextSaveError(error)
-                }
+                log.info("Sync routine: Saving database...")
+                bgContext.saveRecursively()
+                log.info("Sync routine: Database saved.")
 
                 DispatchQueue.main.async {
                   CKNotificationCenter.publish(key: .didFinishSync, object: nil, userInfo: nil)

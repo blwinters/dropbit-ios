@@ -20,7 +20,7 @@ extension AppCoordinator: HolidaySelectorViewDelegate {
       .done(on: .main) { _ in
         let user = CKMUser.find(in: context)
         user?.holidayType = holiday
-        try? context.saveRecursively()
+        context.saveRecursively()
     }.catch { error in
       self.alertManager.showError(message: error.localizedDescription, forDuration: 2.0)
       failure()

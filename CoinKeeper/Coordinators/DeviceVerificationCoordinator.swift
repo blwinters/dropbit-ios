@@ -121,11 +121,7 @@ class DeviceVerificationCoordinator: ChildCoordinatorType {
         .then { _ in delegate.networkManager.getOrCreateLightningAccount() }
         .get(in: context) { lnAccountResponse in
           delegate.persistenceManager.brokers.lightning.persistAccountResponse(lnAccountResponse, in: context)
-          do {
-            try context.saveRecursively()
-          } catch {
-            log.contextSaveError(error)
-          }
+          context.saveRecursively()
         }
         .done { _ in delegate.coordinator(self, didVerify: .twitter, isInitialSetupFlow: self.isInitialSetupFlow) }
         .catch { error in
@@ -185,12 +181,7 @@ extension DeviceVerificationCoordinator: DeviceVerificationViewControllerDelegat
           return self.registerUser(with: body, delegate: delegate, in: bgContext)
         }
         .get(in: bgContext) { _ in
-          do {
-            try bgContext.saveRecursively()
-          } catch {
-            log.contextSaveError(error)
-            throw error
-          }
+          bgContext.saveRecursively()
         }
         .done(on: .main) { userIdentifiable in
 
@@ -340,11 +331,7 @@ extension DeviceVerificationCoordinator: DeviceVerificationViewControllerDelegat
         .then { delegate.networkManager.getOrCreateLightningAccount() }
         .get(in: bgContext) { lnAccountResponse in
           delegate.persistenceManager.brokers.lightning.persistAccountResponse(lnAccountResponse, in: bgContext)
-          do {
-            try bgContext.saveRecursively()
-          } catch {
-            log.contextSaveError(error)
-          }
+          bgContext.saveRecursively()
         }
         .then { _ in delegate.persistenceManager.keychainManager.store(anyValue: phoneNumber.countryCode, key: .countryCode) }
         .then { delegate.persistenceManager.keychainManager.store(anyValue: phoneNumber.nationalNumber, key: .phoneNumber) }
@@ -442,7 +429,7 @@ extension DeviceVerificationCoordinator: DeviceVerificationViewControllerDelegat
     bgContext.perform {
       delegate.registerAndPersistWallet(in: bgContext)
         .done(in: bgContext) { _ in // ignore param, not needed for new wallets
-          try bgContext.saveRecursively()
+          bgContext.saveRecursively()
 
           DispatchQueue.main.async {
             delegate.alertManager.hideActivityHUD(withDelay: self.minHudDisplayDuration) {

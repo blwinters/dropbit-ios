@@ -77,7 +77,7 @@ extension LightningUpgradeCoordinator: LightningUpgradeStatusViewControllerDeleg
         let wallet = CKMWallet.find(in: context)
         wallet?.lastReceivedIndex = CKMWallet.defaultLastIndex
         wallet?.lastChangeIndex = CKMWallet.defaultLastIndex + 1 // send-max to segwit wallet goes to first change address
-        try context.saveRecursively()
+        context.saveRecursively()
         self.parent.persistenceManager.brokers.wallet.receiveAddressIndexGaps = []
     }
   }

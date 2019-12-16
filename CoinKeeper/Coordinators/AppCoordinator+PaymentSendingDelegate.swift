@@ -178,7 +178,7 @@ extension AppCoordinator: PaymentSendingDelegate {
       strongSelf.persistenceManager.brokers.lightning.persistPaymentResponse(response, receiver: receiver,
                                                                              invitation: invitation,
                                                                              inputs: inputs, in: context)
-      try? context.saveRecursively()
+      context.saveRecursively()
     }
   }
 
@@ -303,11 +303,7 @@ extension AppCoordinator: PaymentSendingDelegate {
           }
         }
 
-        do {
-          try context.saveRecursively()
-        } catch {
-          log.contextSaveError(error)
-        }
+        context.saveRecursively()
         seal.fulfill(txid)
       }
     }

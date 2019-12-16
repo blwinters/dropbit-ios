@@ -66,7 +66,7 @@ class ContactCacheDataWorker: ContactCacheDataWorkerType {
     return self.getMetadata(in: bgContext)
       .then(in: bgContext) { self.fetchAndPersistStatuses(fromMetadata: $0, in: bgContext) }
       .done(in: bgContext) {
-        try bgContext.saveRecursively()
+        bgContext.saveRecursively()
     }
   }
 
@@ -75,7 +75,7 @@ class ContactCacheDataWorker: ContactCacheDataWorkerType {
     if let metadata = contactCacheManager.validatedMetadata(for: phoneNumber, in: context) {
       _ = self.fetchAndPersistStatuses(fromMetadata: [metadata], in: context)
         .done {
-          try context.saveRecursively()
+          context.saveRecursively()
           context.refresh(metadata, mergeChanges: true)
           let foundValidNumber = metadata.firstCachedPhoneNumberByName()
           let validatedContact = foundValidNumber.flatMap { ValidatedContact(cachedNumber: $0) }
@@ -142,7 +142,7 @@ class ContactCacheDataWorker: ContactCacheDataWorkerType {
             let changeDesc = bgContext.changesDescription()
             log.debug("Contact cache changes: \(changeDesc)")
 
-            try bgContext.saveRecursively()
+            bgContext.saveRecursively()
 
             DispatchQueue.main.async {
               completion?(nil)

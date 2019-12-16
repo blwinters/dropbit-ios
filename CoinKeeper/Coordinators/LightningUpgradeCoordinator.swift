@@ -48,12 +48,7 @@ class LightningUpgradeCoordinator: ChildCoordinatorType {
 
     walletSyncOperationFactory.performOnChainOnlySync(in: context)
       .get(in: context) { _ in
-        do {
-          try context.saveRecursively()
-        } catch {
-          log.contextSaveError(error)
-          throw error
-        }
+        context.saveRecursively()
       }
       .done { self.proceedWithUpgrade(presentedController: controller) }
       .catch { (error: Error) in

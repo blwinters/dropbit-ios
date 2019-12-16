@@ -213,7 +213,7 @@ class ContactCacheManager: ContactCacheManagerType {
       }
       let changeDesc = context.changesDescription()
       log.debug("Contact cache changes: \(changeDesc)")
-      try context.saveRecursively()
+      context.saveRecursively()
 
       let previousCount = (i * batchSize)
       let cumulativeCount = previousCount + batch.count
@@ -236,7 +236,7 @@ class ContactCacheManager: ContactCacheManagerType {
     let batches = allObjects.chunked(by: 300)
     for batch in batches {
       batch.forEach { context.delete($0) }
-      try context.saveRecursively()
+      context.saveRecursively()
     }
   }
 

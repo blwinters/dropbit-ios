@@ -159,7 +159,7 @@ extension AppCoordinator: VerificationStatusViewControllerDelegate {
       context.perform {
         let user = CKMUser.find(in: context)
         user?.avatar = nil
-        try? context.saveRecursively()
+        context.saveRecursively()
       }
     }
   }

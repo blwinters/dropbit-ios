@@ -29,9 +29,9 @@ class WalletBroker: CKPersistenceBroker, WalletBrokerType {
   func resetWallet() throws {
     let bgContext = self.databaseManager.createBackgroundContext()
     try self.deleteWallet(in: bgContext)
-    try bgContext.performThrowingAndWait {
+    bgContext.perform {
       _ = CKMWallet.findOrCreate(in: bgContext)
-      try bgContext.saveRecursively()
+      bgContext.saveRecursively()
     }
   }
 

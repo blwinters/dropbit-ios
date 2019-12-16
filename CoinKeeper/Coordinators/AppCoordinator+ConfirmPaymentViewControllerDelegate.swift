@@ -163,11 +163,10 @@ extension AppCoordinator: ConfirmPaymentViewControllerDelegate {
                                                    successFailVC: SuccessFailViewController,
                                                    in context: NSManagedObjectContext) {
       acknowledgeSuccessfulInvite(using: output, in: context)
-        .then(in: context) { () -> Promise<Void> in
-          try context.saveRecursively()
-          return Promise.value(())
+        .get(in: context) { _ in
+          context.saveRecursively()
         }
-        .done(on: .main) { [weak self] () -> Void in
+        .done(on: .main) { [weak self] _ in
           guard let strongSelf = self else { return }
           successFailVC.setMode(.success)
 

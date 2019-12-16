@@ -38,12 +38,8 @@ extension AppCoordinator: WalletTransferViewControllerDelegate {
                                                                                           in: context)
           self.analyticsManager.track(event: .lightningToOnChainSuccessful, with: nil)
           successFailVC.setMode(.success)
-          do {
-            try context.saveRecursively()
-            CKNotificationCenter.publish(key: .didUpdateLocalTransactionRecords)
-          } catch {
-            log.contextSaveError(error)
-          }
+          context.saveRecursively()
+          CKNotificationCenter.publish(key: .didUpdateLocalTransactionRecords)
         }
         .catch { error in
           log.error(error, message: "Failed to withdraw from lightning account")

@@ -57,7 +57,7 @@ class CoreDataStackConfig {
         let context = container.viewContext
         CKMWallet.findOrCreate(in: context)
         if context.hasChanges {
-          try? context.saveRecursively()
+          context.saveRecursively()
         }
       case .contactCache: break
       }

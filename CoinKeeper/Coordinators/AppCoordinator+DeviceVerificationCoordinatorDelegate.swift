@@ -53,11 +53,7 @@ extension AppCoordinator: DeviceVerificationCoordinatorDelegate {
         }
       }
       .get(in: context) { _ in
-        do {
-          try context.saveRecursively()
-        } catch {
-          log.contextSaveError(error)
-        }
+        context.saveRecursively()
       }
       .done(on: .main) { (parser: WalletFlagsParser) in
         switch parser.restoreType {
@@ -165,7 +161,7 @@ extension AppCoordinator: DeviceVerificationCoordinatorDelegate {
     walletWorker.deleteAllAddressesOnServer()
       .then(in: bgContext) { walletWorker.registerAndPersistServerAddresses(number: addressNumber, in: bgContext) }
       .get(in: bgContext) { _ in
-        try? bgContext.saveRecursively()
+        bgContext.saveRecursively()
       }
       .catch(policy: .allErrors) { log.error($0, message: "failed to register wallet addresses") }
   }
