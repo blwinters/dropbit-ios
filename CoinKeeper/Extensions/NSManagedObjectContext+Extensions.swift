@@ -83,6 +83,7 @@ extension NSManagedObjectContext {
   }
 
   /// Saves the current context and each parent until changes are saved to the persistent store.
+  /// Recursive saves are performed asynchronously.
   func saveRecursively(isFirstCall: Bool = true, file: String = #file, function: String = #function, line: Int = #line) {
     if isFirstCall {
       // Subsequent recursive saves will show `context.hasChanges == false`,
