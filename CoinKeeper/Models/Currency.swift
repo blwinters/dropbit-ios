@@ -14,11 +14,20 @@ enum Currency: String {
 
   case BTC
   case USD
+  case EUR
+  case GBP
+  case CAD
+  case AUD
+  case SEK
+
+  var code: String {
+    return self.rawValue
+  }
 
   var decimalPlaces: Int {
     switch self {
-    case .USD:	return 2
     case .BTC:	return 8
+    default:    return 2
     }
   }
 
@@ -26,13 +35,18 @@ enum Currency: String {
     switch self {
     case .BTC:	return "\u{20BF} "
     case .USD:	return "$"
+    case .EUR:  return "€"
+    case .GBP:  return "£"
+    case .CAD:  return "C$"
+    case .AUD:  return "A$"
+    case .SEK:  return "kr"
     }
   }
 
   func integerSymbol(forAmount amount: Int) -> String? {
     switch self {
     case .BTC:  return amount == 1 ? " sat" : " sats"
-    case .USD:  return nil
+    default:  return nil
     }
   }
 
