@@ -149,7 +149,7 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
   convenience init?(response: MerchantPaymentRequestResponse,
                     walletTransactionType: WalletTransactionType,
                     exchangeRates: ExchangeRates,
-                    fiatCurrency: CurrencyCode,
+                    fiatCurrency: Currency,
                     delegate: CurrencySwappableEditAmountViewModelDelegate? = nil) {
     guard let output = response.outputs.first else { return nil }
     let btcAmount = NSDecimalNumber(integerAmount: output.amount, currency: .BTC)

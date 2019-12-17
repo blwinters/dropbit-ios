@@ -63,7 +63,7 @@ class MockTransactionDetailValidCellViewModel: MockTransactionSummaryCellViewMod
     }
   }
 
-  func exchangeRateWhenReceived(forCurrency currency: CurrencyCode) -> Double? {
+  func exchangeRateWhenReceived(forCurrency currency: Currency) -> Double? {
     return exchangeRateWhenReceived
   }
 

@@ -1029,7 +1029,7 @@
 		B5B27E902088D91800D4DB89 /* NSMutableAttributedString+Constructors.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B27E8F2088D91700D4DB89 /* NSMutableAttributedString+Constructors.swift */; };
 		B5B37B19206AD713001816F6 /* CalculatorPaymentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B37B18206AD713001816F6 /* CalculatorPaymentButton.swift */; };
 		B5B37B23206AFCDF001816F6 /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B37B22206AFCDF001816F6 /* Money.swift */; };
-		B5B37B27206AFE22001816F6 /* CurrencyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B37B26206AFE22001816F6 /* CurrencyCode.swift */; };
+		B5B37B27206AFE22001816F6 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B37B26206AFE22001816F6 /* Currency.swift */; };
 		B5B3E4C72072AE2400222FF4 /* NSDecimalNumber+SignificantDecimals.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B3E4C62072AE2400222FF4 /* NSDecimalNumber+SignificantDecimals.swift */; };
 		B5B53C9C2107CAA5006C7B67 /* TransactionDetailsInfoContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B53C9B2107CAA5006C7B67 /* TransactionDetailsInfoContainer.swift */; };
 		B5B53C9E2107CD1C006C7B67 /* TransactionDetailMessageLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B53C9D2107CD1C006C7B67 /* TransactionDetailMessageLabel.swift */; };
@@ -2160,7 +2160,7 @@
 		B5B27E8F2088D91700D4DB89 /* NSMutableAttributedString+Constructors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+Constructors.swift"; sourceTree = "<group>"; };
 		B5B37B18206AD713001816F6 /* CalculatorPaymentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorPaymentButton.swift; sourceTree = "<group>"; };
 		B5B37B22206AFCDF001816F6 /* Money.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
-		B5B37B26206AFE22001816F6 /* CurrencyCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyCode.swift; sourceTree = "<group>"; };
+		B5B37B26206AFE22001816F6 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		B5B3E4C62072AE2400222FF4 /* NSDecimalNumber+SignificantDecimals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDecimalNumber+SignificantDecimals.swift"; sourceTree = "<group>"; };
 		B5B53C9B2107CAA5006C7B67 /* TransactionDetailsInfoContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TransactionDetailsInfoContainer.swift; path = CoinKeeper/Views/Subviews/TransactionDetailsInfoContainer.swift; sourceTree = SOURCE_ROOT; };
 		B5B53C9D2107CD1C006C7B67 /* TransactionDetailMessageLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailMessageLabel.swift; sourceTree = "<group>"; };
@@ -2938,7 +2938,7 @@
 				3B6FDADA2050146E0091916A /* VerifyRecoveryWordCellData.swift */,
 				B5B37B22206AFCDF001816F6 /* Money.swift */,
 				5B40427B208CCC27005624B0 /* OnChainQRCode.swift */,
-				B5B37B26206AFE22001816F6 /* CurrencyCode.swift */,
+				B5B37B26206AFE22001816F6 /* Currency.swift */,
 				A20E47EF20C0436E00CA8589 /* ContactType.swift */,
 				B5B0DC7C22134AE00010AB2A /* CKCountry.swift */,
 				B5E7F22022148ECA00358A24 /* FlagEmojiFactory.swift */,
@@ -5203,7 +5203,7 @@
 				B5EDFB35231ED12A00B8E739 /* TransactionHistorySummaryHeader.swift in Sources */,
 				3B69FBEA21B83ED200C561E2 /* OutgoingInvitationDTO.swift in Sources */,
 				B5B0DC7B221349C70010AB2A /* CountryCodePickerDataSource.swift in Sources */,
-				B5B37B27206AFE22001816F6 /* CurrencyCode.swift in Sources */,
+				B5B37B27206AFE22001816F6 /* Currency.swift in Sources */,
 				B5B0DC7D22134AE00010AB2A /* CKCountry.swift in Sources */,
 				B5540C5F21ADD8ED00484238 /* CKRecipientParser.swift in Sources */,
 				B552EDFE211E33D000332BB5 /* CKNotificationCenter.swift in Sources */,

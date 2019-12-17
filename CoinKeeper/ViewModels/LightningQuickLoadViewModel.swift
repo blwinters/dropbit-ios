@@ -12,7 +12,7 @@ struct LightningQuickLoadViewModel {
 
   let btcBalances: WalletBalances
   let fiatBalances: WalletBalances
-  let fiatCurrency: CurrencyCode
+  let fiatCurrency: Currency
   let controlConfigs: [QuickLoadControlConfig]
 
   ///If true, sending max should send all spendable utxos.
@@ -23,7 +23,7 @@ struct LightningQuickLoadViewModel {
     return [5, 10, 20, 50, 100].map { NSDecimalNumber(value: $0) }
   }
 
-  init(spendableBalances: WalletBalances, rates: ExchangeRates, fiatCurrency: CurrencyCode) throws {
+  init(spendableBalances: WalletBalances, rates: ExchangeRates, fiatCurrency: Currency) throws {
     guard let minFiatAmount = LightningQuickLoadViewModel.standardAmounts.first else {
       throw CKSystemError.missingValue(key: "standardAmounts.min")
     }
@@ -54,13 +54,13 @@ struct LightningQuickLoadViewModel {
     self.maxIsLimitedByOnChainBalance = maxAmountResults.limitIsOnChainBalance
   }
 
-  private static func convertBalances(_ btcBalances: WalletBalances, toFiat currency: CurrencyCode, using rates: ExchangeRates) -> WalletBalances {
+  private static func convertBalances(_ btcBalances: WalletBalances, toFiat currency: Currency, using rates: ExchangeRates) -> WalletBalances {
     let onChainConverter = CurrencyConverter(fromBtcTo: currency, fromAmount: btcBalances.onChain, rates: rates)
     let lightningConverter = CurrencyConverter(fromBtcTo: currency, fromAmount: btcBalances.lightning, rates: rates)
     return WalletBalances(onChain: onChainConverter.fiatAmount, lightning: lightningConverter.fiatAmount)
   }
 
-  private static func configs(withMax max: NSDecimalNumber, currency: CurrencyCode) -> [QuickLoadControlConfig] {
+  private static func configs(withMax max: NSDecimalNumber, currency: Currency) -> [QuickLoadControlConfig] {
     let standardConfigs = standardAmounts.map { amount -> QuickLoadControlConfig in
       let money = Money(amount: amount, currency: currency)
       return QuickLoadControlConfig(isEnabled: amount <= max, amount: money)

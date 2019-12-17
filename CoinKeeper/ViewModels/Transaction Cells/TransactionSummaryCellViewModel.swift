@@ -61,7 +61,7 @@ protocol TransactionSummaryCellViewModelObject {
   var isPendingTransferToLightning: Bool { get }
   var isReferralBonus: Bool { get }
 
-  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: CurrencyCode) -> TransactionAmountsFactoryType
+  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: Currency) -> TransactionAmountsFactoryType
   func counterpartyConfig(for deviceCountryCode: Int) -> TransactionCellCounterpartyConfig?
 
 }

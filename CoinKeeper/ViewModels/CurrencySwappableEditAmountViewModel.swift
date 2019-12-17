@@ -29,11 +29,11 @@ extension CurrencySwappableEditAmountViewModelDelegate {
 /// Convenient for passing these values and initialization.
 /// Either primary or secondary must be BTC and the other must be fiat.
 struct CurrencyPair {
-  let primary: CurrencyCode
-  let secondary: CurrencyCode
-  let fiat: CurrencyCode
+  let primary: Currency
+  let secondary: Currency
+  let fiat: Currency
 
-  init(primary: CurrencyCode, secondary: CurrencyCode, fiat: CurrencyCode) {
+  init(primary: Currency, secondary: Currency, fiat: Currency) {
     self.primary = primary
     self.secondary = secondary
     self.fiat = fiat
@@ -44,7 +44,7 @@ struct CurrencyPair {
     self.init(primary: .BTC, secondary: fiat, fiat: fiat)
   }
 
-  init(primary: CurrencyCode, fiat: CurrencyCode) {
+  init(primary: Currency, fiat: Currency) {
     self.primary = primary
     self.fiat = fiat
     self.secondary = (primary == .BTC) ? fiat : .BTC
@@ -59,9 +59,9 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
 
   var exchangeRates: ExchangeRates
   private(set) var fromAmount: NSDecimalNumber
-  var fromCurrency: CurrencyCode
-  var toCurrency: CurrencyCode
-  var fiatCurrency: CurrencyCode
+  var fromCurrency: Currency
+  var toCurrency: Currency
+  var fiatCurrency: Currency
   var walletTransactionType: WalletTransactionType
 
   weak var delegate: CurrencySwappableEditAmountViewModelDelegate?
@@ -91,7 +91,7 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
   }
 
   // Convenience getter/setter
-  var primaryCurrency: CurrencyCode {
+  var primaryCurrency: Currency {
     get { return fromCurrency }
     set { fromCurrency = newValue }
   }
@@ -108,7 +108,7 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
     }
   }
 
-  var secondaryCurrency: CurrencyCode {
+  var secondaryCurrency: Currency {
     get { return toCurrency }
     set { toCurrency = newValue }
   }

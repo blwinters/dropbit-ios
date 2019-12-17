@@ -147,7 +147,7 @@ extension AppCoordinator: SendPaymentViewControllerDelegate {
     viewController.present(alert, animated: true)
   }
 
-  func viewControllerDidPressScan(_ viewController: UIViewController, btcAmount: NSDecimalNumber, primaryCurrency: CurrencyCode) {
+  func viewControllerDidPressScan(_ viewController: UIViewController, btcAmount: NSDecimalNumber, primaryCurrency: Currency) {
     analyticsManager.track(event: .scanButtonPressed, with: nil)
     viewController.dismiss(animated: true) { [weak self] in
       self?.showScanViewController(fallbackBTCAmount: btcAmount, primaryCurrency: primaryCurrency)

@@ -28,7 +28,7 @@ enum ResponseFeeType: String {
 }
 
 /// The rate should represent the amount of currency equal to 1 BTC
-typealias ExchangeRates = [CurrencyCode: Double]
+typealias ExchangeRates = [Currency: Double]
 
 /// The closure type to be passed to the AppCoordinator when requesting the latest exchange rates.
 /// This closure should be called on the main queue.

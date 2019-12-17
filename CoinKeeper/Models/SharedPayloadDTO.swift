@@ -22,10 +22,10 @@ enum AddressPublicKeyState {
 }
 
 struct SharedPayloadAmountInfo {
-  let fiatCurrencyCode: CurrencyCode
+  let fiatCurrencyCode: Currency
   let fiatAmount: Int
 
-  init(fiatCurrency: CurrencyCode, fiatAmount: Int) {
+  init(fiatCurrency: Currency, fiatAmount: Int) {
     self.fiatCurrencyCode = fiatCurrency
     self.fiatAmount = fiatAmount
   }

@@ -1,5 +1,5 @@
 //
-//  CurrencyCode.swift
+//  Currency.swift
 //  DropBit
 //
 //  Created by Ben Winters on 3/27/18.
@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 /// The raw value should match the ISO 4217 currency code to allow for initialization from the string.
-enum CurrencyCode: String {
+enum Currency: String {
 
   case BTC
   case USD

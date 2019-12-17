@@ -12,7 +12,7 @@ import Foundation
 struct Money {
 
   var amount: NSDecimalNumber
-  var currency: CurrencyCode
+  var currency: Currency
 
   var displayString: String {
     if currency.isFiat {

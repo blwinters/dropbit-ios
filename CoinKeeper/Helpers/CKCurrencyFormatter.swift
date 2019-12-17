@@ -14,9 +14,9 @@ enum CurrencySymbolType {
 }
 
 enum CurrencyFormatType {
-  case bitcoin, sats, fiat(CurrencyCode)
+  case bitcoin, sats, fiat(Currency)
 
-  init(walletTxType: WalletTransactionType, currency: CurrencyCode) {
+  init(walletTxType: WalletTransactionType, currency: Currency) {
     if currency.isFiat {
       self = .fiat(currency)
     } else {
@@ -24,7 +24,7 @@ enum CurrencyFormatType {
     }
   }
 
-  var currency: CurrencyCode {
+  var currency: Currency {
     switch self {
     case .bitcoin, .sats:       return .BTC
     case .fiat(let currency):   return currency
@@ -33,13 +33,13 @@ enum CurrencyFormatType {
 }
 
 class CKCurrencyFormatter {
-  let currency: CurrencyCode
+  let currency: Currency
   var symbolType: CurrencySymbolType
   let showNegativeSymbol: Bool
   let negativeHasSpace: Bool
 
   ///Use a custom subclass instead of this formatter directly
-  fileprivate init(currency: CurrencyCode,
+  fileprivate init(currency: Currency,
                    symbolType: CurrencySymbolType,
                    showNegativeSymbol: Bool,
                    negativeHasSpace: Bool) {
@@ -50,7 +50,7 @@ class CKCurrencyFormatter {
   }
 
   static func string(for amount: NSDecimalNumber?,
-                     currency: CurrencyCode,
+                     currency: Currency,
                      walletTransactionType: WalletTransactionType) -> String? {
     guard let amount = amount else { return nil }
     if currency.isFiat {
@@ -96,7 +96,7 @@ class CKCurrencyFormatter {
     return formattedString
   }
 
-  fileprivate func numberFormatterWithoutSymbol(for currency: CurrencyCode, asInteger: Bool = false) -> NumberFormatter {
+  fileprivate func numberFormatterWithoutSymbol(for currency: Currency, asInteger: Bool = false) -> NumberFormatter {
     let formatter = NumberFormatter()
     formatter.maximumFractionDigits = asInteger ? 0 : currency.decimalPlaces
     formatter.locale = Locale.current //determines grouping/decimal separators
@@ -110,7 +110,7 @@ class CKCurrencyFormatter {
 }
 
 class FiatFormatter: CKCurrencyFormatter {
-  init(currency: CurrencyCode,
+  init(currency: Currency,
        withSymbol: Bool,
        showNegativeSymbol: Bool = false,
        negativeHasSpace: Bool = false) {
@@ -120,7 +120,7 @@ class FiatFormatter: CKCurrencyFormatter {
                negativeHasSpace: negativeHasSpace)
   }
 
-  override func numberFormatterWithoutSymbol(for currency: CurrencyCode, asInteger: Bool = false) -> NumberFormatter {
+  override func numberFormatterWithoutSymbol(for currency: Currency, asInteger: Bool = false) -> NumberFormatter {
     let formatter = super.numberFormatterWithoutSymbol(for: currency, asInteger: asInteger)
     if !asInteger {
       formatter.minimumFractionDigits = currency.decimalPlaces
@@ -132,19 +132,19 @@ class FiatFormatter: CKCurrencyFormatter {
 
 class RoundedFiatFormatter: FiatFormatter {
 
-  override func numberFormatterWithoutSymbol(for currency: CurrencyCode, asInteger: Bool = false) -> NumberFormatter {
+  override func numberFormatterWithoutSymbol(for currency: Currency, asInteger: Bool = false) -> NumberFormatter {
     return super.numberFormatterWithoutSymbol(for: currency, asInteger: true)
   }
 }
 
 class EditingFiatAmountFormatter: CKCurrencyFormatter {
 
-  init(currency: CurrencyCode) {
+  init(currency: Currency) {
     super.init(currency: currency, symbolType: .string,
                showNegativeSymbol: false, negativeHasSpace: true)
   }
 
-  override func numberFormatterWithoutSymbol(for currency: CurrencyCode, asInteger: Bool = false) -> NumberFormatter {
+  override func numberFormatterWithoutSymbol(for currency: Currency, asInteger: Bool = false) -> NumberFormatter {
     let formatter = super.numberFormatterWithoutSymbol(for: currency)
     formatter.minimumFractionDigits = 0 //do not require decimal places while editing
     return formatter

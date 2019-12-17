@@ -11,14 +11,14 @@ import PromiseKit
 import enum Result.Result
 
 struct SendingDelegateInputs {
-  let primaryCurrency: CurrencyCode
+  let primaryCurrency: Currency
   let walletTxType: WalletTransactionType
   let contact: ContactType?
   let rates: ExchangeRates
   let sharedPayload: SharedPayloadDTO
   let rbfReplaceabilityOption: CNBTransactionReplaceabilityOption
 
-  init(primaryCurrency: CurrencyCode,
+  init(primaryCurrency: Currency,
        walletTxType: WalletTransactionType,
        contact: ContactType?,
        rates: ExchangeRates,
@@ -81,7 +81,7 @@ protocol SendPaymentViewControllerRoutingDelegate: PaymentBuildingDelegate {
 protocol SendPaymentViewControllerDelegate: SendPaymentViewControllerRoutingDelegate, DeviceCountryCodeProvider {
   func sendPaymentViewControllerDidLoad(_ viewController: UIViewController)
   func sendPaymentViewControllerWillDismiss(_ viewController: UIViewController)
-  func viewControllerDidPressScan(_ viewController: UIViewController, btcAmount: NSDecimalNumber, primaryCurrency: CurrencyCode)
+  func viewControllerDidPressScan(_ viewController: UIViewController, btcAmount: NSDecimalNumber, primaryCurrency: Currency)
   func viewControllerDidPressContacts(_ viewController: UIViewController & SelectedValidContactDelegate)
   func viewControllerDidPressTwitter(_ viewController: UIViewController & SelectedValidContactDelegate)
   func viewControllerDidRequestRegisteredAddress(_ viewController: UIViewController,

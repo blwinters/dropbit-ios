@@ -570,7 +570,7 @@ extension SendPaymentViewController: SelectedValidContactDelegate {
 
 extension SendPaymentViewController {
 
-  var primaryCurrency: CurrencyCode {
+  var primaryCurrency: Currency {
     return viewModel.primaryCurrency
   }
 
