@@ -15,14 +15,6 @@ enum Currency: String {
   case BTC
   case USD
 
-  init?(code: String) {
-    if code == "XBT" { //Commonly used code for Bitcoin
-      self.init(rawValue: "BTC")
-    } else {
-      self.init(rawValue: code)
-    }
-  }
-
   var decimalPlaces: Int {
     switch self {
     case .USD:	return 2
