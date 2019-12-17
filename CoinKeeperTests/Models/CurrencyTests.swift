@@ -1,5 +1,5 @@
 //
-//  CurrencyCodeTests.swift
+//  CurrencyTests.swift
 //  DropBitTests
 //
 //  Created by Ben Winters on 4/3/18.
@@ -9,7 +9,7 @@
 @testable import DropBit
 import XCTest
 
-class CurrencyCodeTests: XCTestCase {
+class CurrencyTests: XCTestCase {
   var sut: Currency!
 
   let usdSymbol = "$"

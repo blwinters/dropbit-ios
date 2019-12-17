@@ -925,7 +925,7 @@
 		B57AF8022268C78400E5B0A6 /* AppCoordinator+ShareTransactionViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57AF8012268C78400E5B0A6 /* AppCoordinator+ShareTransactionViewControllerDelegate.swift */; };
 		B57AF8042268C7E500E5B0A6 /* AppCoordinator+ViewControllerDontShowable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57AF8032268C7E500E5B0A6 /* AppCoordinator+ViewControllerDontShowable.swift */; };
 		B57B78DD20B4878F007B71CB /* CKDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57B78DC20B4878F007B71CB /* CKDateFormatter.swift */; };
-		B57C2436207415F400F9519A /* CurrencyCodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57C2435207415F400F9519A /* CurrencyCodeTests.swift */; };
+		B57C2436207415F400F9519A /* CurrencyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57C2435207415F400F9519A /* CurrencyTests.swift */; };
 		B57F06832243CF0200C147D2 /* TimeInterval+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57F06822243CF0200C147D2 /* TimeInterval+Constants.swift */; };
 		B5823FD8207E83A600B12A35 /* TransactionHistorySummaryCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5823FD7207E83A600B12A35 /* TransactionHistorySummaryCellTests.swift */; };
 		B582409420920E3F005D2F90 /* CompactActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B582409320920E3F005D2F90 /* CompactActionButton.swift */; };
@@ -2066,7 +2066,7 @@
 		B57AF8012268C78400E5B0A6 /* AppCoordinator+ShareTransactionViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+ShareTransactionViewControllerDelegate.swift"; sourceTree = "<group>"; };
 		B57AF8032268C7E500E5B0A6 /* AppCoordinator+ViewControllerDontShowable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+ViewControllerDontShowable.swift"; sourceTree = "<group>"; };
 		B57B78DC20B4878F007B71CB /* CKDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKDateFormatter.swift; sourceTree = "<group>"; };
-		B57C2435207415F400F9519A /* CurrencyCodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyCodeTests.swift; sourceTree = "<group>"; };
+		B57C2435207415F400F9519A /* CurrencyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTests.swift; sourceTree = "<group>"; };
 		B57F06822243CF0200C147D2 /* TimeInterval+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Constants.swift"; sourceTree = "<group>"; };
 		B5823FD7207E83A600B12A35 /* TransactionHistorySummaryCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionHistorySummaryCellTests.swift; sourceTree = "<group>"; };
 		B582409320920E3F005D2F90 /* CompactActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactActionButton.swift; sourceTree = "<group>"; };
@@ -3768,7 +3768,7 @@
 		B57C243720741A3400F9519A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				B57C2435207415F400F9519A /* CurrencyCodeTests.swift */,
+				B57C2435207415F400F9519A /* CurrencyTests.swift */,
 				B50C86A520D8123600B4FA6B /* NSManagedObject */,
 				3BF5807F20E3AFA100DD7F95 /* TransactionDataWorkerTests.swift */,
 				3BF3B0CA217761C50021E45F /* BitcoinURLTests.swift */,
@@ -5484,7 +5484,7 @@
 				4A4A9DF320979C11007A47F4 /* MockNetworkManager.swift in Sources */,
 				B5264B2F21909196009164F6 /* ResponseStringsTestable.swift in Sources */,
 				3B1555E820D2C47000D6A70C /* VinCoreDataTests.swift in Sources */,
-				B57C2436207415F400F9519A /* CurrencyCodeTests.swift in Sources */,
+				B57C2436207415F400F9519A /* CurrencyTests.swift in Sources */,
 				B5C5FEEC22BAC0F000287FF7 /* MockDeviceBroker.swift in Sources */,
 				B51F8232207BA83C00692F5B /* TransactionHistoryViewControllerTests.swift in Sources */,
 				3BFA71982040616D00774D59 /* DigitEntryDisplayViewModelTests.swift in Sources */,
