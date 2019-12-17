@@ -96,7 +96,7 @@ extension DualAmountDisplayable {
   }
 
   private func attributedString(for amount: NSDecimalNumber?,
-                                currency: CurrencyCode,
+                                currency: Currency,
                                 attributes: StringAttributes,
                                 walletTxType: WalletTransactionType) -> NSAttributedString? {
     guard let amount = amount else { return nil }

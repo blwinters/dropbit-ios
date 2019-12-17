@@ -463,8 +463,8 @@ extension TransactionDetailCellViewModelType {
   var historicalCurrencyFormatter: NumberFormatter {
     let formatter = NumberFormatter()
     formatter.numberStyle = .currency
-    formatter.currencySymbol = CurrencyCode.USD.symbol
-    formatter.maximumFractionDigits = CurrencyCode.USD.decimalPlaces
+    formatter.currencySymbol = Currency.USD.symbol
+    formatter.maximumFractionDigits = Currency.USD.decimalPlaces
     return formatter
   }
 

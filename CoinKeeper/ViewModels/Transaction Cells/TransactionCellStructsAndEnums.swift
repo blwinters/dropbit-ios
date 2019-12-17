@@ -14,7 +14,7 @@ struct TransactionViewModelInputs {
   let exchangeRates: ExchangeRates
   let deviceCountryCode: Int
 
-  var fiatCurrency: CurrencyCode {
+  var fiatCurrency: Currency {
     return currencies.fiat
   }
 
@@ -64,7 +64,7 @@ struct MockAmountsFactory: TransactionAmountsFactoryType {
   let fiatWhenTransacted: NSDecimalNumber?
 
   init(btcAmount: NSDecimalNumber,
-       fiatCurrency: CurrencyCode,
+       fiatCurrency: Currency,
        exchangeRates: ExchangeRates,
        fiatWhenInvited: NSDecimalNumber? = nil,
        fiatWhenTransacted: NSDecimalNumber? = nil) {
@@ -76,7 +76,7 @@ struct MockAmountsFactory: TransactionAmountsFactoryType {
   }
 
   init(fiatAmount: NSDecimalNumber,
-       fiatCurrency: CurrencyCode,
+       fiatCurrency: Currency,
        exchangeRates: ExchangeRates,
        fiatWhenInvited: NSDecimalNumber? = nil,
        fiatWhenTransacted: NSDecimalNumber? = nil) {
@@ -284,9 +284,9 @@ struct DetailCellAmountLabels {
 struct ConvertedAmounts {
   let btc: NSDecimalNumber
   let fiat: NSDecimalNumber
-  let fiatCurrency: CurrencyCode //included for easy formatting
+  let fiatCurrency: Currency //included for easy formatting
 
-  init(btc: NSDecimalNumber, fiat: NSDecimalNumber, fiatCurrency: CurrencyCode) {
+  init(btc: NSDecimalNumber, fiat: NSDecimalNumber, fiatCurrency: Currency) {
     self.btc = btc
     self.fiat = fiat
     self.fiatCurrency = fiatCurrency

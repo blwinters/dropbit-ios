@@ -60,7 +60,7 @@ struct TransactionAmounts {
 
 struct TransactionAmountsFactory: TransactionAmountsFactoryType {
 
-  private let fiatCurrency: CurrencyCode
+  private let fiatCurrency: Currency
   private let currentRate: Double
   private let walletTxType: WalletTransactionType
   private let transferType: LightningTransferType?
@@ -75,7 +75,7 @@ struct TransactionAmountsFactory: TransactionAmountsFactoryType {
   private var dropBitFee: NSDecimalNumber?
 
   init(transaction: CKMTransaction,
-       fiatCurrency: CurrencyCode,
+       fiatCurrency: Currency,
        currentRates: ExchangeRates,
        transferType: LightningTransferType?) {
     self.fiatCurrency = fiatCurrency
@@ -106,7 +106,7 @@ struct TransactionAmountsFactory: TransactionAmountsFactoryType {
   }
 
   init(walletEntry: CKMWalletEntry,
-       fiatCurrency: CurrencyCode,
+       fiatCurrency: Currency,
        currentRates: ExchangeRates,
        transferType: LightningTransferType?) {
     self.fiatCurrency = fiatCurrency
@@ -133,7 +133,7 @@ struct TransactionAmountsFactory: TransactionAmountsFactoryType {
   }
 
   init(tempSentTx: CKMTemporarySentTransaction,
-       fiatCurrency: CurrencyCode,
+       fiatCurrency: Currency,
        currentRates: ExchangeRates,
        transferType: LightningTransferType) {
     self.fiatCurrency = fiatCurrency

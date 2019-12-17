@@ -16,15 +16,15 @@ struct CurrencyConverter {
   var fromAmount: NSDecimalNumber
   let currencyPair: CurrencyPair
 
-  var fromCurrency: CurrencyCode {
+  var fromCurrency: Currency {
     return currencyPair.primary
   }
 
-  var toCurrency: CurrencyCode {
+  var toCurrency: Currency {
     return currencyPair.secondary
   }
 
-  var fiatCurrency: CurrencyCode {
+  var fiatCurrency: Currency {
     return currencyPair.fiat
   }
 
@@ -47,7 +47,7 @@ struct CurrencyConverter {
     self.currencyPair = CurrencyPair(primary: .BTC, fiat: converter.fiatCurrency)
   }
 
-  init(fromBtcTo fiatCurrency: CurrencyCode, fromAmount: NSDecimalNumber, rates: ExchangeRates) {
+  init(fromBtcTo fiatCurrency: Currency, fromAmount: NSDecimalNumber, rates: ExchangeRates) {
     self.fromAmount = fromAmount
     self.rates = rates
     self.currencyPair = CurrencyPair(primary: .BTC, fiat: fiatCurrency)
@@ -75,7 +75,7 @@ struct CurrencyConverter {
     return amount(forCurrency: fiatCurrency) ?? .zero
   }
 
-  func otherCurrency(forCurrency currency: CurrencyCode) -> CurrencyCode {
+  func otherCurrency(forCurrency currency: Currency) -> Currency {
     if currency == .BTC {
       return self.fiatCurrency
     } else {
@@ -89,7 +89,7 @@ struct CurrencyConverter {
    if they don't easily know whether they want the fromCurrency or toCurrency.
    */
 
-  func amount(forCurrency currency: CurrencyCode) -> NSDecimalNumber? {
+  func amount(forCurrency currency: Currency) -> NSDecimalNumber? {
     switch currency {
     case fromCurrency:  return fromAmount
     case toCurrency:    return convertedAmount()

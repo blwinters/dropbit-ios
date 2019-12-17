@@ -29,7 +29,7 @@ class LoadLightningBalancesView: UIView {
   }
 
   ///Balances should be converted to fiat before calling this function
-  func configure(withFiatBalances balances: WalletBalances, currency: CurrencyCode) {
+  func configure(withFiatBalances balances: WalletBalances, currency: Currency) {
     let formatter = FiatFormatter(currency: currency, withSymbol: true)
     let onChainAmount = formatter.string(fromDecimal: balances.onChain) ?? "-"
     let lightningAmount = formatter.string(fromDecimal: balances.lightning) ?? "-"

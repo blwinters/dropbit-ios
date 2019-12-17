@@ -105,7 +105,7 @@ class LightningTransactionViewModelObject: LightningViewModelObject, Transaction
     return nil
   }
 
-  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: CurrencyCode) -> TransactionAmountsFactoryType {
+  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
     return TransactionAmountsFactory(walletEntry: walletEntry, fiatCurrency:
       fiatCurrency, currentRates: currentRates, transferType: lightningTransferType)
   }
@@ -186,7 +186,7 @@ class LightningInvitationViewModelObject: LightningViewModelObject, TransactionD
 
   var isReferralBonus: Bool { return false } //Invitations cannot be referral bonuses
 
-  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: CurrencyCode) -> TransactionAmountsFactoryType {
+  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
     return TransactionAmountsFactory(walletEntry: walletEntry, fiatCurrency: fiatCurrency,
                                      currentRates: currentRates, transferType: lightningTransferType)
   }
@@ -271,7 +271,7 @@ class LightningLoadTemporaryViewModelObject: LightningViewModelObject, Transacti
 
   func counterpartyConfig(for deviceCountryCode: Int) -> TransactionCellCounterpartyConfig? { nil }
 
-  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: CurrencyCode) -> TransactionAmountsFactoryType {
+  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
     TransactionAmountsFactory(tempSentTx: tempTx, fiatCurrency: fiatCurrency,
                               currentRates: currentRates, transferType: .deposit)
   }
@@ -308,7 +308,7 @@ struct FallbackViewModelObject: TransactionDetailCellViewModelObject {
     self.paymentIdIsValid = true
   }
 
-  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: CurrencyCode) -> TransactionAmountsFactoryType {
+  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
     return MockAmountsFactory(btcAmount: .zero, fiatCurrency: fiatCurrency, exchangeRates: currentRates)
   }
 

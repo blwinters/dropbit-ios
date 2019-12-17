@@ -33,7 +33,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
     return self.currencyController.exchangeRates
   }
 
-  private var fiatCurrency: CurrencyCode {
+  private var fiatCurrency: Currency {
     return self.currencyController.fiatCurrency
   }
 
@@ -135,7 +135,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
     }
   }
 
-  func showScanViewController(fallbackBTCAmount: NSDecimalNumber, primaryCurrency: CurrencyCode) {
+  func showScanViewController(fallbackBTCAmount: NSDecimalNumber, primaryCurrency: Currency) {
     let scanViewController = ScanQRViewController.newInstance(delegate: self)
     let currencyPair = CurrencyPair(btcPrimaryWith: self.currencyController)
     let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRates: self.exchangeRates,

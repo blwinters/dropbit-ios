@@ -10,7 +10,7 @@
 import XCTest
 
 class CurrencyCodeTests: XCTestCase {
-  var sut: CurrencyCode!
+  var sut: Currency!
 
   let usdSymbol = "$"
   let btcSymbol = "\u{20BF} "

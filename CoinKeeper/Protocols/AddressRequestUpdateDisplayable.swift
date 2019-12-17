@@ -60,7 +60,7 @@ extension AddressRequestUpdateDisplayable {
   }
 
   var fiatDescription: String {
-    var walletTransactionType: WalletTransactionType, currency: CurrencyCode, amount: NSDecimalNumber
+    var walletTransactionType: WalletTransactionType, currency: Currency, amount: NSDecimalNumber
 
     switch addressType {
     case .btc:
@@ -88,7 +88,7 @@ extension AddressRequestUpdateDisplayable {
   func formattedAmountWithoutSymbol(for number: NSDecimalNumber) -> String {
     let formatter = NumberFormatter()
     formatter.numberStyle = .decimal
-    formatter.maximumFractionDigits = CurrencyCode.BTC.decimalPlaces
+    formatter.maximumFractionDigits = Currency.BTC.decimalPlaces
     if number < NSDecimalNumber.one {
       formatter.maximumIntegerDigits = 0
     }

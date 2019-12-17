@@ -104,7 +104,7 @@ class MockSendPaymentViewControllerCoordinator: SendPaymentViewControllerCoordin
   }
 
   var didTapScan = false
-  func viewControllerDidPressScan(_ viewController: UIViewController, btcAmount: NSDecimalNumber, primaryCurrency: CurrencyCode) {
+  func viewControllerDidPressScan(_ viewController: UIViewController, btcAmount: NSDecimalNumber, primaryCurrency: Currency) {
     didTapScan = true
   }
 
