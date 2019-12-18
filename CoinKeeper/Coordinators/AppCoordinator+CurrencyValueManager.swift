@@ -10,8 +10,9 @@ import UIKit
 import PromiseKit
 
 extension AppCoordinator: CurrencyValueDataSourceType {
+
   var preferredFiatCurrency: Currency {
-    return .USD
+    return ratesDataWorker.preferredFiatCurrency
   }
 
   func latestExchangeRates() -> ExchangeRates {

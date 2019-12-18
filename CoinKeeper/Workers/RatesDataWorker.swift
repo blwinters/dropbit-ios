@@ -34,13 +34,16 @@ class RatesDataWorker {
       .catch(worker.handleUpdateCachedMetadataError)
   }
 
+  var preferredFiatCurrency: Currency {
+    self.persistenceManager.brokers.preferences.fiatCurrency
+  }
+
   /// Provides a closure to be called by the delegate, which passes back the latest ExchangeRates
   /// Also, checks the exchange rates and posts a notification if they have been updated
   func latestExchangeRates() -> ExchangeRates {
     // return latest exchange rates
-    let preferredCurrency = self.persistenceManager.brokers.preferences.fiatCurrency
-    let usdRate = self.persistenceManager.brokers.checkIn.cachedFiatRate(for: preferredCurrency)
-    let cachedRates: ExchangeRates = [.BTC: 1.0, .USD: usdRate]
+    let fiatRate = self.persistenceManager.brokers.checkIn.cachedFiatRate(for: preferredFiatCurrency)
+    let cachedRates: ExchangeRates = [.BTC: 1.0, preferredFiatCurrency: fiatRate]
 
     // re-fetch the latest exchange rates
     refetchLatestMetadataIfNecessary()
