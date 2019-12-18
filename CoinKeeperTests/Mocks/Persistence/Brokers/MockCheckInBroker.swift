@@ -13,8 +13,6 @@ import PromiseKit
 
 class MockCheckInBroker: CKPersistenceBroker, CheckInBrokerType {
 
-  var cachedBTCUSDRate: Double = 0
-
   var cachedBlockHeight: Int = 0
 
   var cachedBestFee: Double = 0
@@ -23,7 +21,15 @@ class MockCheckInBroker: CKPersistenceBroker, CheckInBrokerType {
 
   var cachedGoodFee: Double = 0
 
-  func processCheckIn(response: CheckInResponse) -> Promise<Void> {
-    return Promise.value(())
+  private var exchangeRateCache: ExchangeRates = [.BTC: 1]
+  func cacheFiatRate(_ rate: Double, for currency: Currency) {
+    exchangeRateCache[currency] = rate
   }
+
+  func cachedFiatRate(for currency: Currency) -> Double {
+    return exchangeRateCache[currency] ?? 1
+  }
+
+  func persistCheckIn(response: CheckInResponse) { }
+
 }
