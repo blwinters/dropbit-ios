@@ -75,8 +75,6 @@ class WalletOverviewViewControllerTests: XCTestCase {
 
     func viewControllerDidRequestBadgeUpdate(_ viewController: UIViewController) { }
 
-    func latestExchangeRates(responseHandler: ExchangeRatesRequest) { }
-
     func viewControllerDidTapReceivePayment(_ viewController: UIViewController,
                                             converter: CurrencyConverter, walletTransactionType: WalletTransactionType) {}
 
@@ -86,9 +84,9 @@ class WalletOverviewViewControllerTests: XCTestCase {
 
     func viewControllerShouldTrackProperty(property: MixpanelProperty) {}
 
-    func latestFees() -> Promise<Fees> {
-      return Promise { _ in }
-    }
+    var preferredFiatCurrency: Currency = .USD
+    func latestExchangeRates() -> ExchangeRates { [:] }
+    func latestFees() -> Fees { [:] }
 
     func balancesNetPending() -> WalletBalances {
       return WalletBalances(onChain: .zero, lightning: .zero)

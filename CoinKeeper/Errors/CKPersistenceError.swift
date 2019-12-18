@@ -39,4 +39,11 @@ enum CKPersistenceError: Error, LocalizedError {
       return message
     }
   }
+
+}
+
+extension Error {
+  static func missing(valueFor key: String) -> CKPersistenceError {
+    return .missingValue(key: key)
+  }
 }

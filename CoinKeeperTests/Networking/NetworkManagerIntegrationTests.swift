@@ -16,21 +16,17 @@ import XCTest
 class NetworkManagerIntegrationTests: XCTestCase {
 
   var sut: NetworkManager!
-  var persistenceManager: PersistenceManagerType!
   var cnProvider: MockCoinNinjaProvider!
 
   override func setUp() {
     super.setUp()
-    persistenceManager = MockPersistenceManager()
     cnProvider = MockCoinNinjaProvider()
-    self.sut = NetworkManager(persistenceManager: self.persistenceManager,
-                              analyticsManager: MockAnalyticsManager(),
+    self.sut = NetworkManager(analyticsManager: MockAnalyticsManager(),
                               coinNinjaProvider: cnProvider)
   }
 
   override func tearDown() {
     self.sut = nil
-    self.persistenceManager = nil
     self.cnProvider = nil
     super.tearDown()
   }

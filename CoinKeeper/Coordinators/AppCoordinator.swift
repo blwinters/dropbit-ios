@@ -55,6 +55,7 @@ class AppCoordinator: CoordinatorType {
   let ratingAndReviewManager: RatingAndReviewManagerType
   let featureConfigManager: FeatureConfigManagerType
   var userIdentifiableManager: UserIdentifiableManagerType
+  let ratesDataWorker: RatesDataWorker
   let uiTestArguments: [UITestArgument]
 
   // swiftlint:disable:next weak_delegate
@@ -131,8 +132,7 @@ class AppCoordinator: CoordinatorType {
       self.walletManager = WalletManager(words: words, persistenceManager: persistenceManager)
     }
     self.balanceUpdateManager = BalanceUpdateManager()
-    let theNetworkManager = networkManager ?? NetworkManager(persistenceManager: persistenceManager,
-                                                             analyticsManager: analyticsManager)
+    let theNetworkManager = networkManager ?? NetworkManager(analyticsManager: analyticsManager)
     self.networkManager = theNetworkManager
     self.permissionManager = permissionManager
     self.connectionManager = connectionManager
@@ -157,13 +157,14 @@ class AppCoordinator: CoordinatorType {
     self.ratingAndReviewManager = RatingAndReviewManager(persistenceManager: persistenceManager)
     let configDefaults = persistenceManager.userDefaultsManager.configDefaults
     self.featureConfigManager = featureConfigManager ?? FeatureConfigManager(userDefaults: configDefaults)
+    self.ratesDataWorker = RatesDataWorker(persistenceManager: persistenceManager,
+                                           networkManager: theNetworkManager)
 
     // now we can use `self` after initializing all properties
     self.notificationManager.delegate = self
     self.locationManager.delegate = self.locationDelegate
-
+    self.ratesDataWorker.walletDelegate = self
     self.networkManager.headerDelegate = self
-    self.networkManager.walletDelegate = self
     self.alertManager.urlOpener = self
     self.serialQueueManager.delegate = self
     self.userIdentifiableManager.delegate = self
@@ -280,7 +281,7 @@ class AppCoordinator: CoordinatorType {
     applyUITestArguments(uiTestArguments)
     analyticsManager.start()
     analyticsManager.optIn()
-    networkManager.start()
+    ratesDataWorker.start()
     connectionManager.delegate = self
 
     setupDynamicLinks()

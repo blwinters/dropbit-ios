@@ -27,10 +27,10 @@ struct NewsData {
   var weeklyPriceResponse: [PriceSummaryResponse] = []
   var weeklyPriceData: LineChartDataSet = LineChartDataSet()
 
-  var currentPrice: NSNumber?
+  var currentPrice: FiatExchangeRate
 
   var displayPrice: String {
-    return FiatFormatter(currency: .USD, withSymbol: true).string(fromNumber: self.currentPrice ?? 0.0) ?? ""
+    return currentPrice.displayString
   }
 
   func getDataSetForTimePeriod(_ timePeriod: TimePeriodCell.Period) -> LineChartDataSet {
@@ -65,7 +65,7 @@ struct NewsData {
     }
 
     let gross = (priceResponse.last?.average ?? 0.0) - (priceResponse.first?.average ?? 0.0)
-    let percentage = gross / (currentPrice as? Double ?? 1.0) * 100
+    let percentage = gross / (currentPrice.amount.doubleValue) * 100
 
     return (gross: gross, percentage: percentage)
   }

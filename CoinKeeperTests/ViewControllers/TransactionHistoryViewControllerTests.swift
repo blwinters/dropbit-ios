@@ -52,6 +52,16 @@ class TransactionHistoryViewControllerTests: XCTestCase {
 
   class MockCoordinator: TransactionHistoryViewControllerDelegate {
 
+    var preferredFiatCurrency: Currency = .USD
+
+    func latestExchangeRates() -> ExchangeRates {
+      [:]
+    }
+
+    func latestFees() -> Fees {
+      [:]
+    }
+
     var didSendTweet = false
     func openTwitterURL(withMessage message: String) {
       didSendTweet = true
@@ -89,11 +99,6 @@ class TransactionHistoryViewControllerTests: XCTestCase {
     func openURLExternally(_ url: URL, completionHandler completion: ((Bool) -> Void)?) { }
 
     func emptyViewDidRequestRefill(withAmount amount: TransferAmount) { }
-
-    func latestExchangeRates(responseHandler: ExchangeRatesRequest) { }
-    func latestFees() -> Promise<Fees> {
-      return Promise { _ in }
-    }
 
     func viewControllerDidSelectSummaryHeader(_ viewController: UIViewController) { }
     func summaryHeaderType(for viewController: UIViewController) -> SummaryHeaderType? {

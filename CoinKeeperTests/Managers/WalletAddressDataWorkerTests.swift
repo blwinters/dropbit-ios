@@ -29,7 +29,7 @@ class WalletAddressDataWorkerTests: MockedPersistenceTestCase {
     super.setUp()
 
     mockBrokers.mockUser.userIdValue = "34gvbew4gv-qw3yrq3fjh-w3qruihwefs-3fsw34g"
-    mockNetworkManager = MockNetworkManager(persistenceManager: mockPersistenceManager, analyticsManager: MockAnalyticsManager())
+    mockNetworkManager = MockNetworkManager(analyticsManager: MockAnalyticsManager())
     mockWalletManager = MockWalletManager(words: [])
     mockInvitationDelegate = MockInvitationDelegate()
     mockAnalyticsManager = MockAnalyticsManager()

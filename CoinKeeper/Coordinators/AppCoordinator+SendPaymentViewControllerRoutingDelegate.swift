@@ -58,7 +58,7 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
                                                   feeConfig: TransactionFeeConfig) {
     guard let wmgr = walletManager else { return }
 
-    networkManager.latestFees().compactMap { FeeRates(fees: $0) }
+    self.latestFeeRates()
       .then { (feeRates: FeeRates) -> Promise<ConfirmTransactionFeeModel> in
         //Ignore the previously-generated send max transaction data, get it for all three fee types
         return self.adjustableFeeViewModelSendingMax(
@@ -125,7 +125,7 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
   }
 
   private func sendOnChainPayment(with inputs: SendOnChainPaymentInputs) {
-    inputs.networkManager.latestFees().compactMap { FeeRates(fees: $0) }
+    self.latestFeeRates()
       .then { (rates: FeeRates) -> Promise<ConfirmTransactionFeeModel> in
         // Take rates, get fee config, and return a fee mode
         let config = TransactionFeeConfig(prefs: self.persistenceManager.brokers.preferences)
@@ -305,7 +305,7 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
                             contact: ContactType,
                             inputs: SendingDelegateInputs) {
     guard let wmgr = walletManager else { return }
-    networkManager.latestFees().compactMap { FeeRates(fees: $0) }
+    self.latestFeeRates()
       .then { (feeRates: FeeRates) -> Promise<ConfirmTransactionFeeModel> in
         switch inputs.walletTxType {
         case .onChain:

@@ -14,8 +14,7 @@ class AlertManagerTests: XCTestCase {
 
   override func setUp() {
     super.setUp()
-    let networkManager = NetworkManager(persistenceManager: PersistenceManager(),
-                                        analyticsManager: AnalyticsManager())
+    let networkManager = NetworkManager(analyticsManager: AnalyticsManager())
     let notificationManager = NotificationManager(permissionManager: PermissionManager(),
                                                   networkInteractor: networkManager)
     self.sut = AlertManager(notificationManager: notificationManager)

@@ -11,37 +11,26 @@ import PromiseKit
 
 extension AppCoordinator {
 
-  func showAlertsForAddressRequestUpdates(in context: NSManagedObjectContext) -> Promise<Void> {
-    return Promise { seal in
+  func showAlertsForAddressRequestUpdates(in context: NSManagedObjectContext) {
+    let statusUpdates = invitationsWithStatusUpdates(in: context)
+    let addressFulfillmentUpdates = self.updatesForFulfilledReceivedAddressRequests(in: context)
+    let combinedUpdates: [CKMInvitation] = statusUpdates + addressFulfillmentUpdates
+    combinedUpdates.forEach { self.alertManager.showAlert(for: $0) }
 
-      let statusUpdates = invitationsWithStatusUpdates(in: context)
-      let addressFulfillmentUpdates = self.updatesForFulfilledReceivedAddressRequests(in: context)
-      let combinedUpdates: [CKMInvitation] = statusUpdates + addressFulfillmentUpdates
-      combinedUpdates.forEach { self.alertManager.showAlert(for: $0) }
-
-      showAlertsForTransactionFailureUpdates(in: context)
-
-      seal.fulfill(())
-    }
+    showAlertsForTransactionFailureUpdates(in: context)
   }
 
-  func showAlertsForIncomingTransactions(in context: NSManagedObjectContext) -> Promise<Void> {
-    return Promise { seal in
-
-      latestExchangeRates(responseHandler: { rates in
-        let insertedTransactions = context.insertedObjects.compactMap { $0 as? CKMTransaction }
-        let incomingTransactions = insertedTransactions.filter { $0.isIncoming && !$0.isInvite && !$0.isLightningTransfer }
-        let insertedLightningPayments = context.insertedObjects.compactMap { $0 as? CKMLNLedgerEntry }
-        let incomingLightningPayments = insertedLightningPayments.filter { $0.type == .lightning && $0.direction == .in }
-        for transaction in incomingTransactions {
-          self.alertManager.showIncomingTransactionAlert(for: transaction.receivedAmount, with: rates)
-        }
-        for payment in incomingLightningPayments {
-          self.alertManager.showIncomingLightningAlert(for: payment.value, with: rates)
-        }
-        seal.fulfill(())
-      })
-
+  func showAlertsForIncomingTransactions(in context: NSManagedObjectContext) {
+    let exchangeRates = self.ratesDataWorker.latestExchangeRates()
+    let insertedTransactions = context.insertedObjects.compactMap { $0 as? CKMTransaction }
+    let incomingTransactions = insertedTransactions.filter { $0.isIncoming && !$0.isInvite && !$0.isLightningTransfer }
+    let insertedLightningPayments = context.insertedObjects.compactMap { $0 as? CKMLNLedgerEntry }
+    let incomingLightningPayments = insertedLightningPayments.filter { $0.type == .lightning && $0.direction == .in }
+    for transaction in incomingTransactions {
+      self.alertManager.showIncomingTransactionAlert(for: transaction.receivedAmount, with: exchangeRates)
+    }
+    for payment in incomingLightningPayments {
+      self.alertManager.showIncomingLightningAlert(for: payment.value, with: exchangeRates)
     }
   }
 

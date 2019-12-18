@@ -15,8 +15,7 @@ class MockAlertManager: AlertManagerType {
   func debugAlert(with error: Error, debugAction action: @escaping CKCompletion) -> AlertControllerType {
     let alertManager = AlertManager(notificationManager:
       NotificationManager(permissionManager: PermissionManager(),
-                          networkInteractor: NetworkManager(persistenceManager: PersistenceManager(),
-                                                            analyticsManager: AnalyticsManager())))
+                          networkInteractor: NetworkManager(analyticsManager: AnalyticsManager())))
     return alertManager.alert(withTitle: "Error", description: error.localizedDescription, image: nil, style: .alert, actionConfigs: [])
   }
 
@@ -41,8 +40,7 @@ class MockAlertManager: AlertManagerType {
   func defaultAlert(withTitle title: String?, description: String?) -> AlertControllerType {
     let alertManager = AlertManager(notificationManager:
       NotificationManager(permissionManager: PermissionManager(),
-                          networkInteractor: NetworkManager(persistenceManager: PersistenceManager(),
-                                                            analyticsManager: AnalyticsManager())))
+                          networkInteractor: NetworkManager(analyticsManager: AnalyticsManager())))
     return alertManager.alert(withTitle: title, description: description, image: nil, style: .alert, actionConfigs: [])
   }
 
@@ -61,8 +59,7 @@ class MockAlertManager: AlertManagerType {
              actionConfigs: [AlertActionConfigurationType]) -> AlertControllerType {
     let alertManager = AlertManager(notificationManager:
       NotificationManager(permissionManager: PermissionManager(),
-                          networkInteractor: NetworkManager(persistenceManager: PersistenceManager(),
-                                                            analyticsManager: AnalyticsManager())))
+                          networkInteractor: NetworkManager(analyticsManager: AnalyticsManager())))
     return alertManager.alert(withTitle: title, description: description, image: image, style: style, actionConfigs: [])
   }
 
@@ -74,8 +71,7 @@ class MockAlertManager: AlertManagerType {
     ) -> AlertControllerType {
     let alertManager = AlertManager(notificationManager:
       NotificationManager(permissionManager: PermissionManager(),
-                          networkInteractor: NetworkManager(persistenceManager: PersistenceManager(),
-                                                            analyticsManager: AnalyticsManager())))
+                          networkInteractor: NetworkManager(analyticsManager: AnalyticsManager())))
     return alertManager.detailedAlert(withTitle: title, description: description, image: image, style: style, action: action)
   }
 
@@ -92,8 +88,7 @@ class MockAlertManager: AlertManagerType {
     wasAskedForAlert = true
     let alertManager = AlertManager(notificationManager:
       NotificationManager(permissionManager: PermissionManager(),
-                          networkInteractor: NetworkManager(persistenceManager: PersistenceManager(),
-                                                            analyticsManager: AnalyticsManager())))
+                          networkInteractor: NetworkManager(analyticsManager: AnalyticsManager())))
     return alertManager.alert(withTitle: title, description: description, image: image, style: style, actionConfigs: [])
   }
 
