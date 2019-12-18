@@ -175,6 +175,16 @@ protocol PersistenceUserDefaultsType: AnyObject {
 
 extension PersistenceUserDefaultsType {
 
+  func exchangeRateKey(for currency: Currency) -> String {
+    return "exchangeRateBTC\(currency.code)"
+  }
+
+  func exchangeRate(for currency: Currency) -> Double? {
+    let key = exchangeRateKey(for: currency)
+    let rate = standardDefaults.double(forKey: key)
+    return (rate == 0) ? nil : rate
+  }
+
   func double(for key: CKUserDefaults.Key) -> Double {
     return standardDefaults.double(forKey: key.defaultsString)
   }

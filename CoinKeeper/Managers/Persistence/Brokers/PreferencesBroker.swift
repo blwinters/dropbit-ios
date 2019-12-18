@@ -65,6 +65,22 @@ class PreferencesBroker: CKPersistenceBroker, PreferencesBrokerType {
     }
   }
 
+  var fiatCurrency: Currency {
+    get {
+      if let storedCode = userDefaultsManager.string(for: .fiatCurrency),
+        let storedCurrency = Currency(rawValue: storedCode) {
+        return storedCurrency
+      } else {
+        let defaultCurrency = Currency.defaultFiatCurrency(forLocale: .current)
+        userDefaultsManager.set(defaultCurrency.code, for: .fiatCurrency)
+        return defaultCurrency
+      }
+    }
+    set {
+      userDefaultsManager.set(newValue.code, for: .fiatCurrency)
+    }
+  }
+
   var lightningWalletLockedStatus: LockStatus {
     get {
       let stringValue = userDefaultsManager.string(for: .lightningWalletLockedStatus)

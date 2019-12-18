@@ -27,7 +27,6 @@ class CKUserDefaults: PersistenceUserDefaultsType {
     case invitationPopup
     case firstTimeOpeningApp
     case firstOpenDate
-    case exchangeRateBTCUSD
     case feeBest
     case feeBetter
     case feeGood
@@ -49,6 +48,7 @@ class CKUserDefaults: PersistenceUserDefaultsType {
     case lastSuccessfulSyncCompletedAt
     case dustProtectionEnabled
     case selectedCurrency
+    case fiatCurrency
     case lastContactCacheReload
     case dontShowShareTransaction
     case dontShowLightningRefill
@@ -69,8 +69,8 @@ class CKUserDefaults: PersistenceUserDefaultsType {
 
   /// Use this method to not delete everything from UserDefaults
   func deleteWallet() {
+    deleteExchangeRates()
     removeValues(forKeys: [
-      .exchangeRateBTCUSD,
       .feeBest,
       .feeBetter,
       .feeGood,
@@ -88,7 +88,13 @@ class CKUserDefaults: PersistenceUserDefaultsType {
   }
 
   func deleteAll() {
+    deleteExchangeRates()
     removeValues(forKeys: Key.allCases)
+  }
+
+  func deleteExchangeRates() {
+    let keys: [String] = Currency.allCases.map { self.exchangeRateKey(for: $0) }
+    keys.forEach { standardDefaults.set(nil, forKey: $0) }
   }
 
   func unverifyUser() {

@@ -70,13 +70,14 @@ protocol LightningBrokerType: AnyObject {
 
 protocol CheckInBrokerType: AnyObject {
 
-  var cachedBTCUSDRate: Double { get set }
   var cachedBlockHeight: Int { get set }
   var cachedBestFee: Double { get set }
   var cachedBetterFee: Double { get set }
   var cachedGoodFee: Double { get set }
 
-  func processCheckIn(response: CheckInResponse) -> Promise<Void>
+  func cacheFiatRate(_ rate: Double, for currency: Currency)
+  func cachedFiatRate(for currency: Currency) -> Double
+  func persistCheckIn(response: CheckInResponse)
 
 }
 
@@ -125,6 +126,7 @@ protocol PreferencesBrokerType: AnyObject {
   var dustProtectionIsEnabled: Bool { get set }
   var yearlyPriceHighNotificationIsEnabled: Bool { get set }
   var selectedCurrency: SelectedCurrency { get set }
+  var fiatCurrency: Currency { get set }
   var dontShowShareTransaction: Bool { get set }
   var didOptOutOfInvitationPopup: Bool { get set }
   var adjustableFeesIsEnabled: Bool { get set }

@@ -29,7 +29,8 @@ class CachedMetadataWorker {
     let broker = persistenceManager.brokers.checkIn
     guard walletId != nil else {
       let fees = FeesResponse(fast: broker.cachedBestFee, med: broker.cachedBetterFee, slow: broker.cachedGoodFee)
-      let pricing = PriceResponse(last: broker.cachedBTCUSDRate)
+      let rate = broker.cachedFiatRate(for: .USD)
+      let pricing = PriceResponse(last: rate)
       let response = CheckInResponse(blockheight: broker.cachedBlockHeight, fees: fees, pricing: pricing)
       return Promise.value(response)
     }
@@ -40,14 +41,9 @@ class CachedMetadataWorker {
 
   /// Exposed as `internal` for testing purposes, but should only be called from `updateCachedMetadata` in the promise chain.
   func handleCheckIn(response: CheckInResponse) -> Promise<CheckInResponse> {
-    let broker = persistenceManager.brokers.checkIn
-    broker.cachedBestFee = max(response.fees.best, 0)
-    broker.cachedBetterFee = max(response.fees.better, 0)
-    broker.cachedGoodFee = max(response.fees.good, 0)
-    broker.cachedBTCUSDRate = (response.pricing.last > 0) ? response.pricing.last : broker.cachedBTCUSDRate
-    broker.cachedBlockHeight = (response.blockheight > 0) ? response.blockheight : broker.cachedBlockHeight
+    persistenceManager.brokers.checkIn.persistCheckIn(response: response)
     CKNotificationCenter.publish(key: .didUpdateFees)
-    CKNotificationCenter.publish(key: .didUpdateExchangeRates, userInfo: ["value": broker.cachedBTCUSDRate])
+    CKNotificationCenter.publish(key: .didUpdateExchangeRates)
     return Promise { $0.fulfill(response) }
   }
 

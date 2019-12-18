@@ -38,7 +38,8 @@ class RatesDataWorker {
   /// Also, checks the exchange rates and posts a notification if they have been updated
   func latestExchangeRates() -> ExchangeRates {
     // return latest exchange rates
-    let usdRate = self.persistenceManager.brokers.checkIn.cachedBTCUSDRate
+    let preferredCurrency = self.persistenceManager.brokers.preferences.fiatCurrency
+    let usdRate = self.persistenceManager.brokers.checkIn.cachedFiatRate(for: preferredCurrency)
     let cachedRates: ExchangeRates = [.BTC: 1.0, .USD: usdRate]
 
     // re-fetch the latest exchange rates
