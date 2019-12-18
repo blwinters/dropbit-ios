@@ -52,6 +52,18 @@ enum Currency: String, CaseIterable {
     }
   }
 
+  var displayName: String {
+    switch self {
+      case .AUD:  return "Australian Dollar"
+      case .BTC:  return "Bitcoin"
+      case .CAD:  return "Canadian Dollar"
+      case .EUR:  return "Euro"
+      case .GBP:  return "United Kingdom Pound"
+      case .SEK:  return "Swedish Krona"
+      case .USD:  return "United States Dollar"
+    }
+  }
+
   func integerSymbol(forAmount amount: Int) -> String? {
     switch self {
     case .BTC:  return amount == 1 ? " sat" : " sats"
