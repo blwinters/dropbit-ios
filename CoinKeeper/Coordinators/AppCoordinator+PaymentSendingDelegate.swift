@@ -207,8 +207,15 @@ extension AppCoordinator: PaymentSendingDelegate {
                                                     success: @escaping CKCompletion,
                                                     failure: @escaping CKErrorCompletion,
                                                     isInternalLightningLoad: Bool = false) {
-    self.networkManager.updateCachedMetadata()
-      .then { _ in self.networkManager.broadcastTx(with: transactionData) }
+    let metadataWorker = CachedMetadataWorker(persistence: persistenceManager, network: networkManager)
+
+    metadataWorker.updateCachedMetadata()
+      .then { _ -> Promise<String> in
+        guard let wmgr = self.mainWalletManager() else {
+          return Promise(error: CKPersistenceError.noWalletWords)
+        }
+
+        return self.networkManager.broadcastTx(with: transactionData, walletManager: wmgr) }
       .then { txid -> Promise<String> in
         let dataCopyWithTxid = outgoingTransactionData.copy(withTxid: txid)
         if let postableObject = PayloadPostableOutgoingTransactionData(data: dataCopyWithTxid) {

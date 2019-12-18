@@ -10,13 +10,22 @@ import UIKit
 import PromiseKit
 
 extension AppCoordinator: CurrencyValueDataSourceType {
-
-  func latestExchangeRates(responseHandler: ExchangeRatesRequest) {
-    networkManager.latestExchangeRates(responseHandler: responseHandler)
+  var preferredFiatCurrency: Currency {
+    return .USD
   }
 
-  func latestFees() -> Promise<Fees> {
-    return networkManager.latestFees()
+  func latestExchangeRates() -> ExchangeRates {
+    return ratesDataWorker.latestExchangeRates()
+  }
+
+  func latestFees() -> Fees {
+    return ratesDataWorker.latestFees()
+  }
+
+  func latestFeeRates() -> Promise<FeeRates> {
+    let fees = latestFees()
+    guard let feeRates = FeeRates(fees: fees) else { return .missingValue(for: "latestFeeRates") }
+    return .value(feeRates)
   }
 
 }

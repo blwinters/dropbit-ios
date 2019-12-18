@@ -266,7 +266,8 @@ class TransactionDataWorker: TransactionDataWorkerType {
       .get(in: context) { _ in self.persistenceManager.brokers.wallet.updateWalletLastIndexes(in: context) }
       .then { Promise.value(TransactionDataWorkerDTO(atsResponses: $0)) }
       .then { (dto: TransactionDataWorkerDTO) -> Promise<TransactionDataWorkerDTO> in
-        return self.networkManager.updateCachedMetadata()
+        let worker = CachedMetadataWorker(persistence: self.persistenceManager, network: self.networkManager)
+        return worker.updateCachedMetadata()
           .then { Promise.value(TransactionDataWorkerDTO(checkinResponse: $0).merged(with: dto)) }
     }
     .then(in: context) { (dto: TransactionDataWorkerDTO) -> Promise<TransactionDataWorkerDTO> in

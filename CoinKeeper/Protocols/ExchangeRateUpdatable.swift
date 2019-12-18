@@ -36,17 +36,15 @@ extension ExchangeRateUpdatable {
   }
 
   func updateRatesWithLatest() {
-    currencyValueManager?.latestExchangeRates { [weak self] rates in
-      guard let self = self else { return }
-      guard Thread.isMainThread else {
-        assertionFailure("latestExchangeRates closure should be called on the main thread")
-        return
-      }
-
-      // Update rates for use by the view controller until the next refresh
-      self.rateManager.exchangeRates = rates
-      self.didUpdateExchangeRateManager(self.rateManager)
+    guard let latestRates = currencyValueManager?.latestExchangeRates() else { return }
+    guard Thread.isMainThread else {
+      assertionFailure("latestExchangeRates closure should be called on the main thread")
+      return
     }
+
+    // Update rates for use by the view controller until the next refresh
+    self.rateManager.exchangeRates = latestRates
+    self.didUpdateExchangeRateManager(self.rateManager)
   }
 
   /// Call this on viewDidLoad and in the notification block of registerForRateUpdates()

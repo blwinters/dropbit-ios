@@ -16,7 +16,7 @@ protocol WalletSyncDelegate: AnyObject {
   func syncManagerDidRequestDependencies(in context: NSManagedObjectContext, inBackground: Bool) -> Promise<SyncDependencies>
   func syncManagerDidRequestBackgroundContext() -> NSManagedObjectContext
   func syncManagerDidFinishSync()
-  func showAlertsForSyncedChanges(in context: NSManagedObjectContext) -> Promise<Void>
+  func showAlertsForSyncedChanges(in context: NSManagedObjectContext)
   func syncManagerDidSetWalletManager(walletManager: WalletManagerType, in context: NSManagedObjectContext) -> Promise<Void>
   func handleMissingWalletError(_ error: CKPersistenceError)
 }
@@ -138,7 +138,7 @@ class WalletSyncOperationFactory {
       .then(in: context) { _ in dependencies.walletWorker.updateSentAddressRequests(in: context) }
       .recover(self.recoverSyncError)
       .then(in: context) { _ in self.fetchAndFulfillReceivedAddressRequests(with: dependencies, in: context) }
-      .then(in: context) { _ in dependencies.delegate.showAlertsForSyncedChanges(in: context) }
+      .get(in: context) { _ in dependencies.delegate.showAlertsForSyncedChanges(in: context) }
       .then(in: context) { _ in dependencies.twitterAccessManager.inflateTwitterUsersIfNeeded(in: context) }
       .then(in: context) { _ in self.updateWalletIfNeeded(dependencies: dependencies, context: context) }
   }

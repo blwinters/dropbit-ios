@@ -92,11 +92,9 @@ class MockSendPaymentViewControllerCoordinator: SendPaymentViewControllerCoordin
     return WalletBalances(onChain: .zero, lightning: .zero)
   }
 
-  func latestExchangeRates(responseHandler: (ExchangeRates) -> Void) { }
-
-  func latestFees() -> Promise<Fees> {
-    return Promise.value([:])
-  }
+  var preferredFiatCurrency: Currency = .USD
+  func latestExchangeRates() -> ExchangeRates { [:] }
+  func latestFees() -> Fees { [:] }
 
   var didTapTwitter = false
   func viewControllerDidPressTwitter(_ viewController: UIViewController & SelectedValidContactDelegate) {

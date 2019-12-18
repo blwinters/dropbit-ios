@@ -14,7 +14,7 @@ protocol TransactionBroadcastable: AnyObject {
   ///
   /// - Parameter transactionData: Object describing the transaction to be broadcast.
   /// - Returns: A Promise of a String, which is the `txid` in the event of a successful broadcast.
-  func broadcastTx(with transactionData: CNBTransactionData) -> Promise<String>
+  func broadcastTx(with transactionData: CNBTransactionData, walletManager: WalletManagerType) -> Promise<String>
   func broadcastTx(metadata: CNBTransactionMetadata) -> Promise<String>
 
   func postSharedPayloadIfAppropriate(withPostableObject object: SharedPayloadPostableObject,
@@ -61,10 +61,9 @@ struct BroadcastInfo: Error {
 
 extension NetworkManager: TransactionBroadcastable {
 
-  func broadcastTx(with transactionData: CNBTransactionData) -> Promise<String> {
-    guard let wmgr = walletDelegate?.mainWalletManager() else { return Promise(error: CKPersistenceError.noWalletWords) }
+  func broadcastTx(with transactionData: CNBTransactionData, walletManager: WalletManagerType) -> Promise<String> {
     guard transactionData.unspentTransactionOutputs.isNotEmpty else { return Promise(error: TransactionDataError.noSpendableFunds) }
-    let wallet = wmgr.wallet
+    let wallet = walletManager.wallet
     let transactionBuilder = CNBTransactionBuilder()
     let txMetadata = transactionBuilder.generateTxMetadata(with: transactionData, wallet: wallet)
 

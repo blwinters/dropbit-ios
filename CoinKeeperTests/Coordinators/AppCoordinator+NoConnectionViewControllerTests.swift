@@ -17,9 +17,8 @@ class AppCoordinatorNoConnectionViewControllerTests: XCTestCase {
 
   override func setUp() {
     super.setUp()
-    let mockPersistenceManager = MockPersistenceManager()
     connectionManager = MockConnectionManager()
-    networkManager = MockNetworkManager(persistenceManager: mockPersistenceManager)
+    networkManager = MockNetworkManager()
     sut = AppCoordinator(networkManager: networkManager, connectionManager: connectionManager)
     connectionManager.delegate = sut
   }

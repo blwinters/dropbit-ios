@@ -125,10 +125,9 @@ class RequestPayViewControllerTests: XCTestCase {
       return Promise { _ in }
     }
 
-    func latestExchangeRates(responseHandler: (ExchangeRates) -> Void) {}
-    func latestFees() -> Promise<Fees> {
-      return Promise { _ in }
-    }
+    var preferredFiatCurrency: Currency = .USD
+    func latestExchangeRates() -> ExchangeRates { [:] }
+    func latestFees() -> Fees { [:] }
 
     func viewControllerDidRequestNextReceiveAddress(_ viewController: UIViewController) -> String? {
       return nil

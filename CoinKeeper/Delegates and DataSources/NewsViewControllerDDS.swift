@@ -59,7 +59,7 @@ class NewsViewControllerDDS: NSObject {
 
   private var currentTimePeriod: TimePeriodCell.Period = .daily
 
-  var newsData: NewsData = NewsData() {
+  var newsData: NewsData = NewsData(currentPrice: .zero) {
     didSet {
       delegate?.delegateRefreshNews()
     }
@@ -70,7 +70,7 @@ class NewsViewControllerDDS: NSObject {
   }
 
   func setupDataSet(coordinationDelegate: NewsViewControllerDelegate) {
-    var newsData = NewsData()
+    var newsData = NewsData(currentPrice: .zero)
 
     coordinationDelegate.viewControllerDidRequestNewsData(count: 100)
       .then { articles -> Promise<[PriceSummaryResponse]> in

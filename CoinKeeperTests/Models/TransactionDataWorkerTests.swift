@@ -22,7 +22,7 @@ class TransactionDataWorkerTests: XCTestCase {
     super.setUp()
 
     mockPersistenceManager = MockPersistenceManager()
-    mockNetworkManager = MockNetworkManager(persistenceManager: mockPersistenceManager, analyticsManager: MockAnalyticsManager())
+    mockNetworkManager = MockNetworkManager(analyticsManager: MockAnalyticsManager())
     mockWalletManager = MockWalletManager(words: [])
     mockAnalyticsManager = MockAnalyticsManager()
 

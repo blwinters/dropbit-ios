@@ -35,15 +35,12 @@ extension AppCoordinator: SerialQueueManagerDelegate {
     return predefineSyncDependencies(in: context, inBackground: inBackground)
   }
 
-  func showAlertsForSyncedChanges(in context: NSManagedObjectContext) -> Promise<Void> {
-    return self.showAlertsForAddressRequestUpdates(in: context)
-      .then(in: context) { _ -> Promise<Void> in
-        // Skip showing banners for transactions downloaded during initial sync
-        guard self.persistenceManager.brokers.activity.lastSuccessfulSync != nil else {
-          return Promise.value(())
-        }
-        return self.showAlertsForIncomingTransactions(in: context)
-    }
+  func showAlertsForSyncedChanges(in context: NSManagedObjectContext) {
+    self.showAlertsForAddressRequestUpdates(in: context)
+
+    // Skip showing banners for transactions downloaded during initial sync
+    guard self.persistenceManager.brokers.activity.lastSuccessfulSync != nil else { return }
+    return self.showAlertsForIncomingTransactions(in: context)
   }
 
   func predefineSyncDependencies(in context: NSManagedObjectContext, inBackground background: Bool) -> Promise<SyncDependencies> {

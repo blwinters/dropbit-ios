@@ -19,7 +19,7 @@ class SendPaymentViewControllerTests: XCTestCase {
 
   override func setUp() {
     super.setUp()
-    let mockNetworkManager = MockNetworkManager(persistenceManager: MockPersistenceManager())
+    let mockNetworkManager = MockNetworkManager()
     self.mockCoordinator = MockSendPaymentViewControllerCoordinator(networkManager: mockNetworkManager)
 
     let safeRates: ExchangeRates = [.BTC: 1, .USD: 7000]

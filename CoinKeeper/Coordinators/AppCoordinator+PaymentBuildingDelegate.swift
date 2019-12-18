@@ -38,12 +38,10 @@ protocol PaymentBuildingDelegate: CurrencyValueDataSourceType {
 extension AppCoordinator: PaymentBuildingDelegate {
 
   func transactionDataSendingMaxFunds(toAddress destinationAddress: String) -> Promise<CNBTransactionData> {
-    return latestFees()
-      .compactMap { self.usableFeeRate(from: $0) }
-      .then { feeRate -> Promise<CNBTransactionData> in
-        guard let wmgr = self.walletManager else { return Promise(error: CKPersistenceError.noManagedWallet) }
-        return wmgr.transactionDataSendingMax(to: destinationAddress, withFeeRate: feeRate)
-    }
+    let fees = self.latestFees()
+    let feeRate: Double = self.usableFeeRate(from: fees) ?? 0
+    guard let wmgr = self.walletManager else { return Promise(error: CKPersistenceError.noManagedWallet) }
+    return wmgr.transactionDataSendingMax(to: destinationAddress, withFeeRate: feeRate)
   }
 
   func buildLoadLightningPaymentData(selectedAmount: SelectedBTCAmount,
@@ -51,32 +49,33 @@ extension AppCoordinator: PaymentBuildingDelegate {
                                      in context: NSManagedObjectContext) -> Promise<PaymentData> {
     let wallet = CKMWallet.findOrCreate(in: context)
     let lightningAccount = self.persistenceManager.brokers.lightning.getAccount(forWallet: wallet, in: context)
-    return networkManager.latestFees().compactMap { FeeRates(fees: $0) }
-      .then { (feeRates: FeeRates) -> Promise<PaymentData> in
-        do {
-          try BitcoinAddressValidator().validate(value: lightningAccount.address)
-          log.info("Lightning load address successfully validated.")
-        } catch {
-          log.error(error, message: "Lightning load address failed validation. Address: \(lightningAccount.address)")
-          return Promise(error: error)
-        }
-        let feeRate: Double = feeRates.low
-        let maybePaymentData = self.buildNonReplaceableTransactionData(selectedAmount: selectedAmount,
-                                                                       address: lightningAccount.address,
-                                                                       exchangeRates: exchangeRates,
-                                                                       feeRate: feeRate)
-        if let paymentData = maybePaymentData {
-          do {
-            try BitcoinAddressValidator().validate(value: paymentData.broadcastData.paymentAddress)
-            log.info("Lightning load address successfully validated after creating transaction data.")
-            return Promise.value(paymentData)
-          } catch {
-            log.error(error, message: "Lightning load address failed validation. Address: \(lightningAccount.address)")
-            return Promise(error: error)
-          }
-        } else {
-          return Promise(error: TransactionDataError.insufficientFunds)
-        }
+    let fees = self.latestFees()
+    guard let latestFeeRates = FeeRates(fees: fees) else {
+      return .missingValue(for: "feeRates")
+    }
+    do {
+      try BitcoinAddressValidator().validate(value: lightningAccount.address)
+      log.info("Lightning load address successfully validated.")
+    } catch {
+      log.error(error, message: "Lightning load address failed validation. Address: \(lightningAccount.address)")
+      return Promise(error: error)
+    }
+    let feeRate: Double = latestFeeRates.low
+    let maybePaymentData = self.buildNonReplaceableTransactionData(selectedAmount: selectedAmount,
+                                                                   address: lightningAccount.address,
+                                                                   exchangeRates: exchangeRates,
+                                                                   feeRate: feeRate)
+    if let paymentData = maybePaymentData {
+      do {
+        try BitcoinAddressValidator().validate(value: paymentData.broadcastData.paymentAddress)
+        log.info("Lightning load address successfully validated after creating transaction data.")
+        return Promise.value(paymentData)
+      } catch {
+        log.error(error, message: "Lightning load address failed validation. Address: \(lightningAccount.address)")
+        return Promise(error: error)
+      }
+    } else {
+      return Promise(error: TransactionDataError.insufficientFunds)
     }
   }
 

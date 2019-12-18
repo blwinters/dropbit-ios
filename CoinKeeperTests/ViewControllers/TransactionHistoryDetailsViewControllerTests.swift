@@ -53,12 +53,14 @@ class TransactionHistoryDetailsViewControllerTests: XCTestCase {
 
     let currencyController: CurrencyController = CurrencyController(fiatCurrency: .USD)
 
-    func latestExchangeRates(responseHandler: (ExchangeRates) -> Void) {
-      responseHandler(CurrencyConverter.sampleRates)
+    var preferredFiatCurrency: Currency = .USD
+
+    func latestExchangeRates() -> ExchangeRates {
+      return CurrencyConverter.sampleRates
     }
 
-    func latestFees() -> Promise<Fees> {
-      return Promise { _ in }
+    func latestFees() -> Fees {
+      return [:]
     }
 
     func deviceCountryCode() -> Int? {

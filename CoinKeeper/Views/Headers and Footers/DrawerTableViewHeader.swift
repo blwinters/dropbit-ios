@@ -16,16 +16,6 @@ class DrawerTableViewHeader: UITableViewHeaderFooterView {
 
   public weak var currencyValueManager: CurrencyValueDataSourceType?
 
-  private lazy var formatter: NumberFormatter = {
-    let formatter = NumberFormatter()
-    formatter.maximumFractionDigits = 2
-    formatter.minimumFractionDigits = 2
-    formatter.locale = .US
-    formatter.usesGroupingSeparator = true
-    formatter.numberStyle = .currency
-    return formatter
-  }()
-
   deinit {
     CKNotificationCenter.unsubscribe(self)
   }
@@ -47,12 +37,8 @@ class DrawerTableViewHeader: UITableViewHeaderFooterView {
   }
 
   @objc private func refreshDisplayedPrice() {
-    currencyValueManager?.latestExchangeRates(responseHandler: updateRatesRequest)
+    guard let fiatRate = currencyValueManager?.latestFiatExchangeRate() else { return }
+    self.priceLabel.text = fiatRate.displayString
   }
 
-  /// A closure to be called by the delegate during viewDidLoad and when a .didUpdateExchangeRates notification has been received
-  lazy var updateRatesRequest: ExchangeRatesRequest = { [weak self] rates in
-    let value = rates[.USD] as NSNumber?
-    self?.priceLabel.text = self?.formatter.string(from: value ?? 0.0)
-  }
 }
