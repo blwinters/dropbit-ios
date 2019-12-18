@@ -12,13 +12,13 @@ import UIKit
 /// The raw value should match the ISO 4217 currency code to allow for initialization from the string.
 enum Currency: String, CaseIterable {
 
+  case AUD
   case BTC
-  case USD
+  case CAD
   case EUR
   case GBP
-  case CAD
-  case AUD
   case SEK
+  case USD
 
   static func defaultFiatCurrency(forLocale locale: Locale) -> Currency {
     if let localeCurrency = locale.currencyCode,
@@ -42,13 +42,13 @@ enum Currency: String, CaseIterable {
 
   var symbol: String {
     switch self {
-    case .BTC:	return "\u{20BF} "
-    case .USD:	return "$"
+    case .AUD:  return "$"
+    case .BTC:  return "\u{20BF} "
+    case .CAD:  return "$"
     case .EUR:  return "€"
     case .GBP:  return "£"
-    case .CAD:  return "C$"
-    case .AUD:  return "A$"
     case .SEK:  return "kr"
+    case .USD:  return "$"
     }
   }
 
