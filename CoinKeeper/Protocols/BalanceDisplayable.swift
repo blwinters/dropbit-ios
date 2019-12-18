@@ -90,8 +90,10 @@ class ExchangeRateManager {
   var balanceToken: NotificationToken?
 
   init() {
-    let cachedExchangeRate = CKUserDefaults().standardDefaults.double(forKey: CKUserDefaults.Key.exchangeRateBTCUSD.defaultsString)
-    self.exchangeRates = [.BTC: 1, .USD: cachedExchangeRate]
+    let defaults = CKUserDefaults()
+    let defaultCurrency = Currency.defaultFiatCurrency(forLocale: .current)
+    let cachedExchangeRate = defaults.exchangeRate(for: defaultCurrency) ?? 1
+    self.exchangeRates = [.BTC: 1, defaultCurrency: cachedExchangeRate]
   }
 }
 

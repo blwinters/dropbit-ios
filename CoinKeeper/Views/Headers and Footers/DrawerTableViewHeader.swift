@@ -33,7 +33,8 @@ class DrawerTableViewHeader: UITableViewHeaderFooterView {
     refreshDisplayedPrice()
 
     //Need to listen for correct notification
-    CKNotificationCenter.subscribe(self, [.didUpdateExchangeRates: #selector(refreshDisplayedPrice)])
+    CKNotificationCenter.subscribe(self, [.didUpdateExchangeRates: #selector(refreshDisplayedPrice),
+                                          .didUpdatePreferredFiat: #selector(refreshDisplayedPrice)])
   }
 
   @objc private func refreshDisplayedPrice() {

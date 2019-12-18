@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 /// The raw value should match the ISO 4217 currency code to allow for initialization from the string.
-enum Currency: String {
+enum Currency: String, CaseIterable {
 
   case BTC
   case USD
@@ -19,6 +19,15 @@ enum Currency: String {
   case CAD
   case AUD
   case SEK
+
+  static func defaultFiatCurrency(forLocale locale: Locale) -> Currency {
+    if let localeCurrency = locale.currencyCode,
+      let match = Currency(rawValue: localeCurrency) {
+      return match
+    } else {
+      return .USD
+    }
+  }
 
   var code: String {
     return self.rawValue

@@ -171,8 +171,8 @@ class WalletSyncOperationFactory {
       .then { _ in dependencies.keychainMigrationWorker.migrateIfPossible() }
       .then(in: context) { self.checkAndVerifyWallet(with: dependencies, in: context) }
       .then { dependencies.networkManager.checkIn() }
-      .then { dependencies.persistenceManager.brokers.checkIn.processCheckIn(response: $0) }
-      .then(in: context) { dependencies.txDataWorker.performFetchAndStoreAllOnChainTransactions(in: context, fullSync: true) }
+      .get { dependencies.persistenceManager.brokers.checkIn.persistCheckIn(response: $0) }
+      .then(in: context) { _ in dependencies.txDataWorker.performFetchAndStoreAllOnChainTransactions(in: context, fullSync: true) }
       .get { _ in dependencies.connectionManager.setAPIUnreachable(false) }
   }
 
