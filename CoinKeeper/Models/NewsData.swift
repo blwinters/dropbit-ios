@@ -27,7 +27,7 @@ struct NewsData {
   var weeklyPriceResponse: [PriceSummaryResponse] = []
   var weeklyPriceData: LineChartDataSet = LineChartDataSet()
 
-  var currentPrice: FiatExchangeRate = .zero
+  var currentPrice: ExchangeRate = .zero
 
   var displayPrice: String {
     return currentPrice.displayString

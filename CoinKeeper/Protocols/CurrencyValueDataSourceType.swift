@@ -24,8 +24,8 @@ protocol CurrencyValueDataSourceType: AnyObject {
 
 extension CurrencyValueDataSourceType {
 
-  func latestFiatExchangeRate() -> FiatExchangeRate {
-    let rates = latestExchangeRates()
+  func latestExchangeRate() -> ExchangeRate {
+    let rates = ratesDataWorker.latestExchangeRates()
     let currency = preferredFiatCurrency
     let preferredFiatRate = rates[currency] ?? 0.0
     return Money(amount: NSDecimalNumber(value: preferredFiatRate), currency: currency)
@@ -48,12 +48,13 @@ typealias Fees = [ResponseFeeType: Double]
 /// This closure should be called on the main queue.
 typealias FeesRequest = (Fees) -> Void
 
-typealias FiatExchangeRate = Money
+///The rate should represent the amount of currency equal to 1 BTC.
+typealias ExchangeRate = Money
 
-extension FiatExchangeRate {
+extension ExchangeRate {
 
   ///Useful as a non-nil default value
-  static var zero: FiatExchangeRate {
-    return FiatExchangeRate(amount: .zero, currency: .USD)
+  static var zero: ExchangeRate {
+    return ExchangeRate(amount: .zero, currency: .USD)
   }
 }
