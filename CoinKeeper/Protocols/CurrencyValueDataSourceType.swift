@@ -38,23 +38,9 @@ enum ResponseFeeType: String {
   case good, better, best
 }
 
-/// The rate should represent the amount of currency equal to 1 BTC
-typealias ExchangeRates = [Currency: Double]
-
 /// The fee values represent the current cost of a transaction in satoshis/byte
 typealias Fees = [ResponseFeeType: Double]
 
 /// The closure type to be passed to the AppCoordinator when requesting the latest fees.
 /// This closure should be called on the main queue.
 typealias FeesRequest = (Fees) -> Void
-
-///The rate should represent the amount of currency equal to 1 BTC.
-typealias ExchangeRate = Money
-
-extension ExchangeRate {
-
-  ///Useful as a non-nil default value
-  static var zero: ExchangeRate {
-    return ExchangeRate(amount: .zero, currency: .USD)
-  }
-}
