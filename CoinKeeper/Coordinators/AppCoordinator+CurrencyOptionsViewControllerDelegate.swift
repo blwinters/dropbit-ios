@@ -10,8 +10,11 @@ import UIKit
 
 extension AppCoordinator: CurrencyOptionsViewControllerDelegate {
 
-  func viewControllerDidSelectCurrency(currency: Currency, viewController: UIViewController) {
+  func viewControllerDidSelectCurrency(_ currency: Currency, viewController: UIViewController) {
     self.persistenceManager.brokers.preferences.fiatCurrency = currency
     CKNotificationCenter.publish(key: .didUpdatePreferredFiat)
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { //allow user to see selection before dismissing
+      viewController.navigationController?.popViewController(animated: true)
+    }
   }
 }

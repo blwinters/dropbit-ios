@@ -9,7 +9,7 @@
 import UIKit
 
 protocol CurrencyOptionsViewControllerDelegate: AnyObject {
-  func viewControllerDidSelectCurrency(currency: Currency, viewController: UIViewController)
+  func viewControllerDidSelectCurrency(_ currency: Currency, viewController: UIViewController)
 }
 
 class CurrencyOptionsViewController: BaseViewController, StoryboardInitializable {
@@ -34,6 +34,8 @@ class CurrencyOptionsViewController: BaseViewController, StoryboardInitializable
     tableView.delegate = self
     tableView.dataSource = self
     tableView.registerNib(cellType: SelectedCurrencyCell.self)
+    tableView.backgroundColor = .clear
+    tableView.separatorStyle = .none
     tableView.reloadData()
   }
 
@@ -61,9 +63,20 @@ extension CurrencyOptionsViewController: UITableViewDataSource, UITableViewDeleg
     return cell
   }
 
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    let cellVM = cellViewModels[indexPath.row]
+    if cellVM.isSelected {
+      tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+    }
+  }
+
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let vm = cellViewModels[indexPath.row]
-    delegate.viewControllerDidSelectCurrency(currency: vm.currency, viewController: self)
+    delegate.viewControllerDidSelectCurrency(vm.currency, viewController: self)
+  }
+
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    return 60
   }
 
 }
