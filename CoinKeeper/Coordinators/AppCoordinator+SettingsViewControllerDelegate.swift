@@ -90,7 +90,9 @@ extension AppCoordinator: SettingsViewControllerDelegate {
   }
 
   func viewControllerDidSelectCurrencyOptions(_ viewController: UIViewController) {
-
+    let currentSelection = persistenceManager.brokers.preferences.fiatCurrency
+    let currencyOptionsVC = CurrencyOptionsViewController.newInstance(selectedCurrency: currentSelection, delegate: self)
+    viewController.navigationController?.pushViewController(currencyOptionsVC, animated: true)
   }
 
   func viewControllerDidRequestDeleteWallet(_ viewController: UIViewController, completion: @escaping CKCompletion) {

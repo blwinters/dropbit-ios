@@ -95,6 +95,13 @@ class SettingsViewController: BaseViewController, StoryboardInitializable {
     // Hide empty cell separators
     settingsTableView.tableFooterView = UIView(frame: CGRect.zero)
     settingsTableView.reloadData()
+
+    CKNotificationCenter.subscribe(self, key: .didUpdatePreferredFiat, selector: #selector(reloadView))
+  }
+
+  @objc func reloadView() {
+    viewModel = createViewModel()
+    settingsTableView.reloadData()
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -108,7 +115,7 @@ class SettingsViewController: BaseViewController, StoryboardInitializable {
   }
 
   private func setNavBarTitle() {
-    self.navigationItem.title = "SETTINGS"
+    self.title = "SETTINGS"
   }
 
   private func isWalletBackedUp() -> Bool {
