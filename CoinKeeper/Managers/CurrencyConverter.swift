@@ -10,9 +10,9 @@ import Foundation
 
 struct CurrencyConverter {
 
-  static let sampleRates: ExchangeRates = [.BTC: 1, .USD: 7000]
+  static let sampleRate = ExchangeRate(price: 7000.00, currency: .USD)
 
-  let rates: ExchangeRates
+  let rate: ExchangeRate
   var fromAmount: NSDecimalNumber
   let currencyPair: CurrencyPair
 
@@ -28,43 +28,44 @@ struct CurrencyConverter {
     return currencyPair.fiat
   }
 
-  init(rates: ExchangeRates, fromAmount: NSDecimalNumber, currencyPair: CurrencyPair) {
-    self.rates = rates
+  init(rate: ExchangeRate, fromAmount: NSDecimalNumber, isFromBTC: Bool) {
+    self.rate = rate
     self.fromAmount = fromAmount
-    self.currencyPair = currencyPair
+    let primaryCurrency: Currency = isFromBTC ? .BTC : rate.currency
+    self.currencyPair = CurrencyPair(primary: primaryCurrency, fiat: rate.currency)
   }
 
   /// Copies the existing values from the supplied converter and replaces the fromAmount with the newAmount.
   init(newAmount: NSDecimalNumber, converter: CurrencyConverter) {
     self.fromAmount = newAmount
-    self.rates = converter.rates
+    self.rate = converter.rate
     self.currencyPair = converter.currencyPair
   }
 
-  init(btcFromAmount: NSDecimalNumber, converter: CurrencyConverter) {
-    self.fromAmount = btcFromAmount
-    self.rates = converter.rates
+  init(fromBtcAmount fromAmount: NSDecimalNumber, converter: CurrencyConverter) {
+    self.fromAmount = fromAmount
+    self.rate = converter.rate
     self.currencyPair = CurrencyPair(primary: .BTC, fiat: converter.fiatCurrency)
   }
 
-  init(fromBtcTo fiatCurrency: Currency, fromAmount: NSDecimalNumber, rates: ExchangeRates) {
+  init(fromBtcAmount fromAmount: NSDecimalNumber, rate: ExchangeRate) {
     self.fromAmount = fromAmount
-    self.rates = rates
-    self.currencyPair = CurrencyPair(primary: .BTC, fiat: fiatCurrency)
+    self.rate = rate
+    self.currencyPair = CurrencyPair(primary: .BTC, fiat: rate.currency)
   }
 
+  ///The `fromAmount` converted into the `toCurrency`
   func convertedAmount() -> NSDecimalNumber? {
-    guard fromAmount.isNumber else { return nil }
-    guard let fromDouble = rates[fromCurrency], let toDouble = rates[toCurrency] else { return nil }
+    guard fromAmount.isNumber, rate.price > .zero else { return nil }
 
-    let fromRate = NSDecimalNumber(value: fromDouble)
-    let toRate = NSDecimalNumber(value: toDouble)
+    let targetAmount: NSDecimalNumber
+    if currencyPair.primary.isFiat {
+      targetAmount = fromAmount.dividing(by: rate.price)
+    } else {
+      targetAmount = fromAmount.multiplying(by: rate.price)
+    }
 
-    guard fromRate.isPositiveNumber, toRate.isPositiveNumber else { return nil }
-
-    let baseAmount = fromAmount.dividing(by: fromRate)
-    let targetAmount = baseAmount.multiplying(by: toRate)
-    return targetAmount.rounded(forCurrency: toCurrency)
+    return targetAmount.rounded(forCurrency: currencyPair.secondary)
   }
 
   var btcAmount: NSDecimalNumber {
