@@ -22,6 +22,7 @@ protocol SettingsViewControllerDelegate: ViewControllerDismissable, ViewControll
   func viewControllerDidSelectRecoveryWords(_ viewController: UIViewController)
   func viewControllerDidSelectReviewLegacyWords(_ viewController: UIViewController)
   func viewControllerDidSelectAdjustableFees(_ viewController: UIViewController)
+  func viewControllerDidSelectCurrencyOptions(_ viewController: UIViewController)
   func viewControllerResyncBlockchain(_ viewController: UIViewController)
   func viewController(_ viewController: UIViewController, didEnableDustProtection didEnable: Bool)
   func viewController(_ viewController: UIViewController, didEnableYearlyHighNotification didEnable: Bool, completion: @escaping CKCompletion)
@@ -83,7 +84,7 @@ class SettingsViewController: BaseViewController, StoryboardInitializable {
 
     viewModel = createViewModel()
     settingsTableView.registerNib(cellType: SettingCell.self)
-    settingsTableView.registerNib(cellType: SettingsRecoveryWordsCell.self)
+    settingsTableView.registerNib(cellType: SettingsTitleDetailCell.self)
     settingsTableView.registerNib(cellType: SettingSwitchCell.self)
     settingsTableView.registerNib(cellType: SettingSwitchWithInfoCell.self)
     settingsTableView.registerNib(cellType: SettingsWithInfoCell.self)
@@ -191,6 +192,14 @@ class SettingsViewController: BaseViewController, StoryboardInitializable {
     }
     let adjustableFeesVM = SettingsCellViewModel(type: .adjustableFees(action: adjustableFeesAction))
 
+    // currency options
+    let selectedFiat = delegate.persistenceManager.brokers.preferences.fiatCurrency
+    let currencyAction: BasicAction = { [weak self] in
+      guard let self = self else { return }
+      self.delegate.viewControllerDidSelectCurrencyOptions(self)
+    }
+    let currencyOptionsVM = SettingsCellViewModel(type: .currencyOptions(currency: selectedFiat, action: currencyAction))
+
     // regtest vs mainnet
     var regtestVM: SettingsCellViewModel?
     #if DEBUG
@@ -208,6 +217,7 @@ class SettingsViewController: BaseViewController, StoryboardInitializable {
       dustProtectionVM,
       yearlyHighVM,
       adjustableFeesVM,
+      currencyOptionsVM,
       regtestVM
       ]
       .compactMap { $0 }
