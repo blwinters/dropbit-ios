@@ -79,7 +79,6 @@ class SettingsViewController: BaseViewController, StoryboardInitializable {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    setNavBarTitle()
     navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.close))
 
     viewModel = createViewModel()
@@ -106,16 +105,13 @@ class SettingsViewController: BaseViewController, StoryboardInitializable {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
+    setNavBarTitle()
     settingsTableView.reloadData()
   }
 
-  override func viewDidDisappear(_ animated: Bool) {
-    super.viewDidDisappear(animated)
-    setNavBarTitle()
-  }
-
   private func setNavBarTitle() {
-    self.title = "SETTINGS"
+    self.navigationItem.backBarButtonItem?.title = ""
+    self.navigationItem.title = "SETTINGS"
   }
 
   private func isWalletBackedUp() -> Bool {
