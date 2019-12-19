@@ -14,6 +14,22 @@ struct Money {
   var amount: NSDecimalNumber
   var currency: Currency
 
+  init(amount: NSDecimalNumber, currency: Currency) {
+    self.amount = amount
+    self.currency = currency
+  }
+
+  init(doubleAmount: Double, currency: Currency) {
+    let decimalAmount = NSDecimalNumber(value: doubleAmount)
+    self.init(amount: decimalAmount, currency: currency)
+  }
+
+  ///Use for initializing with fractional units of a currency, e.g. sats
+  init(integerAmount: Int, currency: Currency) {
+    let decimalAmount = NSDecimalNumber(integerAmount: integerAmount, currency: currency)
+    self.init(amount: decimalAmount, currency: currency)
+  }
+
   var displayString: String {
     if currency.isFiat {
       return FiatFormatter(currency: currency, withSymbol: true).string(fromDecimal: amount) ?? ""
