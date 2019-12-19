@@ -8,7 +8,8 @@
 
 import Foundation
 
-enum SelectedCurrency: String {
+typealias SelectedCurrency = CurrencyType
+enum CurrencyType: String {
   case BTC, fiat
 
   mutating func toggle() {
@@ -22,6 +23,7 @@ enum SelectedCurrency: String {
     return self.rawValue
   }
 
+  //TODO: fix this for multi-currency
   var code: Currency {
     switch self {
     case .fiat: return .USD
