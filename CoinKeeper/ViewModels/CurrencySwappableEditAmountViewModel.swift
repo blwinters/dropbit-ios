@@ -50,6 +50,16 @@ struct CurrencyPair {
     self.secondary = (primary == .BTC) ? fiat : .BTC
   }
 
+  init(primaryType: CurrencyType, rate: ExchangeRate) {
+    let fiatCurrency = rate.currency
+    switch primaryType {
+    case .fiat:
+      self.init(primary: fiatCurrency, fiat: fiatCurrency)
+    case .BTC:
+      self.init(primary: .BTC, fiat: fiatCurrency)
+    }
+  }
+
   var fromType: CurrencyType {
     return primary.isFiat ? .fiat : .BTC
   }
