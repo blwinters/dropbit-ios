@@ -50,6 +50,10 @@ struct CurrencyPair {
     self.secondary = (primary == .BTC) ? fiat : .BTC
   }
 
+  var fromType: CurrencyType {
+    return primary.isFiat ? .fiat : .BTC
+  }
+
   static var USD_BTC: CurrencyPair { CurrencyPair(primary: .USD, fiat: .USD) }
   static var BTC_USD: CurrencyPair { CurrencyPair(primary: .BTC, fiat: .USD) }
 
@@ -57,7 +61,7 @@ struct CurrencyPair {
 
 class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
 
-  var exchangeRates: ExchangeRates
+  var exchangeRate: ExchangeRate
   private(set) var fromAmount: NSDecimalNumber
   var fromCurrency: Currency
   var toCurrency: Currency
@@ -66,12 +70,12 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
 
   weak var delegate: CurrencySwappableEditAmountViewModelDelegate?
 
-  init(exchangeRates: ExchangeRates,
+  init(exchangeRate: ExchangeRate,
        primaryAmount: NSDecimalNumber,
        walletTransactionType: WalletTransactionType,
        currencyPair: CurrencyPair,
        delegate: CurrencySwappableEditAmountViewModelDelegate? = nil) {
-    self.exchangeRates = exchangeRates
+    self.exchangeRate = exchangeRate
     self.walletTransactionType = walletTransactionType
     self.fromAmount = primaryAmount
     self.fromCurrency = currencyPair.primary
@@ -81,7 +85,7 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
   }
 
   init(viewModel vm: CurrencySwappableEditAmountViewModel) {
-    self.exchangeRates = vm.exchangeRates
+    self.exchangeRate = vm.exchangeRate
     self.fromAmount = vm.primaryAmount
     self.walletTransactionType = vm.walletTransactionType
     self.fromCurrency = vm.primaryCurrency
@@ -101,7 +105,7 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
     set {
       if primaryRequiresInteger {
         let sats = newValue.intValue
-        fromAmount = NSDecimalNumber(integerAmount: sats, currency: .BTC)
+        fromAmount = NSDecimalNumber(sats: sats)
       } else {
         fromAmount = newValue
       }
@@ -161,7 +165,7 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
 
   static func emptyInstance() -> CurrencySwappableEditAmountViewModel {
     let currencyPair = CurrencyPair(primary: .BTC, fiat: .USD)
-    return CurrencySwappableEditAmountViewModel(exchangeRates: [:],
+    return CurrencySwappableEditAmountViewModel(exchangeRate: .zero,
                                                 primaryAmount: 0,
                                                 walletTransactionType: .onChain,
                                                 currencyPair: currencyPair)
@@ -203,7 +207,7 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
     var amount = NSDecimalNumber(fromString: sanitizedText) ?? .zero
 
     if primaryRequiresInteger {
-      amount = NSDecimalNumber(integerAmount: amount.intValue, currency: .BTC)
+      amount = NSDecimalNumber(sats: amount.intValue)
     }
 
     return amount

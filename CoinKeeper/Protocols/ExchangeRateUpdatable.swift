@@ -16,7 +16,7 @@ protocol ExchangeRateUpdatable: AnyObject {
   var rateManager: ExchangeRateManager { get }
 
   /**
-   rateManager.exchangeRates have already been updated when this is called.
+   rateManager.exchangeRate have already been updated when this is called.
    The conforming object should update it's view with the latest rates at this point, if desired.
 
    However, this should not include updating the BalanceContainer.
@@ -36,14 +36,14 @@ extension ExchangeRateUpdatable {
   }
 
   func updateRatesWithLatest() {
-    guard let latestRates = currencyValueManager?.latestExchangeRates() else { return }
+    guard let latestRate = currencyValueManager?.latestExchangeRate() else { return }
     guard Thread.isMainThread else {
       assertionFailure("latestExchangeRates closure should be called on the main thread")
       return
     }
 
     // Update rates for use by the view controller until the next refresh
-    self.rateManager.exchangeRates = latestRates
+    self.rateManager.exchangeRate = latestRate
     self.didUpdateExchangeRateManager(self.rateManager)
   }
 

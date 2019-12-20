@@ -58,14 +58,10 @@ class FeesView: UIView {
   func setupFees(top topSats: Int, bottom bottomSats: Int) {
     let satsFormatter = SatsFormatter(), manager = ExchangeRateManager()
     let fiatFormatter = FiatFormatter(currency: .USD, withSymbol: true)
-    let topFee = NSDecimalNumber(integerAmount: topSats, currency: .BTC)
-    let bottomFee = NSDecimalNumber(integerAmount: bottomSats, currency: .BTC)
-    let currencyConvterterTop = CurrencyConverter(fromBtcTo: .USD,
-                                                  fromAmount: topFee,
-                                                  rates: manager.exchangeRates)
-    let currencyConvterterBottom = CurrencyConverter(fromBtcTo: .USD,
-                                                     fromAmount: bottomFee,
-                                                     rates: manager.exchangeRates)
+    let topFee = NSDecimalNumber(sats: topSats)
+    let bottomFee = NSDecimalNumber(sats: bottomSats)
+    let currencyConvterterTop = CurrencyConverter(fromBtcAmount: topFee, rate: manager.exchangeRate)
+    let currencyConvterterBottom = CurrencyConverter(fromBtcAmount: bottomFee, rate: manager.exchangeRate)
     guard let topDecimal = currencyConvterterTop.amount(forCurrency: .USD),
     let bottomDecimal = currencyConvterterBottom.amount(forCurrency: .USD) else { return }
     topLabel.text = """

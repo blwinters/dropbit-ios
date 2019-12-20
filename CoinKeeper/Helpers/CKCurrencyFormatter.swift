@@ -226,7 +226,7 @@ class SatsFormatter: CKCurrencyFormatter {
   }
 
   func stringWithSymbol(fromSats sats: Int) -> String? {
-    let satsAsDecimal = NSDecimalNumber(integerAmount: sats, currency: .BTC)
+    let satsAsDecimal = NSDecimalNumber(sats: sats)
     return string(fromDecimal: satsAsDecimal)
   }
 

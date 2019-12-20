@@ -21,16 +21,16 @@ extension AppCoordinator {
   }
 
   func showAlertsForIncomingTransactions(in context: NSManagedObjectContext) {
-    let exchangeRates = self.ratesDataWorker.latestExchangeRates()
+    let exchangeRate = self.latestExchangeRate()
     let insertedTransactions = context.insertedObjects.compactMap { $0 as? CKMTransaction }
     let incomingTransactions = insertedTransactions.filter { $0.isIncoming && !$0.isInvite && !$0.isLightningTransfer }
     let insertedLightningPayments = context.insertedObjects.compactMap { $0 as? CKMLNLedgerEntry }
     let incomingLightningPayments = insertedLightningPayments.filter { $0.type == .lightning && $0.direction == .in }
     for transaction in incomingTransactions {
-      self.alertManager.showIncomingTransactionAlert(for: transaction.receivedAmount, with: exchangeRates)
+      self.alertManager.showIncomingTransactionAlert(for: transaction.receivedAmount, with: exchangeRate)
     }
     for payment in incomingLightningPayments {
-      self.alertManager.showIncomingLightningAlert(for: payment.value, with: exchangeRates)
+      self.alertManager.showIncomingLightningAlert(for: payment.value, with: exchangeRate)
     }
   }
 

@@ -11,18 +11,6 @@ import PromiseKit
 
 extension AppCoordinator: CurrencyValueDataSourceType {
 
-  var preferredFiatCurrency: Currency {
-    return ratesDataWorker.preferredFiatCurrency
-  }
-
-  func latestExchangeRates() -> ExchangeRates {
-    return ratesDataWorker.latestExchangeRates()
-  }
-
-  func latestFees() -> Fees {
-    return ratesDataWorker.latestFees()
-  }
-
   func latestFeeRates() -> Promise<FeeRates> {
     let fees = latestFees()
     guard let feeRates = FeeRates(fees: fees) else { return .missingValue(for: "latestFeeRates") }

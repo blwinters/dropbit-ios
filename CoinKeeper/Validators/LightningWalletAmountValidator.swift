@@ -91,8 +91,8 @@ class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
     }
 
     if !ignoringOptions.contains(.maxWalletValue) {
-      let rates = candidateAmountConverter.rates
-      let converter = CurrencyConverter(fromBtcTo: .USD, fromAmount: candidateBTCAmount + balancesNetPending.lightning, rates: rates)
+      let fromAmount = candidateBTCAmount + balancesNetPending.lightning
+      let converter = CurrencyConverter(fromBtcAmount: fromAmount, rate: candidateAmountConverter.rate)
       if usdAmount > LightningWalletAmountValidator.maxWalletValue.amount ||
       converter.convertedAmount() ?? .zero > LightningWalletAmountValidator.maxWalletValue.amount {
         throw LightningWalletAmountValidatorError.walletMaximum

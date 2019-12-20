@@ -81,7 +81,7 @@ class TransactionHistoryViewModel: NSObject, UICollectionViewDataSource, Exchang
     let cell = collectionView.dequeue(TransactionHistorySummaryCell.self, for: indexPath)
     let isFirstCell = indexPath.row == 0
     let item = dataSource.summaryCellDisplayableItem(at: indexPath,
-                                                     rates: rateManager.exchangeRates,
+                                                     rate: rateManager.exchangeRate,
                                                      currencies: selectedCurrencyPair,
                                                      deviceCountryCode: self.deviceCountryCode)
     cell.configure(with: item, isAtTop: isFirstCell)
@@ -99,7 +99,7 @@ class TransactionHistoryViewModel: NSObject, UICollectionViewDataSource, Exchang
     }
 
     let displayableItem = dataSource.detailCellDisplayableItem(at: indexPath,
-                                                               rates: rateManager.exchangeRates,
+                                                               rate: rateManager.exchangeRate,
                                                                currencies: selectedCurrencyPair,
                                                                deviceCountryCode: self.deviceCountryCode)
 
@@ -131,7 +131,7 @@ class TransactionHistoryViewModel: NSObject, UICollectionViewDataSource, Exchang
 
   func popoverDisplayableItem(at indexPath: IndexPath) -> TransactionDetailPopoverDisplayable? {
     return dataSource.detailPopoverDisplayableItem(at: indexPath,
-                                                   rates: rateManager.exchangeRates,
+                                                   rate: rateManager.exchangeRate,
                                                    currencies: selectedCurrencyPair,
                                                    deviceCountryCode: self.deviceCountryCode)
   }

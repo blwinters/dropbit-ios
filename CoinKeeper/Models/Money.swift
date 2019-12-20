@@ -12,11 +12,22 @@ import Foundation
 struct Money {
   let amount: NSDecimalNumber
   let currency: Currency
+
+  var displayString: String {
+    if currency.isFiat {
+      return FiatFormatter(currency: currency, withSymbol: true).string(fromDecimal: amount) ?? ""
+    } else {
+      return BitcoinFormatter(symbolType: .string).string(fromDecimal: amount) ?? ""
+    }
+  }
+
 }
 
 extension Money: Equatable {
+
   static func == (lhs: Money, rhs: Money) -> Bool {
     return lhs.amount.isEqual(to: rhs.amount) &&
       lhs.currency == rhs.currency
   }
+
 }

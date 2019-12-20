@@ -122,7 +122,7 @@ class MockAlertManager: AlertManagerType {
 
   func showSuccessHUD(withStatus status: String?, duration: TimeInterval, completion: CKCompletion?) { }
 
-  func showIncomingTransactionAlert(for receivedAmount: Int, with rates: ExchangeRates) { }
-  func showIncomingLightningAlert(for receivedAmount: Int, with rates: ExchangeRates) { }
+  func showIncomingTransactionAlert(for receivedAmount: Int, with rate: ExchangeRate) { }
+  func showIncomingLightningAlert(for receivedAmount: Int, with rate: ExchangeRate) { }
 
 }

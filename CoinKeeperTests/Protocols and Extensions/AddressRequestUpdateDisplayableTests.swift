@@ -35,25 +35,25 @@ class AddressRequestUpdateDisplayableTests: XCTestCase {
   }
 
   func testAlertAmountFormatterFullDecimals() {
-    let number = NSDecimalNumber(integerAmount: 2_7823, currency: .BTC)
+    let number = NSDecimalNumber(sats: 2_7823)
     let formattedNumber = self.sut.formattedAmountWithoutSymbol(for: number)
     XCTAssertEqual(formattedNumber, ".00027823")
   }
 
   func testAlertAmountFormatterPartialDecimal() {
-    let number = NSDecimalNumber(integerAmount: 2_7800, currency: .BTC)
+    let number = NSDecimalNumber(sats: 2_7800)
     let formattedNumber = self.sut.formattedAmountWithoutSymbol(for: number)
     XCTAssertEqual(formattedNumber, ".000278")
   }
 
   func testAlertAmountFormatterInteger() {
-    let number = NSDecimalNumber(integerAmount: 2_0000_0000, currency: .BTC)
+    let number = NSDecimalNumber(sats: 2_0000_0000)
     let formattedNumber = self.sut.formattedAmountWithoutSymbol(for: number)
     XCTAssertEqual(formattedNumber, "2")
   }
 
   func testAlertAmountFormatterOverOne() {
-    let number = NSDecimalNumber(integerAmount: 1_0002_7000, currency: .BTC)
+    let number = NSDecimalNumber(sats: 1_0002_7000)
     let formattedNumber = self.sut.formattedAmountWithoutSymbol(for: number)
     XCTAssertEqual(formattedNumber, "1.00027")
   }

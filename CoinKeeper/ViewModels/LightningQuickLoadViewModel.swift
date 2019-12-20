@@ -23,14 +23,14 @@ struct LightningQuickLoadViewModel {
     return [5, 10, 20, 50, 100].map { NSDecimalNumber(value: $0) }
   }
 
-  init(spendableBalances: WalletBalances, rates: ExchangeRates, fiatCurrency: Currency) throws {
+  init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency) throws {
     guard let minFiatAmount = LightningQuickLoadViewModel.standardAmounts.first else {
       throw CKSystemError.missingValue(key: "standardAmounts.min")
     }
 
     ///Run these validations separately to produce correct error message
     //check on chain balance exceeds minFiatAmount
-    let minStandardAmountConverter = CurrencyConverter(rates: rates, fromAmount: minFiatAmount, currencyPair: .USD_BTC)
+    let minStandardAmountConverter = CurrencyConverter(rate: rate, fromAmount: minFiatAmount, fromType: .fiat)
     let onChainBalanceValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
                                                                  walletType: .onChain, ignoring: [.maxWalletValue])
     do {
@@ -47,16 +47,16 @@ struct LightningQuickLoadViewModel {
 
     self.btcBalances = spendableBalances
     self.fiatCurrency = fiatCurrency
-    let fiatBalances = LightningQuickLoadViewModel.convertBalances(spendableBalances, toFiat: fiatCurrency, using: rates)
+    let fiatBalances = LightningQuickLoadViewModel.convertBalances(spendableBalances, toFiat: fiatCurrency, using: rate)
     self.fiatBalances = fiatBalances
     let maxAmountResults = minReloadValidator.maxLoadAmount(using: fiatBalances)
     self.controlConfigs = LightningQuickLoadViewModel.configs(withMax: maxAmountResults.amount, currency: fiatCurrency)
     self.maxIsLimitedByOnChainBalance = maxAmountResults.limitIsOnChainBalance
   }
 
-  private static func convertBalances(_ btcBalances: WalletBalances, toFiat currency: Currency, using rates: ExchangeRates) -> WalletBalances {
-    let onChainConverter = CurrencyConverter(fromBtcTo: currency, fromAmount: btcBalances.onChain, rates: rates)
-    let lightningConverter = CurrencyConverter(fromBtcTo: currency, fromAmount: btcBalances.lightning, rates: rates)
+  private static func convertBalances(_ btcBalances: WalletBalances, toFiat currency: Currency, using rate: ExchangeRate) -> WalletBalances {
+    let onChainConverter = CurrencyConverter(fromBtcAmount: btcBalances.onChain, rate: rate)
+    let lightningConverter = CurrencyConverter(fromBtcAmount: btcBalances.lightning, rate: rate)
     return WalletBalances(onChain: onChainConverter.fiatAmount, lightning: lightningConverter.fiatAmount)
   }
 

@@ -85,15 +85,15 @@ extension BalanceDataSource {
  the block notification token until the view controller is deinitialized.
  */
 class ExchangeRateManager {
-  var exchangeRates: ExchangeRates = [:]
+  var exchangeRate: ExchangeRate
   var notificationToken: NotificationToken?
   var balanceToken: NotificationToken?
 
   init() {
     let defaults = CKUserDefaults()
     let defaultCurrency = Currency.defaultFiatCurrency(forLocale: .current)
-    let cachedExchangeRate = defaults.exchangeRate(for: defaultCurrency) ?? 1
-    self.exchangeRates = [.BTC: 1, defaultCurrency: cachedExchangeRate]
+    let exchangeRate = defaults.exchangeRate(for: defaultCurrency) ?? 1
+    self.exchangeRate = ExchangeRate(double: exchangeRate, currency: defaultCurrency)
   }
 }
 
@@ -138,7 +138,7 @@ extension BalanceDisplayable where Self: UIViewController {
   func updateRatesAndBalances() {
 
     // Calling updateRates() here relies on latestExchangeRates being non-escaping (synchronous),
-    // so that rateManager.exchangeRates are set before the below code executes
+    // so that rateManager.exchangeRate are set before the below code executes
     updateRatesWithLatest()
 
     updateViewWithBalance()

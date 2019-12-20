@@ -10,28 +10,30 @@ import Foundation
 
 protocol CurrencyValueDataSourceType: AnyObject {
 
-  var preferredFiatCurrency: Currency { get }
-
-  /// Synchronously returns the latest cached ExchangeRates
-  /// Also asynchronously checks the exchange rates and posts a notification if they have been updated
-  func latestExchangeRates() -> ExchangeRates
-
-  /// Synchronously returns the latest cached Fees
-  /// Also asynchronously checks the fees and posts a notification if they have been updated
-  func latestFees() -> Fees
+  var ratesDataWorker: RatesDataWorker { get }
 
 }
 
 extension CurrencyValueDataSourceType {
 
+  var preferredFiatCurrency: Currency {
+    return ratesDataWorker.preferredFiatCurrency
+  }
+
+  func latestFees() -> Fees {
+    return ratesDataWorker.latestFees()
+  }
+
   func latestExchangeRate() -> ExchangeRate {
     let rates = ratesDataWorker.latestExchangeRates()
     let currency = preferredFiatCurrency
     let preferredFiatRate = rates[currency] ?? 0.0
-    return Money(amount: NSDecimalNumber(value: preferredFiatRate), currency: currency)
+    return ExchangeRate(double: preferredFiatRate, currency: currency)
   }
 
 }
+
+typealias ExchangeRates = [Currency: Double]
 
 /// Follows names of API
 enum ResponseFeeType: String {

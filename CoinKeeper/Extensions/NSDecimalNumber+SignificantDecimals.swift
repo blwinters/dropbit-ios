@@ -35,6 +35,10 @@ extension NSDecimalNumber {
     self.init(mantissa: UInt64(absValue), exponent: -Int16(currency.decimalPlaces), isNegative: integerAmount < 0)
   }
 
+  convenience init(sats: Satoshis) {
+    self.init(integerAmount: sats, currency: .BTC)
+  }
+
   /// Convert the standard currency unit to an integer of its fractional units, e.g. $1.25 -> 125
   func asFractionalUnits(of currency: Currency) -> Int {
     guard self != NSDecimalNumber.notANumber else { return 0 }

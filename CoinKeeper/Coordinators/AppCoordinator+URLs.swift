@@ -19,7 +19,7 @@ extension AppCoordinator {
 
       } else {
         let currencyPair = CurrencyPair(btcPrimaryWith: self.currencyController)
-        let vm = CurrencySwappableEditAmountViewModel(exchangeRates: self.currencyController.exchangeRates,
+        let vm = CurrencySwappableEditAmountViewModel(exchangeRate: self.currencyController.exchangeRate,
                                                       primaryAmount: .zero,
                                                       walletTransactionType: .onChain,
                                                       currencyPair: currencyPair)

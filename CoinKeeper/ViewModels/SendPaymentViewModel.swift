@@ -76,7 +76,7 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
 
   func sendMax(with data: CNBTransactionData) {
     self.sendMaxTransactionData = data
-    let btcAmount = NSDecimalNumber(integerAmount: Int(data.amount), currency: .BTC)
+    let btcAmount = NSDecimalNumber(sats: Int(data.amount))
     setBTCAmountAsPrimary(btcAmount)
     delegate?.viewModelNeedsAmountLabelRefresh(self, secondaryOnly: false)
   }
@@ -103,12 +103,12 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
 
   init(encodedInvoice: String,
        decodedInvoice: LNDecodePaymentRequestResponse,
-       exchangeRates: ExchangeRates,
+       exchangeRate: ExchangeRate,
        currencyPair: CurrencyPair,
        delegate: CurrencySwappableEditAmountViewModelDelegate? = nil) {
     let currencyPair = CurrencyPair(primary: .BTC, fiat: currencyPair.fiat)
-    let amount = NSDecimalNumber(integerAmount: decodedInvoice.numSatoshis ?? 0, currency: .BTC)
-    let viewModel = CurrencySwappableEditAmountViewModel(exchangeRates: exchangeRates,
+    let amount = NSDecimalNumber(sats: decodedInvoice.numSatoshis ?? 0)
+    let viewModel = CurrencySwappableEditAmountViewModel(exchangeRate: exchangeRate,
                                                          primaryAmount: amount,
                                                          walletTransactionType: .lightning,
                                                          currencyPair: currencyPair,
@@ -123,11 +123,11 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
   // delegate may be nil at init since the delegate is likely a view controller which requires this view model for its own creation
   init(qrCode: OnChainQRCode,
        walletTransactionType: WalletTransactionType,
-       exchangeRates: ExchangeRates,
+       exchangeRate: ExchangeRate,
        currencyPair: CurrencyPair,
        delegate: CurrencySwappableEditAmountViewModelDelegate? = nil) {
     let currencyPair = CurrencyPair(primary: .BTC, fiat: currencyPair.fiat)
-    let viewModel = CurrencySwappableEditAmountViewModel(exchangeRates: exchangeRates,
+    let viewModel = CurrencySwappableEditAmountViewModel(exchangeRate: exchangeRate,
                                                          primaryAmount: qrCode.btcAmount ?? .zero,
                                                          walletTransactionType: walletTransactionType,
                                                          currencyPair: currencyPair,
@@ -148,13 +148,13 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
 
   convenience init?(response: MerchantPaymentRequestResponse,
                     walletTransactionType: WalletTransactionType,
-                    exchangeRates: ExchangeRates,
+                    exchangeRate: ExchangeRate,
                     fiatCurrency: Currency,
                     delegate: CurrencySwappableEditAmountViewModelDelegate? = nil) {
     guard let output = response.outputs.first else { return nil }
-    let btcAmount = NSDecimalNumber(integerAmount: output.amount, currency: .BTC)
+    let btcAmount = NSDecimalNumber(sats: output.amount)
     let currencyPair = CurrencyPair(primary: .BTC, secondary: fiatCurrency, fiat: fiatCurrency)
-    let viewModel = CurrencySwappableEditAmountViewModel(exchangeRates: exchangeRates,
+    let viewModel = CurrencySwappableEditAmountViewModel(exchangeRate: exchangeRate,
                                                          primaryAmount: btcAmount,
                                                          walletTransactionType: walletTransactionType,
                                                          currencyPair: currencyPair,

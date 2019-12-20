@@ -38,8 +38,8 @@ class RatesDataWorker {
     self.persistenceManager.brokers.preferences.fiatCurrency
   }
 
-  /// Provides a closure to be called by the delegate, which passes back the latest ExchangeRates
-  /// Also, checks the exchange rates and posts a notification if they have been updated
+  /// Synchronously returns the latest cached ExchangeRate for the preferredFiatCurrency
+  /// Also asynchronously checks all exchange rates and posts a notification if they have been updated
   func latestExchangeRates() -> ExchangeRates {
     // return latest exchange rates
     let fiatRate = self.persistenceManager.brokers.checkIn.cachedFiatRate(for: preferredFiatCurrency)
@@ -51,6 +51,8 @@ class RatesDataWorker {
     return cachedRates
   }
 
+  /// Synchronously returns the latest cached Fees
+  /// Also asynchronously checks the fees and posts a notification if they have been updated
   func latestFees() -> Fees {
     let broker = self.persistenceManager.brokers.checkIn
     let fees: Fees = [.best: broker.cachedBestFee,

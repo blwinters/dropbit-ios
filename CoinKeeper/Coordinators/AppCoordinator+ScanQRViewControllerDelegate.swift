@@ -29,8 +29,8 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
     }
   }
 
-  private var exchangeRates: ExchangeRates {
-    return self.currencyController.exchangeRates
+  private var exchangeRate: ExchangeRate {
+    return self.currencyController.exchangeRate
   }
 
   private var fiatCurrency: Currency {
@@ -45,7 +45,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
         case .success(let response):
           guard let fetchedModel = SendPaymentViewModel(response: response,
                                                         walletTransactionType: walletTransactionType,
-                                                        exchangeRates: self.exchangeRates,
+                                                        exchangeRate: self.exchangeRate,
                                                         fiatCurrency: self.fiatCurrency,
                                                         delegate: nil)
             else { return }
@@ -55,7 +55,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
           let errorMessage = paymentRequestError.errorDescription ?? self.defaultPaymentErrorMessage
           let errorAlert = self.alertManager.defaultAlert(withTitle: self.paymentErrorTitle, description: errorMessage)
           let currencyPair = CurrencyPair(btcPrimaryWith: self.currencyController)
-          let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRates: self.exchangeRates,
+          let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRate: self.exchangeRate,
                                                                  primaryAmount: .zero,
                                                                  walletTransactionType: walletTransactionType,
                                                                  currencyPair: currencyPair)
@@ -86,7 +86,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
         self.analyticsManager.track(event: .externalLightningInvoiceInput, with: nil)
         let currencyPair = CurrencyPair(btcPrimaryWith: self.currencyController)
         let viewModel = SendPaymentViewModel(encodedInvoice: lightningInvoice, decodedInvoice: decodedInvoice,
-                                             exchangeRates: self.exchangeRates, currencyPair: currencyPair)
+                                             exchangeRate: self.exchangeRate, currencyPair: currencyPair)
         self.showSendPaymentViewController(withViewModel: viewModel, dismissing: viewController, completion: nil)
       case .failure(let error):
         let errorAlert = self.alertManager.defaultAlert(withTitle: self.paymentErrorTitle, description: error.localizedDescription)
@@ -112,7 +112,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
 
     let viewModel = SendPaymentViewModel(qrCode: qrCodeToUse,
                                          walletTransactionType: walletTransactionType,
-                                         exchangeRates: self.exchangeRates,
+                                         exchangeRate: self.exchangeRate,
                                          currencyPair: self.currencyController.currencyPair,
                                          delegate: nil)
 
@@ -138,7 +138,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
   func showScanViewController(fallbackBTCAmount: NSDecimalNumber, primaryCurrency: Currency) {
     let scanViewController = ScanQRViewController.newInstance(delegate: self)
     let currencyPair = CurrencyPair(btcPrimaryWith: self.currencyController)
-    let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRates: self.exchangeRates,
+    let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRate: self.exchangeRate,
                                                            primaryAmount: fallbackBTCAmount,
                                                            walletTransactionType: .onChain,
                                                            currencyPair: currencyPair)

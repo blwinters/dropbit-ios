@@ -28,10 +28,16 @@ struct CurrencyConverter {
     return currencyPair.fiat
   }
 
-  init(rate: ExchangeRate, fromAmount: NSDecimalNumber, isFromBTC: Bool) {
+  ///Creates an instance for converting the `fromAmount` to the `rate.currency` using the `rate.price`.
+  ///The `fromType` is used to determine the currency of the `fromAmount`.
+  init(rate: ExchangeRate, fromAmount: NSDecimalNumber, fromType: CurrencyType) {
     self.rate = rate
     self.fromAmount = fromAmount
-    let primaryCurrency: Currency = isFromBTC ? .BTC : rate.currency
+    let primaryCurrency: Currency
+    switch fromType {
+    case .BTC:  primaryCurrency = .BTC
+    case .fiat: primaryCurrency = rate.currency
+    }
     self.currencyPair = CurrencyPair(primary: primaryCurrency, fiat: rate.currency)
   }
 
@@ -42,14 +48,16 @@ struct CurrencyConverter {
     self.currencyPair = converter.currencyPair
   }
 
-  init(fromBtcAmount fromAmount: NSDecimalNumber, converter: CurrencyConverter) {
-    self.fromAmount = fromAmount
+  ///Creates instance for converting the `btcAmount` to the `converter.fiatCurrency` using the `converter.rate`
+  init(fromBtcAmount btcAmount: NSDecimalNumber, converter: CurrencyConverter) {
+    self.fromAmount = btcAmount
     self.rate = converter.rate
     self.currencyPair = CurrencyPair(primary: .BTC, fiat: converter.fiatCurrency)
   }
 
-  init(fromBtcAmount fromAmount: NSDecimalNumber, rate: ExchangeRate) {
-    self.fromAmount = fromAmount
+  ///Creates instance for converting the `btcAmount` to the `rate.currency` using the `rate.price`
+  init(fromBtcAmount btcAmount: NSDecimalNumber, rate: ExchangeRate) {
+    self.fromAmount = btcAmount
     self.rate = rate
     self.currencyPair = CurrencyPair(primary: .BTC, fiat: rate.currency)
   }

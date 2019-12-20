@@ -32,14 +32,13 @@ extension AppCoordinator: PaymentSendingDelegate {
   func viewControllerDidConfirmOnChainPayment(
     _ viewController: UIViewController,
     transactionData: CNBTransactionData,
-    rates: ExchangeRates,
+    rate: ExchangeRate,
     outgoingTransactionData: OutgoingTransactionData
     ) {
     biometricsAuthenticationManager.resetPolicy()
 
-    let converter = CurrencyConverter(fromBtcTo: .USD,
-                                      fromAmount: NSDecimalNumber(integerAmount: outgoingTransactionData.amount, currency: .BTC),
-                                      rates: rates)
+    let btcAmount = NSDecimalNumber(sats: outgoingTransactionData.amount)
+    let converter = CurrencyConverter(fromBtcAmount: btcAmount, rate: rate)
     let amountInfo = SharedPayloadAmountInfo(converter: converter)
     var outgoingTxDataWithAmount = outgoingTransactionData
     outgoingTxDataWithAmount.sharedPayloadDTO?.amountInfo = amountInfo

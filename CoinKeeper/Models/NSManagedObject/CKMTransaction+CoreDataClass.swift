@@ -213,6 +213,11 @@ public class CKMTransaction: NSManagedObject {
     return isLightningPath && isFirstUTXO
   }
 
+  func dayAverageExchangeRate(for currency: Currency) -> ExchangeRate? {
+    guard let rate = self.dayAveragePrice?.doubleValue else { return nil }
+    return ExchangeRate(double: rate, currency: currency)
+  }
+
 }
 
 extension CKMTransaction {

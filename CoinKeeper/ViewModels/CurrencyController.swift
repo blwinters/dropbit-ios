@@ -41,26 +41,27 @@ protocol CurrencyControllerProviding: AnyObject {
   /// Returns the currency selected by toggling currency
   var selectedCurrencyCode: Currency { get }
 
-  /// The fiat currency preferred by the user
-  var fiatCurrency: Currency { get }
-
-  var exchangeRates: ExchangeRates { get set }
+  var exchangeRate: ExchangeRate { get set }
 
   var currencyConverter: CurrencyConverter { get }
 }
 
+extension CurrencyControllerProviding {
+
+  /// The fiat currency preferred by the user
+  var fiatCurrency: Currency { exchangeRate.currency }
+
+}
+
 class CurrencyController: CurrencyControllerProviding {
 
-  var fiatCurrency: Currency
-  var exchangeRates: ExchangeRates
+  var exchangeRate: ExchangeRate
   var selectedCurrency: SelectedCurrency
 
-  init(fiatCurrency: Currency,
-       selectedCurrency: SelectedCurrency = .fiat,
-       exchangeRates: ExchangeRates = [:]) {
-    self.fiatCurrency = fiatCurrency
+  init(selectedCurrency: SelectedCurrency = .fiat,
+       exchangeRate: ExchangeRate = .zero) {
     self.selectedCurrency = selectedCurrency
-    self.exchangeRates = exchangeRates
+    self.exchangeRate = exchangeRate
   }
 
   var selectedCurrencyCode: Currency {
@@ -75,7 +76,7 @@ class CurrencyController: CurrencyControllerProviding {
   }
 
   var currencyConverter: CurrencyConverter {
-    return CurrencyConverter(rates: exchangeRates, fromAmount: .zero, currencyPair: currencyPair)
+    return CurrencyConverter(rate: exchangeRate, fromAmount: .zero, fromType: selectedCurrency)
   }
 
   private var convertedCurrencyCode: Currency {

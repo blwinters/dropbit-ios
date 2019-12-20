@@ -92,7 +92,7 @@ class ConfirmPaymentViewControllerTests: XCTestCase {
     func viewControllerDidConfirmOnChainPayment(
       _ viewController: UIKit.UIViewController,
       transactionData: CNBitcoinKit.CNBTransactionData,
-      rates: ExchangeRates,
+      rate: ExchangeRate,
       outgoingTransactionData: OutgoingTransactionData) { }
 
     func viewControllerDidConfirmInvite(

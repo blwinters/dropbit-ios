@@ -17,20 +17,20 @@ class BaseConfirmPaymentViewModel: DualAmountDisplayable {
   let walletTransactionType: WalletTransactionType
   var btcAmount: NSDecimalNumber
   let currencyPair: CurrencyPair
-  let exchangeRates: ExchangeRates
+  let exchangeRate: ExchangeRate
 
   init(paymentTarget: String?,
        contact: ContactType?,
        walletTransactionType: WalletTransactionType,
        btcAmount: NSDecimalNumber,
        currencyPair: CurrencyPair,
-       exchangeRates: ExchangeRates) {
+       exchangeRate: ExchangeRate) {
     self.paymentTarget = paymentTarget
     self.contact = contact
     self.walletTransactionType = walletTransactionType
     self.btcAmount = btcAmount
     self.currencyPair = currencyPair
-    self.exchangeRates = exchangeRates
+    self.exchangeRate = exchangeRate
   }
 
   func selectedCurrency() -> SelectedCurrency {
@@ -52,7 +52,7 @@ class BaseConfirmPaymentViewModel: DualAmountDisplayable {
 
   ///Custom implementation, ignoring currencyPair which is used for display order
   var currencyConverter: CurrencyConverter {
-    return CurrencyConverter(fromBtcTo: currencyPair.fiat, fromAmount: fromAmount, rates: exchangeRates)
+    return CurrencyConverter(fromBtcAmount: fromAmount, rate: exchangeRate)
   }
 
   var memo: String? {
@@ -65,7 +65,7 @@ class BaseConfirmPaymentViewModel: DualAmountDisplayable {
 
   func update(with transactionData: CNBTransactionData?) {
     guard let txData = transactionData else { return }
-    self.btcAmount = NSDecimalNumber(integerAmount: Int(txData.amount), currency: .BTC)
+    self.btcAmount = NSDecimalNumber(sats: Int(txData.amount))
   }
 
 }
@@ -90,7 +90,7 @@ class ConfirmPaymentInviteViewModel: BaseConfirmPaymentViewModel {
        walletTransactionType: WalletTransactionType,
        btcAmount: NSDecimalNumber,
        currencyPair: CurrencyPair,
-       exchangeRates: ExchangeRates,
+       exchangeRate: ExchangeRate,
        sharedPayloadDTO: SharedPayloadDTO) {
     self.sharedPayloadDTO = sharedPayloadDTO
     super.init(paymentTarget: nil,
@@ -98,7 +98,7 @@ class ConfirmPaymentInviteViewModel: BaseConfirmPaymentViewModel {
                walletTransactionType: walletTransactionType,
                btcAmount: btcAmount,
                currencyPair: currencyPair,
-               exchangeRates: exchangeRates)
+               exchangeRate: exchangeRate)
   }
 
 }
@@ -123,7 +123,7 @@ class ConfirmOnChainPaymentViewModel: BaseConfirmPaymentViewModel {
        contact: ContactType?,
        btcAmount: NSDecimalNumber,
        currencyPair: CurrencyPair,
-       exchangeRates: ExchangeRates,
+       exchangeRate: ExchangeRate,
        outgoingTransactionData: OutgoingTransactionData) {
     self.outgoingTransactionData = outgoingTransactionData
     super.init(paymentTarget: address,
@@ -131,7 +131,7 @@ class ConfirmOnChainPaymentViewModel: BaseConfirmPaymentViewModel {
                walletTransactionType: .onChain,
                btcAmount: btcAmount,
                currencyPair: currencyPair,
-               exchangeRates: exchangeRates)
+               exchangeRate: exchangeRate)
   }
 
   convenience init(inputs: SendOnChainPaymentInputs) {
@@ -139,7 +139,7 @@ class ConfirmOnChainPaymentViewModel: BaseConfirmPaymentViewModel {
               contact: inputs.contact,
               btcAmount: inputs.btcAmount,
               currencyPair: inputs.currencyPair,
-              exchangeRates: inputs.exchangeRates,
+              exchangeRate: inputs.exchangeRate,
               outgoingTransactionData: inputs.outgoingTxData)
   }
 
@@ -163,7 +163,7 @@ class ConfirmLightningPaymentViewModel: BaseConfirmPaymentViewModel {
        btcAmount: NSDecimalNumber,
        sharedPayload: SharedPayloadDTO?,
        currencyPair: CurrencyPair,
-       exchangeRates: ExchangeRates) {
+       exchangeRate: ExchangeRate) {
     self.invoice = invoice
     self.sharedPayloadDTO = sharedPayload
     super.init(paymentTarget: invoice,
@@ -171,7 +171,7 @@ class ConfirmLightningPaymentViewModel: BaseConfirmPaymentViewModel {
                walletTransactionType: .lightning,
                btcAmount: btcAmount,
                currencyPair: currencyPair,
-               exchangeRates: exchangeRates)
+               exchangeRate: exchangeRate)
   }
 
 }

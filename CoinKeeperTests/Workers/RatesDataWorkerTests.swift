@@ -33,9 +33,9 @@ class RatesDataWorkerTests: XCTestCase {
   func testFetchingLatestExchangeRatesAfterInitializationRetrievesCachedValue() {
     self.sut.start()
     let expectedRate = self.persistenceManager.brokers.checkIn.cachedFiatRate(for: .USD)
-    let rates: ExchangeRates = self.sut.latestExchangeRates()
+    let rate: Double = self.sut.latestExchangeRates()[.USD] ?? 0.0
 
-    XCTAssertEqual(rates[.USD], expectedRate, "usd rate should equal expected rate")
+    XCTAssertEqual(rate, expectedRate, "usd rate should equal expected rate")
   }
 
   // MARK: fees

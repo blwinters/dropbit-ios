@@ -46,10 +46,14 @@ class WalletOverviewViewControllerTests: XCTestCase {
     let badgeManager: BadgeManagerType
     let currencyController: CurrencyController
     let balanceUpdateManager: BalanceUpdateManager
+    let ratesDataWorker: RatesDataWorker
 
     init() {
-      badgeManager = BadgeManager(persistenceManager: MockPersistenceManager())
-      currencyController = CurrencyController(fiatCurrency: .USD)
+      let persistence = MockPersistenceManager()
+      let network = MockNetworkManager()
+      badgeManager = BadgeManager(persistenceManager: persistence)
+      ratesDataWorker = RatesDataWorker(persistenceManager: persistence, networkManager: network)
+      currencyController = CurrencyController()
       balanceUpdateManager = BalanceUpdateManager()
     }
 

@@ -432,7 +432,7 @@ extension SendPaymentViewController {
         self.alertManager?.hideActivityHUD(withDelay: nil, completion: {
           let viewModel = SendPaymentViewModel(encodedInvoice: lightningUrl.invoice,
                                                decodedInvoice: decodedInvoice,
-                                               exchangeRates: self.viewModel.exchangeRates,
+                                               exchangeRate: self.viewModel.exchangeRate,
                                                currencyPair: self.viewModel.currencyPair,
                                                delegate: self)
           self.applyFetchedBitcoinModelAndUpdateView(fetchedModel: viewModel)
@@ -458,7 +458,7 @@ extension SendPaymentViewController {
       case .success(let response):
         let maybeFetchedModel = SendPaymentViewModel(response: response,
                                                      walletTransactionType: self.viewModel.walletTransactionType,
-                                                     exchangeRates: self.viewModel.exchangeRates,
+                                                     exchangeRate: self.viewModel.exchangeRate,
                                                      fiatCurrency: self.viewModel.fiatCurrency)
         guard let fetchedModel = maybeFetchedModel, fetchedModel.address != nil else {
             self.showValidatorAlert(for: MerchantPaymentRequestError.missingOutput, title: errorTitle)
@@ -575,7 +575,7 @@ extension SendPaymentViewController {
   }
 
   func didUpdateExchangeRateManager(_ exchangeRateManager: ExchangeRateManager) {
-    self.updateEditAmountView(withRates: exchangeRateManager.exchangeRates)
+    self.updateEditAmountView(withRate: exchangeRateManager.exchangeRate)
   }
 
 }
@@ -698,7 +698,7 @@ extension SendPaymentViewController {
 
     let ignoredOptions = viewModel.invitationMaximumIgnoredOptions
     let validator = createCurrencyAmountValidator(ignoring: ignoredOptions, balanceToCheck: viewModel.walletTransactionType)
-    let validationConverter = CurrencyConverter(btcFromAmount: btcAmount, converter: viewModel.currencyConverter)
+    let validationConverter = CurrencyConverter(fromBtcAmount: btcAmount, converter: viewModel.currencyConverter)
     try validator.validate(value: validationConverter)
   }
 

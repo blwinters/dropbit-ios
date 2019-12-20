@@ -109,7 +109,7 @@ class AppCoordinator: CoordinatorType {
     serialQueueManager: SerialQueueManagerType = SerialQueueManager(),
     notificationManager: NotificationManagerType? = nil,
     messageManager: MessagesManagerType? = nil,
-    currencyController: CurrencyController = CurrencyController(fiatCurrency: .USD),
+    currencyController: CurrencyController = CurrencyController(),
     twitterAccessManager: TwitterAccessManagerType? = nil,
     ratingAndReviewManager: RatingAndReviewManagerType? = nil,
     featureConfigManager: FeatureConfigManagerType? = nil,

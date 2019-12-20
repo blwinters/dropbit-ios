@@ -212,8 +212,8 @@ extension WalletOverviewViewController: BadgeDisplayable {
 
 extension WalletOverviewViewController: BalanceDisplayable {
 
-  var exchangeRates: ExchangeRates {
-    return rateManager.exchangeRates
+  var exchangeRate: ExchangeRate {
+    return rateManager.exchangeRate
   }
 
   var fromAmount: NSDecimalNumber {
@@ -236,8 +236,8 @@ extension WalletOverviewViewController: BalanceDisplayable {
   var walletBalanceView: WalletBalanceView { return currentWalletBalanceView }
 
   func didUpdateExchangeRateManager(_ exchangeRateManager: ExchangeRateManager) {
-    rateManager.exchangeRates = exchangeRateManager.exchangeRates
-    delegate?.currencyController.exchangeRates = exchangeRateManager.exchangeRates
+    rateManager.exchangeRate = exchangeRateManager.exchangeRate
+    delegate?.currencyController.exchangeRate = exchangeRateManager.exchangeRate
     baseViewControllers.compactMap { $0 as? ExchangeRateUpdatable }.forEach { $0.didUpdateExchangeRateManager(exchangeRateManager) }
   }
 

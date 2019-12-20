@@ -95,8 +95,8 @@ extension CurrencySwappableAmountEditor {
 
   func updateQRImage() { } // empty default method
 
-  func updateEditAmountView(withRates rates: ExchangeRates) {
-    editAmountViewModel.exchangeRates = rates
+  func updateEditAmountView(withRate rate: ExchangeRate) {
+    editAmountViewModel.exchangeRate = rate
     refreshSecondaryAmount()
   }
 

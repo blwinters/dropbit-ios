@@ -284,7 +284,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
   }
 
   func didUpdateExchangeRateManager(_ exchangeRateManager: ExchangeRateManager) {
-    updateEditAmountView(withRates: exchangeRateManager.exchangeRates)
+    updateEditAmountView(withRate: exchangeRateManager.exchangeRate)
   }
 
   override func unlock() {

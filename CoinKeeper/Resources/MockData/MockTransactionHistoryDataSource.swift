@@ -29,21 +29,21 @@ class MockTransactionHistoryDataSource: TransactionHistoryDataSourceType {
   }
 
   func summaryCellDisplayableItem(at indexPath: IndexPath,
-                                  rates: ExchangeRates,
+                                  rate: ExchangeRate,
                                   currencies: CurrencyPair,
                                   deviceCountryCode: Int) -> TransactionSummaryCellDisplayable {
     return items[indexPath.row]
   }
 
   func detailCellDisplayableItem(at indexPath: IndexPath,
-                                 rates: ExchangeRates,
+                                 rate: ExchangeRate,
                                  currencies: CurrencyPair,
                                  deviceCountryCode: Int) -> TransactionDetailCellDisplayable {
     return items[indexPath.row]
   }
 
   func detailPopoverDisplayableItem(at indexPath: IndexPath,
-                                    rates: ExchangeRates,
+                                    rate: ExchangeRate,
                                     currencies: CurrencyPair,
                                     deviceCountryCode: Int) -> TransactionDetailPopoverDisplayable? {
     return nil

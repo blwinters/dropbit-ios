@@ -21,8 +21,8 @@ extension AppCoordinator: BalanceDataSource {
     let adjustedOnChain = max(0, balance.onChain)
     let adjustedLightning = max(0, balance.lightning)
 
-    return WalletBalances(onChain: NSDecimalNumber(integerAmount: adjustedOnChain, currency: .BTC),
-                          lightning: NSDecimalNumber(integerAmount: adjustedLightning, currency: .BTC))
+    return WalletBalances(onChain: NSDecimalNumber(sats: adjustedOnChain),
+                          lightning: NSDecimalNumber(sats: adjustedLightning))
   }
 
   /// isSpendable relies on having at least 1 confirmation
@@ -31,8 +31,8 @@ extension AppCoordinator: BalanceDataSource {
     let context = persistenceManager.viewContext
     let balance = wmgr.spendableBalance(in: context)
 
-    return WalletBalances(onChain: NSDecimalNumber(integerAmount: balance.onChain, currency: .BTC),
-                          lightning: NSDecimalNumber(integerAmount: balance.lightning, currency: .BTC))
+    return WalletBalances(onChain: NSDecimalNumber(sats: balance.onChain),
+                          lightning: NSDecimalNumber(sats: balance.lightning))
   }
 
 }

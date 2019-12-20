@@ -19,17 +19,17 @@ protocol TransactionHistoryDataSourceDelegate: AnyObject {
 protocol TransactionHistoryDataSourceType: AnyObject {
 
   func summaryCellDisplayableItem(at indexPath: IndexPath,
-                                  rates: ExchangeRates,
+                                  rate: ExchangeRate,
                                   currencies: CurrencyPair,
                                   deviceCountryCode: Int) -> TransactionSummaryCellDisplayable
 
   func detailCellDisplayableItem(at indexPath: IndexPath,
-                                 rates: ExchangeRates,
+                                 rate: ExchangeRate,
                                  currencies: CurrencyPair,
                                  deviceCountryCode: Int) -> TransactionDetailCellDisplayable
 
   func detailPopoverDisplayableItem(at indexPath: IndexPath,
-                                    rates: ExchangeRates,
+                                    rate: ExchangeRate,
                                     currencies: CurrencyPair,
                                     deviceCountryCode: Int) -> TransactionDetailPopoverDisplayable?
 
@@ -67,30 +67,30 @@ class TransactionHistoryOnChainDataSource: NSObject, TransactionHistoryDataSourc
 
   /// `currencies.primary` should be the SelectedCurrency of the user
   func summaryCellDisplayableItem(at indexPath: IndexPath,
-                                  rates: ExchangeRates,
+                                  rate: ExchangeRate,
                                   currencies: CurrencyPair,
                                   deviceCountryCode: Int) -> TransactionSummaryCellDisplayable {
     let transaction = frc.object(at: indexPath)
-    let inputs = TransactionViewModelInputs(currencies: currencies, exchangeRates: rates, deviceCountryCode: deviceCountryCode)
+    let inputs = TransactionViewModelInputs(currencies: currencies, exchangeRate: rate, deviceCountryCode: deviceCountryCode)
     return TransactionSummaryCellViewModel(object: transaction, inputs: inputs)
   }
 
   func detailCellDisplayableItem(at indexPath: IndexPath,
-                                 rates: ExchangeRates,
+                                 rate: ExchangeRate,
                                  currencies: CurrencyPair,
                                  deviceCountryCode: Int) -> TransactionDetailCellDisplayable {
     let transaction = frc.object(at: indexPath)
-    let inputs = TransactionViewModelInputs(currencies: currencies, exchangeRates: rates, deviceCountryCode: deviceCountryCode)
+    let inputs = TransactionViewModelInputs(currencies: currencies, exchangeRate: rate, deviceCountryCode: deviceCountryCode)
     return TransactionDetailInvalidCellViewModel(maybeInvalidObject: transaction, inputs: inputs) ??
       TransactionDetailCellViewModel(object: transaction, inputs: inputs)
   }
 
   func detailPopoverDisplayableItem(at indexPath: IndexPath,
-                                    rates: ExchangeRates,
+                                    rate: ExchangeRate,
                                     currencies: CurrencyPair,
                                     deviceCountryCode: Int) -> TransactionDetailPopoverDisplayable? {
     let transaction = frc.object(at: indexPath)
-    let inputs = TransactionViewModelInputs(currencies: currencies, exchangeRates: rates, deviceCountryCode: deviceCountryCode)
+    let inputs = TransactionViewModelInputs(currencies: currencies, exchangeRate: rate, deviceCountryCode: deviceCountryCode)
     return OnChainPopoverViewModel(object: transaction, inputs: inputs)
   }
 
@@ -156,21 +156,21 @@ class TransactionHistoryLightningDataSource: NSObject, TransactionHistoryDataSou
   }
 
   func summaryCellDisplayableItem(at indexPath: IndexPath,
-                                  rates: ExchangeRates,
+                                  rate: ExchangeRate,
                                   currencies: CurrencyPair,
                                   deviceCountryCode: Int) -> TransactionSummaryCellDisplayable {
     let walletEntry = frc.object(at: indexPath)
     let vmObject = viewModelObject(for: walletEntry)
-    let inputs = TransactionViewModelInputs(currencies: currencies, exchangeRates: rates, deviceCountryCode: deviceCountryCode)
+    let inputs = TransactionViewModelInputs(currencies: currencies, exchangeRate: rate, deviceCountryCode: deviceCountryCode)
     return TransactionSummaryCellViewModel(object: vmObject, inputs: inputs)
   }
 
   func detailCellDisplayableItem(at indexPath: IndexPath,
-                                 rates: ExchangeRates,
+                                 rate: ExchangeRate,
                                  currencies: CurrencyPair,
                                  deviceCountryCode: Int) -> TransactionDetailCellDisplayable {
     let walletEntry = frc.object(at: indexPath)
-    let inputs = TransactionViewModelInputs(currencies: currencies, exchangeRates: rates, deviceCountryCode: deviceCountryCode)
+    let inputs = TransactionViewModelInputs(currencies: currencies, exchangeRate: rate, deviceCountryCode: deviceCountryCode)
 
     if let invoiceViewModelObject = LightningInvoiceViewModelObject(walletEntry: walletEntry) {
       return TransactionDetailInvoiceCellViewModel(object: invoiceViewModelObject, inputs: inputs)
@@ -185,13 +185,13 @@ class TransactionHistoryLightningDataSource: NSObject, TransactionHistoryDataSou
   }
 
   func detailPopoverDisplayableItem(at indexPath: IndexPath,
-                                    rates: ExchangeRates,
+                                    rate: ExchangeRate,
                                     currencies: CurrencyPair,
                                     deviceCountryCode: Int) -> TransactionDetailPopoverDisplayable? {
     //This intentionally returns nil for ledger entries with type .lightning, no popover desired
     let walletEntry = frc.object(at: indexPath)
     guard let viewModelObject = LightningOnChainViewModelObject(walletEntry: walletEntry) else { return nil }
-    let inputs = TransactionViewModelInputs(currencies: currencies, exchangeRates: rates, deviceCountryCode: deviceCountryCode)
+    let inputs = TransactionViewModelInputs(currencies: currencies, exchangeRate: rate, deviceCountryCode: deviceCountryCode)
     return OnChainPopoverViewModel(object: viewModelObject, inputs: inputs)
   }
 
