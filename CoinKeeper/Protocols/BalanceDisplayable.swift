@@ -88,6 +88,7 @@ class ExchangeRateManager {
   var exchangeRate: ExchangeRate
   var exchangeRateToken: NotificationToken?
   var balanceToken: NotificationToken?
+  var currencyToken: NotificationToken?
 
   init() {
     let defaults = CKUserDefaults()
@@ -126,6 +127,9 @@ extension BalanceDisplayable where Self: UIViewController {
       self?.updateRatesAndBalances()
     }
 
+    rateManager.currencyToken = CKNotificationCenter.subscribe(key: .didUpdatePreferredFiat, object: nil, queue: nil) { [weak self] (_) in
+      self?.updateRatesAndBalances()
+    }
   }
 
   /// Call this on viewDidLoad
