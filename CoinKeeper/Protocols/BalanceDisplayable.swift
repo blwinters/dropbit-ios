@@ -86,7 +86,7 @@ extension BalanceDataSource {
  */
 class ExchangeRateManager {
   var exchangeRate: ExchangeRate
-  var notificationToken: NotificationToken?
+  var exchangeRateToken: NotificationToken?
   var balanceToken: NotificationToken?
 
   init() {
@@ -118,7 +118,7 @@ extension BalanceDisplayable where Self: UIViewController {
   // overrides implementation in ExchangeRateUpdatable
   private func subscribeToRateUpdates() {
     // The observer block token is automatically deregistered when the rateManager is deallocated from the view controller
-    rateManager.notificationToken = CKNotificationCenter.subscribe(key: .didUpdateExchangeRates, object: nil, queue: nil, using: { [weak self] _ in
+    rateManager.exchangeRateToken = CKNotificationCenter.subscribe(key: .didUpdateExchangeRates, object: nil, queue: nil, using: { [weak self] _ in
       self?.updateRatesAndBalances()
     })
 

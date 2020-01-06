@@ -30,7 +30,7 @@ extension ExchangeRateUpdatable {
 
   func registerForRateUpdates() {
     // The observer block token is automatically deregistered when the balanceManager is deallocated from the view controller
-    rateManager.notificationToken = CKNotificationCenter.subscribe(key: .didUpdateExchangeRates, object: nil, queue: nil, using: { [weak self] _ in
+    rateManager.exchangeRateToken = CKNotificationCenter.subscribe(key: .didUpdateExchangeRates, object: nil, queue: nil, using: { [weak self] _ in
       self?.updateRatesAndView()
     })
   }
