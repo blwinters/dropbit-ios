@@ -77,7 +77,7 @@ class CKCurrencyFormatter {
   }
 
   func decimalString(fromDecimal decimalNumber: NSDecimalNumber) -> String? {
-    return numberFormatterWithoutSymbol(for: currency).string(from: decimalNumber)
+    return decimalFormatter().string(from: decimalNumber)
   }
 
   func string(fromDecimal decimalNumber: NSDecimalNumber) -> String? {
@@ -96,7 +96,7 @@ class CKCurrencyFormatter {
     return formattedString
   }
 
-  fileprivate func numberFormatterWithoutSymbol(for currency: Currency, asInteger: Bool = false) -> NumberFormatter {
+  fileprivate func decimalFormatter(asInteger: Bool = false) -> NumberFormatter {
     let formatter = NumberFormatter()
     formatter.maximumFractionDigits = asInteger ? 0 : currency.decimalPlaces
     formatter.locale = Locale.current //determines grouping/decimal separators
@@ -120,8 +120,8 @@ class FiatFormatter: CKCurrencyFormatter {
                negativeHasSpace: negativeHasSpace)
   }
 
-  override func numberFormatterWithoutSymbol(for currency: Currency, asInteger: Bool = false) -> NumberFormatter {
-    let formatter = super.numberFormatterWithoutSymbol(for: currency, asInteger: asInteger)
+  override func decimalFormatter(asInteger: Bool = false) -> NumberFormatter {
+    let formatter = super.decimalFormatter(asInteger: asInteger)
     if !asInteger {
       formatter.minimumFractionDigits = currency.decimalPlaces
     }
@@ -132,8 +132,8 @@ class FiatFormatter: CKCurrencyFormatter {
 
 class RoundedFiatFormatter: FiatFormatter {
 
-  override func numberFormatterWithoutSymbol(for currency: Currency, asInteger: Bool = false) -> NumberFormatter {
-    return super.numberFormatterWithoutSymbol(for: currency, asInteger: true)
+  override func decimalFormatter(asInteger: Bool = false) -> NumberFormatter {
+    return super.decimalFormatter(asInteger: true)
   }
 }
 
@@ -144,8 +144,8 @@ class EditingFiatAmountFormatter: CKCurrencyFormatter {
                showNegativeSymbol: false, negativeHasSpace: true)
   }
 
-  override func numberFormatterWithoutSymbol(for currency: Currency, asInteger: Bool = false) -> NumberFormatter {
-    let formatter = super.numberFormatterWithoutSymbol(for: currency)
+  override func decimalFormatter(asInteger: Bool = false) -> NumberFormatter {
+    let formatter = super.decimalFormatter()
     formatter.minimumFractionDigits = 0 //do not require decimal places while editing
     return formatter
   }
