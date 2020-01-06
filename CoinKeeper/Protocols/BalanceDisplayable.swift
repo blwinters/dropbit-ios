@@ -82,7 +82,7 @@ extension BalanceDataSource {
 
 /**
  Holds the exchange rates returned by the CurrencyValueManager as well as
- the block notification token until the view controller is deinitialized.
+ the block notification tokens until the view controller is deinitialized.
  */
 class ExchangeRateManager {
   var exchangeRate: ExchangeRate

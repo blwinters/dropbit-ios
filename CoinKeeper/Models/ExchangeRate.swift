@@ -8,7 +8,7 @@
 
 import Foundation
 
-///The rate should represent the amount of currency equal to 1 BTC.
+///The `price` should represent the amount of `currency` equal to 1 BTC.
 struct ExchangeRate {
 
   var price: NSDecimalNumber
