@@ -33,6 +33,10 @@ extension ExchangeRateUpdatable {
     rateManager.exchangeRateToken = CKNotificationCenter.subscribe(key: .didUpdateExchangeRates, object: nil, queue: nil, using: { [weak self] _ in
       self?.updateRatesAndView()
     })
+
+    rateManager.currencyToken = CKNotificationCenter.subscribe(key: .didUpdatePreferredFiat, object: nil, queue: nil, using: { [weak self] _ in
+      self?.updateRatesAndView()
+    })
   }
 
   func updateRatesWithLatest() {
