@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PromiseKit
 
 protocol CurrencyValueDataSourceType: AnyObject {
 
@@ -20,15 +21,21 @@ extension CurrencyValueDataSourceType {
     return ratesDataWorker.preferredFiatCurrency
   }
 
-  func latestFees() -> Fees {
-    return ratesDataWorker.latestFees()
-  }
-
   func latestExchangeRate() -> ExchangeRate {
     let rates = ratesDataWorker.latestExchangeRates()
     let currency = preferredFiatCurrency
     let preferredFiatRate = rates[currency] ?? 0.0
     return ExchangeRate(double: preferredFiatRate, currency: currency)
+  }
+
+  func latestFees() -> Fees {
+    return ratesDataWorker.latestFees()
+  }
+
+  func latestFeeRates() -> Promise<FeeRates> {
+    let fees = latestFees()
+    guard let feeRates = FeeRates(fees: fees) else { return .missingValue(for: "latestFeeRates") }
+    return .value(feeRates)
   }
 
 }

@@ -342,7 +342,6 @@
 		3BA9F605208F6D060047C213 /* AppCoordinator+VerifyRecoveryWordsViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA9F604208F6D060047C213 /* AppCoordinator+VerifyRecoveryWordsViewControllerDelegate.swift */; };
 		3BA9F607208F6D2A0047C213 /* AppCoordinator+DrawerViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA9F606208F6D2A0047C213 /* AppCoordinator+DrawerViewControllerDelegate.swift */; };
 		3BA9F60B208F6E870047C213 /* AppCoordinator+BalanceDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA9F60A208F6E870047C213 /* AppCoordinator+BalanceDataSource.swift */; };
-		3BA9F60D208F6EA20047C213 /* AppCoordinator+CurrencyValueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA9F60C208F6EA20047C213 /* AppCoordinator+CurrencyValueManager.swift */; };
 		3BA9F60F208F6EBF0047C213 /* AppCoordinator+RequestPayViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA9F60E208F6EBF0047C213 /* AppCoordinator+RequestPayViewControllerDelegate.swift */; };
 		3BA9F611208F6EDB0047C213 /* AppCoordinator+BalanceContainerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA9F610208F6EDB0047C213 /* AppCoordinator+BalanceContainerDelegate.swift */; };
 		3BA9FA8420FE852C0011C6C4 /* AppCoordinator+NotificationManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA9FA8320FE852C0011C6C4 /* AppCoordinator+NotificationManagerDelegate.swift */; };
@@ -1493,7 +1492,6 @@
 		3BA9F604208F6D060047C213 /* AppCoordinator+VerifyRecoveryWordsViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+VerifyRecoveryWordsViewControllerDelegate.swift"; sourceTree = "<group>"; };
 		3BA9F606208F6D2A0047C213 /* AppCoordinator+DrawerViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+DrawerViewControllerDelegate.swift"; sourceTree = "<group>"; };
 		3BA9F60A208F6E870047C213 /* AppCoordinator+BalanceDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+BalanceDataSource.swift"; sourceTree = "<group>"; };
-		3BA9F60C208F6EA20047C213 /* AppCoordinator+CurrencyValueManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+CurrencyValueManager.swift"; sourceTree = "<group>"; };
 		3BA9F60E208F6EBF0047C213 /* AppCoordinator+RequestPayViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+RequestPayViewControllerDelegate.swift"; sourceTree = "<group>"; };
 		3BA9F610208F6EDB0047C213 /* AppCoordinator+BalanceContainerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+BalanceContainerDelegate.swift"; sourceTree = "<group>"; };
 		3BA9FA8320FE852C0011C6C4 /* AppCoordinator+NotificationManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+NotificationManagerDelegate.swift"; sourceTree = "<group>"; };
@@ -2498,7 +2496,6 @@
 				3B287CB32100FB1A00A43E57 /* AppCoordinator+ConnectionManagerDelegate.swift */,
 				A29CE0EC20A21ED800761B91 /* AppCoordinator+ContactsViewControllerDelegate.swift */,
 				3BA9F602208F6CEA0047C213 /* AppCoordinator+CreateRecoveryWordsViewControllerDelegate.swift */,
-				3BA9F60C208F6EA20047C213 /* AppCoordinator+CurrencyValueManager.swift */,
 				B541DF5420A3312500C621EB /* AppCoordinator+DeviceVerificationCoordinatorDelegate.swift */,
 				B54090F72270AC7D00E53B80 /* AppCoordinator+DropBitMeViewControllerDelegate.swift */,
 				B50E1838214805D80091EEDA /* AppCoordinator+HeaderDelegate.swift */,
@@ -4958,7 +4955,6 @@
 				3BA9F5F2208F61A70047C213 /* BTCTestnetCoin.swift in Sources */,
 				5B91E3982076BEB500DD9A86 /* DrawerViewController.swift in Sources */,
 				3BC23EF220BDCA5100877BB6 /* TransactionDataError.swift in Sources */,
-				3BA9F60D208F6EA20047C213 /* AppCoordinator+CurrencyValueManager.swift in Sources */,
 				B51D55E12346300000AEAA60 /* TransactionViewModelObject+CKMWalletEntry.swift in Sources */,
 				307DF12121517A8800260369 /* VersionInfo.swift in Sources */,
 				B559AF0D2180E919001D44F2 /* Badgeable.swift in Sources */,
