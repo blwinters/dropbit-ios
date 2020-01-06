@@ -236,7 +236,6 @@ extension WalletOverviewViewController: BalanceDisplayable {
   var walletBalanceView: WalletBalanceView { return currentWalletBalanceView }
 
   func didUpdateExchangeRateManager(_ exchangeRateManager: ExchangeRateManager) {
-    rateManager.exchangeRate = exchangeRateManager.exchangeRate
     delegate?.currencyController.exchangeRate = exchangeRateManager.exchangeRate
     baseViewControllers.compactMap { $0 as? ExchangeRateUpdatable }.forEach { $0.didUpdateExchangeRateManager(exchangeRateManager) }
   }
