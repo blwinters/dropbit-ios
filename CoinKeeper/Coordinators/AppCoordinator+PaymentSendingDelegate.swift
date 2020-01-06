@@ -147,7 +147,10 @@ extension AppCoordinator: PaymentSendingDelegate {
                                      to receiver: OutgoingDropBitReceiver?) -> Promise<LNTransactionResponse> {
     return self.networkManager.payLightningPaymentRequest(inputs.invoice, sats: inputs.sats)
     .get {
-      self.analyticsManager.track(event: .lightningDropBitInvoicePaid, with: nil)
+      let satsValues = SatsTransferredValues(transactionType: .lightning,
+                                         isInvite: invitation != nil,
+                                         lightningType: receiver == nil ? .external : .internal)
+      self.analyticsManager.track(event: .satsTransferred, with: satsValues.values)
       self.persistLightningPaymentResponse($0, receiver: receiver, invitation: invitation, inputs: inputs)
     }
   }
@@ -239,10 +242,6 @@ extension AppCoordinator: PaymentSendingDelegate {
           self.analyticsManager.track(event: .onChainToLightningSuccessful, with: nil)
         }
 
-        self.analyticsManager.track(property: MixpanelProperty(key: .hasSent, value: true))
-        if let receiver = outgoingTransactionData.receiver, case .twitter = receiver {
-          self.analyticsManager.track(event: .twitterSendComplete, with: nil)
-        }
         self.trackIfUserHasABalance()
 
         CKNotificationCenter.publish(key: .didUpdateBalance, object: nil, userInfo: nil)

@@ -308,8 +308,8 @@ struct FallbackViewModelObject: TransactionDetailCellViewModelObject {
     self.paymentIdIsValid = true
   }
 
-  func amountFactory(with currentRates: ExchangeRate, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
-    return MockAmountsFactory(btcAmount: .zero, fiatCurrency: fiatCurrency, exchangeRate: currentRates)
+  func amountFactory(with currentRate: ExchangeRate, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
+    return MockAmountsFactory(btcAmount: .zero, fiatCurrency: fiatCurrency, exchangeRate: currentRate)
   }
 
   func counterpartyConfig(for deviceCountryCode: Int) -> TransactionCellCounterpartyConfig? {

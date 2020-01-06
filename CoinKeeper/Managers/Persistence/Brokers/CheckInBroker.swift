@@ -53,7 +53,7 @@ class CheckInBroker: CKPersistenceBroker, CheckInBrokerType {
     }
   }
 
-  private func cacheCheckInPrices(_ prices: [Currency: Double]) {
+  private func cacheCheckInPrices(_ prices: ExchangeRates) {
     for (currency, rate) in prices {
       guard rate > 0 else { continue }
       cacheFiatRate(rate, for: currency)
@@ -65,7 +65,7 @@ class CheckInBroker: CKPersistenceBroker, CheckInBrokerType {
 extension CheckInResponse {
 
   //TODO: remove this, not for use in production
-  var sampleLastPrices: [Currency: Double] {
+  var sampleLastPrices: ExchangeRates {
     let usdRate = pricing.last
     return [.USD: usdRate,
             .EUR: usdRate * 0.8991,
