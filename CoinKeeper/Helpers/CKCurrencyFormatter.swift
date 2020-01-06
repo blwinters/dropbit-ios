@@ -85,7 +85,11 @@ class CKCurrencyFormatter {
 
     var formattedString = amountString
     if symbolType == .string {
-      formattedString = currency.symbol + amountString
+      if currency.symbolIsTrailing {
+        formattedString = amountString + " " + currency.symbol
+      } else {
+        formattedString = currency.symbol + amountString
+      }
     }
 
     if showNegativeSymbol, decimalNumber.isNegativeNumber {
