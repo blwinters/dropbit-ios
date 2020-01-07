@@ -37,7 +37,7 @@ class TransactionSummaryCellViewModel: TransactionSummaryCellViewModelType {
     self.isLightningTransfer = object.isLightningTransfer
     self.isLightningUpgrade = object.isLightningUpgrade
     self.status = object.status
-    self.amounts = TransactionAmounts(factory: object.amountFactory(with: inputs.exchangeRates, fiatCurrency: inputs.fiatCurrency))
+    self.amounts = TransactionAmounts(factory: object.amountFactory(with: inputs.exchangeRate, fiatCurrency: inputs.fiatCurrency))
     self.memo = object.memo
     self.counterpartyConfig = object.counterpartyConfig(for: inputs.deviceCountryCode)
     self.receiverAddress = object.receiverAddress
@@ -61,7 +61,7 @@ protocol TransactionSummaryCellViewModelObject {
   var isPendingTransferToLightning: Bool { get }
   var isReferralBonus: Bool { get }
 
-  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: Currency) -> TransactionAmountsFactoryType
+  func amountFactory(with currentRates: ExchangeRate, fiatCurrency: Currency) -> TransactionAmountsFactoryType
   func counterpartyConfig(for deviceCountryCode: Int) -> TransactionCellCounterpartyConfig?
 
 }

@@ -17,11 +17,14 @@ class MockSendPaymentViewControllerCoordinator: SendPaymentViewControllerCoordin
 
   var networkManager: NetworkManagerType
   var balanceUpdateManager: BalanceUpdateManager
+  var ratesDataWorker: RatesDataWorker
 
   init(balanceUpdateManager: BalanceUpdateManager = BalanceUpdateManager(),
        networkManager: NetworkManagerType) {
     self.balanceUpdateManager = balanceUpdateManager
     self.networkManager = networkManager
+    self.ratesDataWorker = RatesDataWorker(persistenceManager: MockPersistenceManager(),
+                                           networkManager: MockNetworkManager())
   }
 
   func viewControllerDidSelectCloseWithToggle(_ viewController: UIViewController) { }
@@ -44,12 +47,12 @@ class MockSendPaymentViewControllerCoordinator: SendPaymentViewControllerCoordin
   func buildNonReplaceableTransactionData(
     btcAmount: NSDecimalNumber,
     address: String,
-    exchangeRates: ExchangeRates) -> PaymentData? {
+    exchangeRate: ExchangeRate) -> PaymentData? {
     return nil
   }
 
   func buildLoadLightningPaymentData(selectedAmount: SelectedBTCAmount,
-                                     exchangeRates: ExchangeRates,
+                                     exchangeRate: ExchangeRate,
                                      in context: NSManagedObjectContext) -> Promise<PaymentData> {
     return Promise { _ in }
   }

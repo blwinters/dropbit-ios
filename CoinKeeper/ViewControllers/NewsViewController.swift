@@ -83,7 +83,7 @@ final class NewsViewController: BaseViewController, StoryboardInitializable {
   }
 
   @objc private func refreshDisplayedPrice() {
-    guard let fiatRate = currencyValueManager?.latestFiatExchangeRate() else { return }
+    guard let fiatRate = currencyValueManager?.latestExchangeRate() else { return }
     self.newsViewControllerDDS?.newsData.currentPrice = fiatRate
     self.tableView.reloadData()
   }

@@ -105,9 +105,9 @@ class LightningTransactionViewModelObject: LightningViewModelObject, Transaction
     return nil
   }
 
-  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
+  func amountFactory(with currentRate: ExchangeRate, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
     return TransactionAmountsFactory(walletEntry: walletEntry, fiatCurrency:
-      fiatCurrency, currentRates: currentRates, transferType: lightningTransferType)
+      fiatCurrency, currentRate: currentRate, transferType: lightningTransferType)
   }
 
   func counterpartyConfig(for deviceCountryCode: Int) -> TransactionCellCounterpartyConfig? {
@@ -186,9 +186,9 @@ class LightningInvitationViewModelObject: LightningViewModelObject, TransactionD
 
   var isReferralBonus: Bool { return false } //Invitations cannot be referral bonuses
 
-  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
+  func amountFactory(with currentRate: ExchangeRate, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
     return TransactionAmountsFactory(walletEntry: walletEntry, fiatCurrency: fiatCurrency,
-                                     currentRates: currentRates, transferType: lightningTransferType)
+                                     currentRate: currentRate, transferType: lightningTransferType)
   }
 
   func counterpartyConfig(for deviceCountryCode: Int) -> TransactionCellCounterpartyConfig? {
@@ -271,9 +271,9 @@ class LightningLoadTemporaryViewModelObject: LightningViewModelObject, Transacti
 
   func counterpartyConfig(for deviceCountryCode: Int) -> TransactionCellCounterpartyConfig? { nil }
 
-  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
+  func amountFactory(with currentRate: ExchangeRate, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
     TransactionAmountsFactory(tempSentTx: tempTx, fiatCurrency: fiatCurrency,
-                              currentRates: currentRates, transferType: .deposit)
+                              currentRate: currentRate, transferType: .deposit)
   }
 
 }
@@ -308,8 +308,8 @@ struct FallbackViewModelObject: TransactionDetailCellViewModelObject {
     self.paymentIdIsValid = true
   }
 
-  func amountFactory(with currentRates: ExchangeRates, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
-    return MockAmountsFactory(btcAmount: .zero, fiatCurrency: fiatCurrency, exchangeRates: currentRates)
+  func amountFactory(with currentRate: ExchangeRate, fiatCurrency: Currency) -> TransactionAmountsFactoryType {
+    return MockAmountsFactory(btcAmount: .zero, fiatCurrency: fiatCurrency, exchangeRate: currentRate)
   }
 
   func counterpartyConfig(for deviceCountryCode: Int) -> TransactionCellCounterpartyConfig? {

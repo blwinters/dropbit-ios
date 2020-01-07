@@ -10,9 +10,8 @@ import Foundation
 
 /// A simple struct to work with monetary amounts without a currency converter.
 struct Money {
-
-  var amount: NSDecimalNumber
-  var currency: Currency
+  let amount: NSDecimalNumber
+  let currency: Currency
 
   var displayString: String {
     if currency.isFiat {
@@ -25,8 +24,10 @@ struct Money {
 }
 
 extension Money: Equatable {
+
   static func == (lhs: Money, rhs: Money) -> Bool {
     return lhs.amount.isEqual(to: rhs.amount) &&
       lhs.currency == rhs.currency
   }
+
 }

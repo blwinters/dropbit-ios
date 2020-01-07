@@ -30,7 +30,7 @@ protocol PaymentBuildingDelegate: CurrencyValueDataSourceType {
                                         inputs: SendingDelegateInputs) -> OutgoingTransactionData
 
   func buildLoadLightningPaymentData(selectedAmount: SelectedBTCAmount,
-                                     exchangeRates: ExchangeRates,
+                                     exchangeRate: ExchangeRate,
                                      in context: NSManagedObjectContext) -> Promise<PaymentData>
 
 }
@@ -45,7 +45,7 @@ extension AppCoordinator: PaymentBuildingDelegate {
   }
 
   func buildLoadLightningPaymentData(selectedAmount: SelectedBTCAmount,
-                                     exchangeRates: ExchangeRates,
+                                     exchangeRate: ExchangeRate,
                                      in context: NSManagedObjectContext) -> Promise<PaymentData> {
     let wallet = CKMWallet.findOrCreate(in: context)
     let lightningAccount = self.persistenceManager.brokers.lightning.getAccount(forWallet: wallet, in: context)
@@ -63,7 +63,7 @@ extension AppCoordinator: PaymentBuildingDelegate {
     let feeRate: Double = latestFeeRates.low
     let maybePaymentData = self.buildNonReplaceableTransactionData(selectedAmount: selectedAmount,
                                                                    address: lightningAccount.address,
-                                                                   exchangeRates: exchangeRates,
+                                                                   exchangeRate: exchangeRate,
                                                                    feeRate: feeRate)
     if let paymentData = maybePaymentData {
       do {
@@ -82,7 +82,7 @@ extension AppCoordinator: PaymentBuildingDelegate {
   private func buildNonReplaceableTransactionData(
     selectedAmount: SelectedBTCAmount,
     address: String,
-    exchangeRates: ExchangeRates,
+    exchangeRate: ExchangeRate,
     feeRate: Double) -> PaymentData? {
     var outgoingTransactionData = OutgoingTransactionData.emptyInstance()
     let sharedPayload = SharedPayloadDTO.emptyInstance()
@@ -90,7 +90,7 @@ extension AppCoordinator: PaymentBuildingDelegate {
       primaryCurrency: .BTC,
       walletTxType: .onChain,
       contact: nil,
-      rates: exchangeRates,
+      rate: exchangeRate,
       sharedPayload: sharedPayload,
       rbfReplaceabilityOption: .MustNotBeRBF)
 

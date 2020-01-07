@@ -27,7 +27,7 @@ struct NewsData {
   var weeklyPriceResponse: [PriceSummaryResponse] = []
   var weeklyPriceData: LineChartDataSet = LineChartDataSet()
 
-  var currentPrice: FiatExchangeRate = .zero
+  var currentPrice: ExchangeRate = .zero
 
   var displayPrice: String {
     return currentPrice.displayString
@@ -65,7 +65,7 @@ struct NewsData {
     }
 
     let gross = (priceResponse.last?.average ?? 0.0) - (priceResponse.first?.average ?? 0.0)
-    let percentage = gross / (currentPrice.amount.doubleValue) * 100
+    let percentage = gross / (currentPrice.price.doubleValue) * 100
 
     return (gross: gross, percentage: percentage)
   }

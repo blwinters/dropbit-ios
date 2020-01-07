@@ -182,7 +182,7 @@ extension AppCoordinator {
   func createRequestPayViewController(converter: CurrencyConverter) -> RequestPayViewController? {
     guard let address = nextReceiveAddressForRequestPay() else { return nil }
 
-    let amountVM = CurrencySwappableEditAmountViewModel(exchangeRates: self.currencyController.exchangeRates,
+    let amountVM = CurrencySwappableEditAmountViewModel(exchangeRate: self.currencyController.exchangeRate,
                                                         primaryAmount: .zero,
                                                         walletTransactionType: persistenceManager.brokers.preferences.selectedWalletTransactionType,
                                                         currencyPair: self.currencyController.currencyPair)

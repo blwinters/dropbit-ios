@@ -15,7 +15,7 @@ protocol DualAmountDisplayable {
   var satsFormatter: SatsFormatter { get }
 
   var fromAmount: NSDecimalNumber { get }
-  var exchangeRates: ExchangeRates { get }
+  var exchangeRate: ExchangeRate { get }
   var currencyPair: CurrencyPair { get }
 
   func selectedCurrency() -> SelectedCurrency
@@ -38,9 +38,7 @@ extension DualAmountDisplayable {
   }
 
   var currencyConverter: CurrencyConverter {
-    return CurrencyConverter(rates: exchangeRates,
-                             fromAmount: fromAmount,
-                             currencyPair: currencyPair)
+    return CurrencyConverter(rate: exchangeRate, fromAmount: fromAmount, fromType: currencyPair.fromType)
   }
 
 }

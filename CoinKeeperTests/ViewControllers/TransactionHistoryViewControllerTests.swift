@@ -52,10 +52,13 @@ class TransactionHistoryViewControllerTests: XCTestCase {
 
   class MockCoordinator: TransactionHistoryViewControllerDelegate {
 
+    var ratesDataWorker = RatesDataWorker(persistenceManager: MockPersistenceManager(),
+                                          networkManager: MockNetworkManager())
+
     var preferredFiatCurrency: Currency = .USD
 
-    func latestExchangeRates() -> ExchangeRates {
-      [:]
+    func latestExchangeRate() -> ExchangeRate {
+      .zero
     }
 
     func latestFees() -> Fees {
@@ -81,7 +84,7 @@ class TransactionHistoryViewControllerTests: XCTestCase {
     func viewControllerDidTapSpendBitcoin(_ viewController: UIViewController) { }
 
     var currencyController: CurrencyController {
-      return CurrencyController(fiatCurrency: .USD)
+      return CurrencyController()
     }
 
     func viewControllerSummariesDidReload(_ viewController: TransactionHistoryViewController, indexPathsIfNotAll paths: [IndexPath]?) { }

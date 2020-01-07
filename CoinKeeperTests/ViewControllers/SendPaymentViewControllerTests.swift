@@ -22,9 +22,9 @@ class SendPaymentViewControllerTests: XCTestCase {
     let mockNetworkManager = MockNetworkManager()
     self.mockCoordinator = MockSendPaymentViewControllerCoordinator(networkManager: mockNetworkManager)
 
-    let safeRates: ExchangeRates = [.BTC: 1, .USD: 7000]
+    let safeRates = ExchangeRate(price: 7000, currency: .USD)
     let currencyPair = CurrencyPair(primary: .USD, fiat: .USD)
-    let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRates: safeRates,
+    let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRate: safeRates,
                                                            primaryAmount: 3500,
                                                            walletTransactionType: .onChain,
                                                            currencyPair: currencyPair)

@@ -82,18 +82,19 @@ extension BalanceDataSource {
 
 /**
  Holds the exchange rates returned by the CurrencyValueManager as well as
- the block notification token until the view controller is deinitialized.
+ the block notification tokens until the view controller is deinitialized.
  */
 class ExchangeRateManager {
-  var exchangeRates: ExchangeRates = [:]
-  var notificationToken: NotificationToken?
+  var exchangeRate: ExchangeRate
+  var exchangeRateToken: NotificationToken?
   var balanceToken: NotificationToken?
+  var currencyToken: NotificationToken?
 
   init() {
     let defaults = CKUserDefaults()
     let defaultCurrency = Currency.defaultFiatCurrency(forLocale: .current)
-    let cachedExchangeRate = defaults.exchangeRate(for: defaultCurrency) ?? 1
-    self.exchangeRates = [.BTC: 1, defaultCurrency: cachedExchangeRate]
+    let exchangeRate = defaults.exchangeRate(for: defaultCurrency) ?? 1
+    self.exchangeRate = ExchangeRate(double: exchangeRate, currency: defaultCurrency)
   }
 }
 
@@ -118,7 +119,7 @@ extension BalanceDisplayable where Self: UIViewController {
   // overrides implementation in ExchangeRateUpdatable
   private func subscribeToRateUpdates() {
     // The observer block token is automatically deregistered when the rateManager is deallocated from the view controller
-    rateManager.notificationToken = CKNotificationCenter.subscribe(key: .didUpdateExchangeRates, object: nil, queue: nil, using: { [weak self] _ in
+    rateManager.exchangeRateToken = CKNotificationCenter.subscribe(key: .didUpdateExchangeRates, object: nil, queue: nil, using: { [weak self] _ in
       self?.updateRatesAndBalances()
     })
 
@@ -126,6 +127,9 @@ extension BalanceDisplayable where Self: UIViewController {
       self?.updateRatesAndBalances()
     }
 
+    rateManager.currencyToken = CKNotificationCenter.subscribe(key: .didUpdatePreferredFiat, object: nil, queue: nil) { [weak self] (_) in
+      self?.updateRatesAndBalances()
+    }
   }
 
   /// Call this on viewDidLoad
@@ -138,7 +142,7 @@ extension BalanceDisplayable where Self: UIViewController {
   func updateRatesAndBalances() {
 
     // Calling updateRates() here relies on latestExchangeRates being non-escaping (synchronous),
-    // so that rateManager.exchangeRates are set before the below code executes
+    // so that rateManager.exchangeRate are set before the below code executes
     updateRatesWithLatest()
 
     updateViewWithBalance()

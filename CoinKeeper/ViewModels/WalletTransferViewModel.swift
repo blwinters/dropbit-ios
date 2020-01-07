@@ -15,7 +15,7 @@ class WalletTransferViewModel: CurrencySwappableEditAmountViewModel {
 
   init(direction: TransferDirection,
        amount: TransferAmount,
-       exchangeRates: ExchangeRates) {
+       exchangeRate: ExchangeRate) {
     self.direction = direction
     self.amount = amount
 
@@ -28,7 +28,7 @@ class WalletTransferViewModel: CurrencySwappableEditAmountViewModel {
       break
     }
 
-    super.init(exchangeRates: exchangeRates,
+    super.init(exchangeRate: exchangeRate,
                primaryAmount: NSDecimalNumber(integerAmount: amount.value, currency: .USD),
                walletTransactionType: walletTransactionType,
                currencyPair: CurrencyPair(primary: .USD, fiat: .USD))

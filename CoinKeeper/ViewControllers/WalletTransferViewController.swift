@@ -109,7 +109,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
   }
 
   func didUpdateExchangeRateManager(_ exchangeRateManager: ExchangeRateManager) {
-    updateEditAmountView(withRates: exchangeRateManager.exchangeRates)
+    updateEditAmountView(withRate: exchangeRateManager.exchangeRate)
   }
 
   @IBAction func closeButtonWasTouched() {
@@ -208,7 +208,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
       do {
         let walletBalances: WalletBalances = balanceDataSource?.balancesNetPending() ?? .empty
         let type = WalletTransactionType.lightning
-        let value = CurrencyConverter(fromBtcTo: .USD, fromAmount: amount, rates: rateManager.exchangeRates)
+        let value = CurrencyConverter(fromBtcAmount: amount, rate: rateManager.exchangeRate)
         try LightningWalletAmountValidator(balancesNetPending: walletBalances,
                                            walletType: type,
                                            ignoring: [.maxWalletValue, .minReloadAmount]).validate(value: value)

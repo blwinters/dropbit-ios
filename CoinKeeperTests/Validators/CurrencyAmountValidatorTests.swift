@@ -13,7 +13,7 @@ import XCTest
 class CurrencyAmountValidatorTests: XCTestCase {
   var sut: CurrencyAmountValidator!
 
-  let rates: ExchangeRates = [.BTC: 1, .USD: 8000]
+  let rate = ExchangeRate(price: 8000, currency: .USD)
   let maxMoney = Money(amount: NSDecimalNumber(decimal: 100.0), currency: .USD)
 
   override func setUp() {
@@ -28,8 +28,7 @@ class CurrencyAmountValidatorTests: XCTestCase {
 
   func testValueGreaterThan100USDReturnsError() {
     let money = Money(amount: NSDecimalNumber(decimal: 1000.0), currency: .USD)
-    let pair = CurrencyPair(primary: money.currency, fiat: money.currency)
-    let converter = CurrencyConverter(rates: rates, fromAmount: money.amount, currencyPair: pair)
+    let converter = CurrencyConverter(rate: rate, fromAmount: money.amount, fromType: .fiat)
 
     do {
       try self.sut.validate(value: converter)
@@ -45,8 +44,7 @@ class CurrencyAmountValidatorTests: XCTestCase {
   }
 
   func testValueLessThan100USDShouldNotThrow() {
-    let pair = CurrencyPair(primary: maxMoney.currency, fiat: maxMoney.currency)
-    let converter = CurrencyConverter(rates: rates, fromAmount: maxMoney.amount, currencyPair: pair)
+    let converter = CurrencyConverter(rate: rate, fromAmount: maxMoney.amount, fromType: .fiat)
 
     XCTAssertNoThrow(try self.sut.validate(value: converter),
                      "value less than 100 USD should not throw")

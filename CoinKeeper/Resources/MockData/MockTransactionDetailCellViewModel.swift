@@ -46,7 +46,7 @@ class MockTransactionDetailValidCellViewModel: MockTransactionSummaryCellViewMod
     self.onChainConfirmations = onChainConfirmations
     self.addressProvidedToSender = addressProvidedToSender
     self.paymentIdIsValid = MockDetailCellVM.paymentIdIsValid(basedOn: invitationStatus)
-    self.exchangeRateWhenReceived = MockDetailCellVM.testRates[.USD].flatMap { $0 - 50 }
+    self.exchangeRateWhenReceived = MockDetailCellVM.testRate.price.doubleValue - 50
 
     super.init(walletTxType: walletTxType, direction: direction, status: status, isSentToSelf: isSentToSelf,
                receiverAddress: receiverAddress, lightningInvoice: lightningInvoice,

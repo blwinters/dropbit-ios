@@ -61,19 +61,19 @@ extension AppCoordinator: WalletTransferViewControllerDelegate {
 
   func lightningPaymentData(forFiatAmount fiatAmount: NSDecimalNumber, isMax: Bool) -> Promise<PaymentData> {
     let context = self.persistenceManager.viewContext
-    let exchangeRates = self.currencyController.exchangeRates
-    let converter = CurrencyConverter(rates: exchangeRates, fromAmount: fiatAmount, currencyPair: .USD_BTC)
+    let exchangeRate = self.currencyController.exchangeRate
+    let converter = CurrencyConverter(rate: exchangeRate, fromAmount: fiatAmount, fromType: .fiat)
     if isMax {
-      return buildLoadLightningPaymentData(selectedAmount: .max, exchangeRates: exchangeRates, in: context)
+      return buildLoadLightningPaymentData(selectedAmount: .max, exchangeRate: exchangeRate, in: context)
     } else {
-      return buildLoadLightningPaymentData(selectedAmount: .specific(converter.btcAmount), exchangeRates: exchangeRates, in: context)
+      return buildLoadLightningPaymentData(selectedAmount: .specific(converter.btcAmount), exchangeRate: exchangeRate, in: context)
     }
   }
 
   func lightningPaymentData(forBTCAmount btcAmount: NSDecimalNumber) -> Promise<PaymentData> {
     let context = self.persistenceManager.viewContext
-    let exchangeRates = self.currencyController.exchangeRates
-    return buildLoadLightningPaymentData(selectedAmount: .specific(btcAmount), exchangeRates: exchangeRates, in: context)
+    let exchangeRate = self.currencyController.exchangeRate
+    return buildLoadLightningPaymentData(selectedAmount: .specific(btcAmount), exchangeRate: exchangeRate, in: context)
   }
 
   func viewControllerDidConfirmLoad(_ viewController: UIViewController, paymentData transactionData: PaymentData) {

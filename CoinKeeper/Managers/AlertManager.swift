@@ -149,16 +149,14 @@ class AlertManager: AlertManagerType {
     return config
   }
 
-  func showIncomingTransactionAlert(for receivedAmount: Int, with rates: ExchangeRates) {
-    let converter = CurrencyConverter(fromBtcTo: .USD,
-                                      fromAmount: NSDecimalNumber(integerAmount: receivedAmount, currency: .BTC),
-                                      rates: rates)
+  func showIncomingTransactionAlert(for receivedAmount: Int, with rate: ExchangeRate) {
+    let converter = CurrencyConverter(fromBtcAmount: NSDecimalNumber(sats: receivedAmount), rate: rate)
     let dollarAmount: String = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: converter.fiatAmount) ?? ""
     let message = "You have received a new transaction of \(dollarAmount) in bitcoin!"
     showIncomingAlertForCurrentAppState(with: message)
   }
 
-  func showIncomingLightningAlert(for receivedAmount: Int, with rates: ExchangeRates) {
+  func showIncomingLightningAlert(for receivedAmount: Int, with rate: ExchangeRate) {
     let satsFormatter = SatsFormatter()
     var details = "!"
     if let amountString = satsFormatter.stringWithSymbol(fromSats: receivedAmount) {

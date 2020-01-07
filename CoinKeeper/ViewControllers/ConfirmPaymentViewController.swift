@@ -127,7 +127,7 @@ class ConfirmPaymentViewController: PresentableViewController, StoryboardInitial
     delegate.viewControllerDidConfirmOnChainPayment(
       self,
       transactionData: txData,
-      rates: viewModel.exchangeRates,
+      rate: viewModel.exchangeRate,
       outgoingTransactionData: feeAdjustedOutgoingTxData
     )
   }
@@ -143,7 +143,7 @@ class ConfirmPaymentViewController: PresentableViewController, StoryboardInitial
                              feeModel: ConfirmTransactionFeeModel) {
     guard let contact = viewModel.contact else { return }
     let btcAmount = viewModel.btcAmount
-    let converter = CurrencyConverter(fromBtcTo: .USD, fromAmount: btcAmount, rates: viewModel.exchangeRates)
+    let converter = CurrencyConverter(fromBtcAmount: btcAmount, rate: viewModel.exchangeRate)
 
     let pair = (btcAmount: btcAmount, usdAmount: converter.amount(forCurrency: .USD) ?? NSDecimalNumber(decimal: 0.0))
     let outgoingInvitationDTO = OutgoingInvitationDTO(contact: contact,
@@ -254,10 +254,8 @@ extension ConfirmPaymentViewController {
       adjustableFeesContainer.isHidden = true
     }
 
-    let feeDecimalAmount = NSDecimalNumber(integerAmount: feeModel.networkFeeAmount, currency: .BTC)
-    let feeConverter = CurrencyConverter(fromBtcTo: .USD,
-                                         fromAmount: feeDecimalAmount,
-                                         rates: self.viewModel.exchangeRates)
+    let feeDecimalAmount = NSDecimalNumber(sats: feeModel.networkFeeAmount)
+    let feeConverter = CurrencyConverter(fromBtcAmount: feeDecimalAmount, rate: self.viewModel.exchangeRate)
     let btcFee = String(describing: feeConverter.amount(forCurrency: .BTC) ?? 0)
     let fiatFeeAmount = feeConverter.amount(forCurrency: .USD)
     let fiatFeeString = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: fiatFeeAmount ?? .zero) ?? ""

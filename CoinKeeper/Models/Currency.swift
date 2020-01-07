@@ -52,6 +52,14 @@ enum Currency: String, CaseIterable {
     }
   }
 
+  var symbolIsTrailing: Bool {
+    switch self {
+    case .SEK,
+         .EUR:    return true
+    default:      return false
+    }
+  }
+
   var displayName: String {
     switch self {
     case .AUD:  return "Australian Dollar"

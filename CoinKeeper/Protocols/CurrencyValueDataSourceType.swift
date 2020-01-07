@@ -7,39 +7,45 @@
 //
 
 import Foundation
+import PromiseKit
 
 protocol CurrencyValueDataSourceType: AnyObject {
 
-  var preferredFiatCurrency: Currency { get }
-
-  /// Synchronously returns the latest cached ExchangeRates
-  /// Also asynchronously checks the exchange rates and posts a notification if they have been updated
-  func latestExchangeRates() -> ExchangeRates
-
-  /// Synchronously returns the latest cached Fees
-  /// Also asynchronously checks the fees and posts a notification if they have been updated
-  func latestFees() -> Fees
+  var ratesDataWorker: RatesDataWorker { get }
 
 }
 
 extension CurrencyValueDataSourceType {
 
-  func latestFiatExchangeRate() -> FiatExchangeRate {
-    let rates = latestExchangeRates()
+  var preferredFiatCurrency: Currency {
+    return ratesDataWorker.preferredFiatCurrency
+  }
+
+  func latestExchangeRate() -> ExchangeRate {
+    let rates = ratesDataWorker.latestExchangeRates()
     let currency = preferredFiatCurrency
     let preferredFiatRate = rates[currency] ?? 0.0
-    return Money(amount: NSDecimalNumber(value: preferredFiatRate), currency: currency)
+    return ExchangeRate(double: preferredFiatRate, currency: currency)
+  }
+
+  func latestFees() -> Fees {
+    return ratesDataWorker.latestFees()
+  }
+
+  func latestFeeRates() -> Promise<FeeRates> {
+    let fees = latestFees()
+    guard let feeRates = FeeRates(fees: fees) else { return .missingValue(for: "latestFeeRates") }
+    return .value(feeRates)
   }
 
 }
+
+typealias ExchangeRates = [Currency: Double]
 
 /// Follows names of API
 enum ResponseFeeType: String {
   case good, better, best
 }
-
-/// The rate should represent the amount of currency equal to 1 BTC
-typealias ExchangeRates = [Currency: Double]
 
 /// The fee values represent the current cost of a transaction in satoshis/byte
 typealias Fees = [ResponseFeeType: Double]
@@ -47,13 +53,3 @@ typealias Fees = [ResponseFeeType: Double]
 /// The closure type to be passed to the AppCoordinator when requesting the latest fees.
 /// This closure should be called on the main queue.
 typealias FeesRequest = (Fees) -> Void
-
-typealias FiatExchangeRate = Money
-
-extension FiatExchangeRate {
-
-  ///Useful as a non-nil default value
-  static var zero: FiatExchangeRate {
-    return FiatExchangeRate(amount: .zero, currency: .USD)
-  }
-}
