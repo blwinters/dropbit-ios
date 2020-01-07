@@ -13,7 +13,7 @@ class CurrencyTests: XCTestCase {
   var sut: Currency!
 
   let usdSymbol = "$"
-  let btcSymbol = "\u{20BF} "
+  let btcSymbol = "\u{20BF}"
 
   // MARK: USD
   func testUSDHasSymbolAndDecimalPlaces() {

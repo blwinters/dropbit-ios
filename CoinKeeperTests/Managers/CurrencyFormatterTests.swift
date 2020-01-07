@@ -35,7 +35,7 @@ class CurrencyFormatterTests: XCTestCase {
   func testBitcoinFormatterWithSymbol() {
     let formatter = BitcoinFormatter(symbolType: .string)
     let amount = NSDecimalNumber(sats: 714286)
-    let expectedValue = "\(Currency.BTC.symbol)0.00714286"
+    let expectedValue = "\(Currency.BTC.symbol) 0.00714286"
 
     XCTAssertEqual(formatter.string(fromDecimal: amount), expectedValue)
   }
