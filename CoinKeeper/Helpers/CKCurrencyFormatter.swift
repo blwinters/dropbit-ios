@@ -91,9 +91,9 @@ class CKCurrencyFormatter {
     var formattedString = amountString
     if symbolType == .string {
       if currency.symbolIsTrailing {
-        formattedString = amountString + " " + currency.symbol
+        formattedString = amountString + currency.symbolWithSpace
       } else {
-        formattedString = currency.symbol + amountString
+        formattedString = currency.symbolWithSpace + amountString
       }
     }
 
@@ -195,7 +195,7 @@ class BitcoinFormatter: CKCurrencyFormatter {
     switch symbolType {
     case .string:
       let attributes: StringAttributes? = symbolFont.flatMap { [.font: $0] }
-      return NSAttributedString(string: currency.symbol, attributes: attributes)
+      return NSAttributedString(string: currency.symbolWithSpace, attributes: attributes)
     default:
       let image = UIImage(named: "bitcoinLogo")
       let textAttribute = NSTextAttachment()

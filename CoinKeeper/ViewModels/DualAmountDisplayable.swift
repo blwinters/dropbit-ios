@@ -153,13 +153,13 @@ extension DualAmountEditable {
     var attributes: StringAttributes = [:]
     switch primaryFormat {
     case .bitcoin:
-      symbol = primaryFormat.currency.symbol
+      symbol = primaryFormat.currency.symbolWithSpace
       attributes[.font] = bitcoinSymbolFont
     case .sats:
       symbol = primaryFormat.currency.integerSymbol(forAmount: fromAmount)
       attributes[.font] = UIFont.regular(primaryFont.pointSize)
     case .fiat:
-      symbol = primaryFormat.currency.symbol
+      symbol = primaryFormat.currency.symbolWithSpace
       attributes[.font] = UIFont.regular(primaryFont.pointSize)
     }
 

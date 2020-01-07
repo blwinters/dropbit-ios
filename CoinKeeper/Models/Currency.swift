@@ -43,12 +43,20 @@ enum Currency: String, CaseIterable {
   var symbol: String {
     switch self {
     case .AUD:  return "$"
-    case .BTC:  return "\u{20BF} "
+    case .BTC:  return "\u{20BF}"
     case .CAD:  return "$"
     case .EUR:  return "€"
     case .GBP:  return "£"
     case .SEK:  return "kr"
     case .USD:  return "$"
+    }
+  }
+
+  var symbolWithSpace: String {
+    switch self {
+    case .SEK, .EUR:  return " " + symbol
+    case .BTC:        return symbol + " "
+    default:          return symbol
     }
   }
 
