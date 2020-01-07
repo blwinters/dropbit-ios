@@ -24,6 +24,11 @@ enum CurrencyFormatType {
     }
   }
 
+  init(walletTxType: WalletTransactionType, fiatCurrency: Currency, selected: SelectedCurrency) {
+    let currency: Currency = (selected == .fiat) ? fiatCurrency : .BTC
+    self.init(walletTxType: walletTxType, currency: currency)
+  }
+
   var currency: Currency {
     switch self {
     case .bitcoin, .sats:       return .BTC
