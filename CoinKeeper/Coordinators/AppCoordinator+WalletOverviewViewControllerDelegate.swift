@@ -71,10 +71,7 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
     if let validatorError = error as? LightningWalletAmountValidatorError {
       switch validatorError {
       case .reloadMinimum:
-        let message = """
-        DropBit requires you to load a minimum of $5.00 to your Lightning wallet.
-        You don’t currently have enough funds to meet the minimum requirement.
-        """.removingMultilineLineBreaks()
+        let message = validatorError.displayMessage ?? ""
 
         let buyBitcoinAction = AlertActionConfiguration(title: "Buy Bitcoin", style: .default) {
           self.viewControllerDidTapGetBitcoin(viewController)
