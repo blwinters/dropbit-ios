@@ -64,11 +64,12 @@ class LightningQuickLoadViewModelTests: XCTestCase {
   }
 
   func testHighOnChainBalanceIsLimitedByMaxLightningBalance() {
-    let expectedMaxFiatAmount = NSDecimalNumber(integerAmount: 20_00, currency: .USD)
-    let lightningFiatBalance = NSDecimalNumber(integerAmount: 180_00, currency: .USD)
+    let lightningBalance = NSDecimalNumber(sats: 2_000_000)
+    let expectedMaxBTCAmount = self.limits.maxBalance.subtracting(lightningBalance)
     let rate = CurrencyConverter.sampleRate
-    let balanceConverter = CurrencyConverter(rate: rate, fromAmount: lightningFiatBalance, fromType: .fiat)
-    let btcBalances = WalletBalances(onChain: .one, lightning: balanceConverter.btcAmount)
+    let converter = CurrencyConverter(rate: rate, fromAmount: expectedMaxBTCAmount, fromType: .BTC)
+    let expectedMaxFiatAmount = converter.fiatAmount
+    let btcBalances = WalletBalances(onChain: .one, lightning: lightningBalance)
     do {
       sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD, limits: limits)
       XCTAssertEqual(sut.controlConfigs.last!.amount.amount, expectedMaxFiatAmount)
