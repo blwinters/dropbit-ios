@@ -19,12 +19,13 @@ struct LightningQuickLoadViewModel {
   ///If false, sending max should send the specific amount shown.
   let maxIsLimitedByOnChainBalance: Bool
 
-  static var standardAmounts: [NSDecimalNumber] {
+  static func standardAmounts(for currency: Currency) -> [NSDecimalNumber] {
     return [5, 10, 20, 50, 100].map { NSDecimalNumber(value: $0) }
   }
 
   init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency, limits: LightningLimits) throws {
-    guard let minFiatAmount = LightningQuickLoadViewModel.standardAmounts.first else {
+    let standardAmounts = LightningQuickLoadViewModel.standardAmounts(for: fiatCurrency)
+    guard let minFiatAmount = standardAmounts.first else {
       throw CKSystemError.missingValue(key: "standardAmounts.min")
     }
 
@@ -65,7 +66,7 @@ struct LightningQuickLoadViewModel {
   }
 
   private static func configs(withMax max: NSDecimalNumber, currency: Currency) -> [QuickLoadControlConfig] {
-    let standardConfigs = standardAmounts.map { amount -> QuickLoadControlConfig in
+    let standardConfigs = standardAmounts(for: currency).map { amount -> QuickLoadControlConfig in
       let money = Money(amount: amount, currency: currency)
       return QuickLoadControlConfig(isEnabled: amount <= max, amount: money)
     }
