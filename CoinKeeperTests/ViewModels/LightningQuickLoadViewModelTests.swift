@@ -51,13 +51,13 @@ class LightningQuickLoadViewModelTests: XCTestCase {
   }
 
   func testModerateOnChainBalanceEqualsMaxAmount() {
-    let expectedMaxFiatAmount = NSDecimalNumber(integerAmount: 20_50, currency: .USD)
+    let onChainFiatBalance = NSDecimalNumber(integerAmount: 20_50, currency: .USD)
     let rate = CurrencyConverter.sampleRate
-    let balanceConverter = CurrencyConverter(rate: rate, fromAmount: expectedMaxFiatAmount, fromType: .fiat)
+    let balanceConverter = CurrencyConverter(rate: rate, fromAmount: onChainFiatBalance, fromType: .fiat)
     let btcBalances = WalletBalances(onChain: balanceConverter.btcAmount, lightning: .zero)
     do {
       sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD, limits: limits)
-      XCTAssertEqual(sut.controlConfigs.last!.amount.amount, expectedMaxFiatAmount)
+      XCTAssertEqual(sut.controlConfigs.last!.amount.amount, onChainFiatBalance)
     } catch {
       XCTFail("Threw unexpected error: \(error.localizedDescription)")
     }

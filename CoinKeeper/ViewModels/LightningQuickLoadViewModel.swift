@@ -51,10 +51,10 @@ struct LightningQuickLoadViewModel {
 
     self.btcBalances = spendableBalances
     self.fiatCurrency = fiatCurrency
-    let fiatBalances = LightningQuickLoadViewModel.convertBalances(spendableBalances, toFiat: fiatCurrency, using: rate)
-    self.fiatBalances = fiatBalances
-    let maxAmountResults = minReloadValidator.maxLoadAmount(using: fiatBalances)
-    self.controlConfigs = LightningQuickLoadViewModel.configs(withMax: maxAmountResults.amount, currency: fiatCurrency)
+    self.fiatBalances = LightningQuickLoadViewModel.convertBalances(spendableBalances, toFiat: fiatCurrency, using: rate)
+    let maxAmountResults = minReloadValidator.maxLoadAmount(using: spendableBalances)
+    let fiatMaxConverter = CurrencyConverter(rate: rate, fromAmount: maxAmountResults.btcAmount, fromType: .BTC)
+    self.controlConfigs = LightningQuickLoadViewModel.configs(withMax: fiatMaxConverter.fiatAmount, currency: fiatCurrency)
     self.maxIsLimitedByOnChainBalance = maxAmountResults.limitIsOnChainBalance
   }
 

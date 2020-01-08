@@ -107,12 +107,12 @@ class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
 
   ///Returns a tuple of the max amount that the user can load into their lightning wallet
   ///and a boolean representing whether the user's on-chain balance was the primary constraint.
-  func maxLoadAmount(using fiatBalances: WalletBalances) -> (amount: NSDecimalNumber, limitIsOnChainBalance: Bool) {
-    let lightningBalanceFiatCapacity: NSDecimalNumber = limits.maxBalance.subtracting(fiatBalances.lightning)
+  func maxLoadAmount(using btcBalances: WalletBalances) -> (btcAmount: NSDecimalNumber, limitIsOnChainBalance: Bool) {
+    let lightningBalanceFiatCapacity: NSDecimalNumber = limits.maxBalance.subtracting(btcBalances.lightning)
     guard lightningBalanceFiatCapacity.isPositiveNumber else { return (.zero, false) }
 
-    if fiatBalances.onChain < lightningBalanceFiatCapacity {
-      return (fiatBalances.onChain, true)
+    if btcBalances.onChain < lightningBalanceFiatCapacity {
+      return (btcBalances.onChain, true)
     } else {
       return (lightningBalanceFiatCapacity, false)
     }
