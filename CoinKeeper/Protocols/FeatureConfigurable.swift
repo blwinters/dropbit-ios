@@ -38,6 +38,8 @@ struct FeatureConfig: Equatable {
 
   enum Key: String, CaseIterable {
     case referrals
+    case maxLightningBalance
+    case minLightningReload
 
     var defaultsString: String {
       return self.rawValue
@@ -46,8 +48,11 @@ struct FeatureConfig: Equatable {
 
   private var enabledFeatures: Set<Key> = []
 
-  init(enabledFeatures: [Key]) {
+  let lightningLimits: LightningLimits
+
+  init(enabledFeatures: [Key], limits: LightningLimits) {
     self.enabledFeatures = Set(enabledFeatures)
+    self.lightningLimits = limits
   }
 
   func shouldEnable(_ feature: Key) -> Bool {
@@ -68,7 +73,7 @@ protocol FeatureConfigManagerType: AnyObject {
 class FeatureConfigManager: FeatureConfigManagerType {
 
   let userDefaults: UserDefaults
-  var latestConfig = FeatureConfig(enabledFeatures: []) //cached in memory
+  var latestConfig = FeatureConfig(enabledFeatures: [], limits: .fallbackInstance) //cached in memory
 
   init(userDefaults: UserDefaults) {
     self.userDefaults = userDefaults
@@ -96,21 +101,31 @@ class FeatureConfigManager: FeatureConfigManagerType {
   ///Creates a config based on persisted values, falling back to default values if not persisted
   private func createConfig() -> FeatureConfig {
     let enabledKeys: [FeatureConfig.Key] = FeatureConfig.Key.allCases.filter { key in
-      return persistedValue(for: key) ?? isEnabledByDefault(for: key)
+      return persistedBool(for: key) ?? isEnabledByDefault(for: key)
     }
-    return FeatureConfig(enabledFeatures: enabledKeys)
+    let lightningLimits = LightningLimits(minReload: persistedInteger(for: .minLightningReload),
+                                          maxBalance: persistedInteger(for: .maxLightningBalance))
+    return FeatureConfig(enabledFeatures: enabledKeys, limits: lightningLimits)
   }
 
-  private func persistedValue(for key: FeatureConfig.Key) -> Bool? {
+  private func persistedBool(for key: FeatureConfig.Key) -> Bool? {
     guard userDefaults.object(forKey: key.defaultsString) != nil else {
       return nil
     }
     return userDefaults.bool(forKey: key.defaultsString)
   }
 
+  private func persistedInteger(for key: FeatureConfig.Key) -> Int? {
+    guard userDefaults.object(forKey: key.defaultsString) != nil else {
+      return nil
+    }
+    return userDefaults.integer(forKey: key.defaultsString)
+  }
+
   private func isEnabledByDefault(for key: FeatureConfig.Key) -> Bool {
     switch key {
     case .referrals:        return false
+    default:                return false
     }
   }
 

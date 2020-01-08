@@ -23,7 +23,7 @@ struct LightningQuickLoadViewModel {
     return [5, 10, 20, 50, 100].map { NSDecimalNumber(value: $0) }
   }
 
-  init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency) throws {
+  init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency, limits: LightningLimits) throws {
     guard let minFiatAmount = LightningQuickLoadViewModel.standardAmounts.first else {
       throw CKSystemError.missingValue(key: "standardAmounts.min")
     }
@@ -32,17 +32,21 @@ struct LightningQuickLoadViewModel {
     //check on chain balance exceeds minFiatAmount
     let minStandardAmountConverter = CurrencyConverter(rate: rate, fromAmount: minFiatAmount, fromType: .fiat)
     let onChainBalanceValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
-                                                                 walletType: .onChain, ignoring: [.maxWalletValue])
+                                                                 walletType: .onChain,
+                                                                 limits: limits,
+                                                                 ignoring: [.maxWalletValue])
     do {
       try onChainBalanceValidator.validate(value: minStandardAmountConverter)
     } catch {
       //map usableBalance error to
-      throw LightningWalletAmountValidatorError.reloadMinimum
+      throw LightningWalletAmountValidatorError.reloadMinimum(btc: limits.minReloadAmount)
     }
 
     //check lightning wallet has capacity for the minFiatAmount
     let minReloadValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
-                                                            walletType: .onChain, ignoring: [.minReloadAmount])
+                                                            walletType: .onChain,
+                                                            limits: limits,
+                                                            ignoring: [.minReloadAmount])
     try minReloadValidator.validate(value: minStandardAmountConverter)
 
     self.btcBalances = spendableBalances

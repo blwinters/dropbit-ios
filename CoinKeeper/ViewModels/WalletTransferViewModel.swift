@@ -12,12 +12,15 @@ class WalletTransferViewModel: CurrencySwappableEditAmountViewModel {
 
   var direction: TransferDirection
   var amount: TransferAmount
+  let lightningLimits: LightningLimits
 
   init(direction: TransferDirection,
        amount: TransferAmount,
-       exchangeRate: ExchangeRate) {
+       exchangeRate: ExchangeRate,
+       limits: LightningLimits) {
     self.direction = direction
     self.amount = amount
+    self.lightningLimits = limits
 
     var walletTransactionType: WalletTransactionType = .onChain
 

@@ -19,16 +19,18 @@ class LightningQuickLoadViewModelTests: XCTestCase {
     sut = nil
   }
 
+  let limits = LightningLimits.fallbackInstance
+
   func testLowOnChainBalanceThrowsError() {
     let oneSat = NSDecimalNumber(sats: 1)
     let balances = WalletBalances(onChain: oneSat, lightning: .zero)
-    let expectedError = LightningWalletAmountValidatorError.reloadMinimum
+    let expectedError = LightningWalletAmountValidatorError.reloadMinimum(btc: limits.minReloadAmount)
     let rate = CurrencyConverter.sampleRate
     do {
-      sut = try LightningQuickLoadViewModel(spendableBalances: balances, rate: rate, fiatCurrency: .USD)
+      sut = try LightningQuickLoadViewModel(spendableBalances: balances, rate: rate, fiatCurrency: .USD, limits: limits)
       XCTFail("Should throw error")
     } catch let error as LightningWalletAmountValidatorError {
-      XCTAssertEqual(error, expectedError)
+      XCTAssertTrue(expectedError == error, "Threw unexpected error: \(error.localizedDescription)")
     } catch {
       XCTFail("Threw unexpected error: \(error.localizedDescription)")
     }
@@ -36,10 +38,10 @@ class LightningQuickLoadViewModelTests: XCTestCase {
 
   func testHighLightningBalanceThrowsError() {
     let balances = WalletBalances(onChain: .one, lightning: .one)
-    let expectedError = LightningWalletAmountValidatorError.walletMaximum
+    let expectedError = LightningWalletAmountValidatorError.walletMaximum(btc: limits.maxBalance)
     let rate = CurrencyConverter.sampleRate
     do {
-      sut = try LightningQuickLoadViewModel(spendableBalances: balances, rate: rate, fiatCurrency: .USD)
+      sut = try LightningQuickLoadViewModel(spendableBalances: balances, rate: rate, fiatCurrency: .USD, limits: limits)
       XCTFail("Should throw error")
     } catch let error as LightningWalletAmountValidatorError {
       XCTAssertEqual(error, expectedError)
@@ -54,7 +56,7 @@ class LightningQuickLoadViewModelTests: XCTestCase {
     let balanceConverter = CurrencyConverter(rate: rate, fromAmount: expectedMaxFiatAmount, fromType: .fiat)
     let btcBalances = WalletBalances(onChain: balanceConverter.btcAmount, lightning: .zero)
     do {
-      sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD)
+      sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD, limits: limits)
       XCTAssertEqual(sut.controlConfigs.last!.amount.amount, expectedMaxFiatAmount)
     } catch {
       XCTFail("Threw unexpected error: \(error.localizedDescription)")
@@ -68,7 +70,7 @@ class LightningQuickLoadViewModelTests: XCTestCase {
     let balanceConverter = CurrencyConverter(rate: rate, fromAmount: lightningFiatBalance, fromType: .fiat)
     let btcBalances = WalletBalances(onChain: .one, lightning: balanceConverter.btcAmount)
     do {
-      sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD)
+      sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD, limits: limits)
       XCTAssertEqual(sut.controlConfigs.last!.amount.amount, expectedMaxFiatAmount)
     } catch {
       XCTFail("Threw unexpected error: \(error.localizedDescription)")
@@ -81,7 +83,7 @@ class LightningQuickLoadViewModelTests: XCTestCase {
     let balanceConverter = CurrencyConverter(rate: rate, fromAmount: onChainFiatBalance, fromType: .fiat)
     let btcBalances = WalletBalances(onChain: balanceConverter.btcAmount, lightning: .zero)
     do {
-      sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD)
+      sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD, limits: limits)
       let expectedEnabledValues: [NSDecimalNumber] = [5, 10, 20, 45].map { NSDecimalNumber(value: $0) }
       let actualEnabledValues = sut.controlConfigs.filter { $0.isEnabled }.map { $0.amount.amount }
       XCTAssertEqual(expectedEnabledValues, actualEnabledValues)
