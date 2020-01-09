@@ -20,7 +20,10 @@ struct LightningQuickLoadViewModel {
   let maxIsLimitedByOnChainBalance: Bool
 
   static func standardAmounts(for currency: Currency) -> [NSDecimalNumber] {
-    return [5, 10, 20, 50, 100].map { NSDecimalNumber(value: $0) }
+    switch currency {
+    case .SEK:  return [50, 100, 200, 500, 1000].map { NSDecimalNumber(value: $0) }
+    default:    return [5, 10, 20, 50, 100].map { NSDecimalNumber(value: $0) }
+    }
   }
 
   init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency, limits: LightningLimits) throws {

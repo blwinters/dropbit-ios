@@ -62,7 +62,7 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
     let balances = self.spendableBalancesNetPending()
     let rate = self.currencyController.exchangeRate
     let limits = self.currentConfig().lightningLimits
-    return try LightningQuickLoadViewModel(spendableBalances: balances, rate: rate, fiatCurrency: .USD, limits: limits)
+    return try LightningQuickLoadViewModel(spendableBalances: balances, rate: rate, fiatCurrency: rate.currency, limits: limits)
   }
 
   private func showQuickLoadBalanceError(for error: Error, viewController: UIViewController) {
