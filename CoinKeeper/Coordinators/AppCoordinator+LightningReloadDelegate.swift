@@ -16,7 +16,9 @@ extension AppCoordinator: EmptyStateLightningLoadDelegate {
     self.lightningPaymentData(forFiatAmount: dollars, isMax: false)
       .done { paymentData in
         let rate = self.currencyController.exchangeRate
-        let viewModel = WalletTransferViewModel(direction: .toLightning(paymentData), amount: amount, exchangeRate: rate)
+        let limits = self.currentConfig().lightningLimits
+        let viewModel = WalletTransferViewModel(direction: .toLightning(paymentData), amount: amount,
+                                                exchangeRate: rate, limits: limits)
         let walletTransferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel,
                                                                                     alertManager: self.alertManager)
         self.navigationController.present(walletTransferViewController, animated: true, completion: nil)

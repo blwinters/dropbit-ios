@@ -38,12 +38,12 @@ protocol PaymentBuildingDelegate: CurrencyValueDataSourceType {
 extension AppCoordinator: PaymentBuildingDelegate {
 
   func transactionDataSendingMaxFunds(toAddress destinationAddress: String) -> Promise<CNBCnlibTransactionData> {
-    return latestFees()
-      .compactMap { self.usableFeeRate(from: $0) }
-      .then { feeRate -> Promise<CNBCnlibTransactionData> in
-        guard let wmgr = self.walletManager else { return Promise(error: CKPersistenceError.noManagedWallet) }
-        return wmgr.transactionDataSendingMax(to: destinationAddress, withFeeRate: feeRate)
+    let fees = self.latestFees()
+    guard let feeRate = self.usableFeeRate(from: fees) else {
+      return Promise(error: CKSystemError.missingValue(key: "usableFeeRate"))
     }
+    guard let wmgr = self.walletManager else { return Promise(error: CKPersistenceError.noManagedWallet) }
+    return wmgr.transactionDataSendingMax(to: destinationAddress, withFeeRate: feeRate)
   }
 
   func buildLoadLightningPaymentData(selectedAmount: SelectedBTCAmount,

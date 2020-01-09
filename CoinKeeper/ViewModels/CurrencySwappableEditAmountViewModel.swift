@@ -153,6 +153,10 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
 
   var primaryRequiresInteger: Bool { isEditingSats }
 
+  var currencySymbolIsTrailing: Bool {
+    return isEditingSats || primaryCurrency.symbolIsTrailing
+  }
+
   var isEditingSats: Bool {
     return primaryCurrency == .BTC && walletTransactionType == .lightning
   }

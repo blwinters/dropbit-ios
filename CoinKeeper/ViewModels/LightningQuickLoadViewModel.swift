@@ -19,12 +19,13 @@ struct LightningQuickLoadViewModel {
   ///If false, sending max should send the specific amount shown.
   let maxIsLimitedByOnChainBalance: Bool
 
-  static var standardAmounts: [NSDecimalNumber] {
+  static func standardAmounts(for currency: Currency) -> [NSDecimalNumber] {
     return [5, 10, 20, 50, 100].map { NSDecimalNumber(value: $0) }
   }
 
-  init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency) throws {
-    guard let minFiatAmount = LightningQuickLoadViewModel.standardAmounts.first else {
+  init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency, limits: LightningLimits) throws {
+    let standardAmounts = LightningQuickLoadViewModel.standardAmounts(for: fiatCurrency)
+    guard let minFiatAmount = standardAmounts.first else {
       throw CKSystemError.missingValue(key: "standardAmounts.min")
     }
 
@@ -32,25 +33,29 @@ struct LightningQuickLoadViewModel {
     //check on chain balance exceeds minFiatAmount
     let minStandardAmountConverter = CurrencyConverter(rate: rate, fromAmount: minFiatAmount, fromType: .fiat)
     let onChainBalanceValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
-                                                                 walletType: .onChain, ignoring: [.maxWalletValue])
+                                                                 walletType: .onChain,
+                                                                 limits: limits,
+                                                                 ignoring: [.maxWalletValue])
     do {
       try onChainBalanceValidator.validate(value: minStandardAmountConverter)
     } catch {
       //map usableBalance error to
-      throw LightningWalletAmountValidatorError.reloadMinimum
+      throw LightningWalletAmountValidatorError.reloadMinimum(btc: limits.minReloadAmount)
     }
 
     //check lightning wallet has capacity for the minFiatAmount
     let minReloadValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
-                                                            walletType: .onChain, ignoring: [.minReloadAmount])
+                                                            walletType: .onChain,
+                                                            limits: limits,
+                                                            ignoring: [.minReloadAmount])
     try minReloadValidator.validate(value: minStandardAmountConverter)
 
     self.btcBalances = spendableBalances
     self.fiatCurrency = fiatCurrency
-    let fiatBalances = LightningQuickLoadViewModel.convertBalances(spendableBalances, toFiat: fiatCurrency, using: rate)
-    self.fiatBalances = fiatBalances
-    let maxAmountResults = minReloadValidator.maxLoadAmount(using: fiatBalances)
-    self.controlConfigs = LightningQuickLoadViewModel.configs(withMax: maxAmountResults.amount, currency: fiatCurrency)
+    self.fiatBalances = LightningQuickLoadViewModel.convertBalances(spendableBalances, toFiat: fiatCurrency, using: rate)
+    let maxAmountResults = minReloadValidator.maxLoadAmount(using: spendableBalances)
+    let fiatMaxConverter = CurrencyConverter(rate: rate, fromAmount: maxAmountResults.btcAmount, fromType: .BTC)
+    self.controlConfigs = LightningQuickLoadViewModel.configs(withMax: fiatMaxConverter.fiatAmount, currency: fiatCurrency)
     self.maxIsLimitedByOnChainBalance = maxAmountResults.limitIsOnChainBalance
   }
 
@@ -61,7 +66,7 @@ struct LightningQuickLoadViewModel {
   }
 
   private static func configs(withMax max: NSDecimalNumber, currency: Currency) -> [QuickLoadControlConfig] {
-    let standardConfigs = standardAmounts.map { amount -> QuickLoadControlConfig in
+    let standardConfigs = standardAmounts(for: currency).map { amount -> QuickLoadControlConfig in
       let money = Money(amount: amount, currency: currency)
       return QuickLoadControlConfig(isEnabled: amount <= max, amount: money)
     }

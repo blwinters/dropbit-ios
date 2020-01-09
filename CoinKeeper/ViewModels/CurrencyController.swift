@@ -23,14 +23,6 @@ enum CurrencyType: String {
     return self.rawValue
   }
 
-  //TODO: fix this for multi-currency
-  var code: Currency {
-    switch self {
-    case .fiat: return .USD
-    case .BTC:  return .BTC
-    }
-  }
-
 }
 
 protocol SelectedCurrencyUpdatable: AnyObject {

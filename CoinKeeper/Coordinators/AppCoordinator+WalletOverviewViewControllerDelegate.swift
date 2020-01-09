@@ -47,7 +47,8 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
 
       case .toOnChain:
         let exchangeRate = self.currencyController.exchangeRate
-        let viewModel = WalletTransferViewModel(direction: direction, amount: .custom, exchangeRate: exchangeRate)
+        let limits = self.currentConfig().lightningLimits
+        let viewModel = WalletTransferViewModel(direction: direction, amount: .custom, exchangeRate: exchangeRate, limits: limits)
         let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel, alertManager: self.alertManager)
         self.toggleChartAndBalance()
         self.navigationController.present(transferViewController, animated: true, completion: nil)
@@ -60,7 +61,8 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
   private func createQuickLoadViewModel() throws -> LightningQuickLoadViewModel {
     let balances = self.spendableBalancesNetPending()
     let rate = self.currencyController.exchangeRate
-    return try LightningQuickLoadViewModel(spendableBalances: balances, rate: rate, fiatCurrency: .USD)
+    let limits = self.currentConfig().lightningLimits
+    return try LightningQuickLoadViewModel(spendableBalances: balances, rate: rate, fiatCurrency: .USD, limits: limits)
   }
 
   private func showQuickLoadBalanceError(for error: Error, viewController: UIViewController) {
@@ -71,10 +73,7 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
     if let validatorError = error as? LightningWalletAmountValidatorError {
       switch validatorError {
       case .reloadMinimum:
-        let message = """
-        DropBit requires you to load a minimum of $5.00 to your Lightning wallet.
-        You don’t currently have enough funds to meet the minimum requirement.
-        """.removingMultilineLineBreaks()
+        let message = validatorError.displayMessage ?? ""
 
         let buyBitcoinAction = AlertActionConfiguration(title: "Buy Bitcoin", style: .default) {
           self.viewControllerDidTapGetBitcoin(viewController)
@@ -163,7 +162,9 @@ extension AppCoordinator: LightningQuickLoadViewControllerDelegate {
   func viewControllerDidRequestCustomAmountLoad(_ viewController: LightningQuickLoadViewController) {
     viewController.dismiss(animated: true) {
       let exchangeRate = self.currencyController.exchangeRate
-      let viewModel = WalletTransferViewModel(direction: .toLightning(nil), amount: .custom, exchangeRate: exchangeRate)
+      let limits = self.currentConfig().lightningLimits
+      let viewModel = WalletTransferViewModel(direction: .toLightning(nil), amount: .custom,
+                                              exchangeRate: exchangeRate, limits: limits)
       let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel, alertManager: self.alertManager)
       self.toggleChartAndBalance()
       self.navigationController.present(transferViewController, animated: true, completion: nil)
