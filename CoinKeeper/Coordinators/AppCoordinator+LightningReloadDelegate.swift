@@ -10,7 +10,7 @@ import Foundation
 
 extension AppCoordinator: EmptyStateLightningLoadDelegate {
 
-  func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, exchangeRate: ExchangeRate, type: TransferAmountType) {
+  func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, type: EmptyStateLoadType) {
     trackReloaded(reloadType: type)
     self.lightningPaymentData(forFiatAmount: fiatAmount, isMax: false)
       .done { paymentData in
@@ -39,7 +39,7 @@ extension AppCoordinator: EmptyStateLightningLoadDelegate {
     }
   }
 
-  private func trackReloaded(reloadType: TransferAmountType) {
+  private func trackReloaded(reloadType: EmptyStateLoadType) {
     switch reloadType {
     case .low:
       analyticsManager.track(event: .quickReloadFive, with: nil)

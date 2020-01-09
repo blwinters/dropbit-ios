@@ -9,7 +9,36 @@
 import Foundation
 import UIKit
 
-class LightningTransactionHistoryEmptyView: UIView {
+protocol EmptyStateLightningLoadDelegate: class {
+  func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, type: EmptyStateLoadType)
+}
+
+protocol LightningRefillOptionsDisplayable: AnyObject {
+  var delegate: EmptyStateLightningLoadDelegate? { get }
+  var amounts: [NSDecimalNumber] { get set }
+  var amountButtons: [UIButton] { get }
+}
+
+extension LightningRefillOptionsDisplayable {
+
+  ///Call this when setting up the view
+  func configure(with currency: Currency, amounts: [NSDecimalNumber]) {
+    self.amounts = amounts
+    let formatter = RoundedFiatFormatter(currency: currency, withSymbol: true)
+    let amountStrings = amounts.compactMap { formatter.string(fromDecimal: $0) }
+    let buttonAmounts = zip(amountButtons, amountStrings)
+    for (button, amount) in buttonAmounts {
+      button.setTitle(amount, for: .normal)
+    }
+  }
+
+  func didRequest(loadType: EmptyStateLoadType) {
+    let amount = amounts[safe: loadType.rawValue] ?? .zero //.zero is passed for .custom
+    delegate?.didRequestLightningLoad(withAmount: amount, type: loadType)
+  }
+}
+
+class LightningTransactionHistoryEmptyView: UIView, LightningRefillOptionsDisplayable {
 
   @IBOutlet var titleLabel: UILabel!
   @IBOutlet var detailLabel: UILabel!
@@ -39,24 +68,30 @@ class LightningTransactionHistoryEmptyView: UIView {
     return CGSize(width: 404, height: 221)
   }
 
+  var amounts: [NSDecimalNumber] = []
+
+  var amountButtons: [UIButton] {
+    [lowAmountButton, mediumAmountButton, highAmountButton, maxAmountButton].compactMap { $0 }
+  }
+
   @IBAction func lowAmountButtonWasTouched() {
-    delegate?.didRequestLightningLoad(withAmount: .low)
+    didRequest(loadType: .low)
   }
 
   @IBAction func mediumAmountButtonWasTouched() {
-    delegate?.didRequestLightningLoad(withAmount: .medium)
+    didRequest(loadType: .medium)
   }
 
   @IBAction func highAmountButtonWasTouched() {
-    delegate?.didRequestLightningLoad(withAmount: .high)
+    didRequest(loadType: .high)
   }
 
   @IBAction func maxAmountButtonWasTouched() {
-    delegate?.didRequestLightningLoad(withAmount: .max)
+    didRequest(loadType: .max)
   }
 
   @IBAction func customAmountButtonWasTouched() {
-    delegate?.didRequestLightningLoad(withAmount: .custom)
+    didRequest(loadType: .custom)
   }
 
 }

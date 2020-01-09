@@ -9,17 +9,11 @@
 import Foundation
 import UIKit
 
-protocol EmptyStateLightningLoadDelegate: class {
-  func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber,
-                               exchangeRate: ExchangeRate,
-                               type: TransferAmountType)
-}
-
 protocol LightningRefillViewControllerDelegate: EmptyStateLightningLoadDelegate {
   func dontAskMeAgainButtonWasTouched()
 }
 
-class LightningRefillViewController: BaseViewController, StoryboardInitializable {
+class LightningRefillViewController: BaseViewController, StoryboardInitializable, LightningRefillOptionsDisplayable {
 
   @IBOutlet var containerView: UIView!
   @IBOutlet var lightningImageView: UIImageView!
@@ -33,13 +27,26 @@ class LightningRefillViewController: BaseViewController, StoryboardInitializable
   @IBOutlet var remindMeLaterButton: UIButton!
   @IBOutlet var dontAskMeAgainButton: UIButton!
 
-  weak var delegate: LightningRefillViewControllerDelegate?
+  weak var refillDelegate: LightningRefillViewControllerDelegate?
 
-  static func newInstance() -> LightningRefillViewController {
+  var delegate: EmptyStateLightningLoadDelegate? {
+    return refillDelegate
+  }
+
+  static func newInstance(refillAmounts: [NSDecimalNumber], currency: Currency) -> LightningRefillViewController {
     let viewController = LightningRefillViewController.makeFromStoryboard()
+    viewController.amounts = refillAmounts
+    viewController.currency = currency
     viewController.modalPresentationStyle = .overFullScreen
     viewController.modalTransitionStyle = .crossDissolve
     return viewController
+  }
+
+  var amounts: [NSDecimalNumber] = []
+  var currency: Currency = .USD
+
+  var amountButtons: [UIButton] {
+    [lowAmountButton, mediumAmountButton, maxAmountButton].compactMap { $0 }
   }
 
   override func viewDidLoad() {
@@ -61,26 +68,28 @@ class LightningRefillViewController: BaseViewController, StoryboardInitializable
 
     remindMeLaterButton.setTitleColor(.neonGreen, for: .normal)
     dontAskMeAgainButton.setTitleColor(.white, for: .normal)
+
+    configure(with: currency, amounts: amounts)
   }
 
   @IBAction func lowAmountButtonWasTouched() {
     dismiss(animated: true, completion: nil)
-    delegate?.didRequestLightningLoad(withAmount: .low)
+    didRequest(loadType: .low)
   }
 
   @IBAction func mediumAmountButtonWasTouched() {
     dismiss(animated: true, completion: nil)
-    delegate?.didRequestLightningLoad(withAmount: .medium)
+    didRequest(loadType: .medium)
   }
 
   @IBAction func maxAmountButtonWasTouched() {
     dismiss(animated: true, completion: nil)
-    delegate?.didRequestLightningLoad(withAmount: .max)
+    didRequest(loadType: .max)
   }
 
   @IBAction func customAmountButtonWasTouched() {
     dismiss(animated: true, completion: nil)
-    delegate?.didRequestLightningLoad(withAmount: .custom)
+    didRequest(loadType: .custom)
   }
 
   @IBAction func remindMeLaterButtonWasTouched() {
@@ -89,6 +98,6 @@ class LightningRefillViewController: BaseViewController, StoryboardInitializable
 
   @IBAction func dontRemindMeButtonWasTouched() {
     dismiss(animated: true, completion: nil)
-    delegate?.dontAskMeAgainButtonWasTouched()
+    refillDelegate?.dontAskMeAgainButtonWasTouched()
   }
 }

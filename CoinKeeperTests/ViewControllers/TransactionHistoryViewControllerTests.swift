@@ -71,7 +71,7 @@ class TransactionHistoryViewControllerTests: XCTestCase {
     }
 
     var didRequestLightningLoad = false
-    func didRequestLightningLoad(withAmount amount: TransferAmount) {
+    func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, type: EmptyStateLoadType) {
       didRequestLightningLoad = true
     }
 
@@ -100,8 +100,6 @@ class TransactionHistoryViewControllerTests: XCTestCase {
 
     func openURL(_ url: URL, completionHandler completion: CKCompletion?) { }
     func openURLExternally(_ url: URL, completionHandler completion: ((Bool) -> Void)?) { }
-
-    func emptyViewDidRequestRefill(withAmount amount: TransferAmount) { }
 
     func viewControllerDidSelectSummaryHeader(_ viewController: UIViewController) { }
     func summaryHeaderType(for viewController: UIViewController) -> SummaryHeaderType? {

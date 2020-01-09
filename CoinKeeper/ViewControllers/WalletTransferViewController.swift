@@ -13,12 +13,12 @@ import PromiseKit
 
 ///Raw values correspond to the index of the standard fiat reload amounts provided
 ///by the server for each currency, except for `.custom`.
-enum TransferAmountType: Int {
+enum EmptyStateLoadType: Int {
   case low = 0
-  case medium = 2
-  case high = 3
-  case max = 4
-  case custom = 5
+  case medium
+  case high
+  case max
+  case custom
 }
 
 protocol WalletTransferViewControllerDelegate: ViewControllerDismissable
