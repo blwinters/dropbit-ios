@@ -266,7 +266,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
 
   private func setupUIForFees(networkFee: Int, processingFee: Int) {
     feesView.isHidden = false
-    feesView.setupFees(top: networkFee, bottom: processingFee)
+    feesView.setupFees(top: networkFee, bottom: processingFee, exchangeRate: rateManager.exchangeRate)
   }
 
   func currencySwappableAmountDataDidChange() {

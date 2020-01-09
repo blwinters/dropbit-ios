@@ -55,21 +55,21 @@ class FeesView: UIView {
     layer.borderWidth = 1.0
   }
 
-  func setupFees(top topSats: Int, bottom bottomSats: Int) {
-    let satsFormatter = SatsFormatter(), manager = ExchangeRateManager()
-    let fiatFormatter = FiatFormatter(currency: .USD, withSymbol: true)
+  func setupFees(top topSats: Int, bottom bottomSats: Int, exchangeRate: ExchangeRate) {
+    let satsFormatter = SatsFormatter()
+    let fiatFormatter = FiatFormatter(currency: exchangeRate.currency, withSymbol: true)
     let topFee = NSDecimalNumber(sats: topSats)
     let bottomFee = NSDecimalNumber(sats: bottomSats)
-    let currencyConvterterTop = CurrencyConverter(fromBtcAmount: topFee, rate: manager.exchangeRate)
-    let currencyConvterterBottom = CurrencyConverter(fromBtcAmount: bottomFee, rate: manager.exchangeRate)
-    guard let topDecimal = currencyConvterterTop.amount(forCurrency: .USD),
-    let bottomDecimal = currencyConvterterBottom.amount(forCurrency: .USD) else { return }
-    topLabel.text = """
-      \(satsFormatter.string(fromDecimal: topFee) ?? "") (\(fiatFormatter.string(fromDecimal: topDecimal) ?? ""))
-      """.removingMultilineLineBreaks()
-    bottomLabel.text = """
-      \(satsFormatter.string(fromDecimal: bottomFee) ?? "") (\(fiatFormatter.string(fromDecimal: bottomDecimal) ?? ""))
-      """.removingMultilineLineBreaks()
+    let topConverter = CurrencyConverter(fromBtcAmount: topFee, rate: exchangeRate)
+    let bottomConverter = CurrencyConverter(fromBtcAmount: bottomFee, rate: exchangeRate)
+
+    let topSatsString = satsFormatter.string(fromDecimal: topFee) ?? ""
+    let bottomSatsString = satsFormatter.string(fromDecimal: bottomFee) ?? ""
+    let topFiatString = fiatFormatter.string(fromDecimal: topConverter.fiatAmount) ?? ""
+    let bottomFiatString = fiatFormatter.string(fromDecimal: bottomConverter.fiatAmount) ?? ""
+
+    topLabel.text = "\(topSatsString) (\(topFiatString))"
+    bottomLabel.text = "\(bottomSatsString) (\(bottomFiatString))"
   }
 
   @IBAction func tooltipButtonWasTouched() {
