@@ -23,18 +23,17 @@ class WalletTransferViewModel: CurrencySwappableEditAmountViewModel {
     self.amount = amount
     self.lightningLimits = limits
 
-    var walletTransactionType: WalletTransactionType = .onChain
-
+    let walletTxType: WalletTransactionType
     switch direction {
-    case .toOnChain:
-      walletTransactionType = .lightning
-    default:
-      break
+    case .toOnChain:    walletTxType = .lightning
+    case .toLightning:  walletTxType = .onChain
     }
 
+    let fiatCurrency = exchangeRate.currency
+
     super.init(exchangeRate: exchangeRate,
-               primaryAmount: NSDecimalNumber(integerAmount: amount.value, currency: .USD),
-               walletTransactionType: walletTransactionType,
-               currencyPair: CurrencyPair(primary: .USD, fiat: .USD))
+               primaryAmount: NSDecimalNumber(integerAmount: amount.value, currency: fiatCurrency),
+               walletTransactionType: walletTxType,
+               currencyPair: CurrencyPair(primary: fiatCurrency, fiat: fiatCurrency))
   }
 }
