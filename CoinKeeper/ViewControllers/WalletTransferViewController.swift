@@ -11,23 +11,14 @@ import UIKit
 import SVProgressHUD
 import PromiseKit
 
-enum TransferAmount {
-  case low
-  case medium
-  case high
-
-  case max
-  case custom
-
-  var value: Int {
-    switch self {
-    case .low: return 500
-    case .medium: return 2000
-    case .high: return 5000
-    case .max: return 10000
-    case .custom: return 0
-    }
-  }
+///Raw values correspond to the index of the standard fiat reload amounts provided
+///by the server for each currency, except for `.custom`.
+enum TransferAmountType: Int {
+  case low = 0
+  case medium = 2
+  case high = 3
+  case max = 4
+  case custom = 5
 }
 
 protocol WalletTransferViewControllerDelegate: ViewControllerDismissable

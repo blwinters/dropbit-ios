@@ -10,7 +10,9 @@ import Foundation
 import UIKit
 
 protocol EmptyStateLightningLoadDelegate: class {
-  func didRequestLightningLoad(withAmount amount: TransferAmount)
+  func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber,
+                               exchangeRate: ExchangeRate,
+                               type: TransferAmountType)
 }
 
 protocol LightningRefillViewControllerDelegate: EmptyStateLightningLoadDelegate {
