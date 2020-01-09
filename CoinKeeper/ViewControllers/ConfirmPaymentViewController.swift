@@ -255,10 +255,11 @@ extension ConfirmPaymentViewController {
     }
 
     let feeDecimalAmount = NSDecimalNumber(sats: feeModel.networkFeeAmount)
-    let feeConverter = CurrencyConverter(fromBtcAmount: feeDecimalAmount, rate: self.viewModel.exchangeRate)
+    let exchangeRate = self.viewModel.exchangeRate
+    let feeConverter = CurrencyConverter(fromBtcAmount: feeDecimalAmount, rate: exchangeRate)
     let btcFee = String(describing: feeConverter.amount(forCurrency: .BTC) ?? 0)
-    let fiatFeeAmount = feeConverter.amount(forCurrency: .USD)
-    let fiatFeeString = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: fiatFeeAmount ?? .zero) ?? ""
+    let fiatFeeAmount = feeConverter.convertedAmount() ?? .zero
+    let fiatFeeString = FiatFormatter(currency: exchangeRate.currency, withSymbol: true).string(fromDecimal: fiatFeeAmount) ?? ""
     networkFeeLabel.text = "Network Fee \(btcFee) (\(fiatFeeString))"
   }
 
