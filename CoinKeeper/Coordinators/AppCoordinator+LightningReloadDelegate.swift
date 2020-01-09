@@ -15,11 +15,12 @@ extension AppCoordinator: EmptyStateLightningLoadDelegate {
     trackReloaded(amount: amount)
     self.lightningPaymentData(forFiatAmount: dollars, isMax: false)
       .done { paymentData in
-        let rates = self.currencyController.exchangeRate
+        let rate = self.currencyController.exchangeRate
         let limits = self.currentConfig().lightningLimits
         let viewModel = WalletTransferViewModel(direction: .toLightning(paymentData), amount: amount,
-                                                exchangeRate: rates, limits: limits)
-        let walletTransferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel)
+                                                exchangeRate: rate, limits: limits)
+        let walletTransferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel,
+                                                                                    alertManager: self.alertManager)
         self.navigationController.present(walletTransferViewController, animated: true, completion: nil)
       }
       .catch { self.handleLightningLoadError($0) }

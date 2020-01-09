@@ -13,6 +13,7 @@ class WalletTransferViewModel: CurrencySwappableEditAmountViewModel {
   var direction: TransferDirection
   var amount: TransferAmount
   let lightningLimits: LightningLimits
+  var isSendingMax: Bool = false
 
   init(direction: TransferDirection,
        amount: TransferAmount,

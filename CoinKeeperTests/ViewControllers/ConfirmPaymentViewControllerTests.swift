@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import DropBit
-import CNBitcoinKit
+import Cnlib
 import PromiseKit
 
 class ConfirmPaymentViewControllerTests: XCTestCase {
@@ -91,7 +91,7 @@ class ConfirmPaymentViewControllerTests: XCTestCase {
 
     func viewControllerDidConfirmOnChainPayment(
       _ viewController: UIKit.UIViewController,
-      transactionData: CNBitcoinKit.CNBTransactionData,
+      transactionData: Cnlib.CNBCnlibTransactionData,
       rate: ExchangeRate,
       outgoingTransactionData: OutgoingTransactionData) { }
 
