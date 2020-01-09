@@ -48,7 +48,7 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
       case .toOnChain:
         let exchangeRate = self.currencyController.exchangeRate
         let viewModel = WalletTransferViewModel(direction: direction, amount: .custom, exchangeRate: exchangeRate)
-        let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel)
+        let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel, alertManager: self.alertManager)
         self.toggleChartAndBalance()
         self.navigationController.present(transferViewController, animated: true, completion: nil)
       }
@@ -164,7 +164,7 @@ extension AppCoordinator: LightningQuickLoadViewControllerDelegate {
     viewController.dismiss(animated: true) {
       let exchangeRate = self.currencyController.exchangeRate
       let viewModel = WalletTransferViewModel(direction: .toLightning(nil), amount: .custom, exchangeRate: exchangeRate)
-      let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel)
+      let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel, alertManager: self.alertManager)
       self.toggleChartAndBalance()
       self.navigationController.present(transferViewController, animated: true, completion: nil)
     }

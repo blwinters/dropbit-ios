@@ -10,6 +10,10 @@ import PromiseKit
 @testable import DropBit
 
 extension MockNetworkManager: LightningRequestable {
+  
+  func withdrawMaxLightningAmountEstimate(to address: String) -> Promise<LNTransactionResponse> {
+    return Promise { _ in }
+  }
 
   func getLightningLedger(parameters: LNLedgerUrlParameters) -> Promise<LNLedgerResponse> {
     return Promise { _ in }
@@ -24,10 +28,6 @@ extension MockNetworkManager: LightningRequestable {
   }
 
   func createLightningPaymentRequest(sats: Int, expires: Int?, memo: String?) -> Promise<LNCreatePaymentRequestResponse> {
-    return Promise { _ in }
-  }
-
-  func decodeLightningPaymentRequest(_ request: String) -> Promise<LNDecodePaymentRequestResponse> {
     return Promise { _ in }
   }
 

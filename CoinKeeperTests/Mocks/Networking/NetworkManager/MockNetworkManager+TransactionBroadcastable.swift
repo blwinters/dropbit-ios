@@ -7,16 +7,16 @@
 //
 
 @testable import DropBit
-import CNBitcoinKit
+import Cnlib
 import PromiseKit
 
 extension MockNetworkManager: TransactionBroadcastable {
 
-  func broadcastTx(with transactionData: CNBTransactionData, walletManager: WalletManagerType) -> Promise<String> {
+  func broadcastTx(with transactionData: CNBCnlibTransactionData, walletManager: WalletManagerType) -> Promise<String> {
     return Promise { _ in }
   }
 
-  func broadcastTx(metadata: CNBTransactionMetadata) -> Promise<String> {
+  func broadcastTx(metadata: CNBCnlibTransactionMetadata) -> Promise<String> {
     return Promise { _ in }
   }
 
