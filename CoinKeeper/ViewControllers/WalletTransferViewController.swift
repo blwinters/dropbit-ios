@@ -131,7 +131,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
       let amount = NSDecimalNumber(integerAmount: response.result.value, currency: .BTC)
       self.viewModel.direction = .toOnChain(-1)
       self.viewModel.isSendingMax = true
-      self.viewModel.primaryAmount = CurrencyConverter(fromBtcTo: .USD, fromAmount: amount, rates: self.viewModel.exchangeRates).fiatAmount
+      self.viewModel.primaryAmount = CurrencyConverter(fromBtcAmount: amount, rate: self.viewModel.exchangeRate).fiatAmount
       self.setupUIForFees(networkFee: response.result.networkFee, processingFee: response.result.processingFee)
       self.setupTransactionUI()
       self.refreshBothAmounts()

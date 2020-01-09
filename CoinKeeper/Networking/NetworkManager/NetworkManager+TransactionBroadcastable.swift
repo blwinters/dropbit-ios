@@ -62,7 +62,7 @@ struct BroadcastInfo: Error {
 extension NetworkManager: TransactionBroadcastable {
 
   func broadcastTx(with transactionData: CNBCnlibTransactionData, walletManager: WalletManagerType) -> Promise<String> {
-    guard transactionData.unspentTransactionOutputs.isNotEmpty else { return Promise(error: TransactionDataError.noSpendableFunds) }
+    guard transactionData.utxoCount() > 0 else { return Promise(error: TransactionDataError.noSpendableFunds) }
     let wallet = walletManager.wallet
     do {
       let txMetadata = try wallet.buildTransactionMetadata(transactionData)
