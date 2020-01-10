@@ -9,11 +9,11 @@
 import Foundation
 import UIKit
 
-protocol LightningRefillViewControllerDelegate: EmptyStateLightningLoadDelegate {
+protocol LightningRefillViewControllerDelegate: LightningLoadPresetDelegate {
   func dontAskMeAgainButtonWasTouched()
 }
 
-class LightningRefillViewController: BaseViewController, StoryboardInitializable, LightningRefillOptionsDisplayable {
+class LightningRefillViewController: BaseViewController, StoryboardInitializable, LightningLoadPresetsDisplayable {
 
   @IBOutlet var containerView: UIView!
   @IBOutlet var lightningImageView: UIImageView!
@@ -29,7 +29,7 @@ class LightningRefillViewController: BaseViewController, StoryboardInitializable
 
   weak var refillDelegate: LightningRefillViewControllerDelegate?
 
-  var delegate: EmptyStateLightningLoadDelegate? {
+  var delegate: LightningLoadPresetDelegate? {
     return refillDelegate
   }
 

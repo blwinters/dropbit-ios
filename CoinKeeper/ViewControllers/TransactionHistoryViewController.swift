@@ -13,7 +13,7 @@ import PromiseKit
 import DZNEmptyDataSet
 
 protocol TransactionHistoryViewControllerDelegate: DeviceCountryCodeProvider &
-  BadgeUpdateDelegate & URLOpener & EmptyStateLightningLoadDelegate & CurrencyValueDataSourceType &
+  BadgeUpdateDelegate & URLOpener & LightningLoadPresetDelegate & CurrencyValueDataSourceType &
   TweetDelegate {
   func viewControllerDidRequestHistoryUpdate(_ viewController: TransactionHistoryViewController)
   func viewControllerDidDisplayTransactions(_ viewController: TransactionHistoryViewController)

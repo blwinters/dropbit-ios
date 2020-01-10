@@ -1,5 +1,5 @@
 //
-//  AppCoordinator+EmptyStateLightningLoadDelegate.swift
+//  AppCoordinator+LightningLoadPresetDelegate.swift
 //  DropBit
 //
 //  Created by Mitchell Malleo on 9/6/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension AppCoordinator: EmptyStateLightningLoadDelegate {
+extension AppCoordinator: LightningLoadPresetDelegate {
 
   func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, selectionIndex: Int) {
     trackReloaded(selectionIndex: selectionIndex)

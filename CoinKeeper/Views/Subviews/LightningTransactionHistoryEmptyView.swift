@@ -9,17 +9,17 @@
 import Foundation
 import UIKit
 
-protocol EmptyStateLightningLoadDelegate: class {
+protocol LightningLoadPresetDelegate: class {
   func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, selectionIndex: Int)
 }
 
-protocol LightningRefillOptionsDisplayable: AnyObject {
-  var delegate: EmptyStateLightningLoadDelegate? { get }
+protocol LightningLoadPresetsDisplayable: AnyObject {
+  var delegate: LightningLoadPresetDelegate? { get }
   var presetAmounts: [NSDecimalNumber] { get set }
   var amountButtons: [UIButton] { get }
 }
 
-extension LightningRefillOptionsDisplayable {
+extension LightningLoadPresetsDisplayable {
 
   ///Call this when setting up the view
   func configure(with currency: Currency, presetAmounts: [NSDecimalNumber]) {
@@ -38,7 +38,7 @@ extension LightningRefillOptionsDisplayable {
   }
 }
 
-class LightningTransactionHistoryEmptyView: UIView, LightningRefillOptionsDisplayable {
+class LightningTransactionHistoryEmptyView: UIView, LightningLoadPresetsDisplayable {
 
   @IBOutlet var titleLabel: UILabel!
   @IBOutlet var detailLabel: UILabel!
@@ -48,7 +48,7 @@ class LightningTransactionHistoryEmptyView: UIView, LightningRefillOptionsDispla
   @IBOutlet var maxAmountButton: LightningActionButton!
   @IBOutlet var customAmountButton: UIButton!
 
-  weak var delegate: EmptyStateLightningLoadDelegate?
+  weak var delegate: LightningLoadPresetDelegate?
 
   override func awakeFromNib() {
     super.awakeFromNib()
