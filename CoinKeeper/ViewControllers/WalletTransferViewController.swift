@@ -11,16 +11,6 @@ import UIKit
 import SVProgressHUD
 import PromiseKit
 
-///Raw values correspond to the index of the standard fiat reload amounts provided
-///by the server for each currency, except for `.custom`.
-enum EmptyStateLoadType: Int {
-  case low = 0
-  case medium
-  case high
-  case max
-  case custom
-}
-
 protocol WalletTransferViewControllerDelegate: ViewControllerDismissable
 & PaymentBuildingDelegate & PaymentSendingDelegate & URLOpener &
 BalanceDataSource & AnalyticsManagerAccessType & LightningLoadable {

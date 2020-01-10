@@ -10,31 +10,31 @@ import Foundation
 import UIKit
 
 protocol EmptyStateLightningLoadDelegate: class {
-  func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, type: EmptyStateLoadType)
+  func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, selectionIndex: Int)
 }
 
 protocol LightningRefillOptionsDisplayable: AnyObject {
   var delegate: EmptyStateLightningLoadDelegate? { get }
-  var amounts: [NSDecimalNumber] { get set }
+  var presetAmounts: [NSDecimalNumber] { get set }
   var amountButtons: [UIButton] { get }
 }
 
 extension LightningRefillOptionsDisplayable {
 
   ///Call this when setting up the view
-  func configure(with currency: Currency, amounts: [NSDecimalNumber]) {
-    self.amounts = amounts
+  func configure(with currency: Currency, presetAmounts: [NSDecimalNumber]) {
+    self.presetAmounts = presetAmounts
     let formatter = RoundedFiatFormatter(currency: currency, withSymbol: true)
-    let amountStrings = amounts.compactMap { formatter.string(fromDecimal: $0) }
+    let amountStrings = presetAmounts.compactMap { formatter.string(fromDecimal: $0) }
     let buttonAmounts = zip(amountButtons, amountStrings)
     for (button, amount) in buttonAmounts {
       button.setTitle(amount, for: .normal)
     }
   }
 
-  func didRequest(loadType: EmptyStateLoadType) {
-    let amount = amounts[safe: loadType.rawValue] ?? .zero //.zero is passed for .custom
-    delegate?.didRequestLightningLoad(withAmount: amount, type: loadType)
+  func didRequestLoad(selectionIndex: Int) {
+    let amount = presetAmounts[safe: selectionIndex] ?? .zero //.zero is passed for .custom
+    delegate?.didRequestLightningLoad(withAmount: amount, selectionIndex: selectionIndex)
   }
 }
 
@@ -68,30 +68,30 @@ class LightningTransactionHistoryEmptyView: UIView, LightningRefillOptionsDispla
     return CGSize(width: 404, height: 221)
   }
 
-  var amounts: [NSDecimalNumber] = []
+  var presetAmounts: [NSDecimalNumber] = []
 
   var amountButtons: [UIButton] {
     [lowAmountButton, mediumAmountButton, highAmountButton, maxAmountButton].compactMap { $0 }
   }
 
   @IBAction func lowAmountButtonWasTouched() {
-    didRequest(loadType: .low)
+    didRequestLoad(selectionIndex: 0)
   }
 
   @IBAction func mediumAmountButtonWasTouched() {
-    didRequest(loadType: .medium)
+    didRequestLoad(selectionIndex: 1)
   }
 
   @IBAction func highAmountButtonWasTouched() {
-    didRequest(loadType: .high)
+    didRequestLoad(selectionIndex: 2)
   }
 
   @IBAction func maxAmountButtonWasTouched() {
-    didRequest(loadType: .max)
+    didRequestLoad(selectionIndex: 3)
   }
 
   @IBAction func customAmountButtonWasTouched() {
-    didRequest(loadType: .custom)
+    didRequestLoad(selectionIndex: 4)
   }
 
 }

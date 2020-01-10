@@ -71,7 +71,7 @@ class TransactionHistoryViewControllerTests: XCTestCase {
     }
 
     var didRequestLightningLoad = false
-    func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, type: EmptyStateLoadType) {
+    func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, selectionIndex: Int) {
       didRequestLightningLoad = true
     }
 

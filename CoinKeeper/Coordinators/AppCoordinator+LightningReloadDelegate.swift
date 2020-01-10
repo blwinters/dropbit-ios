@@ -10,8 +10,8 @@ import Foundation
 
 extension AppCoordinator: EmptyStateLightningLoadDelegate {
 
-  func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, type: EmptyStateLoadType) {
-    trackReloaded(reloadType: type)
+  func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, selectionIndex: Int) {
+    trackReloaded(selectionIndex: selectionIndex)
     self.lightningPaymentData(forFiatAmount: fiatAmount, isMax: false)
       .done { paymentData in
         let rate = self.currencyController.exchangeRate
@@ -39,19 +39,15 @@ extension AppCoordinator: EmptyStateLightningLoadDelegate {
     }
   }
 
-  private func trackReloaded(reloadType: EmptyStateLoadType) {
-    switch reloadType {
-    case .low:
-      analyticsManager.track(event: .quickReloadFive, with: nil)
-    case .medium:
-      analyticsManager.track(event: .quickReloadTwenty, with: nil)
-    case .high:
-      analyticsManager.track(event: .quickReloadFifty, with: nil)
-    case .max:
-      analyticsManager.track(event: .quickReloadOneHundred, with: nil)
-    case .custom:
-      analyticsManager.track(event: .quickReloadCustomAmount, with: nil)
+  private func trackReloaded(selectionIndex: Int) {
+    let eventKeys: [AnalyticsManagerEventType] = [.quickReloadFive, .quickReloadTwenty, .quickReloadFifty,
+                                                  .quickReloadOneHundred, .quickReloadCustomAmount]
+
+    guard let event = eventKeys[safe: selectionIndex] else {
+      log.error("Selection index of empty state reload event is out of bounds: \(selectionIndex)")
+      return
     }
+    analyticsManager.track(event: event, with: nil)
   }
 
 }
