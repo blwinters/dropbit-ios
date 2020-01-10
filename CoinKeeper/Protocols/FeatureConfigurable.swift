@@ -9,7 +9,7 @@
 import Foundation
 
 protocol FeatureConfigDataSource: AnyObject {
-  func currentConfig() -> FeatureConfig
+  var currentConfig: FeatureConfig { get }
 }
 
 ///Conforming objects (view controllers), need to set a datasource

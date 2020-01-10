@@ -67,7 +67,7 @@ class DrawerViewController: BaseViewController, StoryboardInitializable, Feature
   }
 
   func reloadFeatureConfigurableView() {
-    guard let config = self.featureConfigDataSource?.currentConfig() else { return }
+    guard let config = self.featureConfigDataSource?.currentConfig else { return }
 
     let circularIconOffset = ViewOffset(dx: 7, dy: -2)
 

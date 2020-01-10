@@ -11,7 +11,7 @@ import Foundation
 extension AppCoordinator: LightningLoadPresetDelegate {
 
   func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber] {
-    return currentConfig().lightning.loadPresetAmounts(for: currency)
+    return currentConfig.lightning.loadPresetAmounts(for: currency)
   }
 
   func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, selectionIndex: Int) {
@@ -19,7 +19,7 @@ extension AppCoordinator: LightningLoadPresetDelegate {
     self.lightningPaymentData(forFiatAmount: fiatAmount, isMax: false)
       .done { paymentData in
         let rate = self.currencyController.exchangeRate
-        let lightningConfig = self.currentConfig().lightning
+        let lightningConfig = self.currentConfig.lightning
         let viewModel = WalletTransferViewModel(direction: .toLightning(paymentData), fiatAmount: fiatAmount,
                                                 exchangeRate: rate, lightningConfig: lightningConfig)
         let walletTransferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel,
