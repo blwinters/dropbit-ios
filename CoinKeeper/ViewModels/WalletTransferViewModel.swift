@@ -11,30 +11,29 @@ import Foundation
 class WalletTransferViewModel: CurrencySwappableEditAmountViewModel {
 
   var direction: TransferDirection
-  var amount: TransferAmount
-  let lightningLimits: LightningLimits
+  var fiatAmount: NSDecimalNumber
+  let lightningConfig: LightningConfig
   var isSendingMax: Bool = false
 
   init(direction: TransferDirection,
-       amount: TransferAmount,
+       fiatAmount: NSDecimalNumber,
        exchangeRate: ExchangeRate,
-       limits: LightningLimits) {
+       lightningConfig: LightningConfig) {
     self.direction = direction
-    self.amount = amount
-    self.lightningLimits = limits
+    self.fiatAmount = fiatAmount
+    self.lightningConfig = lightningConfig
 
-    var walletTransactionType: WalletTransactionType = .onChain
-
+    let walletTxType: WalletTransactionType
     switch direction {
-    case .toOnChain:
-      walletTransactionType = .lightning
-    default:
-      break
+    case .toOnChain:    walletTxType = .lightning
+    case .toLightning:  walletTxType = .onChain
     }
 
+    let fiatCurrency = exchangeRate.currency
+
     super.init(exchangeRate: exchangeRate,
-               primaryAmount: NSDecimalNumber(integerAmount: amount.value, currency: .USD),
-               walletTransactionType: walletTransactionType,
-               currencyPair: CurrencyPair(primary: .USD, fiat: .USD))
+               primaryAmount: fiatAmount,
+               walletTransactionType: walletTxType,
+               currencyPair: CurrencyPair(primary: fiatCurrency, fiat: fiatCurrency))
   }
 }

@@ -16,7 +16,7 @@ extension AppCoordinator: BadgeUpdateDelegate {
 
 extension AppCoordinator: DrawerViewControllerDelegate {
 
-  func currentConfig() -> FeatureConfig {
+  var currentConfig: FeatureConfig {
     return featureConfigManager.latestConfig
   }
 

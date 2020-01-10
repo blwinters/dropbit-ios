@@ -11,25 +11,6 @@ import UIKit
 import SVProgressHUD
 import PromiseKit
 
-enum TransferAmount {
-  case low
-  case medium
-  case high
-
-  case max
-  case custom
-
-  var value: Int {
-    switch self {
-    case .low: return 500
-    case .medium: return 2000
-    case .high: return 5000
-    case .max: return 10000
-    case .custom: return 0
-    }
-  }
-}
-
 protocol WalletTransferViewControllerDelegate: ViewControllerDismissable
 & PaymentBuildingDelegate & PaymentSendingDelegate & URLOpener &
 BalanceDataSource & AnalyticsManagerAccessType & LightningLoadable {
@@ -163,7 +144,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
     do {
       let validator = LightningWalletAmountValidator(balancesNetPending: walletBalances,
                                                      walletType: .onChain,
-                                                     limits: viewModel.lightningLimits)
+                                                     config: viewModel.lightningConfig)
       try validator.validate(value: viewModel.currencyConverter)
       delegate.lightningPaymentData(forBTCAmount: viewModel.btcAmount)
         .done { paymentData in
@@ -241,7 +222,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
         let value = CurrencyConverter(fromBtcAmount: amount, rate: rateManager.exchangeRate)
         try LightningWalletAmountValidator(balancesNetPending: walletBalances,
                                            walletType: type,
-                                           limits: viewModel.lightningLimits,
+                                           config: viewModel.lightningConfig,
                                            ignoring: [.maxWalletValue, .minReloadAmount]).validate(value: value)
 
         delegate.viewControllerNeedsFeeEstimates(self, btcAmount: amount)
@@ -266,7 +247,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
 
   private func setupUIForFees(networkFee: Int, processingFee: Int) {
     feesView.isHidden = false
-    feesView.setupFees(top: networkFee, bottom: processingFee)
+    feesView.setupFees(top: networkFee, bottom: processingFee, exchangeRate: rateManager.exchangeRate)
   }
 
   func currencySwappableAmountDataDidChange() {
@@ -293,7 +274,7 @@ extension WalletTransferViewController: LongPressConfirmButtonDelegate {
       do {
         let validator = LightningWalletAmountValidator(balancesNetPending: walletBalances,
                                                        walletType: .onChain,
-                                                       limits: viewModel.lightningLimits)
+                                                       config: viewModel.lightningConfig)
         try validator.validate(value: viewModel.currencyConverter)
         delegate.viewControllerDidConfirmLoad(self, paymentData: data)
       } catch {

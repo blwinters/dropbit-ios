@@ -64,9 +64,6 @@ struct CurrencyPair {
     return primary.isFiat ? .fiat : .BTC
   }
 
-  static var USD_BTC: CurrencyPair { CurrencyPair(primary: .USD, fiat: .USD) }
-  static var BTC_USD: CurrencyPair { CurrencyPair(primary: .BTC, fiat: .USD) }
-
 }
 
 class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {

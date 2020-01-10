@@ -1,5 +1,5 @@
 //
-//  AppCoordinator+EmptyStateLightningLoadDelegate.swift
+//  AppCoordinator+LightningLoadPresetDelegate.swift
 //  DropBit
 //
 //  Created by Mitchell Malleo on 9/6/19.
@@ -8,17 +8,20 @@
 
 import Foundation
 
-extension AppCoordinator: EmptyStateLightningLoadDelegate {
+extension AppCoordinator: LightningLoadPresetDelegate {
 
-  func didRequestLightningLoad(withAmount amount: TransferAmount) {
-    let dollars = NSDecimalNumber(integerAmount: amount.value, currency: .USD)
-    trackReloaded(amount: amount)
-    self.lightningPaymentData(forFiatAmount: dollars, isMax: false)
+  func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber] {
+    return currentConfig.lightning.loadPresetAmounts(for: currency)
+  }
+
+  func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, selectionIndex: Int) {
+    trackReloaded(selectionIndex: selectionIndex)
+    self.lightningPaymentData(forFiatAmount: fiatAmount, isMax: false)
       .done { paymentData in
         let rate = self.currencyController.exchangeRate
-        let limits = self.currentConfig().lightningLimits
-        let viewModel = WalletTransferViewModel(direction: .toLightning(paymentData), amount: amount,
-                                                exchangeRate: rate, limits: limits)
+        let lightningConfig = self.currentConfig.lightning
+        let viewModel = WalletTransferViewModel(direction: .toLightning(paymentData), fiatAmount: fiatAmount,
+                                                exchangeRate: rate, lightningConfig: lightningConfig)
         let walletTransferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel,
                                                                                     alertManager: self.alertManager)
         self.navigationController.present(walletTransferViewController, animated: true, completion: nil)
@@ -40,19 +43,15 @@ extension AppCoordinator: EmptyStateLightningLoadDelegate {
     }
   }
 
-  private func trackReloaded(amount: TransferAmount) {
-    switch amount {
-    case .low:
-      analyticsManager.track(event: .quickReloadFive, with: nil)
-    case .medium:
-      analyticsManager.track(event: .quickReloadTwenty, with: nil)
-    case .high:
-      analyticsManager.track(event: .quickReloadFifty, with: nil)
-    case .max:
-      analyticsManager.track(event: .quickReloadOneHundred, with: nil)
-    case .custom:
-      analyticsManager.track(event: .quickReloadCustomAmount, with: nil)
+  private func trackReloaded(selectionIndex: Int) {
+    let eventKeys: [AnalyticsManagerEventType] = [.quickReloadFive, .quickReloadTwenty, .quickReloadFifty,
+                                                  .quickReloadOneHundred, .quickReloadCustomAmount]
+
+    guard let event = eventKeys[safe: selectionIndex] else {
+      log.error("Selection index of empty state reload event is out of bounds: \(selectionIndex)")
+      return
     }
+    analyticsManager.track(event: event, with: nil)
   }
 
 }
