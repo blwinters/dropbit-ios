@@ -105,5 +105,10 @@ class TransactionHistoryViewControllerTests: XCTestCase {
     func summaryHeaderType(for viewController: UIViewController) -> SummaryHeaderType? {
       return nil
     }
+
+    func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber] {
+      return []
+    }
+
   }
 }

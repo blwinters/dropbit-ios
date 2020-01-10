@@ -48,11 +48,11 @@ struct FeatureConfig: Equatable {
 
   private var enabledFeatures: Set<Key> = []
 
-  let lightningLimits: LightningLimits
+  let lightning: LightningConfig
 
-  init(enabledFeatures: [Key], limits: LightningLimits) {
+  init(enabledFeatures: [Key], lightningConfig: LightningConfig) {
     self.enabledFeatures = Set(enabledFeatures)
-    self.lightningLimits = limits
+    self.lightning = lightningConfig
   }
 
   func shouldEnable(_ feature: Key) -> Bool {
@@ -73,7 +73,7 @@ protocol FeatureConfigManagerType: AnyObject {
 class FeatureConfigManager: FeatureConfigManagerType {
 
   let userDefaults: UserDefaults
-  var latestConfig = FeatureConfig(enabledFeatures: [], limits: .fallbackInstance) //cached in memory
+  var latestConfig = FeatureConfig(enabledFeatures: [], lightningConfig: .fallbackInstance) //cached in memory
 
   init(userDefaults: UserDefaults) {
     self.userDefaults = userDefaults
@@ -103,9 +103,9 @@ class FeatureConfigManager: FeatureConfigManagerType {
     let enabledKeys: [FeatureConfig.Key] = FeatureConfig.Key.allCases.filter { key in
       return persistedBool(for: key) ?? isEnabledByDefault(for: key)
     }
-    let lightningLimits = LightningLimits(minReload: persistedInteger(for: .minLightningReload),
+    let lightningConfig = LightningConfig(minReload: persistedInteger(for: .minLightningReload),
                                           maxBalance: persistedInteger(for: .maxLightningBalance))
-    return FeatureConfig(enabledFeatures: enabledKeys, limits: lightningLimits)
+    return FeatureConfig(enabledFeatures: enabledKeys, lightningConfig: lightningConfig)
   }
 
   private func persistedBool(for key: FeatureConfig.Key) -> Bool? {

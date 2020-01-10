@@ -19,16 +19,9 @@ struct LightningQuickLoadViewModel {
   ///If false, sending max should send the specific amount shown.
   let maxIsLimitedByOnChainBalance: Bool
 
-  static func standardAmounts(for currency: Currency) -> [NSDecimalNumber] {
-    switch currency {
-    case .SEK:  return [50, 100, 200, 500, 1000].map { NSDecimalNumber(value: $0) }
-    default:    return [5, 10, 20, 50, 100].map { NSDecimalNumber(value: $0) }
-    }
-  }
-
-  init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency, limits: LightningLimits) throws {
-    let standardAmounts = LightningQuickLoadViewModel.standardAmounts(for: fiatCurrency)
-    guard let minFiatAmount = standardAmounts.first else {
+  init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency, config: LightningConfig) throws {
+    let presetAmounts = config.loadPresetAmounts(for: fiatCurrency)
+    guard let minFiatAmount = presetAmounts.first else {
       throw CKSystemError.missingValue(key: "standardAmounts.min")
     }
 
@@ -37,19 +30,19 @@ struct LightningQuickLoadViewModel {
     let minStandardAmountConverter = CurrencyConverter(rate: rate, fromAmount: minFiatAmount, fromType: .fiat)
     let onChainBalanceValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
                                                                  walletType: .onChain,
-                                                                 limits: limits,
+                                                                 config: config,
                                                                  ignoring: [.maxWalletValue])
     do {
       try onChainBalanceValidator.validate(value: minStandardAmountConverter)
     } catch {
       //map usableBalance error to
-      throw LightningWalletAmountValidatorError.reloadMinimum(btc: limits.minReloadAmount)
+      throw LightningWalletAmountValidatorError.reloadMinimum(btc: config.minReloadAmount)
     }
 
     //check lightning wallet has capacity for the minFiatAmount
     let minReloadValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
                                                             walletType: .onChain,
-                                                            limits: limits,
+                                                            config: config,
                                                             ignoring: [.minReloadAmount])
     try minReloadValidator.validate(value: minStandardAmountConverter)
 
@@ -58,7 +51,9 @@ struct LightningQuickLoadViewModel {
     self.fiatBalances = LightningQuickLoadViewModel.convertBalances(spendableBalances, toFiat: fiatCurrency, using: rate)
     let maxAmountResults = minReloadValidator.maxLoadAmount(using: spendableBalances)
     let fiatMaxConverter = CurrencyConverter(rate: rate, fromAmount: maxAmountResults.btcAmount, fromType: .BTC)
-    self.controlConfigs = LightningQuickLoadViewModel.configs(withMax: fiatMaxConverter.fiatAmount, currency: fiatCurrency)
+    self.controlConfigs = LightningQuickLoadViewModel.configs(withPresets: presetAmounts,
+                                                              max: fiatMaxConverter.fiatAmount,
+                                                              currency: fiatCurrency)
     self.maxIsLimitedByOnChainBalance = maxAmountResults.limitIsOnChainBalance
   }
 
@@ -68,8 +63,10 @@ struct LightningQuickLoadViewModel {
     return WalletBalances(onChain: onChainConverter.fiatAmount, lightning: lightningConverter.fiatAmount)
   }
 
-  private static func configs(withMax max: NSDecimalNumber, currency: Currency) -> [QuickLoadControlConfig] {
-    let standardConfigs = standardAmounts(for: currency).map { amount -> QuickLoadControlConfig in
+  private static func configs(withPresets presetAmounts: [NSDecimalNumber],
+                              max: NSDecimalNumber,
+                              currency: Currency) -> [QuickLoadControlConfig] {
+    let standardConfigs = presetAmounts.map { amount -> QuickLoadControlConfig in
       let money = Money(amount: amount, currency: currency)
       return QuickLoadControlConfig(isEnabled: amount <= max, amount: money)
     }

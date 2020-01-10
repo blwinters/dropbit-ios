@@ -41,7 +41,7 @@ struct LightningWalletValidationOptions: OptionSet {
   static let minReloadAmount = LightningWalletValidationOptions(rawValue: 1 << 1)
 }
 
-struct LightningLimits: Equatable {
+struct LightningConfig: Equatable {
 
   ///The minimum amount required for a transaction to load the lightning wallet, in BTC
   let minReloadAmount: NSDecimalNumber
@@ -50,8 +50,8 @@ struct LightningLimits: Equatable {
   let maxBalance: NSDecimalNumber
 
   init(minReload: Satoshis?, maxBalance: Satoshis?) {
-    let reloadAmt = minReload ?? LightningLimits.defaultMinReload
-    let balanceAmt = maxBalance ?? LightningLimits.defaultMaxBalance
+    let reloadAmt = minReload ?? LightningConfig.defaultMinReload
+    let balanceAmt = maxBalance ?? LightningConfig.defaultMaxBalance
     self.minReloadAmount = NSDecimalNumber(sats: reloadAmt)
     self.maxBalance = NSDecimalNumber(sats: balanceAmt)
   }
@@ -59,8 +59,15 @@ struct LightningLimits: Equatable {
   private static let defaultMinReload: Satoshis = 60_000
   private static let defaultMaxBalance: Satoshis = 2_500_000
 
-  static var fallbackInstance: LightningLimits {
-    return LightningLimits(minReload: defaultMinReload, maxBalance: defaultMaxBalance)
+  func loadPresetAmounts(for currency: Currency) -> [NSDecimalNumber] {
+    switch currency {
+    case .SEK:  return [50, 100, 200, 500, 1000].map { NSDecimalNumber(value: $0) }
+    default:    return [5, 10, 20, 50, 100].map { NSDecimalNumber(value: $0) }
+    }
+  }
+
+  static var fallbackInstance: LightningConfig {
+    return LightningConfig(minReload: defaultMinReload, maxBalance: defaultMaxBalance)
   }
 
 }
@@ -70,15 +77,15 @@ class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
   let balancesNetPending: WalletBalances
   let walletTxType: WalletTransactionType
   let ignoringOptions: [LightningWalletValidationOptions]
-  let limits: LightningLimits
+  let config: LightningConfig
 
   init(balancesNetPending: WalletBalances,
        walletType: WalletTransactionType,
-       limits: LightningLimits,
+       config: LightningConfig,
        ignoring: [LightningWalletValidationOptions] = []) {
     self.balancesNetPending = balancesNetPending
     self.walletTxType = walletType
-    self.limits = limits
+    self.config = config
     self.ignoringOptions = ignoring
     super.init()
   }
@@ -91,16 +98,16 @@ class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
     try validateBalanceNetPendingIsSufficient(forAmount: candidateBTCAmount, balances: balancesNetPending, walletTxType: walletTxType)
 
     if !ignoringOptions.contains(.minReloadAmount) {
-      if candidateBTCAmount < limits.minReloadAmount {
-        throw LightningWalletAmountValidatorError.reloadMinimum(btc: limits.minReloadAmount)
+      if candidateBTCAmount < config.minReloadAmount {
+        throw LightningWalletAmountValidatorError.reloadMinimum(btc: config.minReloadAmount)
       }
     }
 
     if !ignoringOptions.contains(.maxWalletValue) {
       let candidateLightningBalance = candidateBTCAmount + balancesNetPending.lightning
 
-      if candidateBTCAmount > limits.maxBalance || candidateLightningBalance > limits.maxBalance {
-        throw LightningWalletAmountValidatorError.walletMaximum(btc: limits.maxBalance)
+      if candidateBTCAmount > config.maxBalance || candidateLightningBalance > config.maxBalance {
+        throw LightningWalletAmountValidatorError.walletMaximum(btc: config.maxBalance)
       }
     }
   }
@@ -108,7 +115,7 @@ class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
   ///Returns a tuple of the max amount that the user can load into their lightning wallet
   ///and a boolean representing whether the user's on-chain balance was the primary constraint.
   func maxLoadAmount(using btcBalances: WalletBalances) -> (btcAmount: NSDecimalNumber, limitIsOnChainBalance: Bool) {
-    let lightningBalanceFiatCapacity: NSDecimalNumber = limits.maxBalance.subtracting(btcBalances.lightning)
+    let lightningBalanceFiatCapacity: NSDecimalNumber = config.maxBalance.subtracting(btcBalances.lightning)
     guard lightningBalanceFiatCapacity.isPositiveNumber else { return (.zero, false) }
 
     if btcBalances.onChain < lightningBalanceFiatCapacity {

@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 protocol LightningLoadPresetDelegate: class {
+  ///This returns an array of 5 preset amounts, some views may only show a subset of the returned amounts.
+  func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber]
   func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, selectionIndex: Int)
 }
 

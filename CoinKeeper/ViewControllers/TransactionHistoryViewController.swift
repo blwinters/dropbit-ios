@@ -257,6 +257,9 @@ extension TransactionHistoryViewController: DZNEmptyDataSetDelegate, DZNEmptyDat
       return transactionHistoryWithBalanceView
     case .lightning:
       lightningTransactionHistoryEmptyBalanceView.isHidden = false
+      let currency = delegate.preferredFiatCurrency
+      let amounts = delegate.lightningLoadPresetAmounts(for: currency)
+      lightningTransactionHistoryEmptyBalanceView.configure(with: currency, presetAmounts: amounts)
       return lightningTransactionHistoryEmptyBalanceView
     case .none:
       return nil
