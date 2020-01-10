@@ -256,11 +256,14 @@ extension TransactionHistoryViewController: DZNEmptyDataSetDelegate, DZNEmptyDat
       transactionHistoryWithBalanceView.isHidden = false
       return transactionHistoryWithBalanceView
     case .lightning:
-      lightningTransactionHistoryEmptyBalanceView.isHidden = false
+      let loadView = lightningTransactionHistoryEmptyBalanceView
+      loadView?.isHidden = false
       let currency = delegate.preferredFiatCurrency
-      let amounts = delegate.lightningLoadPresetAmounts(for: currency)
-      lightningTransactionHistoryEmptyBalanceView.configure(with: currency, presetAmounts: amounts)
-      return lightningTransactionHistoryEmptyBalanceView
+      var amounts = delegate.lightningLoadPresetAmounts(for: currency)
+      guard amounts.count == 5 else { return loadView }
+      amounts.remove(at: 1) //remove to only show four amounts
+      loadView?.configure(with: currency, presetAmounts: amounts)
+      return loadView
     case .none:
       return nil
     }
