@@ -16,6 +16,14 @@ extension CKMTransaction {
     return transactions(in: context)
   }
 
+  static func findAll(dateAscending: Bool, in context: NSManagedObjectContext) -> [CKMTransaction] {
+    let request: NSFetchRequest<CKMTransaction> = CKMTransaction.fetchRequest()
+    request.sortDescriptors = [
+      NSSortDescriptor(key: "\(#keyPath(CKMTransaction.date))", ascending: dateAscending)
+    ]
+    return transactions(with: request, in: context)
+  }
+
   static func findAll(byTxids txids: [String], in context: NSManagedObjectContext) -> [CKMTransaction] {
     let path = #keyPath(CKMTransaction.txid)
     let predicate = NSPredicate(format: "\(path) IN %@", txids)

@@ -995,6 +995,8 @@
 		B5A3BA602151940E005EE657 /* WalletAddressRequestsTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A3BA5F2151940E005EE657 /* WalletAddressRequestsTarget.swift */; };
 		B5A3BA622151941E005EE657 /* WalletAddressesTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A3BA612151941E005EE657 /* WalletAddressesTarget.swift */; };
 		B5A42A9A217A3E0F00EB32CB /* KeyPathDescribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A42A99217A3E0F00EB32CB /* KeyPathDescribable.swift */; };
+		B5A4F9F923CD65000013E756 /* ExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A4F9F823CD65000013E756 /* ExportManager.swift */; };
+		B5A4F9FB23CD76610013E756 /* CounterpartyDescribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A4F9FA23CD76610013E756 /* CounterpartyDescribable.swift */; };
 		B5A5B1B3216B854500345468 /* MockNetworkManager+WalletRequestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A5B1B2216B854500345468 /* MockNetworkManager+WalletRequestable.swift */; };
 		B5A5B1B5216B87AD00345468 /* MockNetworkManager+AddressRequestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A5B1B4216B87AD00345468 /* MockNetworkManager+AddressRequestable.swift */; };
 		B5A5B1B7216B88C100345468 /* MockNetworkManager+BlockchainInfoRequestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A5B1B6216B88C100345468 /* MockNetworkManager+BlockchainInfoRequestable.swift */; };
@@ -2110,6 +2112,8 @@
 		B5A3BA5F2151940E005EE657 /* WalletAddressRequestsTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAddressRequestsTarget.swift; sourceTree = "<group>"; };
 		B5A3BA612151941E005EE657 /* WalletAddressesTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAddressesTarget.swift; sourceTree = "<group>"; };
 		B5A42A99217A3E0F00EB32CB /* KeyPathDescribable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPathDescribable.swift; sourceTree = "<group>"; };
+		B5A4F9F823CD65000013E756 /* ExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportManager.swift; sourceTree = "<group>"; };
+		B5A4F9FA23CD76610013E756 /* CounterpartyDescribable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterpartyDescribable.swift; sourceTree = "<group>"; };
 		B5A5B1B2216B854500345468 /* MockNetworkManager+WalletRequestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockNetworkManager+WalletRequestable.swift"; sourceTree = "<group>"; };
 		B5A5B1B4216B87AD00345468 /* MockNetworkManager+AddressRequestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockNetworkManager+AddressRequestable.swift"; sourceTree = "<group>"; };
 		B5A5B1B6216B88C100345468 /* MockNetworkManager+BlockchainInfoRequestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockNetworkManager+BlockchainInfoRequestable.swift"; sourceTree = "<group>"; };
@@ -3597,6 +3601,7 @@
 				B597B7BD23443C720020E20F /* TransactionDetailInvoiceCellProtocols.swift */,
 				B5DB5341232E8C1C0088C8A1 /* TransactionCellStructsAndEnums.swift */,
 				B50E7B7E230C6A0400927C8B /* TransactionSummaryCellViewModel.swift */,
+				B5A4F9FA23CD76610013E756 /* CounterpartyDescribable.swift */,
 				B5219C802343C7A300EA5B05 /* TransactionDetailCellViewModel.swift */,
 				B54D0F1E234A2584001B89BD /* TransactionDetailInvalidCellViewModel.swift */,
 				B59D0F292345701500E828BF /* TransactionDetailInvoiceCellViewModel.swift */,
@@ -3651,6 +3656,7 @@
 				B58E781E217FB6C3000F9796 /* BadgeManager.swift */,
 				B552EDD5211E33D000332BB5 /* LaunchStateManager.swift */,
 				B552EDD6211E33D000332BB5 /* CoinNinjaUrlFactory.swift */,
+				B5A4F9F823CD65000013E756 /* ExportManager.swift */,
 				B552EDD7211E33D000332BB5 /* HashingManager.swift */,
 				B552EDD8211E33D000332BB5 /* CurrencyConverter.swift */,
 				B552EDD9211E33D000332BB5 /* ConnectionManager.swift */,
@@ -4702,6 +4708,7 @@
 				3B6FDADD205029A40091916A /* Sequence+Shuffled.swift in Sources */,
 				30B08FB821F23F3C0012B4CF /* AppCoordinator+SyncManagerTypeDelegate.swift in Sources */,
 				B54159CC20A5DEBF0048F495 /* CKMUser+CoreDataProperties.swift in Sources */,
+				B5A4F9FB23CD76610013E756 /* CounterpartyDescribable.swift in Sources */,
 				3BCBFCC8229EF15400F633BA /* SettingsBaseCell.swift in Sources */,
 				230DE9FD207E786300CA8B03 /* NotificationToken.swift in Sources */,
 				3BEF348E22708E88002E4DB5 /* TransactionHistoryDetailValidCell.swift in Sources */,
@@ -5135,6 +5142,7 @@
 				B5A3BA542151939B005EE657 /* AddressesTarget.swift in Sources */,
 				B53461722098ABBF00DDC1C4 /* CKMAddressTransactionSummary+CoreDataClass.swift in Sources */,
 				B52E1DC02302F50800AA652D /* CKMLNLedgerEntry+CoreDataProperties.swift in Sources */,
+				B5A4F9F923CD65000013E756 /* ExportManager.swift in Sources */,
 				B54913B122BD525400ACC7D7 /* AppCoordinator+AdjustableFeesViewControllerDelegate.swift in Sources */,
 				3BEF22A12264B9D8001F6D25 /* AppCoordinator+GetBitcoinViewControllerDelegate.swift in Sources */,
 				30ADA32C2162A76D00E52AF9 /* CreateDeviceBody.swift in Sources */,

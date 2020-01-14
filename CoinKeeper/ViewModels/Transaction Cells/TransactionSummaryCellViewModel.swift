@@ -68,46 +68,16 @@ protocol TransactionSummaryCellViewModelObject {
 
 extension TransactionSummaryCellViewModelObject {
 
-  func priorityCounterpartyName(with twitterConfig: TransactionCellTwitterConfig?,
-                                invitation: CKMInvitation?,
-                                phoneNumber: CKMPhoneNumber?,
-                                counterparty: CKMCounterparty?) -> String? {
-    if counterparty != nil {
-      return counterparty?.name
-    } else if let config = twitterConfig {
-      return config.displayName
-    } else if let inviteName = invitation?.counterpartyName {
-      return inviteName
-    } else {
-      let relevantNumber = phoneNumber ?? invitation?.counterpartyPhoneNumber
-      return relevantNumber?.counterparty?.name
-    }
-  }
-
-  func priorityPhoneNumber(for deviceCountryCode: Int, invitation: CKMInvitation?, phoneNumber: CKMPhoneNumber?) -> String? {
-    guard let relevantPhoneNumber = invitation?.counterpartyPhoneNumber ?? phoneNumber else { return nil }
-    let globalPhoneNumber = relevantPhoneNumber.asGlobalPhoneNumber
-    let format: PhoneNumberFormat = (deviceCountryCode == globalPhoneNumber.countryCode) ? .national : .international
-    let formatter = CKPhoneNumberFormatter(format: format)
-    return try? formatter.string(from: globalPhoneNumber)
-  }
-
   func counterpartyConfig(for walletEntry: CKMWalletEntry, deviceCountryCode: Int) -> TransactionCellCounterpartyConfig? {
-    let maybeDirectTwitter = walletEntry.twitterContact.flatMap { TransactionCellTwitterConfig(contact: $0) }
-    let maybeInvitationTwitter = walletEntry.invitation?.twitterContact.flatMap { TransactionCellTwitterConfig(contact: $0) }
-    let maybeTwitter = maybeDirectTwitter ?? maybeInvitationTwitter
-
-    let maybeName = priorityCounterpartyName(with: maybeTwitter, invitation: walletEntry.invitation,
-                                             phoneNumber: walletEntry.phoneNumber,
-                                             counterparty: walletEntry.counterparty)
+    let maybeName = walletEntry.priorityCounterpartyName()
+    let maybeNumber = walletEntry.priorityDisplayPhoneNumber(for: deviceCountryCode)
     var maybeAvatar: TransactionCellAvatarConfig?
     if let avatarData = walletEntry.counterparty?.profileImageData, let maybeImage = UIImage(data: avatarData) {
       maybeAvatar = TransactionCellAvatarConfig(image: maybeImage, bgColor: .lightningBlue)
     }
-    let maybeNumber = priorityPhoneNumber(for: deviceCountryCode, invitation: walletEntry.invitation, phoneNumber: walletEntry.phoneNumber)
     return TransactionCellCounterpartyConfig(failableWithName: maybeName,
                                              displayPhoneNumber: maybeNumber,
-                                             twitterConfig: maybeTwitter,
+                                             twitterConfig: walletEntry.maybeTwitterCellConfig,
                                              avatarConfig: maybeAvatar)
   }
 
