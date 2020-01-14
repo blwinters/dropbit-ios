@@ -3,6 +3,7 @@ PODS:
   - Charts (3.4.0):
     - Charts/Core (= 3.4.0)
   - Charts/Core (3.4.0)
+  - CHCSVParser (2.1.0)
   - DZNEmptyDataSet (1.8.1)
   - Firebase/Analytics (6.14.0):
     - Firebase/Core
@@ -117,6 +118,7 @@ PODS:
 
 DEPENDENCIES:
   - Charts (~> 3.4.0)
+  - CHCSVParser
   - DZNEmptyDataSet (~> 1.8.1)
   - Firebase/Analytics (~> 6.14.0)
   - Firebase/DynamicLinks (~> 6.14.0)
@@ -143,6 +145,7 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - Charts
+    - CHCSVParser
     - DZNEmptyDataSet
     - Firebase
     - FirebaseAnalytics
@@ -195,6 +198,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   Charts: 74c9f256eaf0460c0c416522d1cf8c634ea6b286
+  CHCSVParser: 3bcc7bdb72111a31222e95d57eacceefe4e537e8
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Firebase: 0219bb4782eb1406f1b9b0628a2e625484ce910d
   FirebaseAnalytics: f68b9f3f1241385129ae0a83b63627fc420c05e5
@@ -225,6 +229,6 @@ SPEC CHECKSUMS:
   SwiftMessages: b577dc7043be8b299857ab35bb663dbff6483bd0
   Willow: a6310f9aedcb6f4de8c35b94fd3416a660ae9280
 
-PODFILE CHECKSUM: ca7495d0c9d9d9d1cabc36eb135b61c7c8d87331
+PODFILE CHECKSUM: d223b53b4fdb28cb61aea7bab335d43e6a21ad48
 
 COCOAPODS: 1.7.4

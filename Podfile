@@ -24,6 +24,7 @@ def shared_pods
   pod 'SwiftMessages', '~> 7.0.0'
   pod 'Gifu', '~> 3.2.0'
   pod 'Strongbox', '~> 0.5.3'
+  pod 'CHCSVParser'
 end
 
 target 'DropBit' do
