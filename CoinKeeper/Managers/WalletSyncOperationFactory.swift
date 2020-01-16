@@ -18,7 +18,7 @@ protocol WalletSyncDelegate: AnyObject {
   func syncManagerDidFinishSync()
   func showAlertsForSyncedChanges(in context: NSManagedObjectContext)
   func syncManagerDidSetWalletManager(walletManager: WalletManagerType, in context: NSManagedObjectContext) -> Promise<Void>
-  func handleMissingWalletError(_ error: CKPersistenceError)
+  func handleMissingWalletError(_ error: DBTError.Persistence)
 }
 
 class WalletSyncOperationFactory {
@@ -32,7 +32,7 @@ class WalletSyncOperationFactory {
 
   func performOnChainOnlySync(in context: NSManagedObjectContext) -> Promise<Void> {
     guard let queueDelegate = self.delegate else {
-      return Promise(error: SyncRoutineError.missingQueueDelegate)
+      return Promise(error: DBTError.SyncRoutine.missingQueueDelegate)
     }
 
     return queueDelegate.syncManagerDidRequestDependencies(in: context, inBackground: false)
@@ -44,7 +44,7 @@ class WalletSyncOperationFactory {
                            fetchResult: ((UIBackgroundFetchResult) -> Void)?,
                            in context: NSManagedObjectContext) -> Promise<AsynchronousOperation> {
     guard let queueDelegate = self.delegate else {
-      return Promise.init(error: SyncRoutineError.missingQueueDelegate)
+      return Promise.init(error: DBTError.SyncRoutine.missingQueueDelegate)
     }
 
     let inBackground = (fetchResult != nil)
@@ -78,6 +78,22 @@ class WalletSyncOperationFactory {
                 let receivedOnChain = bgContext.insertedObjects.compactMap { $0 as? CKMTransaction }.isNotEmpty
                 let receivedLightning = bgContext.insertedObjects.compactMap { $0 as? CKMLNLedgerEntry }.isNotEmpty
                 receivedFunds = receivedOnChain || receivedLightning
+
+                if bgContext.insertedObjects.isNotEmpty && !isFullSync {
+                  let ledgerEntries = bgContext.insertedObjects.compactMap({ object -> CKMLNLedgerEntry? in
+                    guard let walletEntry = object as? CKMWalletEntry else { return nil }
+                    return walletEntry.ledgerEntry
+                  })
+
+                  for object in ledgerEntries {
+                    guard let walletEntry = object.walletEntry,
+                      walletEntry.counterparty?.type == .referral else { continue }
+                    let wasInvited = AnalyticsEventValue(key: .invited,
+                                                         value: walletEntry.referralPaymentSenderAnalyticsIdentifier)
+                    dependencies.analyticsManager.track(event: .referralPaymentReceived, with: [wasInvited])
+                  }
+                }
+
                 do {
                   log.info("Sync routine: Saving database...")
                   try bgContext.saveRecursively()
@@ -177,7 +193,7 @@ class WalletSyncOperationFactory {
   }
 
   private func recoverSyncError(_ error: Error) -> Promise<Void> {
-    if let providerError = error as? CKNetworkError {
+    if let providerError = error as? DBTError.Network {
       switch providerError {
       case .userNotVerified:  return Promise.value(())
       default:                return Promise(error: error)
@@ -222,7 +238,7 @@ class WalletSyncOperationFactory {
       return dependencies.networkManager
         .getWallet()
         .recover { (error: Error) -> Promise<WalletResponse> in
-          if case CKNetworkError.unauthorized = error {
+          if case DBTError.Network.unauthorized = error {
             var flagsParser = WalletFlagsParser(flags: 0).setVersion(.v0).setPurpose(.BIP49)
             if let words = dependencies.persistenceManager.keychainManager.retrieveValue(for: .walletWords) as? [String],
               let newWalletManager = WalletManager(words: words, persistenceManager: dependencies.persistenceManager) {
@@ -234,7 +250,7 @@ class WalletSyncOperationFactory {
               return newWalletManager.hexEncodedPublicKeyPromise()
                 .then { return dependencies.networkManager.createWallet(withPublicKey: $0, walletFlags: flagsParser.flags) }
             } else {
-              return Promise(error: CKPersistenceError.noWalletWords)
+              return Promise(error: DBTError.Persistence.noWalletWords)
             }
           } else {
             return Promise(error: error)
@@ -245,7 +261,7 @@ class WalletSyncOperationFactory {
     } else { // walletId is nil
       guard let keychainWords = dependencies.persistenceManager.brokers.wallet.walletWords(),
         let walletManager = WalletManager(words: keychainWords, persistenceManager: dependencies.persistenceManager) else {
-        return Promise { $0.reject(CKPersistenceError.noWalletWords) }
+        return Promise { $0.reject(DBTError.Persistence.noWalletWords) }
       }
 
       // Make sure we are registering a wallet with the words stored in the keychain
@@ -260,13 +276,13 @@ class WalletSyncOperationFactory {
   }
 
   private func handleSyncRoutineError(_ error: Error, in context: NSManagedObjectContext) {
-    if let persistenceError = error as? CKPersistenceError {
+    if let persistenceError = error as? DBTError.Persistence {
       switch persistenceError {
       case .noWalletWords:
         delegate?.handleMissingWalletError(persistenceError)
       default: break
       }
-    } else if let networkError = error as? CKNetworkError {
+    } else if let networkError = error as? DBTError.Network {
       switch networkError {
       case .reachabilityFailed(let moyaError):
         delegate?.handleReachabilityError(moyaError)

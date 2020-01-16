@@ -44,7 +44,7 @@ class NetworkManagerIntegrationTests: XCTestCase {
         let expectedPath = PriceTransactionResponseKey.average.path
         let expectedValue = String(response.average)
 
-        guard let networkError = error as? CKNetworkError,
+        guard let networkError = error as? DBTError.Network,
           case let .invalidValue(path, value, _) = networkError else {
             XCTFail("Received incorrect error: \(error.localizedDescription)")
             return
@@ -75,7 +75,7 @@ class NetworkManagerIntegrationTests: XCTestCase {
         let expectedPath = FeesResponseKey.slow.path
         let expectedValue = String(testCheckInResponse.fees.good)
 
-        guard let networkError = error as? CKNetworkError,
+        guard let networkError = error as? DBTError.Network,
           case let .invalidValue(path, value, _) = networkError else {
             XCTFail("Received incorrect error: \(error.localizedDescription)")
             return
@@ -108,7 +108,7 @@ class NetworkManagerIntegrationTests: XCTestCase {
         XCTFail("Should not return valid response")
       }
       .catch { error in
-        guard let networkError = error as? CKNetworkError,
+        guard let networkError = error as? DBTError.Network,
           case .invalidValue = networkError else {
             XCTFail("Received incorrect error: \(error.localizedDescription)")
             return

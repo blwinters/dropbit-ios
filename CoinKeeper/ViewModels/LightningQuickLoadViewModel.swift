@@ -22,7 +22,7 @@ struct LightningQuickLoadViewModel {
   init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency, config: LightningConfig) throws {
     let presetAmounts = config.loadPresetAmounts(for: fiatCurrency)
     guard let minFiatAmount = presetAmounts.first else {
-      throw CKSystemError.missingValue(key: "standardAmounts.min")
+      throw DBTError.System.missingValue(key: "standardAmounts.min")
     }
 
     ///Run these validations separately to produce correct error message

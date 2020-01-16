@@ -9,7 +9,7 @@
 import Foundation
 import PromiseKit
 import UIKit
-import MMDrawerController
+import FAPanels
 import CoreData
 
 enum SetupFlow {
@@ -66,6 +66,7 @@ extension AppCoordinator {
         .done(on: .main) { _ in
           self.analyticsManager.track(event: .createWallet, with: nil)
           self.analyticsManager.track(property: MixpanelProperty(key: .walletVersion, value: WalletFlagsVersion.v2.rawValue))
+          self.localNotificationManager.schedule(.backupWords)
           self.continueSetupFlow()
         }.cauterize()
     }
@@ -154,16 +155,23 @@ extension AppCoordinator {
     navigationController.present(navVC, animated: true, completion: nil)
   }
 
-  private func setupDrawerViewController(centerViewController: UIViewController, leftViewController: UIViewController) -> MMDrawerController {
+  private func setupDrawerViewController(centerViewController: UIViewController, leftViewController: UIViewController) -> FAPanelController {
     let drawerWidth: CGFloat = 118.0
-    let drawerController = MMDrawerController(center: centerViewController,
-                                              leftDrawerViewController: leftViewController)
-    drawerController?.setMaximumLeftDrawerWidth(drawerWidth, animated: false, completion: nil)
-    drawerController?.closeDrawerGestureModeMask = [.tapCenterView, .tapNavigationBar, .panningCenterView]
-    drawerController?.openDrawerGestureModeMask = [.bezelPanningCenterView]
-    drawerController?.shouldStretchDrawer = false
-    drawerController?.showsShadow = false
-    return drawerController!
+
+    let drawerController = FAPanelController()
+      .left(leftViewController)
+      .center(centerViewController)
+
+    drawerController.configs = FAPanelConfigurations()
+
+    drawerController.configs.leftPanelWidth = drawerWidth
+    drawerController.configs.bounceOnLeftPanelOpen = true
+    drawerController.configs.bounceOnLeftPanelClose = false
+
+    drawerController.configs.panFromEdge = true
+    drawerController.configs.minEdgeForLeftPanel = 70
+
+    return drawerController
   }
 
   func nextReceiveAddressForRequestPay() -> String? {

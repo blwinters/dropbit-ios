@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import MMDrawerController
 import Sheeeeeeeeet
 
 extension AppCoordinator: WalletOverviewViewControllerDelegate {
@@ -68,30 +67,22 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
   }
 
   private func showQuickLoadBalanceError(for error: Error, viewController: UIViewController) {
-    func showDefaultAlert(withMessage message: String) {
-      self.alertManager.showError(message: message, forDuration: 5)
-    }
+    if let validatorError = error as? LightningWalletAmountValidatorError, case .reloadMinimum = validatorError {
+      let message = """
+      DropBit requires you to load a minimum of $5.00 to your Lightning wallet.
+      You don’t currently have enough funds to meet the minimum requirement.
+      """.removingMultilineLineBreaks()
 
-    if let validatorError = error as? LightningWalletAmountValidatorError {
-      switch validatorError {
-      case .reloadMinimum:
-        let message = validatorError.displayMessage ?? ""
-
-        let buyBitcoinAction = AlertActionConfiguration(title: "Buy Bitcoin", style: .default) {
-          self.viewControllerDidTapGetBitcoin(viewController)
-        }
-
-        let alertVM = AlertControllerViewModel(title: nil, description: message, actions: [buyBitcoinAction,
-                                                                                           alertManager.okAlertActionConfig])
-        let alert = self.alertManager.alert(from: alertVM)
-        self.navigationController.present(alert, animated: true, completion: nil)
-      default:
-        let message = validatorError.displayMessage ?? validatorError.localizedDescription
-        showDefaultAlert(withMessage: message)
+      let buyBitcoinAction = AlertActionConfiguration(title: "Buy Bitcoin", style: .default) {
+        self.viewControllerDidTapGetBitcoin(viewController)
       }
 
+      let alertVM = AlertControllerViewModel(title: nil, description: message, actions: [buyBitcoinAction,
+                                                                                         alertManager.okAlertActionConfig])
+      let alert = self.alertManager.alert(from: alertVM)
+      self.navigationController.present(alert, animated: true, completion: nil)
     } else {
-      showDefaultAlert(withMessage: error.localizedDescription)
+      self.alertManager.showErrorHUD(error, forDuration: 5)
     }
   }
 

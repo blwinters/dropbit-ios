@@ -34,7 +34,7 @@ extension AppCoordinator: ConfirmPaymentViewControllerDelegate {
       if outgoingInvitationDTO.walletTxType == .onChain {
         guard outgoingInvitationDTO.fee > 0 else {
           log.error("DropBit invitation fee is zero")
-          self.handleFailure(error: TransactionDataError.insufficientFee)
+          self.handleFailure(error: DBTError.TransactionData.insufficientFee)
           return
         }
       }
@@ -75,7 +75,7 @@ extension AppCoordinator: ConfirmPaymentViewControllerDelegate {
       if outgoingInvitationDTO.walletTxType == .onChain {
         guard outgoingInvitationDTO.fee > 0 else {
           log.error("DropBit invitation fee is zero")
-          strongSelf.handleFailure(error: TransactionDataError.insufficientFee)
+          strongSelf.handleFailure(error: DBTError.TransactionData.insufficientFee)
           return
         }
       }
@@ -152,6 +152,10 @@ extension AppCoordinator: ConfirmPaymentViewControllerDelegate {
       return self.base64SharedPayload(from: body, invitationDTO: outgoingInvitationDTO)
         .then { self.networkManager.preauthorizeLightningPayment(sats: body.amount.btc, encodedPayload: $0) }
         .then { preauthResponse -> Promise<CreateAddressRequestOutput> in
+          let satsValues = SatsTransferredValues(transactionType: .lightning,
+                                                 isInvite: true,
+                                                 lightningType: .internal)
+          self.analyticsManager.track(event: .satsTransferred, with: satsValues.values)
           return self.networkManager.getOrCreateLightningAccount()
             .get(in: context) { self.persistenceManager.brokers.lightning.persistAccountResponse($0, in: context) }
             .then { _ in self.networkManager.createAddressRequest(body: body, preauthId: preauthResponse.result.id) }
@@ -245,14 +249,15 @@ extension AppCoordinator: ConfirmPaymentViewControllerDelegate {
 
     var errorMessage = ""
 
-    if let networkError = error as? CKNetworkError, case .rateLimitExceeded = networkError {
+    if let networkError = error as? DBTError.Network, case .rateLimitExceeded = networkError {
       errorMessage = "For security reasons we must limit the number of DropBits sent too rapidly.  Please briefly wait and try sending again."
 
-    } else if let txDataError = error as? TransactionDataError, case .insufficientFee = txDataError {
-      errorMessage = (error as? TransactionDataError)?.messageDescription ?? ""
+    } else if let txDataError = error as? DBTError.TransactionData, case .insufficientFee = txDataError {
+      errorMessage = txDataError.displayMessage
 
     } else {
-      errorMessage = "Oops something went wrong, try again later"
+      let dbtError = DBTError.cast(error)
+      errorMessage = dbtError.displayMessage
     }
 
     let alert = alertManager.defaultAlert(withTitle: "Error", description: errorMessage)
@@ -292,7 +297,8 @@ extension AppCoordinator: ConfirmPaymentViewControllerDelegate {
                                                  inviteBody: WalletAddressRequestBody,
                                                  successFailVC: SuccessFailViewController,
                                                  in context: NSManagedObjectContext) {
-    if let networkError = error as? CKNetworkError,
+    let dbtError = DBTError.cast(error)
+    if let networkError = error as? DBTError.Network,
       case let .twilioError(response) = networkError,
       let typedResponse = try? response.map(WalletAddressRequestResponse.self, using: WalletAddressRequestResponse.decoder) {
 
@@ -308,7 +314,7 @@ extension AppCoordinator: ConfirmPaymentViewControllerDelegate {
       // In the edge case where we don't receive a server response due to a network failure, expected behavior
       // is that the SharedPayloadDTO is never persisted or sent, because we don't create CKMTransaction dependency
       // until we have acknowledgement from the server that the address request was successfully posted.
-      self.handleFailureInvite(error: error)
+      self.handleFailureInvite(error: dbtError)
       successFailVC.setMode(.failure)
     }
   }

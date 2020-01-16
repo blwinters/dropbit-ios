@@ -14,7 +14,13 @@ class DrawerTableViewHeader: UITableViewHeaderFooterView {
   @IBOutlet var priceTitleLabel: UILabel!
   @IBOutlet var priceLabel: UILabel!
 
-  public weak var currencyValueManager: CurrencyValueDataSourceType?
+  public weak var currencyValueManager: CurrencyValueDataSourceType? {
+    didSet {
+      currencyValueManager?.latestExchangeRates()
+        .done(updateRatesRequest)
+        .catch { log.error($0, message: "Failed to update rates in DrawerTableViewHeader.")}
+    }
+  }
 
   deinit {
     CKNotificationCenter.unsubscribe(self)
@@ -29,8 +35,6 @@ class DrawerTableViewHeader: UITableViewHeaderFooterView {
     priceTitleLabel.font = .light(11.6)
     priceLabel.font = .regular(16)
     _backgroundView.backgroundColor = .darkBlueBackground
-
-    refreshDisplayedPrice()
 
     //Need to listen for correct notification
     CKNotificationCenter.subscribe(self, [.didUpdateExchangeRates: #selector(refreshDisplayedPrice),

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import MMDrawerController
+import FAPanels
 import Moya
 import Permission
 import AVFoundation
@@ -56,6 +56,7 @@ class AppCoordinator: CoordinatorType {
   let featureConfigManager: FeatureConfigManagerType
   var userIdentifiableManager: UserIdentifiableManagerType
   let ratesDataWorker: RatesDataWorker
+  var localNotificationManager: LocalNotificationManagerType
   let uiTestArguments: [UITestArgument]
 
   // swiftlint:disable:next weak_delegate
@@ -108,6 +109,7 @@ class AppCoordinator: CoordinatorType {
     analyticsManager: AnalyticsManagerType = AnalyticsManager(),
     connectionManager: ConnectionManagerType = ConnectionManager(),
     serialQueueManager: SerialQueueManagerType = SerialQueueManager(),
+    localNotificationManager: LocalNotificationManagerType = LocalNotificationManager(),
     notificationManager: NotificationManagerType? = nil,
     messageManager: MessagesManagerType? = nil,
     currencyController: CurrencyController = CurrencyController(),
@@ -126,6 +128,7 @@ class AppCoordinator: CoordinatorType {
     self.biometricsAuthenticationManager = biometricsAuthenticationManager
     let theLaunchStateManager = launchStateManager ?? LaunchStateManager(persistenceManager: persistenceManager)
     self.launchStateManager = theLaunchStateManager
+    self.localNotificationManager = localNotificationManager
     self.badgeManager = BadgeManager(persistenceManager: persistenceManager)
     self.analyticsManager = analyticsManager
     if let words = persistenceManager.brokers.wallet.walletWords() {
@@ -170,8 +173,8 @@ class AppCoordinator: CoordinatorType {
     self.userIdentifiableManager.delegate = self
   }
 
-  var drawerController: MMDrawerController? {
-    return navigationController.topViewController.flatMap { $0 as? MMDrawerController }
+  var drawerController: FAPanelController? {
+    return navigationController.topViewController().flatMap { $0 as? FAPanelController }
   }
 
   func startSegwitUpgrade() {
@@ -455,8 +458,8 @@ class AppCoordinator: CoordinatorType {
   }
 
   private var walletOverviewViewController: WalletOverviewViewController? {
-    guard let topViewController = (navigationController.topViewController() as? MMDrawerController) else { return nil }
-    return topViewController.centerViewController as? WalletOverviewViewController
+    guard let topViewController = (navigationController.topViewController() as? FAPanelController) else { return nil }
+    return topViewController.center as? WalletOverviewViewController
   }
 
   func toggleChartAndBalance() {
