@@ -31,7 +31,7 @@ extension CKMTransaction: TransactionSummaryCellViewModelObject {
 
   func counterpartyConfig(for deviceCountryCode: Int) -> TransactionCellCounterpartyConfig? {
     let maybeName = self.priorityCounterpartyName()
-    let maybeNumber = priorityPhoneNumber(for: deviceCountryCode, invitation: invitation, phoneNumber: phoneNumber)
+    let maybeNumber = self.priorityDisplayPhoneNumber(for: deviceCountryCode)
     return TransactionCellCounterpartyConfig(failableWithName: maybeName,
                                              displayPhoneNumber: maybeNumber,
                                              twitterConfig: maybeTwitterCellConfig)

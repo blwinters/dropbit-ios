@@ -45,7 +45,10 @@ class ExportManager {
   ///Create CSV header string by joining these elements.
   private var itemHeaders: [String] {
     let fiat = fiatCurrency.rawValue
-    return ["Date", "Completed", "Transaction ID", "Net BTC", "\(fiat) Price", "Net \(fiat)", "Receiver Address", "Sent to Self", "Counterparty", "Memo"]
+    return [
+      "Date", "Completed", "Transaction ID", "Net BTC", "\(fiat) Price", "Net \(fiat)",
+      "Receiver Address", "Sent to Self", "Counterparty", "Memo"
+    ]
   }
 
   ///Returns promise of the exported file's URL.

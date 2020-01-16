@@ -112,14 +112,12 @@ class LightningTransactionViewModelObject: LightningViewModelObject, Transaction
 
   func counterpartyConfig(for deviceCountryCode: Int) -> TransactionCellCounterpartyConfig? {
     let maybeTwitter = ledgerEntry.walletEntry?.twitterContact.flatMap { TransactionCellTwitterConfig(contact: $0) }
-    let maybeName = priorityCounterpartyName(with: maybeTwitter, invitation: nil,
-                                             phoneNumber: ledgerEntry.walletEntry?.phoneNumber,
-                                             counterparty: ledgerEntry.walletEntry?.counterparty)
+    let maybeName = walletEntry.priorityCounterpartyName()
     var maybeAvatar: TransactionCellAvatarConfig?
     if let avatarData = walletEntry.counterparty?.profileImageData, let maybeImage = UIImage(data: avatarData) {
       maybeAvatar = TransactionCellAvatarConfig(image: maybeImage, bgColor: .lightningBlue)
     }
-    let maybeNumber = priorityPhoneNumber(for: deviceCountryCode, invitation: nil, phoneNumber: ledgerEntry.walletEntry?.phoneNumber)
+    let maybeNumber = walletEntry.priorityDisplayPhoneNumber(for: deviceCountryCode)
     return TransactionCellCounterpartyConfig(failableWithName: maybeName,
                                              displayPhoneNumber: maybeNumber,
                                              twitterConfig: maybeTwitter,
