@@ -14,6 +14,7 @@ struct ExportDependencies {
   let context: NSManagedObjectContext
   let countryCode: Int
   let fiatCurrency: CurrencyCode
+  let walletTxType: WalletTransactionType
 }
 
 ///Exports all transactions with their main related properties, one per line.
@@ -22,11 +23,13 @@ class ExportManager {
   private let context: NSManagedObjectContext
   private let countryCode: Int
   private let fiatCurrency: CurrencyCode
+  private let walletTxType: WalletTransactionType
 
   init(inputs: ExportDependencies) {
     self.context = inputs.context
     self.countryCode = inputs.countryCode
     self.fiatCurrency = inputs.fiatCurrency
+    self.walletTxType = inputs.walletTxType
   }
 
   //TODO: check that this escapes commas appropriately when region is set to France
@@ -52,8 +55,8 @@ class ExportManager {
   private var itemHeaders: [String] {
     let fiat = fiatCurrency.rawValue
     return [
-      "Date", "Completed", "Net BTC", "BTC-\(fiat) Rate", "Net \(fiat)",
-      "Transaction ID", "Receiver Address", "Is Transfer", "Counterparty", "Memo"
+      "Date", "Net BTC", "BTC-\(fiat) Rate", "Net \(fiat)", "Transaction ID",
+      "Receiver Address", "Completed", "Is Transfer", "Counterparty", "Memo"
     ]
   }
 
@@ -84,8 +87,6 @@ class ExportManager {
     }
 
     append(tx.date?.csvDescription)
-    let isCompleted = tx.confirmations > 0
-    append(isCompleted)
 
     let amountDescs = self.amountDescriptions(for: tx)
     append(amountDescs.netBTC)
@@ -94,11 +95,15 @@ class ExportManager {
 
     append(tx.txid)
     append(tx.receiverAddress)
+
+    let isCompleted = tx.confirmations > 0
+    append(isCompleted)
+
     let transferDesc = self.transferDescription(for: tx)
     append(transferDesc.isTransfer)
     let maybeName = tx.priorityCounterpartyName()
     let maybeNumber = tx.priorityDisplayPhoneNumber(for: self.countryCode)
-    let counterpartyDesc = maybeName ?? maybeNumber ?? "-"
+    let counterpartyDesc = maybeName ?? maybeNumber
     append(counterpartyDesc)
     append(tx.memo ?? transferDesc.memo)
 
@@ -148,7 +153,8 @@ class ExportManager {
     let nameFormatter = DateFormatter()
     nameFormatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
     let dateString = nameFormatter.string(from: Date())
-    let fileBase = "DropBit_"
+    let txTypeDesc = (self.walletTxType == .onChain) ? "Bitcoin" : "Lightning"
+    let fileBase = "DropBit_\(txTypeDesc)_Transactions_"
     let fileName = fileBase + dateString
 
     let fileURL = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName + ".csv")

@@ -128,11 +128,9 @@ extension AppCoordinator: SettingsViewControllerDelegate {
 
     let actions: ActionSheet.SelectAction = { [weak self] sheet, item in
       guard let self = self else { return }
-      let inputs = ExportDependencies(context: self.persistenceManager.createBackgroundContext(),
-                                      countryCode: self.deviceCountryCode() ?? 1,
-                                      fiatCurrency: .USD)
       switch item {
       case onChainItem:
+        let inputs = self.exportDependencies(for: .onChain)
         let exportManager = ExportManager(inputs: inputs)
         exportManager.exportUserData()
           .done { url in
@@ -146,6 +144,13 @@ extension AppCoordinator: SettingsViewControllerDelegate {
     }
 
     alertManager.showActionSheet(in: viewController, with: [onChainItem, lightningItem], actions: actions)
+  }
+
+  private func exportDependencies(for walletTxType: WalletTransactionType) -> ExportDependencies {
+    return ExportDependencies(context: self.persistenceManager.createBackgroundContext(),
+                              countryCode: self.deviceCountryCode() ?? 1,
+                              fiatCurrency: .USD,
+                              walletTxType: walletTxType)
   }
 
   private func showShareSheet(withFileURL url: URL, viewController: UIViewController) {
