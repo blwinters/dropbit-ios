@@ -40,7 +40,7 @@ extension AppCoordinator: PaymentBuildingDelegate {
   func transactionDataSendingMaxFunds(toAddress destinationAddress: String) -> Promise<CNBCnlibTransactionData> {
     let fees = self.latestFees()
     guard let feeRate = self.usableFeeRate(from: fees) else {
-      return Promise(error: CKSystemError.missingValue(key: "usableFeeRate"))
+      return .systemMissingValue(for: "usableFeeRate")
     }
     guard let wmgr = self.walletManager else { return Promise(error: DBTError.Persistence.noManagedWallet) }
     return wmgr.transactionDataSendingMax(to: destinationAddress, withFeeRate: feeRate)
@@ -53,7 +53,7 @@ extension AppCoordinator: PaymentBuildingDelegate {
     let lightningAccount = self.persistenceManager.brokers.lightning.getAccount(forWallet: wallet, in: context)
     let fees = self.latestFees()
     guard let latestFeeRates = FeeRates(fees: fees) else {
-      return .missingValue(for: "feeRates")
+      return .systemMissingValue(for: "feeRates")
     }
     do {
       try BitcoinAddressValidator().validate(value: lightningAccount.address)

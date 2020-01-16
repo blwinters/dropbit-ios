@@ -16,9 +16,7 @@ class DrawerTableViewHeader: UITableViewHeaderFooterView {
 
   public weak var currencyValueManager: CurrencyValueDataSourceType? {
     didSet {
-      currencyValueManager?.latestExchangeRates()
-        .done(updateRatesRequest)
-        .catch { log.error($0, message: "Failed to update rates in DrawerTableViewHeader.")}
+      self.refreshDisplayedPrice()
     }
   }
 

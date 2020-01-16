@@ -48,7 +48,7 @@ class CachedMetadataWorker {
   }
 
   func handleUpdateCachedMetadataError(error: Error) {
-    guard let networkError = error as? CKNetworkError else {
+    guard let networkError = error as? DBTError.Network else {
       return
     }
 

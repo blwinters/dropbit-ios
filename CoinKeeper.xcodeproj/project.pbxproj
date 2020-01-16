@@ -808,7 +808,6 @@
 		B5457126217E6D8900FF3A5A /* ResponseCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5457125217E6D8900FF3A5A /* ResponseCodable.swift */; };
 		B5457128217E6F1700FF3A5A /* BodyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5457127217E6F1700FF3A5A /* BodyCodable.swift */; };
 		B545EB5423A9806600F31715 /* RatesDataWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B545EB5323A9806600F31715 /* RatesDataWorker.swift */; };
-		B545EB5623A9967800F31715 /* Error+PromiseKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B545EB5523A9967800F31715 /* Error+PromiseKit.swift */; };
 		B545EB5823A9A27100F31715 /* CachedMetadataWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B545EB5723A9A27100F31715 /* CachedMetadataWorker.swift */; };
 		B545EB5A23A9A98C00F31715 /* CurrencyValueDataSourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B545EB5923A9A98C00F31715 /* CurrencyValueDataSourceType.swift */; };
 		B5473279233D584D008AE08B /* MockSummaryDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5473278233D584D008AE08B /* MockSummaryDataGenerator.swift */; };
@@ -2322,6 +2321,7 @@
 				3B124E0D2020EB2B00431E2E /* Products */,
 				3B124E2F2020F1E500431E2E /* Frameworks */,
 				C598778409B817E98A66EE95 /* Pods */,
+				B5D0F79123D0F1CB001E5652 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -4020,6 +4020,14 @@
 			path = ContactCache;
 			sourceTree = "<group>";
 		};
+		B5D0F79123D0F1CB001E5652 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				B545EB5523A9967800F31715 /* Error+PromiseKit.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		B5D1B2CD21933990006B2BC7 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -4705,7 +4713,6 @@
 				3BCBFCC6229EE91E00F633BA /* SettingsCellTitleLabel.swift in Sources */,
 				B5B9132921419F84003A24E9 /* PhoneNumberKit+AreaCodes.swift in Sources */,
 				3B731D382253D97A0044B4F8 /* UIView+Fade.swift in Sources */,
-				B545EB5623A9967800F31715 /* Error+PromiseKit.swift in Sources */,
 				A2B4E6EE22FA476A00E24324 /* LightningRefillViewController.swift in Sources */,
 				3BF88B84226F5C9400B94474 /* TransactionHistoryDetailInvalidCell.swift in Sources */,
 				B558B86522B9365B0033AFBD /* MigrationBroker.swift in Sources */,
@@ -4838,8 +4845,6 @@
 				3B27D3FA225E84E900291B82 /* GetBitcoinViewController.swift in Sources */,
 				3BA9F5F2208F61A70047C213 /* BTCTestnetCoin.swift in Sources */,
 				5B91E3982076BEB500DD9A86 /* DrawerViewController.swift in Sources */,
-				3BC23EF220BDCA5100877BB6 /* TransactionDataError.swift in Sources */,
-				3BA9F60D208F6EA20047C213 /* AppCoordinator+CurrencyValueManager.swift in Sources */,
 				B51D55E12346300000AEAA60 /* TransactionViewModelObject+CKMWalletEntry.swift in Sources */,
 				307DF12121517A8800260369 /* VersionInfo.swift in Sources */,
 				B559AF0D2180E919001D44F2 /* Badgeable.swift in Sources */,

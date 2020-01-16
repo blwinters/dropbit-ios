@@ -34,8 +34,11 @@ extension CurrencyValueDataSourceType {
 
   func latestFeeRates() -> Promise<FeeRates> {
     let fees = latestFees()
-    guard let feeRates = FeeRates(fees: fees) else { return .missingValue(for: "latestFeeRates") }
-    return .value(feeRates)
+    if let feeRates = FeeRates(fees: fees) {
+      return .value(feeRates)
+    } else {
+      return .systemMissingValue(for: "latestFeeRates")
+    }
   }
 
 }

@@ -218,7 +218,7 @@ extension AppCoordinator: PaymentSendingDelegate {
     metadataWorker.updateCachedMetadata()
       .then { _ -> Promise<String> in
         guard let wmgr = self.mainWalletManager() else {
-          return Promise(error: CKPersistenceError.noWalletWords)
+          return Promise(error: DBTError.Persistence.noWalletWords)
         }
 
         return self.networkManager.broadcastTx(with: transactionData, walletManager: wmgr) }

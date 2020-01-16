@@ -9,6 +9,7 @@
 import Foundation
 import Moya
 import LocalAuthentication
+import PromiseKit
 
 protocol DBTErrorType: LocalizedError {
   var displayTitle: String { get }
@@ -464,6 +465,15 @@ extension MoyaError: DBTErrorType {
     } else {
       return self.errorDescription ?? "An unknown network error occurred"
     }
+  }
+
+}
+
+extension Thenable {
+
+  static func systemMissingValue<T>(for key: String) -> Promise<T> {
+    let error = DBTError.System.missingValue(key: key)
+    return Promise(error: error)
   }
 
 }

@@ -8,16 +8,12 @@
 
 import Foundation
 
-enum LightningWalletAmountValidatorError: ValidatorTypeError, Equatable {
+enum LightningWalletAmountValidatorError: ValidatorErrorType, Equatable {
   case walletMaximum(btc: NSDecimalNumber)
   case reloadMinimum(btc: NSDecimalNumber)
   case invalidAmount
 
-  var debugMessage: String {
-    return displayMessage ?? ""
-  }
-
-  var displayMessage: String? {
+  var displayMessage: String {
     switch self {
     case .invalidAmount:
       return "Unable to convert amount to fiat, stopping"
