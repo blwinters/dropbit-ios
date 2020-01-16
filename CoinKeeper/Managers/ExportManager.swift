@@ -10,6 +10,12 @@ import CHCSVParser
 import CoreData
 import PromiseKit
 
+struct ExportDependencies {
+  let context: NSManagedObjectContext
+  let countryCode: Int
+  let fiatCurrency: CurrencyCode
+}
+
 ///Exports all transactions with their main related properties, one per line.
 class ExportManager {
 
@@ -17,10 +23,10 @@ class ExportManager {
   private let countryCode: Int
   private let fiatCurrency: CurrencyCode
 
-  init(backgroundContext: NSManagedObjectContext, deviceCountryCode: Int, fiatCurrency: CurrencyCode) {
-    self.context = backgroundContext
-    self.countryCode = deviceCountryCode
-    self.fiatCurrency = fiatCurrency
+  init(inputs: ExportDependencies) {
+    self.context = inputs.context
+    self.countryCode = inputs.countryCode
+    self.fiatCurrency = inputs.fiatCurrency
   }
 
   //TODO: check that this escapes commas appropriately when region is set to France
@@ -46,8 +52,8 @@ class ExportManager {
   private var itemHeaders: [String] {
     let fiat = fiatCurrency.rawValue
     return [
-      "Date", "Completed", "Transaction ID", "Net BTC", "\(fiat) Price", "Net \(fiat)",
-      "Receiver Address", "Sent to Self", "Counterparty", "Memo"
+      "Date", "Completed", "Net BTC", "BTC-\(fiat) Rate", "Net \(fiat)",
+      "Transaction ID", "Receiver Address", "Is Transfer", "Counterparty", "Memo"
     ]
   }
 
@@ -80,22 +86,37 @@ class ExportManager {
     append(tx.date?.csvDescription)
     let isCompleted = tx.confirmations > 0
     append(isCompleted)
-    append(tx.txid)
 
     let amountDescs = self.amountDescriptions(for: tx)
     append(amountDescs.netBTC)
     append(amountDescs.fiatPrice)
     append(amountDescs.netFiat)
 
+    append(tx.txid)
     append(tx.receiverAddress)
-    append(tx.isSentToSelf)
+    let transferDesc = self.transferDescription(for: tx)
+    append(transferDesc.isTransfer)
     let maybeName = tx.priorityCounterpartyName()
     let maybeNumber = tx.priorityDisplayPhoneNumber(for: self.countryCode)
     let counterpartyDesc = maybeName ?? maybeNumber ?? "-"
     append(counterpartyDesc)
-    append(tx.memo)
+    append(tx.memo ?? transferDesc.memo)
 
     return properties
+  }
+
+  private func transferDescription(for tx: CKMTransaction) -> (isTransfer: Bool, memo: String?) {
+    let isTransfer = tx.isSentToSelf || tx.isLightningTransfer
+    if isTransfer {
+      if tx.isSentToSelf {
+        return (isTransfer, "Sent to Self")
+      } else {
+        let lnDesc = tx.isIncoming ? "Lightning Withdrawal" : "Lightning Deposit"
+        return (isTransfer, lnDesc)
+      }
+    } else {
+      return (isTransfer, nil)
+    }
   }
 
   private struct AmountDescriptions {
@@ -105,8 +126,7 @@ class ExportManager {
   }
 
   private func amountDescriptions(for tx: CKMTransaction) -> AmountDescriptions {
-    let signMultiplier = (tx.netWalletAmount < 0) ? -1 : 1
-    let netBTC = NSDecimalNumber(integerAmount: tx.netWalletAmount, currency: .BTC).multiplying(by: NSDecimalNumber(value: signMultiplier))
+    let netBTC = NSDecimalNumber(integerAmount: tx.netWalletAmount, currency: .BTC)
     let formattedNetBTC = self.bitcoinFormatter.string(from: netBTC) ?? "-"
 
     let fiatPrice: NSDecimalNumber? = tx.dayAveragePrice
@@ -128,7 +148,7 @@ class ExportManager {
     let nameFormatter = DateFormatter()
     nameFormatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
     let dateString = nameFormatter.string(from: Date())
-    let fileBase = "Dreambase_"
+    let fileBase = "DropBit_"
     let fileName = fileBase + dateString
 
     let fileURL = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName + ".csv")
