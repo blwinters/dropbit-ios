@@ -22,6 +22,7 @@ protocol SettingsViewControllerDelegate: ViewControllerDismissable, ViewControll
   func viewControllerDidSelectRecoveryWords(_ viewController: UIViewController)
   func viewControllerDidSelectReviewLegacyWords(_ viewController: UIViewController)
   func viewControllerDidSelectAdjustableFees(_ viewController: UIViewController)
+  func viewControllerDidSelectExportTransactions(_ viewController: UIViewController)
   func viewControllerResyncBlockchain(_ viewController: UIViewController)
   func viewController(_ viewController: UIViewController, didEnableDustProtection didEnable: Bool)
   func viewController(_ viewController: UIViewController, didEnableYearlyHighNotification didEnable: Bool, completion: @escaping CKCompletion)
@@ -191,6 +192,13 @@ class SettingsViewController: BaseViewController, StoryboardInitializable {
     }
     let adjustableFeesVM = SettingsCellViewModel(type: .adjustableFees(action: adjustableFeesAction))
 
+    // export transactions
+    let exportAction: BasicAction = { [weak self] in
+      guard let self = self else { return }
+      self.delegate.viewControllerDidSelectExportTransactions(self)
+    }
+    let exportVM = SettingsCellViewModel(type: .exportTransactions(action: exportAction))
+
     // regtest vs mainnet
     var regtestVM: SettingsCellViewModel?
     #if DEBUG
@@ -208,6 +216,7 @@ class SettingsViewController: BaseViewController, StoryboardInitializable {
       dustProtectionVM,
       yearlyHighVM,
       adjustableFeesVM,
+      exportVM,
       regtestVM
       ]
       .compactMap { $0 }

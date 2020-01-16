@@ -104,6 +104,7 @@ class SettingsViewControllerTests: XCTestCase {
     func viewController(_ viewController: UIViewController, didEnableDustProtection didEnable: Bool) {}
     func viewController(_ viewController: UIViewController, didEnableYearlyHighNotification didEnable: Bool, completion: CKCompletion) {}
     func viewControllerDidSelectAdjustableFees(_ viewController: UIViewController) {}
+    func viewControllerDidSelectExportTransactions(_ viewController: UIViewController) {}
 
     var didSelectCloseWasCalled = false
     func viewControllerDidSelectClose(_ viewController: UIViewController) {

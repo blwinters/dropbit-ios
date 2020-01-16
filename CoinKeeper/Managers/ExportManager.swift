@@ -89,7 +89,9 @@ class ExportManager {
 
     append(tx.receiverAddress)
     append(tx.isSentToSelf)
-    let counterpartyDesc = tx.priorityCounterpartyName() ?? tx.priorityDisplayPhoneNumber(for: self.countryCode) ?? "-"
+    let maybeName = tx.priorityCounterpartyName()
+    let maybeNumber = tx.priorityDisplayPhoneNumber(for: self.countryCode)
+    let counterpartyDesc = maybeName ?? maybeNumber ?? "-"
     append(counterpartyDesc)
     append(tx.memo)
 

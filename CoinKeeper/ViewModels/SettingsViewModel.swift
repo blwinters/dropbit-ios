@@ -33,7 +33,7 @@ struct SettingsCellViewModel {
       onChange(control.isOn)
     case .regtest(enabled: _, onChange: let onChange):
       onChange(control.isOn)
-    case .licenses, .legacyWords, .recoveryWords, .adjustableFees:
+    case .licenses, .legacyWords, .recoveryWords, .adjustableFees, .exportTransactions:
       break
     }
   }
@@ -44,7 +44,7 @@ struct SettingsCellViewModel {
       infoAction(type)
     case .legacyWords(action: _, infoAction: let infoAction):
       infoAction(type)
-    case .licenses, .recoveryWords, .yearlyHighPushNotification, .adjustableFees, .regtest:
+    case .licenses, .recoveryWords, .yearlyHighPushNotification, .adjustableFees, .exportTransactions, .regtest:
       break
     }
   }
@@ -55,7 +55,7 @@ struct SettingsCellViewModel {
       action()
     case .recoveryWords(_, let action):
       action()
-    case .licenses(let action), .adjustableFees(let action):
+    case .licenses(let action), .adjustableFees(let action), .exportTransactions(let action):
       action()
     case .dustProtection, .yearlyHighPushNotification, .regtest:
       break
@@ -71,6 +71,7 @@ enum SettingsCellType {
   case yearlyHighPushNotification(enabled: Bool, onChange: (Bool) -> Void)
   case licenses(action: BasicAction)
   case adjustableFees(action: BasicAction)
+  case exportTransactions(action: BasicAction)
   case regtest(enabled: Bool, onChange: (Bool) -> Void)
 
   /// Returns nil if the text is conditional
@@ -81,6 +82,7 @@ enum SettingsCellType {
     case .dustProtection: return "Dust Protection"
     case .yearlyHighPushNotification: return "Bitcoin Yearly High Price Notification"
     case .adjustableFees: return "Adjustable Fees"
+    case .exportTransactions: return "Export Transactions"
     case .licenses:       return "Open Source"
     case .regtest:        return "Use RegTest"
     }
