@@ -6,6 +6,7 @@
 //  Copyright © 2018 Coin Ninja, LLC. All rights reserved.
 //
 
+import CoreData
 import PromiseKit
 import UIKit
 import Permission
@@ -124,18 +125,33 @@ extension AppCoordinator: SettingsViewControllerDelegate {
   func viewControllerDidSelectExportTransactions(_ viewController: UIViewController) {
     let onChainItem = ActionSheetItem(title: "Bitcoin Transactions")
     let lightningItem = ActionSheetItem(title: "Lightning Transactions")
+
     let actions: ActionSheet.SelectAction = { [weak self] sheet, item in
       guard let self = self else { return }
+      let inputs = ExportDependencies(context: self.persistenceManager.createBackgroundContext(),
+                                      countryCode: self.deviceCountryCode() ?? 1,
+                                      fiatCurrency: .USD)
       switch item {
       case onChainItem:
+        let exportManager = ExportManager(inputs: inputs)
+        exportManager.exportUserData()
+          .done { url in
+            self.showShareSheet(withFileURL: url, viewController: viewController)
+        }.cauterize()
       case lightningItem:
+        break //TODO: add implementation
       default:
         break
       }
-
     }
 
     alertManager.showActionSheet(in: viewController, with: [onChainItem, lightningItem], actions: actions)
+  }
+
+  private func showShareSheet(withFileURL url: URL, viewController: UIViewController) {
+    let shareSheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+    shareSheet.excludedActivityTypes = UIActivity.standardExcludedTypes
+    viewController.present(shareSheet, animated: true, completion: nil)
   }
 
   func viewControllerDidConfirmDeleteWallet(_ viewController: UIViewController) {
