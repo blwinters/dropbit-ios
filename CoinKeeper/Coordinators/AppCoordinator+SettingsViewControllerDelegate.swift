@@ -9,6 +9,7 @@
 import PromiseKit
 import UIKit
 import Permission
+import Sheeeeeeeeet
 
 extension AppCoordinator: SettingsViewControllerDelegate {
 
@@ -121,6 +122,20 @@ extension AppCoordinator: SettingsViewControllerDelegate {
   }
 
   func viewControllerDidSelectExportTransactions(_ viewController: UIViewController) {
+    let onChainItem = ActionSheetItem(title: "Bitcoin Transactions")
+    let lightningItem = ActionSheetItem(title: "Lightning Transactions")
+    let actions: ActionSheet.SelectAction = { [weak self] sheet, item in
+      guard let self = self else { return }
+      switch item {
+      case onChainItem:
+      case lightningItem:
+      default:
+        break
+      }
+
+    }
+
+    alertManager.showActionSheet(in: viewController, with: [onChainItem, lightningItem], actions: actions)
   }
 
   func viewControllerDidConfirmDeleteWallet(_ viewController: UIViewController) {
