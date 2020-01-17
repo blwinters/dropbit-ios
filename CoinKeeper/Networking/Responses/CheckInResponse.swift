@@ -13,9 +13,9 @@ struct CheckInResponse: ResponseCodable {
   let blockheight: Int
   let fees: FeesResponse
   let pricing: PriceResponse
-  let currency: CurrencyResponse
+  let currency: ExchangeRatesResponse
 
-  init(blockheight: Int, fees: FeesResponse, pricing: PriceResponse, currency: CurrencyResponse) {
+  init(blockheight: Int, fees: FeesResponse, pricing: PriceResponse, currency: ExchangeRatesResponse) {
     self.blockheight = blockheight
     self.fees = fees
     self.pricing = pricing
@@ -121,7 +121,7 @@ struct PriceResponse: ResponseCodable {
 
 }
 
-struct CurrencyResponse: ResponseCodable {
+struct ExchangeRatesResponse: ResponseCodable {
 
   let aud: Double
   let cad: Double
@@ -143,8 +143,8 @@ struct CurrencyResponse: ResponseCodable {
     """
   }
 
-  static var requiredStringKeys: [KeyPath<CurrencyResponse, String>] { return [] }
-  static var optionalStringKeys: [WritableKeyPath<CurrencyResponse, String?>] { return [] }
+  static var requiredStringKeys: [KeyPath<ExchangeRatesResponse, String>] { return [] }
+  static var optionalStringKeys: [WritableKeyPath<ExchangeRatesResponse, String?>] { return [] }
 }
 
 extension CheckInResponse {
@@ -155,7 +155,7 @@ extension CheckInResponse {
     "blockheight": 518631,
     "fees": \(FeesResponse.sampleJSON),
     "pricing": \(PriceResponse.sampleJSON),
-    "currency": \(CurrencyResponse.sampleJSON)
+    "currency": \(ExchangeRatesResponse.sampleJSON)
     }
     """
   }
@@ -163,7 +163,7 @@ extension CheckInResponse {
   static func validateResponse(_ response: CheckInResponse) throws -> CheckInResponse {
     let stringValidatedFeesResponse = try FeesResponse.validateResponse(response.fees)
     let stringValidatedPriceResponse = try PriceResponse.validateResponse(response.pricing)
-    let stringValidatedCurrencyResponse = try CurrencyResponse.validateResponse(response.currency)
+    let stringValidatedCurrencyResponse = try ExchangeRatesResponse.validateResponse(response.currency)
 
     // Create new CheckInResponse with FeesResponse and PriceResponse in case they had an empty string that was changed to nil during validation.
     let candidateCheckInResponse = CheckInResponse(blockheight: response.blockheight,

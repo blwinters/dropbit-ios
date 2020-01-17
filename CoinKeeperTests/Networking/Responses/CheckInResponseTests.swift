@@ -194,9 +194,9 @@ extension PriceResponse: EmptyStringCopyable {
   }
 }
 
-extension CurrencyResponse: EmptyStringCopyable {
-  func copyWithEmptyRequiredStrings() -> CurrencyResponse {
-    return CurrencyResponse(aud: self.aud, cad: self.cad, eur: self.eur,
+extension ExchangeRatesResponse: EmptyStringCopyable {
+  func copyWithEmptyRequiredStrings() -> ExchangeRatesResponse {
+    return ExchangeRatesResponse(aud: self.aud, cad: self.cad, eur: self.eur,
                             gbp: self.gbp, sek: self.sek, usd: self.usd)
   }
 }

@@ -65,7 +65,7 @@ class CheckInBroker: CKPersistenceBroker, CheckInBrokerType {
     }
   }
 
-  private func cacheCheckInPrices(_ prices: CurrencyResponse) {
+  private func cacheCheckInPrices(_ prices: ExchangeRatesResponse) {
     cacheFiatRate(prices.aud, for: .AUD)
     cacheFiatRate(prices.cad, for: .CAD)
     cacheFiatRate(prices.eur, for: .EUR)
