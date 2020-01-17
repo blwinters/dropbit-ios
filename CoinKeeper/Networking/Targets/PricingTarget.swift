@@ -12,6 +12,7 @@ public enum PricingTarget: CoinNinjaTargetType {
   typealias ResponseType = PriceTransactionResponse
 
   case getTxPricing(String)
+  case getPricing(TimeInterval)
 
 }
 
@@ -19,13 +20,15 @@ extension PricingTarget {
 
   var basePath: String {
     switch self {
-    case .getTxPricing: return "pricing"
+    case .getTxPricing,
+         .getPricing: return "pricing"
     }
   }
 
   var subPath: String? {
     switch self {
     case .getTxPricing(let txid): return txid
+    case .getPricing(let timestamp): return String(Int(timestamp))
     }
   }
 

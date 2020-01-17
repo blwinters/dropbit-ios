@@ -145,6 +145,10 @@ struct ExchangeRatesResponse: ResponseCodable {
 
   static var requiredStringKeys: [KeyPath<ExchangeRatesResponse, String>] { return [] }
   static var optionalStringKeys: [WritableKeyPath<ExchangeRatesResponse, String?>] { return [] }
+
+  static func emptyInstance() -> ExchangeRatesResponse {
+    return ExchangeRatesResponse(aud: 0, cad: 0, eur: 0, gbp: 0, sek: 0, usd: 0)
+  }
 }
 
 extension CheckInResponse {

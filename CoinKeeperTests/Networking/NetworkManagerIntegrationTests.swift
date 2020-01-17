@@ -32,7 +32,7 @@ class NetworkManagerIntegrationTests: XCTestCase {
   }
 
   func testNegativeTransactionPriceThrowsError() {
-    let response = PriceTransactionResponse(average: -100)
+    let response = PriceTransactionResponse(average: -100, currency: .emptyInstance())
     cnProvider.appendResponseStub(data: response.asData())
 
     let expectation = XCTestExpectation(description: "throw error for negative price")

@@ -620,7 +620,7 @@ class TransactionDataWorker: TransactionDataWorkerType {
           switch providerError {
           case .recordNotFound,
                .unknownServerError:
-            let emptyResponse = PriceTransactionResponse(average: 0)
+            let emptyResponse = PriceTransactionResponse(average: 0, currency: .emptyInstance())
             return Promise.value(emptyResponse)
           default:
             throw providerError
