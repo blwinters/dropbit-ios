@@ -50,7 +50,7 @@ class MockTransactionBroker: CKPersistenceBroker, TransactionBrokerType {
 
   func deleteTransactions(notIn txids: [String], in context: NSManagedObjectContext) { }
 
-  func transactionsWithoutDayAveragePrice(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]> {
+  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]> {
     return Promise.value([])
   }
 

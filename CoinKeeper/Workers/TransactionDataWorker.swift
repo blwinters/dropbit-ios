@@ -283,7 +283,7 @@ class TransactionDataWorker: TransactionDataWorkerType {
         .then { Promise.value(TransactionDataWorkerDTO(txResponses: $0).merged(with: dto)) }
     }
     .then(in: context) { _ in self.updateUnspentVouts(in: context) }
-    .then(in: context) { _ in self.updateTransactionDayAveragePrices(in: context) }
+    .then(in: context) { _ in self.updateTransactionExchangeRates(in: context) }
   }
 
   private var fourteenDaysAgo: Date {
@@ -591,30 +591,28 @@ class TransactionDataWorker: TransactionDataWorkerType {
     return Promise.value(uniqueATSResponses)
   }
 
-  private func updateTransactionDayAveragePrices(in context: NSManagedObjectContext) -> Promise<Void> {
-    return self.persistenceManager.brokers.transaction.transactionsWithoutDayAveragePrice(in: context)
-      .then(in: context) { self.fetchAndSetDayAveragePrices(for: $0, in: context) }
+  private func updateTransactionExchangeRates(in context: NSManagedObjectContext) -> Promise<Void> {
+    return self.persistenceManager.brokers.transaction.transactionsWithoutExchangeRates(in: context)
+      .then(in: context) { self.fetchAndSetExchangeRates(for: $0, in: context) }
   }
 
-  private func fetchAndSetDayAveragePrices(for transactions: [CKMTransaction], in context: NSManagedObjectContext) -> Promise<Void> {
+  private func fetchAndSetExchangeRates(for transactions: [CKMTransaction], in context: NSManagedObjectContext) -> Promise<Void> {
     var transactionIterator = transactions.makeIterator()
     let promiseIterator = AnyIterator<Promise<Void>> {
       guard let ckmTransaction = transactionIterator.next() else {
         return nil
       }
-      return self.fetchAndSetDayAveragePrice(for: ckmTransaction, in: context).asVoid()
+      return self.fetchAndSetExchangeRates(for: ckmTransaction, in: context).asVoid()
     }
 
     return when(fulfilled: promiseIterator, concurrently: 5).asVoid()
   }
 
-  private func fetchAndSetDayAveragePrice(for transaction: CKMTransaction, in context: NSManagedObjectContext) -> Promise<PriceTransactionResponse> {
+  private func fetchAndSetExchangeRates(for transaction: CKMTransaction, in context: NSManagedObjectContext) -> Promise<PriceTransactionResponse> {
     guard let txDate = transaction.date else { return .value(PriceTransactionResponse.emptyInstance()) }
     return self.networkManager.fetchPrices(at: txDate)
       .get(in: context) { (response: PriceTransactionResponse) in
-        if response.average != 0 { //ignore emptyResponse created above
-          transaction.dayAveragePrice = response.averagePrice
-        }
+        transaction.exchangeRates = CKMExchangeRates(response: response.currency, insertInto: context)
     }
   }
 

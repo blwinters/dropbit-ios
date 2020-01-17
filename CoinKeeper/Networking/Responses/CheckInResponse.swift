@@ -121,7 +121,7 @@ struct PriceResponse: ResponseCodable {
 
 }
 
-struct ExchangeRatesResponse: ResponseCodable {
+public struct ExchangeRatesResponse: ResponseCodable {
 
   let aud: Double
   let cad: Double

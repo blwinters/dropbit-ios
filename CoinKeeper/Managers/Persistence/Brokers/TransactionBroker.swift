@@ -58,8 +58,8 @@ class TransactionBroker: CKPersistenceBroker, TransactionBrokerType {
     return databaseManager.deleteTransactions(notIn: txids, in: context)
   }
 
-  func transactionsWithoutDayAveragePrice(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]> {
-    return databaseManager.transactionsWithoutDayAveragePrice(in: context)
+  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]> {
+    return databaseManager.transactionsWithoutExchangeRates(in: context)
   }
 
 }

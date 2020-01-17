@@ -303,10 +303,10 @@ class CKDatabase: PersistenceDatabaseType {
     return CKMInvitation.findUnacknowledgedInvitations(in: context)
   }
 
-  func transactionsWithoutDayAveragePrice(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]> {
-    let pricePredicate = CKPredicate.Transaction.withoutDayAveragePrice()
+  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]> {
+    let ratesPredicate = CKPredicate.Transaction.withoutExchangeRates()
     let txidPredicate = CKPredicate.Transaction.withValidTxid()
-    let compoundPredicate = NSCompoundPredicate(type: .and, subpredicates: [pricePredicate, txidPredicate])
+    let compoundPredicate = NSCompoundPredicate(type: .and, subpredicates: [ratesPredicate, txidPredicate])
 
     return Promise { seal in
       let request: NSFetchRequest<CKMTransaction> = CKMTransaction.fetchRequest()

@@ -44,9 +44,8 @@ class CheckInBroker: CKPersistenceBroker, CheckInBrokerType {
 
   func cacheFiatRate(_ rate: Double, for currency: Currency) {
     guard rate > 0 else { return }
-    let roundedRate = NSDecimalNumber(value: rate).rounded(forCurrency: currency)
     let key = userDefaultsManager.exchangeRateKey(for: currency)
-    userDefaultsManager.standardDefaults.set(roundedRate, forKey: key)
+    userDefaultsManager.standardDefaults.set(rate, forKey: key)
   }
 
   func cachedFiatRate(for currency: Currency) -> Double {
@@ -65,13 +64,13 @@ class CheckInBroker: CKPersistenceBroker, CheckInBrokerType {
     }
   }
 
-  private func cacheCheckInPrices(_ prices: ExchangeRatesResponse) {
-    cacheFiatRate(prices.aud, for: .AUD)
-    cacheFiatRate(prices.cad, for: .CAD)
-    cacheFiatRate(prices.eur, for: .EUR)
-    cacheFiatRate(prices.gbp, for: .GBP)
-    cacheFiatRate(prices.sek, for: .SEK)
-    cacheFiatRate(prices.usd, for: .USD)
+  private func cacheCheckInPrices(_ response: ExchangeRatesResponse) {
+    cacheFiatRate(response.aud, for: .AUD)
+    cacheFiatRate(response.cad, for: .CAD)
+    cacheFiatRate(response.eur, for: .EUR)
+    cacheFiatRate(response.gbp, for: .GBP)
+    cacheFiatRate(response.sek, for: .SEK)
+    cacheFiatRate(response.usd, for: .USD)
   }
 
 }

@@ -161,9 +161,9 @@ struct CKPredicate {
 
   struct Transaction {
 
-    static func withoutDayAveragePrice() -> NSPredicate {
-      let pricePath = #keyPath(CKMTransaction.dayAveragePrice)
-      return NSPredicate(format: "\(pricePath) == nil")
+    static func withoutExchangeRates() -> NSPredicate {
+      let ratesPath = #keyPath(CKMTransaction.exchangeRates)
+      return NSPredicate(format: "\(ratesPath) == nil")
     }
 
     static func withValidTxid() -> NSPredicate {

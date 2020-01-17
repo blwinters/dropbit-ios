@@ -60,7 +60,7 @@ class MockPersistenceDatabaseManager: PersistenceDatabaseType {
 
   func removeWalletId(in context: NSManagedObjectContext) { }
 
-  func transactionsWithoutDayAveragePrice(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]> {
+  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]> {
     return Promise { _ in }
   }
 
