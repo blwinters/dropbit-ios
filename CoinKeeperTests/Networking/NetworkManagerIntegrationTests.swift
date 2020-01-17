@@ -63,7 +63,7 @@ class NetworkManagerIntegrationTests: XCTestCase {
     let sample = CheckInResponse.sampleInstance()!
     let invalidFee = FeesResponse.validFeeCeiling + 1
     let testFees = FeesResponse(fast: 1, med: 1, slow: invalidFee)
-    let testCheckInResponse = CheckInResponse(blockheight: sample.blockheight, fees: testFees, pricing: sample.pricing)
+    let testCheckInResponse = CheckInResponse(blockheight: sample.blockheight, fees: testFees, pricing: sample.pricing, currency: sample.currency)
     cnProvider.appendResponseStub(data: testCheckInResponse.asData())
 
     let expectation = XCTestExpectation(description: "throw error for max fees")

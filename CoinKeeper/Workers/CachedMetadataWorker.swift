@@ -26,14 +26,7 @@ class CachedMetadataWorker {
   func updateCachedMetadata() -> Promise<CheckInResponse> {
     let context = persistenceManager.viewContext
     let walletId = self.persistenceManager.brokers.wallet.walletId(in: context)
-    let broker = persistenceManager.brokers.checkIn
-    guard walletId != nil else {
-      let fees = FeesResponse(fast: broker.cachedBestFee, med: broker.cachedBetterFee, slow: broker.cachedGoodFee)
-      let rate = broker.cachedFiatRate(for: .USD)
-      let pricing = PriceResponse(last: rate)
-      let response = CheckInResponse(blockheight: broker.cachedBlockHeight, fees: fees, pricing: pricing)
-      return Promise.value(response)
-    }
+    guard walletId != nil else { return Promise(error: DBTError.Persistence.noManagedWallet) }
 
     return self.networkManager.checkIn()
       .then { self.handleCheckIn(response: $0) }

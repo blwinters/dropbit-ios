@@ -75,7 +75,6 @@ protocol CheckInBrokerType: AnyObject {
   var cachedBetterFee: Double { get set }
   var cachedGoodFee: Double { get set }
 
-  func cacheFiatRate(_ rate: Double, for currency: Currency)
   func cachedFiatRate(for currency: Currency) -> Double
   func persistCheckIn(response: CheckInResponse)
 

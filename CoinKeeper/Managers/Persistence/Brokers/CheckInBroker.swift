@@ -32,8 +32,10 @@ class CheckInBroker: CKPersistenceBroker, CheckInBrokerType {
   }
 
   func cacheFiatRate(_ rate: Double, for currency: Currency) {
+    guard rate > 0 else { return }
+    let roundedRate = NSDecimalNumber(value: rate).rounded(forCurrency: currency)
     let key = userDefaultsManager.exchangeRateKey(for: currency)
-    userDefaultsManager.standardDefaults.set(rate, forKey: key)
+    userDefaultsManager.standardDefaults.set(roundedRate, forKey: key)
   }
 
   func cachedFiatRate(for currency: Currency) -> Double {
@@ -41,8 +43,7 @@ class CheckInBroker: CKPersistenceBroker, CheckInBrokerType {
   }
 
   func persistCheckIn(response: CheckInResponse) {
-    let lastPrices = response.sampleLastPrices
-    cacheCheckInPrices(lastPrices)
+    cacheCheckInPrices(response.currency)
 
     cachedBestFee = max(response.fees.best, 0)
     cachedBetterFee = max(response.fees.better, 0)
@@ -53,25 +54,13 @@ class CheckInBroker: CKPersistenceBroker, CheckInBrokerType {
     }
   }
 
-  private func cacheCheckInPrices(_ prices: ExchangeRates) {
-    for (currency, rate) in prices {
-      guard rate > 0 else { continue }
-      cacheFiatRate(rate, for: currency)
-    }
+  private func cacheCheckInPrices(_ prices: CurrencyResponse) {
+    cacheFiatRate(prices.aud, for: .AUD)
+    cacheFiatRate(prices.cad, for: .CAD)
+    cacheFiatRate(prices.eur, for: .EUR)
+    cacheFiatRate(prices.gbp, for: .GBP)
+    cacheFiatRate(prices.sek, for: .SEK)
+    cacheFiatRate(prices.usd, for: .USD)
   }
 
-}
-
-extension CheckInResponse {
-
-  //TODO: remove this, not for use in production
-  var sampleLastPrices: ExchangeRates {
-    let usdRate = pricing.last
-    return [.USD: usdRate,
-            .EUR: usdRate * 0.8991,
-            .GBP: usdRate * 0.7650,
-            .CAD: usdRate * 1.3105,
-            .AUD: usdRate * 1.4576,
-            .SEK: usdRate * 9.4113]
-  }
 }
