@@ -21,6 +21,9 @@ struct PriceTransactionResponse: ResponseCodable {
   let average: Double
   let currency: ExchangeRatesResponse
 
+  static func emptyInstance() -> PriceTransactionResponse {
+    PriceTransactionResponse(average: 0, currency: .emptyInstance())
+  }
 }
 
 extension PriceTransactionResponse {

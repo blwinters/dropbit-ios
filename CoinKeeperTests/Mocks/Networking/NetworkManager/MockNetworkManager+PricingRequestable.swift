@@ -16,8 +16,4 @@ extension MockNetworkManager: PricingRequestable {
     return Promise { _ in }
   }
 
-  func fetchDayAveragePrice(for txid: String) -> Promise<PriceTransactionResponse> {
-    return Promise { _ in }
-  }
-
 }

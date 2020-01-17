@@ -602,37 +602,19 @@ class TransactionDataWorker: TransactionDataWorkerType {
       guard let ckmTransaction = transactionIterator.next() else {
         return nil
       }
-      return self.fetchAndSetDayAveragePrice(for: ckmTransaction, in: context)
+      return self.fetchAndSetDayAveragePrice(for: ckmTransaction, in: context).asVoid()
     }
 
     return when(fulfilled: promiseIterator, concurrently: 5).asVoid()
   }
 
-  private func fetchAndSetDayAveragePrice(for transaction: CKMTransaction, in context: NSManagedObjectContext) -> Promise<Void> {
-    return Promise { seal in
-      context.perform {
-        seal.fulfill(transaction.txid)
-      }
-    }
-    .then { txid in self.networkManager.fetchDayAveragePrice(for: txid) }
-    .recover { error -> Promise<PriceTransactionResponse> in
-        if let providerError = error as? DBTError.Network {
-          switch providerError {
-          case .recordNotFound,
-               .unknownServerError:
-            let emptyResponse = PriceTransactionResponse(average: 0, currency: .emptyInstance())
-            return Promise.value(emptyResponse)
-          default:
-            throw providerError
-          }
-        } else {
-          throw error
+  private func fetchAndSetDayAveragePrice(for transaction: CKMTransaction, in context: NSManagedObjectContext) -> Promise<PriceTransactionResponse> {
+    guard let txDate = transaction.date else { return .value(PriceTransactionResponse.emptyInstance()) }
+    return self.networkManager.fetchPrices(at: txDate)
+      .get(in: context) { (response: PriceTransactionResponse) in
+        if response.average != 0 { //ignore emptyResponse created above
+          transaction.dayAveragePrice = response.averagePrice
         }
-    }
-    .done(in: context) { (response: PriceTransactionResponse) in
-      if response.average != 0 { //ignore emptyResponse created above
-        transaction.dayAveragePrice = response.averagePrice
-      }
     }
   }
 

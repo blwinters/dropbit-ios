@@ -10,15 +10,10 @@ import Foundation
 import PromiseKit
 
 protocol PricingRequestable: AnyObject {
-  func fetchDayAveragePrice(for txid: String) -> Promise<PriceTransactionResponse>
   func fetchPrices(at date: Date) -> Promise<PriceTransactionResponse>
 }
 
 extension NetworkManager: PricingRequestable {
-
-  func fetchDayAveragePrice(for txid: String) -> Promise<PriceTransactionResponse> {
-    return cnProvider.request(PricingTarget.getTxPricing(txid))
-  }
 
   func fetchPrices(at date: Date) -> Promise<PriceTransactionResponse> {
     let timestamp = date.timeIntervalSince1970

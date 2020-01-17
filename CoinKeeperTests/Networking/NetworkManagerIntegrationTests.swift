@@ -37,7 +37,7 @@ class NetworkManagerIntegrationTests: XCTestCase {
 
     let expectation = XCTestExpectation(description: "throw error for negative price")
 
-    self.sut.fetchDayAveragePrice(for: "")
+    self.sut.fetchPrices(at: Date())
       .done { _ in
         XCTFail("Should not return valid response")
       }.catch { error in

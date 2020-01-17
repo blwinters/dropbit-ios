@@ -32,8 +32,7 @@ class PriceTransactionResponseTests: XCTestCase, ResponseStringsTestable {
   }
 
   func testZeroPriceThrowsError() {
-    let response = PriceTransactionResponse(average: 0, currency: .emptyInstance())
-
+    let response = PriceTransactionResponse.emptyInstance()
     XCTAssertThrowsError(try PriceTransactionResponse.validateResponse(response), "Zero price should throw error", { _ in })
   }
 
