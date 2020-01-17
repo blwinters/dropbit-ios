@@ -130,14 +130,9 @@ extension AppCoordinator: SettingsViewControllerDelegate {
       guard let self = self else { return }
       switch item {
       case onChainItem:
-        let inputs = self.exportDependencies(for: .onChain)
-        let exportManager = ExportManager(inputs: inputs)
-        exportManager.exportUserData()
-          .done { url in
-            self.showShareSheet(withFileURL: url, viewController: viewController)
-        }.cauterize()
+        self.exportTransactions(for: .onChain, viewController: viewController)
       case lightningItem:
-        break //TODO: add implementation
+        self.exportTransactions(for: .lightning, viewController: viewController)
       default:
         break
       }
@@ -146,11 +141,16 @@ extension AppCoordinator: SettingsViewControllerDelegate {
     alertManager.showActionSheet(in: viewController, with: [onChainItem, lightningItem], actions: actions)
   }
 
-  private func exportDependencies(for walletTxType: WalletTransactionType) -> ExportDependencies {
-    return ExportDependencies(context: self.persistenceManager.createBackgroundContext(),
-                              countryCode: self.deviceCountryCode() ?? 1,
-                              fiatCurrency: .USD,
-                              walletTxType: walletTxType)
+  private func exportTransactions(for walletTxType: WalletTransactionType, viewController: UIViewController) {
+    let inputs = ExportDependencies(context: self.persistenceManager.createBackgroundContext(),
+                                    countryCode: self.deviceCountryCode() ?? 1,
+                                    fiatCurrency: .USD,
+                                    walletTxType: walletTxType)
+    let exportManager = ExportManager(inputs: inputs)
+    exportManager.exportUserData()
+      .done { url in
+        self.showShareSheet(withFileURL: url, viewController: viewController)
+    }.cauterize()
   }
 
   private func showShareSheet(withFileURL url: URL, viewController: UIViewController) {

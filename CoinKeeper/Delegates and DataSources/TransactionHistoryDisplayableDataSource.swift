@@ -131,7 +131,8 @@ class TransactionHistoryOnChainDataSource: NSObject, TransactionHistoryDataSourc
 
 }
 
-class TransactionHistoryLightningDataSource: NSObject, TransactionHistoryDataSourceType, NSFetchedResultsControllerDelegate {
+class TransactionHistoryLightningDataSource: NSObject, TransactionHistoryDataSourceType,
+LightningViewModelObjectProvider, NSFetchedResultsControllerDelegate {
 
   let frc: NSFetchedResultsController<CKMWalletEntry>
   let walletTransactionType: WalletTransactionType = .lightning
@@ -199,20 +200,6 @@ class TransactionHistoryLightningDataSource: NSObject, TransactionHistoryDataSou
     return frc.object(at: indexPath)
   }
 
-  private func viewModelObject(for walletEntry: CKMWalletEntry) -> TransactionDetailCellViewModelObject {
-    if let invitationObject = LightningInvitationViewModelObject(walletEntry: walletEntry) {
-      return invitationObject
-    } else if let lightningInvoiceObject = LightningInvoiceViewModelObject(walletEntry: walletEntry) {
-      return lightningInvoiceObject
-    } else if let transactionObject = LightningTransactionViewModelObject(walletEntry: walletEntry) {
-      return transactionObject
-    } else if let tempLoadObject = LightningLoadTemporaryViewModelObject(walletEntry: walletEntry) {
-      return tempLoadObject
-    } else {
-      return FallbackViewModelObject(walletTxType: .lightning)
-    }
-  }
-
   func indexPathsToAnimate() -> [IndexPath] {
     let indexPaths = newIndexPaths
     newIndexPaths = []
@@ -244,4 +231,23 @@ class TransactionHistoryLightningDataSource: NSObject, TransactionHistoryDataSou
     newIndexPaths.append(newIndexPath)
   }
 
+}
+
+///Allows some of the data transformation logic to be shared across the app, since `CKMWalletEntry`
+///doesn't conform directly to `TransactionDetailCellViewModelObject` like `CKMTransaction` does.
+protocol LightningViewModelObjectProvider { }
+extension LightningViewModelObjectProvider {
+  func viewModelObject(for walletEntry: CKMWalletEntry) -> TransactionDetailCellViewModelObject {
+    if let invitationObject = LightningInvitationViewModelObject(walletEntry: walletEntry) {
+      return invitationObject
+    } else if let lightningInvoiceObject = LightningInvoiceViewModelObject(walletEntry: walletEntry) {
+      return lightningInvoiceObject
+    } else if let transactionObject = LightningTransactionViewModelObject(walletEntry: walletEntry) {
+      return transactionObject
+    } else if let tempLoadObject = LightningLoadTemporaryViewModelObject(walletEntry: walletEntry) {
+      return tempLoadObject
+    } else {
+      return FallbackViewModelObject(walletTxType: .lightning)
+    }
+  }
 }

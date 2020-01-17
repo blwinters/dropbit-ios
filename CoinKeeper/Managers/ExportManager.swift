@@ -18,7 +18,7 @@ struct ExportDependencies {
 }
 
 ///Exports all transactions with their main related properties, one per line.
-class ExportManager {
+class ExportManager: LightningViewModelObjectProvider {
 
   private let context: NSManagedObjectContext
   private let countryCode: Int
@@ -54,65 +54,111 @@ class ExportManager {
   ///Create CSV header string by joining these elements.
   private var itemHeaders: [String] {
     let fiat = fiatCurrency.rawValue
-    return [
-      "Date", "Net BTC", "BTC-\(fiat) Rate", "Net \(fiat)", "Transaction ID",
-      "Receiver Address", "Completed", "Is Transfer", "Counterparty", "Memo"
-    ]
+    switch walletTxType {
+    case .onChain:
+      return [
+        "Date", "Net BTC", "BTC-\(fiat) Rate", "Net \(fiat)", "Transaction ID",
+        "Receiver Address", "Completed", "Is Transfer", "Counterparty", "Memo"
+      ]
+    case .lightning:
+      return [
+        "Date", "Net BTC", "BTC-\(fiat) Rate", "Net \(fiat)", "Invoice",
+        "Completed", "Is Transfer", "Counterparty", "Memo"
+      ]
+    }
   }
 
   ///Returns promise of the exported file's URL.
   func exportUserData() -> Promise<URL> {
     return performIn(self.context) { () -> URL in
-      let onChainTransactions = CKMTransaction.findAll(dateAscending: false, in: self.context)
-
       let path = self.filePath
       let url = URL(fileURLWithPath: path)
       let csvWriter = CHCSVWriter(forWritingToCSVFile: path)
 
       csvWriter?.writeLine(ofFields: NSArray(array: self.itemHeaders))
 
-      for tx in onChainTransactions {
-        let fields = NSArray(array: self.csvProperties(for: tx))
-        csvWriter?.writeLine(ofFields: fields)
+      switch self.walletTxType {
+      case .onChain:
+        let onChainTransactions = CKMTransaction.findAll(dateAscending: false, in: self.context)
+
+        for tx in onChainTransactions {
+          let properties = NSArray(array: self.csvProperties(for: tx))
+          csvWriter?.writeLine(ofFields: properties)
+        }
+      case .lightning:
+        let lightningTransactions = CKMWalletEntry.findAll(dateAscending: false, in: self.context)
+        for walletEntry in lightningTransactions {
+          let properties = NSArray(array: self.csvProperties(for: walletEntry))
+          csvWriter?.writeLine(ofFields: properties)
+        }
       }
       return url
     }
   }
 
+  func desc(_ property: CustomStringConvertible?) -> String {
+    property.flatMap { $0.description } ?? "-"
+  }
+
+  lazy var csvDateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd HH:mm"
+    return formatter
+  }()
+
+  func formatted(_ date: Date?) -> String? {
+    guard let date = date else { return nil }
+    return csvDateFormatter.string(from: date)
+  }
+
   private func csvProperties(for tx: CKMTransaction) -> [String] {
-    var properties: [String] = []
-    func append(_ property: CustomStringConvertible?) {
-      let desc = property.flatMap { $0.description } ?? "-"
-      properties.append(desc)
-    }
-
-    append(tx.date?.csvDescription)
-
     let amountDescs = self.amountDescriptions(for: tx)
-    append(amountDescs.netBTC)
-    append(amountDescs.fiatPrice)
-    append(amountDescs.netFiat)
-
-    append(tx.txid)
-    append(tx.receiverAddress)
-
     let isCompleted = tx.confirmations > 0
-    append(isCompleted)
-
-    append(tx.isLightningTransfer)
     let maybeName = tx.priorityCounterpartyName()
     let maybeNumber = tx.priorityDisplayPhoneNumber(for: self.countryCode)
     let maybeSelf = tx.isSentToSelf ? "Myself" : nil
     let counterpartyDesc = maybeSelf ?? maybeName ?? maybeNumber
-    append(counterpartyDesc)
-    append(lightningMemo(for: tx) ?? tx.memo)
+    let maybeTransferMemo = lightningTransferMemo(isTransfer: tx.isLightningTransfer, isIncoming: tx.isIncoming)
 
-    return properties
+    return [
+      desc(formatted(tx.date)),
+      desc(amountDescs.netBTC),
+      desc(amountDescs.fiatPrice),
+      desc(amountDescs.netFiat),
+      desc(tx.txid),
+      desc(tx.receiverAddress),
+      desc(isCompleted),
+      desc(tx.isLightningTransfer),
+      desc(counterpartyDesc),
+      desc(maybeTransferMemo ?? tx.memo)
+    ]
   }
 
-  private func lightningMemo(for tx: CKMTransaction) -> String? {
-    guard tx.isLightningTransfer else { return nil }
-    return tx.isIncoming ? "Lightning Withdrawal" : "Lightning Deposit"
+  private func lightningTransferMemo(isTransfer: Bool, isIncoming: Bool) -> String? {
+    guard isTransfer else { return nil }
+    return isIncoming ? "Lightning Withdrawal" : "Lightning Deposit"
+  }
+
+  private func csvProperties(for walletEntry: CKMWalletEntry) -> [String] {
+    let amountDescs = self.amountDescriptions(for: walletEntry)
+    let object = viewModelObject(for: walletEntry)
+    let isCompleted = object.status == .completed
+    let maybeName = walletEntry.priorityCounterpartyName()
+    let maybeNumber = walletEntry.priorityDisplayPhoneNumber(for: self.countryCode)
+    let counterpartyDesc = maybeName ?? maybeNumber
+    let maybeTransferMemo = lightningTransferMemo(isTransfer: object.isLightningTransfer,
+                                                  isIncoming: object.direction == .in)
+    return [
+      desc(formatted(walletEntry.sortDate)),
+      desc(amountDescs.netBTC),
+      desc(amountDescs.fiatPrice),
+      desc(amountDescs.netFiat),
+      desc(walletEntry.ledgerEntry?.cleanedRequest),
+      desc(isCompleted),
+      desc(walletEntry.ledgerEntry?.type == .btc),
+      desc(counterpartyDesc),
+      desc(maybeTransferMemo ?? walletEntry.memo)
+    ]
   }
 
   private struct AmountDescriptions {
@@ -122,32 +168,41 @@ class ExportManager {
   }
 
   private func amountDescriptions(for tx: CKMTransaction) -> AmountDescriptions {
-    let netBTC = NSDecimalNumber(integerAmount: tx.netWalletAmount, currency: .BTC)
+    amountDescriptions(netSats: tx.netWalletAmount, historicalRate: tx.dayAveragePrice)
+  }
+
+  //TODO: supply historicalRate when available for lightning transactions
+  private func amountDescriptions(for walletEntry: CKMWalletEntry) -> AmountDescriptions {
+    amountDescriptions(netSats: walletEntry.netWalletAmount, historicalRate: nil)
+  }
+
+  private func amountDescriptions(netSats: Int, historicalRate: NSDecimalNumber?) -> AmountDescriptions {
+    let netBTC = NSDecimalNumber(integerAmount: netSats, currency: .BTC)
     let formattedNetBTC = self.bitcoinFormatter.string(from: netBTC) ?? "-"
 
-    let fiatPrice: NSDecimalNumber? = tx.dayAveragePrice
-    let priceDesc = fiatPrice.flatMap { fiatFormatter.string(from: $0) } ?? "-"
+    let priceDesc = historicalRate.flatMap { fiatFormatter.string(from: $0) } ?? "-"
 
     var netFiatDesc = "-"
-    if let price = fiatPrice {
-      let netFiat = netBTC.multiplying(by: price)
+    if let rate = historicalRate {
+      let netFiat = netBTC.multiplying(by: rate)
       netFiatDesc = self.fiatFormatter.string(from: netFiat) ?? "-"
     }
 
     return AmountDescriptions(netBTC: formattedNetBTC, fiatPrice: priceDesc, netFiat: netFiatDesc)
   }
 
-  private var filePath: String {
-    let fileManager = FileManager.default
-    let dirPath = NSTemporaryDirectory()
-
+  private var fileName: String {
     let nameFormatter = DateFormatter()
     nameFormatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
     let dateString = nameFormatter.string(from: Date())
     let txTypeDesc = (self.walletTxType == .onChain) ? "Bitcoin" : "Lightning"
     let fileBase = "DropBit_\(txTypeDesc)_Transactions_"
-    let fileName = fileBase + dateString
+    return fileBase + dateString
+  }
 
+  private var filePath: String {
+    let fileManager = FileManager.default
+    let dirPath = NSTemporaryDirectory()
     let fileURL = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName + ".csv")
     let filePath = fileURL.path
 
@@ -168,18 +223,4 @@ extension Bool {
     return self ? "True" : "False"
   }
 
-}
-
-extension DateFormatter {
-  static var csv: DateFormatter {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd HH:mm"
-    return formatter
-  }
-}
-
-extension Date {
-  var csvDescription: String? {
-    return DateFormatter.csv.string(from: self)
-  }
 }

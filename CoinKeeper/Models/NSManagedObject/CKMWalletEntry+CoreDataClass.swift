@@ -45,6 +45,21 @@ public class CKMWalletEntry: NSManagedObject {
     }
   }
 
+  static func findAll(dateAscending: Bool, in context: NSManagedObjectContext) -> [CKMWalletEntry] {
+    let request: NSFetchRequest<CKMWalletEntry> = CKMWalletEntry.fetchRequest()
+    request.predicate = CKPredicate.WalletEntry.notHidden()
+    request.sortDescriptors = [
+      NSSortDescriptor(key: "\(#keyPath(CKMWalletEntry.sortDate))", ascending: dateAscending)
+    ]
+    var result: [CKMWalletEntry] = []
+    do {
+      result = try context.fetch(request)
+    } catch {
+      result = []
+    }
+    return result
+  }
+
   var referralPaymentSenderAnalyticsIdentifier: String {
     guard let memo = memo, counterparty?.type == .referral else { return "Unknown" }
 
