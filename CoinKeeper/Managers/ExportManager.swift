@@ -99,29 +99,20 @@ class ExportManager {
     let isCompleted = tx.confirmations > 0
     append(isCompleted)
 
-    let transferDesc = self.transferDescription(for: tx)
-    append(transferDesc.isTransfer)
+    append(tx.isLightningTransfer)
     let maybeName = tx.priorityCounterpartyName()
     let maybeNumber = tx.priorityDisplayPhoneNumber(for: self.countryCode)
-    let counterpartyDesc = maybeName ?? maybeNumber
+    let maybeSelf = tx.isSentToSelf ? "Myself" : nil
+    let counterpartyDesc = maybeSelf ?? maybeName ?? maybeNumber
     append(counterpartyDesc)
-    append(tx.memo ?? transferDesc.memo)
+    append(lightningMemo(for: tx) ?? tx.memo)
 
     return properties
   }
 
-  private func transferDescription(for tx: CKMTransaction) -> (isTransfer: Bool, memo: String?) {
-    let isTransfer = tx.isSentToSelf || tx.isLightningTransfer
-    if isTransfer {
-      if tx.isSentToSelf {
-        return (isTransfer, "Sent to Self")
-      } else {
-        let lnDesc = tx.isIncoming ? "Lightning Withdrawal" : "Lightning Deposit"
-        return (isTransfer, lnDesc)
-      }
-    } else {
-      return (isTransfer, nil)
-    }
+  private func lightningMemo(for tx: CKMTransaction) -> String? {
+    guard tx.isLightningTransfer else { return nil }
+    return tx.isIncoming ? "Lightning Withdrawal" : "Lightning Deposit"
   }
 
   private struct AmountDescriptions {
