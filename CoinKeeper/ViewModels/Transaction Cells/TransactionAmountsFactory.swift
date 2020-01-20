@@ -127,6 +127,8 @@ struct TransactionAmountsFactory: TransactionAmountsFactoryType {
       self.dropBitFee = NSDecimalNumber(sats: ledgerEntry.processingFee)
     }
 
+    self.rateWhenTransacted = walletEntry.exchangeRate(for: fiatCurrency)
+
     if let invite = walletEntry.invitation {
       self.primaryFiatAmountWhenInitiated = NSDecimalNumber(integerAmount: invite.fiatAmount, currency: .USD)
     }
