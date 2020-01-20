@@ -128,7 +128,7 @@ protocol PersistenceDatabaseType: AnyObject {
   func deleteTransactions(notIn txids: [String], in context: NSManagedObjectContext)
   func latestTransaction(in context: NSManagedObjectContext) -> CKMTransaction?
 
-  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]>
+  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> [CKMTransaction]
 
   func persistWalletResponse(_ response: WalletResponse, in context: NSManagedObjectContext) throws
   func persistUserId(_ id: String, in context: NSManagedObjectContext)

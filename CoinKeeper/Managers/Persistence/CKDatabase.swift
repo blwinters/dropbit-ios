@@ -303,16 +303,17 @@ class CKDatabase: PersistenceDatabaseType {
     return CKMInvitation.findUnacknowledgedInvitations(in: context)
   }
 
-  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]> {
+  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> [CKMTransaction] {
     let ratesPredicate = CKPredicate.Transaction.withoutExchangeRates()
     let txidPredicate = CKPredicate.Transaction.withValidTxid()
     let compoundPredicate = NSCompoundPredicate(type: .and, subpredicates: [ratesPredicate, txidPredicate])
 
-    return Promise { seal in
-      let request: NSFetchRequest<CKMTransaction> = CKMTransaction.fetchRequest()
-      request.predicate = compoundPredicate
-      let results = try context.fetch(request)
-      seal.fulfill(results)
+    let request: NSFetchRequest<CKMTransaction> = CKMTransaction.fetchRequest()
+    request.predicate = compoundPredicate
+    do {
+      return try context.fetch(request)
+    } catch {
+      return []
     }
   }
 

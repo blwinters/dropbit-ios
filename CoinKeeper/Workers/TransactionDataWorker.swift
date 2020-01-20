@@ -592,8 +592,10 @@ class TransactionDataWorker: TransactionDataWorkerType {
   }
 
   private func updateTransactionExchangeRates(in context: NSManagedObjectContext) -> Promise<Void> {
-    return self.persistenceManager.brokers.transaction.transactionsWithoutExchangeRates(in: context)
-      .then(in: context) { self.fetchAndSetExchangeRates(for: $0, in: context) }
+    let transactions = self.persistenceManager.brokers.transaction.transactionsWithoutExchangeRates(in: context)
+    return self.fetchAndSetExchangeRates(for: transactions, in: context)
+  }
+
   }
 
   private func fetchAndSetExchangeRates(for transactions: [CKMTransaction], in context: NSManagedObjectContext) -> Promise<Void> {

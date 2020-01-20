@@ -166,7 +166,7 @@ protocol TransactionBrokerType: AnyObject {
   func containsRegularTransaction(in context: NSManagedObjectContext) -> IncomingOutgoingTuple
   func containsDropbitTransaction(in context: NSManagedObjectContext) -> IncomingOutgoingTuple
   func deleteTransactions(notIn txids: [String], in context: NSManagedObjectContext)
-  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]>
+  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> [CKMTransaction]
 }
 
 protocol UserBrokerType: AnyObject {

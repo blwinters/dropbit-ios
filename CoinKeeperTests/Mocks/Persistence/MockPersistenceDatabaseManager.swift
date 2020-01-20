@@ -60,8 +60,8 @@ class MockPersistenceDatabaseManager: PersistenceDatabaseType {
 
   func removeWalletId(in context: NSManagedObjectContext) { }
 
-  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]> {
-    return Promise { _ in }
+  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> [CKMTransaction] {
+    return []
   }
 
   var inMemoryCoreDataStack = InMemoryCoreDataStack()
