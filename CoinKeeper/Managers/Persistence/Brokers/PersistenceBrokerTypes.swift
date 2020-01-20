@@ -154,7 +154,8 @@ protocol TransactionBrokerType: AnyObject {
     with outgoingTransactionData: OutgoingTransactionData,
     txid: String,
     invitation: CKMInvitation?,
-    in context: NSManagedObjectContext
+    in context: NSManagedObjectContext,
+    incomingAddress: String?
     ) -> CKMTransaction
 
   @discardableResult
