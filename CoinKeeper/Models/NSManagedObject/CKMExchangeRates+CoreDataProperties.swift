@@ -24,5 +24,6 @@ extension CKMExchangeRates {
   @NSManaged public var usd: Double
 
   @NSManaged public var transaction: CKMTransaction?
+  @NSManaged public var walletEntry: CKMWalletEntry?
 
 }

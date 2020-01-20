@@ -59,6 +59,7 @@
         <attribute name="sek" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="usd" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="transaction" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CKMTransaction" inverseName="exchangeRates" inverseEntity="CKMTransaction"/>
+        <relationship name="walletEntry" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CKMWalletEntry" inverseName="exchangeRates" inverseEntity="CKMWalletEntry"/>
     </entity>
     <entity name="CKMInvitation" representedClassName="CKMInvitation" versionHashModifier="1" syncable="YES">
         <attribute name="addressProvidedToSender" optional="YES" attributeType="String"/>
@@ -264,6 +265,7 @@
         <attribute name="memoSetByInvoice" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="sortDate" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="counterparty" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CKMCounterparty" inverseName="walletEntries" inverseEntity="CKMCounterparty"/>
+        <relationship name="exchangeRates" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CKMExchangeRates" inverseName="walletEntry" inverseEntity="CKMExchangeRates"/>
         <relationship name="invitation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CKMInvitation" inverseName="walletEntry" inverseEntity="CKMInvitation"/>
         <relationship name="ledgerEntry" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CKMLNLedgerEntry" inverseName="walletEntry" inverseEntity="CKMLNLedgerEntry"/>
         <relationship name="phoneNumber" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CKMPhoneNumber" inverseName="walletEntries" inverseEntity="CKMPhoneNumber"/>
@@ -278,7 +280,7 @@
         <element name="CKMCounterparty" positionX="-1964" positionY="-63" width="128" height="118"/>
         <element name="CKMCounterpartyAddress" positionX="-1935" positionY="351" width="128" height="73"/>
         <element name="CKMDerivativePath" positionX="-972" positionY="315" width="128" height="163"/>
-        <element name="CKMExchangeRates" positionX="-2016" positionY="-405" width="128" height="148"/>
+        <element name="CKMExchangeRates" positionX="-2016" positionY="-405" width="128" height="163"/>
         <element name="CKMInvitation" positionX="-1674" positionY="-36" width="144" height="298"/>
         <element name="CKMLNAccount" positionX="160" positionY="192" width="128" height="135"/>
         <element name="CKMLNInvoice" positionX="-2215.80078125" positionY="195.44140625" width="128" height="195"/>
@@ -293,6 +295,6 @@
         <element name="CKMVin" positionX="-1845" positionY="657" width="128" height="133"/>
         <element name="CKMVout" positionX="-1503" positionY="639" width="128" height="165"/>
         <element name="CKMWallet" positionX="-1368" positionY="99" width="128" height="210"/>
-        <element name="CKMWalletEntry" positionX="-1776.2578125" positionY="-547.37109375" width="128" height="223"/>
+        <element name="CKMWalletEntry" positionX="-1776.2578125" positionY="-547.37109375" width="128" height="238"/>
     </elements>
 </model>
