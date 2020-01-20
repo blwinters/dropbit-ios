@@ -26,7 +26,11 @@ extension AppCoordinator: PrivateKeySweepViewControllerDelegate {
 
   private func sendTransaction(withData transactionData: CNBCnlibTransactionData,
                                forViewController viewController: SuccessFailViewController) {
-    networkManager.broadcastTx(with: transactionData)
+    guard let wmgr = self.walletManager else {
+      log.error(DBTError.System.missingValue(key: "wallet manager"), message: nil)
+      return
+    }
+    networkManager.broadcastTx(with: transactionData, walletManager: wmgr)
       .done { (txid: String) in
         let context = self.persistenceManager.createBackgroundContext()
         let outgoingTransactionData = OutgoingTransactionData(txid: txid, destinationAddress: transactionData.paymentAddress,

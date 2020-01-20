@@ -182,7 +182,8 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
 
   private func showPrivateKeySweepViewController(privateKey: WIFPrivateKey, data: CNBCnlibTransactionData) {
     guard let topVC = navigationController.topViewController(), !(topVC is PrivateKeySweepViewController) else { return }
-    let privateKeySweepViewController = PrivateKeySweepViewController.newInstance(delegate: self, privateKey: privateKey, transactionData: data)
+    let privateKeySweepViewController = PrivateKeySweepViewController.newInstance(delegate: self, privateKey: privateKey,
+                                                                                  transactionData: data, exchangeRate: self.exchangeRate)
     navigationController.topViewController()?.present(privateKeySweepViewController,
                                                       animated: true, completion: nil)
   }

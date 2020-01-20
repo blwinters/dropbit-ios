@@ -75,6 +75,7 @@ protocol CheckInBrokerType: AnyObject {
   var cachedBetterFee: Double { get set }
   var cachedGoodFee: Double { get set }
 
+  func fee(forType type: TransactionFeeType) -> Double
   func cachedFiatRate(for currency: Currency) -> Double
   func persistCheckIn(response: CheckInResponse)
 

@@ -31,6 +31,17 @@ class CheckInBroker: CKPersistenceBroker, CheckInBrokerType {
     set { userDefaultsManager.set(newValue, for: .feeGood) }
   }
 
+  func fee(forType type: TransactionFeeType) -> Double {
+    switch type {
+    case .fast:
+      return cachedBestFee
+    case .slow:
+      return cachedBetterFee
+    case .cheap:
+      return cachedGoodFee
+    }
+  }
+
   func cacheFiatRate(_ rate: Double, for currency: Currency) {
     guard rate > 0 else { return }
     let roundedRate = NSDecimalNumber(value: rate).rounded(forCurrency: currency)

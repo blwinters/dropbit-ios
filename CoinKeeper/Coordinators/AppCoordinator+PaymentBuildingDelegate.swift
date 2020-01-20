@@ -66,9 +66,8 @@ extension AppCoordinator: PaymentBuildingDelegate {
     let feeRate: Double = latestFeeRates.low
     return self.buildNonReplaceableTransactionData(selectedAmount: selectedAmount,
                                                    address: lightningAccount.address,
-                                                   exchangeRates: exchangeRates,
+                                                   exchangeRate: exchangeRate,
                                                    feeRate: feeRate)
-    }
   }
 
   private func buildNonReplaceableTransactionData(
