@@ -37,4 +37,8 @@ class MockLightningBroker: CKPersistenceBroker, LightningBrokerType {
     return []
   }
 
+  func walletEntriesNeedingExchangeRates(in context: NSManagedObjectContext) -> [CKMWalletEntry] {
+    return []
+  }
+
 }

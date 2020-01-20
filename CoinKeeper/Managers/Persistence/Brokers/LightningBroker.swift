@@ -125,4 +125,21 @@ class LightningBroker: CKPersistenceBroker, LightningBrokerType {
     }
   }
 
+  func walletEntriesNeedingExchangeRates(in context: NSManagedObjectContext) -> [CKMWalletEntry] {
+    let fetchRequest: NSFetchRequest<CKMWalletEntry> = CKMWalletEntry.fetchRequest()
+    let predicates = [
+      CKPredicate.WalletEntry.withoutExchangeRates(),
+      CKPredicate.WalletEntry.withLedgerEntry(),
+      CKPredicate.WalletEntry.withLedgerEntryStatus(.completed)
+    ]
+    fetchRequest.predicate = NSCompoundPredicate(type: .and, subpredicates: predicates)
+
+    do {
+      return try context.fetch(fetchRequest)
+    } catch {
+      log.error(error, message: "failed to fetch wallet entries without exchange rates")
+      return []
+    }
+  }
+
 }
