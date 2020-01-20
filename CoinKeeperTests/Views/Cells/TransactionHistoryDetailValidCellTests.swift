@@ -558,7 +558,7 @@ class TransactionHistoryDetailValidCellTests: XCTestCase {
 
   func testDateLabelShowsDate() {
     let now = Date()
-    let expectedDisplayDate = CKDateFormatter.displayFull.string(from: now)
+    let expectedDisplayDate = CKDateFormatter.displayFullUS.string(from: now)
     let viewModel = MockDetailCellVM(date: now)
     sut.configure(with: viewModel, delegate: mockDelegate)
     XCTAssertEqual(sut.dateLabel.text, expectedDisplayDate)

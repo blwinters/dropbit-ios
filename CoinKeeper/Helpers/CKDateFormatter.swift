@@ -27,11 +27,21 @@ struct CKDateFormatter {
   }()
 
   /// Format with full date and time for display to the user.
-  static let displayFull: DateFormatter = {
+  /// Customizes the am/pm symbols.
+  static let displayFullUS: DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "MMMM d, yyyy h:mma"
     formatter.amSymbol = "am"
     formatter.pmSymbol = "pm"
+    formatter.locale = .US
+    return formatter
+  }()
+
+  static let displayFullLocalized: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .long
+    formatter.timeStyle = .short
+    formatter.locale = .current
     return formatter
   }()
 

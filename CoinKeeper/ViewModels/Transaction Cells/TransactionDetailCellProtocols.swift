@@ -401,7 +401,11 @@ extension TransactionDetailCellViewModelType {
   }
 
   var displayDate: String {
-    return CKDateFormatter.displayFull.string(from: date)
+    if Locale.current.identifier == Locale.US.identifier {
+      return CKDateFormatter.displayFullUS.string(from: date)
+    } else {
+      return CKDateFormatter.displayFullLocalized.string(from: date)
+    }
   }
 
   var tooltipType: DetailCellTooltip {
