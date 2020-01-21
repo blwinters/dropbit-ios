@@ -58,6 +58,10 @@ public class CKMWalletEntry: NSManagedObject {
 
   }
 
+  func exchangeRate(for currency: Currency) -> ExchangeRate? {
+    self.exchangeRates?.exchangeRate(for: currency)
+  }
+
 }
 
 extension CKMWalletEntry: InvitationParent { }

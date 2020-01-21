@@ -65,6 +65,7 @@ protocol LightningBrokerType: AnyObject {
   func deleteInvalidLedgerEntries(in context: NSManagedObjectContext)
 
   func getLedgerEntriesWithoutPayloads(matchingIds ids: [String], in context: NSManagedObjectContext) -> [CKMLNLedgerEntry]
+  func walletEntriesNeedingExchangeRates(in context: NSManagedObjectContext) -> [CKMWalletEntry]
 
 }
 
@@ -166,7 +167,7 @@ protocol TransactionBrokerType: AnyObject {
   func containsRegularTransaction(in context: NSManagedObjectContext) -> IncomingOutgoingTuple
   func containsDropbitTransaction(in context: NSManagedObjectContext) -> IncomingOutgoingTuple
   func deleteTransactions(notIn txids: [String], in context: NSManagedObjectContext)
-  func transactionsWithoutDayAveragePrice(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]>
+  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> [CKMTransaction]
 }
 
 protocol UserBrokerType: AnyObject {

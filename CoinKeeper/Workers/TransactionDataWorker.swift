@@ -111,7 +111,7 @@ class TransactionDataWorker: TransactionDataWorkerType {
         lnBroker.deleteInvalidWalletEntries(in: context)
         lnBroker.deleteInvalidLedgerEntries(in: context)
 
-        self.persistenceManager.brokers.lightning.persistLedgerResponse(response, forWallet: wallet, in: context)
+        lnBroker.persistLedgerResponse(response, forWallet: wallet, in: context)
         self.processOnChainLightningTransfers(withLedger: response.ledger, forWallet: wallet, in: context)
     }
     .then(in: context) { response -> Promise<Void> in
@@ -130,6 +130,7 @@ class TransactionDataWorker: TransactionDataWorkerType {
       }
       .asVoid()
     }
+    .then(in: context) { self.updateWalletEntryExchangeRates(in: context) }
   }
 
   private func getLightningLedger(since date: Date?,
@@ -283,7 +284,7 @@ class TransactionDataWorker: TransactionDataWorkerType {
         .then { Promise.value(TransactionDataWorkerDTO(txResponses: $0).merged(with: dto)) }
     }
     .then(in: context) { _ in self.updateUnspentVouts(in: context) }
-    .then(in: context) { _ in self.updateTransactionDayAveragePrices(in: context) }
+    .then(in: context) { _ in self.updateTransactionExchangeRates(in: context) }
   }
 
   private var fourteenDaysAgo: Date {
@@ -591,48 +592,53 @@ class TransactionDataWorker: TransactionDataWorkerType {
     return Promise.value(uniqueATSResponses)
   }
 
-  private func updateTransactionDayAveragePrices(in context: NSManagedObjectContext) -> Promise<Void> {
-    return self.persistenceManager.brokers.transaction.transactionsWithoutDayAveragePrice(in: context)
-      .then(in: context) { self.fetchAndSetDayAveragePrices(for: $0, in: context) }
+  private func updateTransactionExchangeRates(in context: NSManagedObjectContext) -> Promise<Void> {
+    let transactions = self.persistenceManager.brokers.transaction.transactionsWithoutExchangeRates(in: context)
+    return self.fetchAndSetExchangeRates(for: transactions, in: context)
   }
 
-  private func fetchAndSetDayAveragePrices(for transactions: [CKMTransaction], in context: NSManagedObjectContext) -> Promise<Void> {
+  private func updateWalletEntryExchangeRates(in context: NSManagedObjectContext) -> Promise<Void> {
+    let walletEntries = self.persistenceManager.brokers.lightning.walletEntriesNeedingExchangeRates(in: context)
+    return self.fetchAndSetExchangeRates(for: walletEntries, in: context)
+  }
+
+  private func fetchAndSetExchangeRates(for transactions: [CKMTransaction], in context: NSManagedObjectContext) -> Promise<Void> {
     var transactionIterator = transactions.makeIterator()
     let promiseIterator = AnyIterator<Promise<Void>> {
       guard let ckmTransaction = transactionIterator.next() else {
         return nil
       }
-      return self.fetchAndSetDayAveragePrice(for: ckmTransaction, in: context)
+      return self.fetchAndSetExchangeRates(for: ckmTransaction, in: context).asVoid()
     }
 
     return when(fulfilled: promiseIterator, concurrently: 5).asVoid()
   }
 
-  private func fetchAndSetDayAveragePrice(for transaction: CKMTransaction, in context: NSManagedObjectContext) -> Promise<Void> {
-    return Promise { seal in
-      context.perform {
-        seal.fulfill(transaction.txid)
+  private func fetchAndSetExchangeRates(for walletEntries: [CKMWalletEntry], in context: NSManagedObjectContext) -> Promise<Void> {
+    var entryIterator = walletEntries.makeIterator()
+    let promiseIterator = AnyIterator<Promise<Void>> {
+      guard let ckmWalletEntry = entryIterator.next() else {
+        return nil
       }
+      return self.fetchAndSetExchangeRates(for: ckmWalletEntry, in: context).asVoid()
     }
-    .then { txid in self.networkManager.fetchDayAveragePrice(for: txid) }
-    .recover { error -> Promise<PriceTransactionResponse> in
-        if let providerError = error as? DBTError.Network {
-          switch providerError {
-          case .recordNotFound,
-               .unknownServerError:
-            let emptyResponse = PriceTransactionResponse(average: 0)
-            return Promise.value(emptyResponse)
-          default:
-            throw providerError
-          }
-        } else {
-          throw error
-        }
+
+    return when(fulfilled: promiseIterator, concurrently: 5).asVoid()
+  }
+
+  private func fetchAndSetExchangeRates(for transaction: CKMTransaction, in context: NSManagedObjectContext) -> Promise<PriceTransactionResponse> {
+    guard let txDate = transaction.date else { return .value(PriceTransactionResponse.emptyInstance()) }
+    return self.networkManager.fetchPrices(at: txDate)
+      .get(in: context) { (response: PriceTransactionResponse) in
+        transaction.exchangeRates = CKMExchangeRates(response: response.currency, insertInto: context)
     }
-    .done(in: context) { (response: PriceTransactionResponse) in
-      if response.average != 0 { //ignore emptyResponse created above
-        transaction.dayAveragePrice = response.averagePrice
-      }
+  }
+
+  private func fetchAndSetExchangeRates(for walletEntry: CKMWalletEntry, in context: NSManagedObjectContext) -> Promise<PriceTransactionResponse> {
+    guard let txDate = walletEntry.ledgerEntry?.updatedAt else { return .value(PriceTransactionResponse.emptyInstance()) }
+    return self.networkManager.fetchPrices(at: txDate)
+      .get(in: context) { (response: PriceTransactionResponse) in
+        walletEntry.exchangeRates = CKMExchangeRates(response: response.currency, insertInto: context)
     }
   }
 

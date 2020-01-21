@@ -161,9 +161,9 @@ struct CKPredicate {
 
   struct Transaction {
 
-    static func withoutDayAveragePrice() -> NSPredicate {
-      let pricePath = #keyPath(CKMTransaction.dayAveragePrice)
-      return NSPredicate(format: "\(pricePath) == nil")
+    static func withoutExchangeRates() -> NSPredicate {
+      let ratesPath = #keyPath(CKMTransaction.exchangeRates)
+      return NSPredicate(format: "\(ratesPath) == nil")
     }
 
     static func withValidTxid() -> NSPredicate {
@@ -387,6 +387,21 @@ struct CKPredicate {
       let invitationPredicate = NSPredicate(format: "%K == nil", invitationPath)
       let ledgerEntryPredicate = NSPredicate(format: "%K BEGINSWITH[cd] %@", ledgerEntryPath, CKMLNLedgerEntry.preAuthPrefix)
       return NSCompoundPredicate(type: .and, subpredicates: [invitationPredicate, ledgerEntryPredicate])
+    }
+
+    static func withoutExchangeRates() -> NSPredicate {
+      let ratesPath = #keyPath(CKMWalletEntry.exchangeRates)
+      return NSPredicate(format: "\(ratesPath) == nil")
+    }
+
+    static func withLedgerEntry() -> NSPredicate {
+      let path = #keyPath(CKMWalletEntry.ledgerEntry)
+      return NSPredicate(format: "\(path) != nil")
+    }
+
+    static func withLedgerEntryStatus(_ status: CKMLNTransactionStatus) -> NSPredicate {
+      let path = #keyPath(CKMWalletEntry.ledgerEntry.status)
+      return NSPredicate(format: "\(path) == %d", status.rawValue)
     }
 
     static func tempId(_ id: String) -> NSPredicate {

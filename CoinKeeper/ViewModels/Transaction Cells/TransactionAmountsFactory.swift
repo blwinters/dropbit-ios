@@ -87,7 +87,7 @@ struct TransactionAmountsFactory: TransactionAmountsFactoryType {
     let btcNetworkFee = NSDecimalNumber(sats: transaction.networkFee)
     self.bitcoinNetworkFee = btcNetworkFee
     self.dropBitFee = NSDecimalNumber(sats: transaction.dropBitProcessingFee)
-    self.rateWhenTransacted = transaction.dayAverageExchangeRate(for: fiatCurrency)
+    self.rateWhenTransacted = transaction.exchangeRate(for: fiatCurrency)
 
     if let invite = transaction.invitation {
       let fiatTxAmount = NSDecimalNumber(integerAmount: invite.fiatAmount, currency: .USD)
@@ -96,7 +96,7 @@ struct TransactionAmountsFactory: TransactionAmountsFactoryType {
       } else {
         ///When outgoing, convert the fee amount to fiat, then combine with the
         ///known fiat invitation amount to get total fiat sent when initiated.
-        if let approxRateWhenInitiated: ExchangeRate = transaction.dayAverageExchangeRate(for: fiatCurrency) {
+        if let approxRateWhenInitiated: ExchangeRate = transaction.exchangeRate(for: fiatCurrency) {
           let fiatFeeConverter = CurrencyConverter(rate: approxRateWhenInitiated, fromAmount: btcNetworkFee, fromType: .BTC)
           let fiatFeeWhenInitiated = fiatFeeConverter.fiatAmount
           primaryFiatAmountWhenInitiated = fiatTxAmount.adding(fiatFeeWhenInitiated)
@@ -126,6 +126,8 @@ struct TransactionAmountsFactory: TransactionAmountsFactoryType {
 
       self.dropBitFee = NSDecimalNumber(sats: ledgerEntry.processingFee)
     }
+
+    self.rateWhenTransacted = walletEntry.exchangeRate(for: fiatCurrency)
 
     if let invite = walletEntry.invitation {
       self.primaryFiatAmountWhenInitiated = NSDecimalNumber(integerAmount: invite.fiatAmount, currency: .USD)
