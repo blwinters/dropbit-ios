@@ -22,18 +22,12 @@ enum AddressPublicKeyState {
 }
 
 struct SharedPayloadAmountInfo {
-  let fiatCurrencyCode: Currency
-  let fiatAmount: Int
+  let usdAmount: Int
+  let fiatCurrency: Currency = .USD
 
-  init(fiatCurrency: Currency, fiatAmount: Int) {
-    self.fiatCurrencyCode = fiatCurrency
-    self.fiatAmount = fiatAmount
-  }
-
-  init(converter: CurrencyConverter) {
-    let fiatCurrency = converter.fiatCurrency
-    let fiatFractionalAmount = converter.fiatAmount.asFractionalUnits(of: fiatCurrency)
-    self.init(fiatCurrency: fiatCurrency, fiatAmount: fiatFractionalAmount)
+  ///Always provide USD amount regardless of preferred fiat currency to avoid conflicts with legacy installations or Android.
+  init(usdAmount: Int) {
+    self.usdAmount = usdAmount
   }
 }
 

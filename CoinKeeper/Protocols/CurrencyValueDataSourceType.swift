@@ -22,8 +22,11 @@ extension CurrencyValueDataSourceType {
   }
 
   func latestExchangeRate() -> ExchangeRate {
+    return exchangeRate(for: preferredFiatCurrency)
+  }
+
+  func exchangeRate(for currency: Currency) -> ExchangeRate {
     let rates = ratesDataWorker.latestExchangeRates()
-    let currency = preferredFiatCurrency
     let preferredFiatRate = rates[currency] ?? 0.0
     return ExchangeRate(double: preferredFiatRate, currency: currency)
   }
