@@ -18,11 +18,11 @@ protocol CurrencyValueDataSourceType: AnyObject {
 extension CurrencyValueDataSourceType {
 
   var preferredFiatCurrency: Currency {
-    return ratesDataWorker.preferredFiatCurrency
+    ratesDataWorker.preferredFiatCurrency
   }
 
-  func latestExchangeRate() -> ExchangeRate {
-    return exchangeRate(for: preferredFiatCurrency)
+  func preferredExchangeRate() -> ExchangeRate {
+    exchangeRate(for: preferredFiatCurrency)
   }
 
   func exchangeRate(for currency: Currency) -> ExchangeRate {
@@ -32,7 +32,7 @@ extension CurrencyValueDataSourceType {
   }
 
   func latestFees() -> Fees {
-    return ratesDataWorker.latestFees()
+    ratesDataWorker.latestFees()
   }
 
   func latestFeeRates() -> Promise<FeeRates> {

@@ -40,7 +40,7 @@ extension ExchangeRateUpdatable {
   }
 
   func updateRatesWithLatest() {
-    guard let latestRate = currencyValueManager?.latestExchangeRate() else { return }
+    guard let latestRate = currencyValueManager?.preferredExchangeRate() else { return }
     guard Thread.isMainThread else {
       assertionFailure("latestExchangeRates closure should be called on the main thread")
       return

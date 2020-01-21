@@ -21,7 +21,7 @@ extension AppCoordinator {
   }
 
   func showAlertsForIncomingTransactions(in context: NSManagedObjectContext) {
-    let exchangeRate = self.latestExchangeRate()
+    let exchangeRate = self.preferredExchangeRate()
     let insertedTransactions = context.insertedObjects.compactMap { $0 as? CKMTransaction }
     let incomingTransactions = insertedTransactions.filter { $0.isIncoming && !$0.isInvite && !$0.isLightningTransfer }
     let insertedLightningPayments = context.insertedObjects.compactMap { $0 as? CKMLNLedgerEntry }

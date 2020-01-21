@@ -40,7 +40,7 @@ class DrawerTableViewHeader: UITableViewHeaderFooterView {
   }
 
   @objc private func refreshDisplayedPrice() {
-    guard let fiatRate = currencyValueManager?.latestExchangeRate() else { return }
+    guard let fiatRate = currencyValueManager?.preferredExchangeRate() else { return }
     self.priceLabel.text = fiatRate.displayString
   }
 
