@@ -78,6 +78,7 @@ protocol CheckInBrokerType: AnyObject {
 
   func fee(forType type: TransactionFeeType) -> Double
   func cachedFiatRate(for currency: Currency) -> Double
+  func allCachedFiatRates() -> ExchangeRates
   func persistCheckIn(response: CheckInResponse)
 
 }
