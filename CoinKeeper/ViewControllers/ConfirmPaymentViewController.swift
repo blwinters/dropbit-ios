@@ -145,6 +145,7 @@ class ConfirmPaymentViewController: PresentableViewController, StoryboardInitial
     let btcAmount = viewModel.btcAmount
     let converter = CurrencyConverter(fromBtcAmount: btcAmount, rate: viewModel.exchangeRate)
 
+    //TODO: update for multi-currency
     let pair = (btcAmount: btcAmount, usdAmount: converter.amount(forCurrency: .USD) ?? NSDecimalNumber(decimal: 0.0))
     let outgoingInvitationDTO = OutgoingInvitationDTO(contact: contact,
                                                       btcPair: pair,
