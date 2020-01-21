@@ -93,8 +93,8 @@ extension SenderSharedPayloadPersistable {
       else { return }
 
     self.sharedPayload = CKMTransactionSharedPayload(sharingDesired: sharedPayloadDTO.sharingDesired,
-                                                     fiatAmount: amountInfo.fiatAmount,
-                                                     fiatCurrency: amountInfo.fiatCurrencyCode.rawValue,
+                                                     fiatAmount: amountInfo.usdAmount,
+                                                     fiatCurrency: amountInfo.fiatCurrency.code,
                                                      receivedPayload: nil,
                                                      insertInto: context)
   }

@@ -722,7 +722,7 @@ extension SendPaymentViewController {
   }
 
   private func sharedAmountInfo() -> SharedPayloadAmountInfo {
-    return SharedPayloadAmountInfo(fiatCurrency: .USD, fiatAmount: 1)
+    return SharedPayloadAmountInfo(usdAmount: 1)
   }
 
   private func validatePayment(toTarget paymentTarget: String, matches type: CKRecipientType) throws {

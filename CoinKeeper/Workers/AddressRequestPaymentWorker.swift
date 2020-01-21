@@ -127,8 +127,9 @@ class AddressRequestPaymentWorker {
 
     if let ckmPayload = maybePayload,
       let fiatCurrency = Currency(rawValue: ckmPayload.fiatCurrency),
+      fiatCurrency == .USD,
       let pubKey = response.addressPubkey {
-      let amountInfo = SharedPayloadAmountInfo(fiatCurrency: fiatCurrency, fiatAmount: ckmPayload.fiatAmount)
+      let amountInfo = SharedPayloadAmountInfo(usdAmount: ckmPayload.fiatAmount)
       let maybeMemo = invitation.transaction?.memo ?? invitation.walletEntry?.memo
       return SharedPayloadDTO(addressPubKeyState: .known(pubKey),
                               walletTxType: walletTxType,

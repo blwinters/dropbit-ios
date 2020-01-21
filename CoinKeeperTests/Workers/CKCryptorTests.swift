@@ -161,7 +161,7 @@ class CKCryptorTests: XCTestCase {
     mockPersistenceManager.fakeCoinToUse = BTCMainnetCoin(purpose: .nestedSegwit)
 
     // Construct the test data
-    let amountInfo = SharedPayloadAmountInfo(fiatCurrency: .USD, fiatAmount: 100)
+    let amountInfo = SharedPayloadAmountInfo(usdAmount: 100)
     let alicePhoneNumber = GlobalPhoneNumber(countryCode: 1, nationalNumber: "5555555555")
     let alicePayload = SharedPayloadV1(txid: "4e0044689eeebff9f6232678397f9ed4ba52854bbde9efbee211c8f17a9d839b",
                                        memo: "谢谢 Bob 👋", amountInfo: amountInfo, senderPhoneNumber: alicePhoneNumber)

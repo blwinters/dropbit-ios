@@ -38,14 +38,16 @@ extension AppCoordinator: PaymentSendingDelegate {
     biometricsAuthenticationManager.resetPolicy()
 
     let btcAmount = NSDecimalNumber(sats: outgoingTransactionData.amount)
-    let converter = CurrencyConverter(fromBtcAmount: btcAmount, rate: rate)
-    let amountInfo = SharedPayloadAmountInfo(converter: converter)
+    let usdRate = self.exchangeRate(for: .USD)
+    let converter = CurrencyConverter(fromBtcAmount: btcAmount, rate: usdRate)
+    let usdAmount = converter.fiatAmount.asFractionalUnits(of: .USD)
+    let payloadAmountInfo = SharedPayloadAmountInfo(usdAmount: usdAmount)
     var outgoingTxDataWithAmount = outgoingTransactionData
-    outgoingTxDataWithAmount.sharedPayloadDTO?.amountInfo = amountInfo
+    outgoingTxDataWithAmount.sharedPayloadDTO?.amountInfo = payloadAmountInfo
     outgoingTxDataWithAmount.sender = self.sharedPayloadSenderIdentity(forReceiver: outgoingTransactionData.receiver)
 
     let usdThreshold = 100_00
-    let shouldDisableBiometrics = amountInfo.fiatAmount > usdThreshold
+    let shouldDisableBiometrics = payloadAmountInfo.usdAmount > usdThreshold
 
     let pinEntryViewModel = PaymentVerificationPinEntryViewModel(amountDisablesBiometrics: shouldDisableBiometrics)
 

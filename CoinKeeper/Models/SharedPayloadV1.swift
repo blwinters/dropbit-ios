@@ -19,8 +19,8 @@ struct SharedPayloadInfoV1: Codable {
 
   init(memo: String, amountInfo: SharedPayloadAmountInfo) {
     self.memo = memo
-    self.amount = amountInfo.fiatAmount
-    self.currency = amountInfo.fiatCurrencyCode.rawValue
+    self.amount = amountInfo.usdAmount
+    self.currency = amountInfo.fiatCurrency.code
   }
 }
 
