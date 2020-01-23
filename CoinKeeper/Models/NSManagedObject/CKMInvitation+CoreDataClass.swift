@@ -23,7 +23,9 @@ public class CKMInvitation: NSManagedObject {
     self.id = response.id
     self.btcAmount = response.metadata?.amount?.btc ?? 0
     self.usdAmountAtTimeOfInvitation = response.metadata?.amount?.usd ?? 0
-    ///TODO: persist fiatAmount and fiatCurrency (both optional in case of received invites from legacy/Android users)
+    self.fiatCurrency = response.metadata?.amount?.fiatCurrency
+    self.fiatAmountAtTimeOfInvitation = response.metadata?.amount?.fiatAmount ?? 0
+
     self.counterpartyName = nil
     self.sentDate = response.createdAt
     self.side = InvitationSide(requestSide: side)
@@ -70,7 +72,9 @@ public class CKMInvitation: NSManagedObject {
     self.id = CKMInvitation.unacknowledgementPrefix + acknowledgmentId
     self.btcAmount = requestAmount.btc
     self.usdAmountAtTimeOfInvitation = requestAmount.usd
-    ///TODO: persist fiatAmount and fiatCurrency (both optional in case of received invites from legacy/Android users)
+    self.fiatCurrency = requestAmount.fiatCurrency
+    self.fiatAmountAtTimeOfInvitation = requestAmount.fiatAmount
+
     self.side = .sender
     self.walletTxTypeCase = invitationDTO.walletTxType
     self.status = .notSent
