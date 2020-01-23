@@ -25,7 +25,7 @@ extension CKMInvitation {
   @NSManaged public var btcAmount: Int
   @NSManaged public var usdAmountAtTimeOfInvitation: Int
   @NSManaged public var fiatAmountAtTimeOfInvitation: Int //default is 0
-  @NSManaged public var fiatCurrency: String?
+  @NSManaged public var fiatCurrency: String? //only set if sender supports multi-currency
   @NSManaged private(set) var fees: Int
   @NSManaged public var sentDate: Date?
   @NSManaged private(set) var walletTransactionType: String

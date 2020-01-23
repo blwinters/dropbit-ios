@@ -20,7 +20,7 @@ struct AddressRequestUpdateTestObject: AddressRequestUpdateDisplayable {
   var receiverPhoneNumber: GlobalPhoneNumber?
   var receiverHandle: String?
   var btcAmount: Int = 0
-  var fiatAmount: Int = 0
+  var fiatMoney: Money = Money(amount: .zero, currency: .USD)
   var side: InvitationSide = .sender
   var status: InvitationStatus = .completed
   var addressType: WalletAddressType = .btc

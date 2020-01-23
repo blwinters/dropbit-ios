@@ -41,7 +41,7 @@ public struct MetadataAmount: Decodable, CustomStringConvertible {
       "btc: \(btc.flatMap { String($0) } ?? "-")",
       "usd: \(usd.flatMap { String($0) } ?? "-")",
       "fiatAmount: \(fiatAmount.flatMap { String($0) } ?? "-")",
-      "fiatCurrency: \(fiatCurrency ?? "-")",
+      "fiatCurrency: \(fiatCurrency ?? "-")"
     ]
     propertyKeyValues.forEach { desc in
       responseDesc.append("\n\t\(desc)")

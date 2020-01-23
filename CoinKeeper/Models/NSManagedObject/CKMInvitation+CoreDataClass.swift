@@ -292,8 +292,18 @@ public class CKMInvitation: NSManagedObject {
 }
 
 extension CKMInvitation: AddressRequestUpdateDisplayable {
-  var fiatAmount: Int {
-    return self.usdAmountAtTimeOfInvitation
+
+  ///The amount of fiat currency according to the exchange rate when the invitation was first created.
+  ///Uses the fiat amount if sender's app supported multi-currency, otherwise falls back to legacy USD amount.
+  var fiatMoney: Money {
+    if self.fiatAmountAtTimeOfInvitation != 0,
+      let currency = self.fiatCurrency.flatMap({ code in Currency(rawValue: code) }) {
+      let fiatAmount = NSDecimalNumber(integerAmount: self.fiatAmountAtTimeOfInvitation, currency: currency)
+      return Money(amount: fiatAmount, currency: currency)
+    } else {
+      let usdAmount = NSDecimalNumber(integerAmount: self.usdAmountAtTimeOfInvitation, currency: .USD)
+      return Money(amount: usdAmount, currency: .USD)
+    }
   }
 
   var addressRequestId: String {
