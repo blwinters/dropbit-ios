@@ -329,9 +329,8 @@ extension TransactionDetailCellViewModelType {
 
     let secondary = btcAttributedString ?? NSAttributedString(string: "-")
 
-    let historicalText = historicalAmountsAttributedString(fiatWhenTransacted: amounts.netWhenTransacted?.fiat,
-                                                           fiatWhenInvited: amounts.netWhenInitiated?.fiat,
-                                                           fiatCurrency: netAtCurrent.fiatCurrency)
+    let historicalText = historicalAmountsAttributedString(fiatMoneyWhenTransacted: amounts.netWhenTransacted?.fiatMoney,
+                                                           fiatMoneyWhenInvited: amounts.netWhenInitiated?.fiatMoney)
 
     return DetailCellAmountLabels(primaryText: fiatText,
                                   secondaryAttributedText: secondary,
@@ -473,18 +472,26 @@ extension TransactionDetailCellViewModelType {
     return formatter
   }
 
-  private func historicalAmountsAttributedString(fiatWhenTransacted: NSDecimalNumber?,
-                                                 fiatWhenInvited: NSDecimalNumber?,
-                                                 fiatCurrency: Currency) -> NSAttributedString? {
+  private func historicalAmountsAttributedString(fiatMoneyWhenTransacted: Money?,
+                                                 fiatMoneyWhenInvited: Money?) -> NSAttributedString? {
     // Using bold and regular strings
     let fontSize: CGFloat = 14.0
     let color = UIColor.darkBlueText
     let attributes = TextAttributes(size: fontSize, color: color)
     let attributedString = NSMutableAttributedString.medium("", size: fontSize, color: color)
 
-    let historicalFormatter = historicalCurrencyFormatter(currency: fiatCurrency)
-    let inviteAmount: String? = fiatWhenInvited.flatMap { historicalFormatter.string(from: $0.absoluteValue()) }
-    let receivedAmount: String? = fiatWhenTransacted.flatMap { historicalFormatter.string(from: $0.absoluteValue()) }
+    var inviteAmount: String?
+    if let inviteMoney = fiatMoneyWhenInvited {
+      let inviteAmountFormatter = historicalCurrencyFormatter(currency: inviteMoney.currency)
+      inviteAmount = inviteAmountFormatter.string(from: inviteMoney.amount.absoluteValue())
+    }
+
+    var receivedAmount: String?
+    if let transactedMoney = fiatMoneyWhenTransacted {
+      let receivedAmountFormatter = historicalCurrencyFormatter(currency: transactedMoney.currency)
+      receivedAmount = receivedAmountFormatter.string(from: transactedMoney.amount.absoluteValue())
+    }
+
     guard inviteAmount != nil || receivedAmount != nil else { return nil }
 
     // Amount descriptions are flipped depending on isIncoming
