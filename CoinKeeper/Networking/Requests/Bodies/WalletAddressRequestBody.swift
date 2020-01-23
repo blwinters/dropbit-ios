@@ -15,7 +15,7 @@ public struct WalletAddressRequestAmount: Codable {
   let usd: Int
 
   ///The amount in the user's preferred fiat currency
-  let fiatAmount: Int
+  let fiatValue: Int
 
   ///The user's preferred fiat currency
   let fiatCurrency: String
@@ -28,7 +28,7 @@ public struct WalletAddressRequestAmount: Codable {
 
     //server requires a non-zero integer for small amounts, e.g. 1 sat
     self.usd = max(usdCents, 1)
-    self.fiatAmount = max(fiatCents, 1)
+    self.fiatValue = max(fiatCents, 1)
 
     self.fiatCurrency = amountPair.fiatCurrency.code
   }

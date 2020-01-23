@@ -24,7 +24,7 @@ public class CKMInvitation: NSManagedObject {
     self.btcAmount = response.metadata?.amount?.btc ?? 0
     self.usdAmountAtTimeOfInvitation = response.metadata?.amount?.usd ?? 0
     self.fiatCurrency = response.metadata?.amount?.fiatCurrency
-    self.fiatAmountAtTimeOfInvitation = response.metadata?.amount?.fiatAmount ?? 0
+    self.fiatAmountAtTimeOfInvitation = response.metadata?.amount?.fiatValue ?? 0
 
     self.counterpartyName = nil
     self.sentDate = response.createdAt
@@ -73,7 +73,7 @@ public class CKMInvitation: NSManagedObject {
     self.btcAmount = requestAmount.btc
     self.usdAmountAtTimeOfInvitation = requestAmount.usd
     self.fiatCurrency = requestAmount.fiatCurrency
-    self.fiatAmountAtTimeOfInvitation = requestAmount.fiatAmount
+    self.fiatAmountAtTimeOfInvitation = requestAmount.fiatValue
 
     self.side = .sender
     self.walletTxTypeCase = invitationDTO.walletTxType

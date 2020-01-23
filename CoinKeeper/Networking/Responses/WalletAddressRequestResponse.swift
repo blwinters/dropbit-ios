@@ -32,7 +32,7 @@ public struct MetadataAmount: Decodable, CustomStringConvertible {
 
   let btc: Int?
   let usd: Int?
-  let fiatAmount: Int?
+  let fiatValue: Int?
   let fiatCurrency: String?
 
   public var description: String {
@@ -40,7 +40,7 @@ public struct MetadataAmount: Decodable, CustomStringConvertible {
     let propertyKeyValues: [String] = [
       "btc: \(btc.flatMap { String($0) } ?? "-")",
       "usd: \(usd.flatMap { String($0) } ?? "-")",
-      "fiatAmount: \(fiatAmount.flatMap { String($0) } ?? "-")",
+      "fiatValue: \(fiatValue.flatMap { String($0) } ?? "-")",
       "fiatCurrency: \(fiatCurrency ?? "-")"
     ]
     propertyKeyValues.forEach { desc in

@@ -132,7 +132,7 @@ struct AddressRequestUpdate: AddressRequestUpdateDisplayable {
 extension MetadataAmount {
 
   var fiatMoney: Money? {
-    if let fiatAmount =  self.fiatAmount, fiatAmount != 0,
+    if let fiatAmount =  self.fiatValue, fiatAmount != 0,
       let currency = self.fiatCurrency.flatMap({ code in Currency(rawValue: code) }) {
       let fiatDecimalAmount = NSDecimalNumber(integerAmount: fiatAmount, currency: currency)
       return Money(amount: fiatDecimalAmount, currency: currency)
