@@ -53,6 +53,8 @@ class TransactionHistoryDetailsViewControllerTests: XCTestCase {
     let ratesDataWorker = RatesDataWorker(persistenceManager: MockPersistenceManager(),
                                           networkManager: MockNetworkManager())
 
+    var uiTestIsInProgress: Bool { false }
+
     let currencyController: CurrencyController = CurrencyController()
 
     var preferredFiatCurrency: Currency = .USD

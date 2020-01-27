@@ -10,11 +10,15 @@ import Foundation
 import UIKit
 import Charts
 import PromiseKit
-import SVProgressHUD
 
-protocol NewsViewControllerDelegate: CurrencyValueDataSourceType, ViewControllerDismissable, URLOpener {
+protocol LoadingDelegate {
+  func viewControllerWillLoad(_ viewController: UIViewController)
+  func viewControllerFinishedLoading(_ viewController: UIViewController)
+}
+
+protocol NewsViewControllerDelegate: PriceDelegate, LoadingDelegate,
+CurrencyValueDataSourceType, ViewControllerDismissable, URLOpener {
   func viewControllerDidRequestNewsData(count: Int) -> Promise<[NewsArticleResponse]>
-  func viewControllerDidRequestPriceDataFor(period: PricePeriod) -> Promise<[PriceSummaryResponse]>
   func viewControllerBecameVisible(_ viewController: UIViewController)
   func viewControllerWillShowNewsArticle(_ viewController: UIViewController)
 }
@@ -64,7 +68,7 @@ final class NewsViewController: BaseViewController, StoryboardInitializable {
     newsErrorLabel.font = .light(13)
     newsErrorLabel.textColor = .darkGrayText
 
-    SVProgressHUD.show()
+    delegate.viewControllerWillLoad(self)
 
     CKNotificationCenter.subscribe(self, [.didUpdateExchangeRates: #selector(refreshDisplayedPrice)])
     refreshDisplayedPrice()
@@ -73,7 +77,7 @@ final class NewsViewController: BaseViewController, StoryboardInitializable {
   }
 
   @IBAction func closeButtonWasTouched() {
-    SVProgressHUD.dismiss()
+    delegate.viewControllerFinishedLoading(self)
     delegate.viewControllerDidSelectClose(self)
   }
 
@@ -101,12 +105,12 @@ extension NewsViewController: NewsViewControllerDDSDelegate {
   }
 
   func delegateFinishedLoadingData() {
-    SVProgressHUD.dismiss()
+    delegate.viewControllerFinishedLoading(self)
     tableView.isHidden = false
   }
 
   func delegateErrorLoadingData() {
-    SVProgressHUD.dismiss()
+    delegate.viewControllerFinishedLoading(self)
     newsErrorLabel.isHidden = false
   }
 }

@@ -31,8 +31,6 @@ protocol ChildCoordinatorDelegate: class {
   func childCoordinatorDidComplete(childCoordinator: ChildCoordinatorType)
 }
 
-let phoneNumberKit = PhoneNumberKit()
-
 class AppCoordinator: CoordinatorType {
   let navigationController: UINavigationController
   let persistenceManager: PersistenceManagerType
@@ -77,8 +75,7 @@ class AppCoordinator: CoordinatorType {
   let contactStore = CNContactStore()
   let locationManager = CLLocationManager()
 
-  var bitcoinURLToOpen: BitcoinURL?
-  var purchasedBitcoinComponents: WyreURLParser?
+  var launchUrl: LaunchURLType?
 
   lazy var contactCacheDataWorker: ContactCacheDataWorker = {
     return ContactCacheDataWorker(contactCacheManager: self.contactCacheManager,
@@ -350,8 +347,12 @@ class AppCoordinator: CoordinatorType {
 
   /// Called by applicationDidBecomeActive()
   func appBecameActive() {
+    if uiTestArguments.contains(.uiTestInProgress) {
+      UIApplication.shared.keyWindow?.layer.speed = 10
+    }
+
     resetWalletManagerIfNeeded()
-    handlePendingBitcoinURL()
+    handleLaunchUrlIfNecessary()
     refreshContacts()
 
     self.permissionManager.refreshNotificationPermissionStatus()

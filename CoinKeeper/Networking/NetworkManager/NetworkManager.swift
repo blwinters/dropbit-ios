@@ -54,6 +54,8 @@ class NetworkManager: NetworkManagerType {
   let coinNinjaProvider = CoinNinjaBroadcastProvider()
   let blockchainInfoProvider = BlockchainInfoProvider()
   let blockstreamProvider = BlockstreamProvider()
+  let newsNetworkManager: NewsNetworkManager
+  let checkInNetworkManager: CheckInNetworkManager
 
   var twitterOAuthManager: OAuth1Swift
 
@@ -71,6 +73,8 @@ class NetworkManager: NetworkManagerType {
       accessTokenUrl: twitterOAuth.accessTokenURL
     )
 
+    newsNetworkManager = NewsNetworkManager(coinNinjaProvider: coinNinjaProvider)
+    checkInNetworkManager = CheckInNetworkManager(coinNinjaProvider: coinNinjaProvider)
     self.cnProvider.headerDelegate = self
   }
 
