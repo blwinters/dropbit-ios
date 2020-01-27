@@ -78,6 +78,7 @@ protocol CheckInBrokerType: AnyObject {
 
   func fee(forType type: TransactionFeeType) -> Double
   func cachedFiatRate(for currency: Currency) -> Double
+  func allCachedFiatRates() -> ExchangeRates
   func persistCheckIn(response: CheckInResponse)
 
 }
@@ -103,6 +104,7 @@ protocol InvitationBrokerType: AnyObject {
   func getUnacknowledgedInvitations(in context: NSManagedObjectContext) -> [CKMInvitation]
   func getAllInvitations(in context: NSManagedObjectContext) -> [CKMInvitation]
   func persistUnacknowledgedInvitation(withDTO invitationDTO: OutgoingInvitationDTO,
+                                       requestAmount: WalletAddressRequestAmount,
                                        acknowledgmentId: String,
                                        in context: NSManagedObjectContext)
   func addressesProvidedForReceivedPendingDropBits(in context: NSManagedObjectContext) -> [String]

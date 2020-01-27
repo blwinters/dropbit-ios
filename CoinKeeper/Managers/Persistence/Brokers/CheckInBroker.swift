@@ -52,6 +52,14 @@ class CheckInBroker: CKPersistenceBroker, CheckInBrokerType {
     return userDefaultsManager.exchangeRate(for: currency) ?? 1
   }
 
+  func allCachedFiatRates() -> ExchangeRates {
+    var rates: ExchangeRates = [:]
+    for currency in Currency.allCases {
+      rates[currency] = self.cachedFiatRate(for: currency)
+    }
+    return rates
+  }
+
   func persistCheckIn(response: CheckInResponse) {
     cacheCheckInPrices(response.currency)
 

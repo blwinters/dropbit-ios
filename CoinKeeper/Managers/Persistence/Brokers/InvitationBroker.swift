@@ -19,9 +19,11 @@ class InvitationBroker: CKPersistenceBroker, InvitationBrokerType {
   }
 
   func persistUnacknowledgedInvitation(withDTO invitationDTO: OutgoingInvitationDTO,
+                                       requestAmount: WalletAddressRequestAmount,
                                        acknowledgmentId: String,
                                        in context: NSManagedObjectContext) {
     _ = CKMInvitation(withOutgoingInvitationDTO: invitationDTO,
+                      requestAmount: requestAmount,
                       acknowledgmentId: acknowledgmentId,
                       insertInto: context)
   }

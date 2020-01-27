@@ -32,10 +32,18 @@ class RatesDataWorkerTests: XCTestCase {
   // MARK: initialization
   func testFetchingLatestExchangeRatesAfterInitializationRetrievesCachedValue() {
     self.sut.start()
-    let expectedRate = self.persistenceManager.brokers.checkIn.cachedFiatRate(for: .USD)
-    let rate: Double = self.sut.latestExchangeRates()[.USD] ?? 0.0
+    guard let response = CheckInResponse.sampleInstance() else {
+      XCTFail("Failed to decode sample instance")
+      return
+    }
 
-    XCTAssertEqual(rate, expectedRate, "usd rate should equal expected rate")
+    let expectedRate: Double = response.currency.usd
+    self.persistenceManager.brokers.checkIn.persistCheckIn(response: response)
+    let rateA = self.persistenceManager.brokers.checkIn.cachedFiatRate(for: .USD)
+    let rateB: Double = self.sut.latestExchangeRates()[.USD] ?? 0.0
+
+    XCTAssertEqual(expectedRate, rateA, "usd rate should equal expected rate")
+    XCTAssertEqual(rateA, rateB, "rate sources should match")
   }
 
   // MARK: fees

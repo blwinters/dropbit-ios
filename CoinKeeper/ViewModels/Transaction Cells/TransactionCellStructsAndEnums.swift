@@ -294,4 +294,8 @@ struct ConvertedAmounts {
               fiat: converter.fiatAmount,
               fiatCurrency: converter.fiatCurrency)
   }
+
+  var fiatMoney: Money {
+    return Money(amount: fiat, currency: fiatCurrency)
+  }
 }

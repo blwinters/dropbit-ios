@@ -17,7 +17,11 @@ protocol ConfirmPaymentViewControllerDelegate: ViewControllerDismissable, AllPay
 
 }
 
-typealias BitcoinUSDPair = (btcAmount: NSDecimalNumber, usdAmount: NSDecimalNumber)
+struct BitcoinFiatPair {
+  let btcAmount: NSDecimalNumber
+  let fiatAmount: NSDecimalNumber
+  let fiatCurrency: Currency
+}
 
 class ConfirmPaymentViewController: PresentableViewController, StoryboardInitializable {
 
@@ -144,10 +148,11 @@ class ConfirmPaymentViewController: PresentableViewController, StoryboardInitial
     guard let contact = viewModel.contact else { return }
     let btcAmount = viewModel.btcAmount
     let converter = CurrencyConverter(fromBtcAmount: btcAmount, rate: viewModel.exchangeRate)
-
-    let pair = (btcAmount: btcAmount, usdAmount: converter.amount(forCurrency: .USD) ?? NSDecimalNumber(decimal: 0.0))
+    let amountPair = BitcoinFiatPair(btcAmount: btcAmount,
+                                     fiatAmount: converter.fiatAmount,
+                                     fiatCurrency: converter.fiatCurrency)
     let outgoingInvitationDTO = OutgoingInvitationDTO(contact: contact,
-                                                      btcPair: pair,
+                                                      amountPair: amountPair,
                                                       fee: feeModel.networkFeeAmount,
                                                       walletTxType: viewModel.walletTransactionType,
                                                       sharedPayloadDTO: viewModel.sharedPayloadDTO)

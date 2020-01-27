@@ -12,6 +12,7 @@ import PromiseKit
 @testable import DropBit
 
 class MockCheckInBroker: CKPersistenceBroker, CheckInBrokerType {
+
   func fee(forType type: TransactionFeeType) -> Double {
     return 0.0
   }
@@ -30,9 +31,18 @@ class MockCheckInBroker: CKPersistenceBroker, CheckInBrokerType {
   }
 
   func cachedFiatRate(for currency: Currency) -> Double {
-    return exchangeRateCache[currency] ?? 1
+    return exchangeRateCache[currency] ?? 0
   }
 
-  func persistCheckIn(response: CheckInResponse) { }
+  func allCachedFiatRates() -> ExchangeRates { exchangeRateCache }
+  func persistCheckIn(response: CheckInResponse) {
+    let rates = response.currency
+    cacheFiatRate(rates.aud, for: .AUD)
+    cacheFiatRate(rates.cad, for: .CAD)
+    cacheFiatRate(rates.eur, for: .EUR)
+    cacheFiatRate(rates.gbp, for: .GBP)
+    cacheFiatRate(rates.sek, for: .SEK)
+    cacheFiatRate(rates.usd, for: .USD)
+  }
 
 }
