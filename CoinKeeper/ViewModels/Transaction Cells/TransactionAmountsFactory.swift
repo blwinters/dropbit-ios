@@ -215,8 +215,6 @@ struct TransactionAmountsFactory: TransactionAmountsFactoryType {
 
 }
 
-public typealias Satoshis = Int
-
 // MARK: - Computed Amounts
 extension CKMTransaction {
 

@@ -531,7 +531,7 @@
 		A2568E1C23D6415B00CE5F6B /* KeyPathDescribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A42A99217A3E0F00EB32CB /* KeyPathDescribable.swift */; };
 		A2568E1D23D6416800CE5F6B /* NewsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A230F1C522D664360017BC7A /* NewsData.swift */; };
 		A2568E1E23D641EB00CE5F6B /* CKCurrencyFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54F8FA320C3088300294F50 /* CKCurrencyFormatter.swift */; };
-		A2568E1F23D641F900CE5F6B /* CurrencyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B37B26206AFE22001816F6 /* CurrencyCode.swift */; };
+		A2568E1F23D641F900CE5F6B /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B37B26206AFE22001816F6 /* Currency.swift */; };
 		A2568E2023D6420500CE5F6B /* NSDecimalNumber+SignificantDecimals.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B3E4C62072AE2400222FF4 /* NSDecimalNumber+SignificantDecimals.swift */; };
 		A2568E2223D6428100CE5F6B /* CoinNinjaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8F5C4216D37D300E3E85B /* CoinNinjaProvider.swift */; };
 		A2568E2323D6429300CE5F6B /* DefaultHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B474158217E5251004DA223 /* DefaultHeaders.swift */; };
@@ -1017,6 +1017,10 @@
 		B56F36AC233AB82200984A51 /* ConfirmPaymentMemoViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56F36AB233AB82200984A51 /* ConfirmPaymentMemoViewTests.swift */; };
 		B56F3F3B237C614600949B37 /* TransactionNotificationsElasticQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56F3F3A237C614600949B37 /* TransactionNotificationsElasticQuery.swift */; };
 		B5705450230B4812006DD57F /* Typealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB05AC0209CF407000297E1 /* Typealiases.swift */; };
+		B572E4FF23DFA0D700ACEB90 /* ExchangeRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B538508823AC1A3400997240 /* ExchangeRate.swift */; };
+		B572E50023DFA0F000ACEB90 /* Locale+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BEC1AF32229CC8D00824A35 /* Locale+Constants.swift */; };
+		B572E50223DFA15500ACEB90 /* SelectedCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B572E50123DFA15500ACEB90 /* SelectedCurrency.swift */; };
+		B572E50323DFA15500ACEB90 /* SelectedCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B572E50123DFA15500ACEB90 /* SelectedCurrency.swift */; };
 		B5730E27239FF54A00106E19 /* FeatureConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5730E26239FF54A00106E19 /* FeatureConfigurable.swift */; };
 		B5730E2923A0026700106E19 /* ConfigResponseItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5730E2823A0026700106E19 /* ConfigResponseItems.swift */; };
 		B575B61622E9F68700CECFB7 /* LNLedgerTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B575B61522E9F68700CECFB7 /* LNLedgerTarget.swift */; };
@@ -2260,6 +2264,7 @@
 		B56E15A62167EAE6003B69D4 /* NetworkManager+DeviceRequestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+DeviceRequestable.swift"; sourceTree = "<group>"; };
 		B56F36AB233AB82200984A51 /* ConfirmPaymentMemoViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPaymentMemoViewTests.swift; sourceTree = "<group>"; };
 		B56F3F3A237C614600949B37 /* TransactionNotificationsElasticQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionNotificationsElasticQuery.swift; sourceTree = "<group>"; };
+		B572E50123DFA15500ACEB90 /* SelectedCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedCurrency.swift; sourceTree = "<group>"; };
 		B5730E26239FF54A00106E19 /* FeatureConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureConfigurable.swift; sourceTree = "<group>"; };
 		B5730E2823A0026700106E19 /* ConfigResponseItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigResponseItems.swift; sourceTree = "<group>"; };
 		B575B61522E9F68700CECFB7 /* LNLedgerTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNLedgerTarget.swift; sourceTree = "<group>"; };
@@ -3198,6 +3203,7 @@
 				B538508823AC1A3400997240 /* ExchangeRate.swift */,
 				5B40427B208CCC27005624B0 /* OnChainQRCode.swift */,
 				B5B37B26206AFE22001816F6 /* Currency.swift */,
+				B572E50123DFA15500ACEB90 /* SelectedCurrency.swift */,
 				A20E47EF20C0436E00CA8589 /* ContactType.swift */,
 				B5B0DC7C22134AE00010AB2A /* CKCountry.swift */,
 				B5E7F22022148ECA00358A24 /* FlagEmojiFactory.swift */,
@@ -5377,6 +5383,7 @@
 				B552EDED211E33D000332BB5 /* HashingManager.swift in Sources */,
 				A24933762396B9AD0030C421 /* AppCoordinator+EarnViewControllerDelegate.swift in Sources */,
 				3B44961D21B065C200A4E912 /* MemoEntryViewController.swift in Sources */,
+				B572E50223DFA15500ACEB90 /* SelectedCurrency.swift in Sources */,
 				B527AFBD2195CFF6007D9484 /* UIView+AccessibilityIdentifier.swift in Sources */,
 				A2CEEF72238C752000E4A8EF /* PrivateKeySweepViewController.swift in Sources */,
 				B5DDB0F521DE5ED200A25929 /* KeychainMigrationWorker.swift in Sources */,
@@ -6028,9 +6035,11 @@
 				A2568E5C23D649D200CE5F6B /* MoyaResponse+ErrorMessage.swift in Sources */,
 				A2568E1323D6403500CE5F6B /* PriceTarget.swift in Sources */,
 				A2853B0523D9EA3F00533272 /* CheckInResponse.swift in Sources */,
+				B572E50323DFA15500ACEB90 /* SelectedCurrency.swift in Sources */,
 				A2568E2023D6420500CE5F6B /* NSDecimalNumber+SignificantDecimals.swift in Sources */,
 				A2568E6D23D8A44900CE5F6B /* NewsNetworkManager.swift in Sources */,
 				A2568E6123D64B0100CE5F6B /* NSDecimalNumber+NilInitializer.swift in Sources */,
+				B572E50023DFA0F000ACEB90 /* Locale+Constants.swift in Sources */,
 				A2568E6023D64AFE00CE5F6B /* NSDecimalNumber+Comparable.swift in Sources */,
 				A2568E4F23D6478900CE5F6B /* MetadataParticipant.swift in Sources */,
 				A2568E5423D6485B00CE5F6B /* PersistenceUserDefaultsType.swift in Sources */,
@@ -6039,6 +6048,7 @@
 				A2568E4C23D6471900CE5F6B /* String+Count.swift in Sources */,
 				A2568E5023D6481400CE5F6B /* URLRequest+Helpers.swift in Sources */,
 				A2568E5D23D649DD00CE5F6B /* AuthPlugin.swift in Sources */,
+				B572E4FF23DFA0D700ACEB90 /* ExchangeRate.swift in Sources */,
 				A2568E1923D6412100CE5F6B /* ResponseCodable.swift in Sources */,
 				A2568E4923D6464800CE5F6B /* Collection+IsNotEmpty.swift in Sources */,
 				A2568E6423D64F4400CE5F6B /* WalletTransactionType.swift in Sources */,
@@ -6052,7 +6062,7 @@
 				A2568E6F23D8A48800CE5F6B /* NewsTarget.swift in Sources */,
 				A2568E6823D782DF00CE5F6B /* UIColor+Theme.swift in Sources */,
 				A2568E4723D6462F00CE5F6B /* String+Multiline.swift in Sources */,
-				A2568E1F23D641F900CE5F6B /* CurrencyCode.swift in Sources */,
+				A2568E1F23D641F900CE5F6B /* Currency.swift in Sources */,
 				A2568E2E23D643BF00CE5F6B /* CKLogger.swift in Sources */,
 				A2568E2B23D6436000CE5F6B /* Typealiases.swift in Sources */,
 				A2568E4A23D646CA00CE5F6B /* UIImage+Mask.swift in Sources */,

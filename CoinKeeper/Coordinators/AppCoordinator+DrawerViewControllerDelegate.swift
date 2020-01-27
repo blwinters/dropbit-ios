@@ -86,7 +86,4 @@ extension AppCoordinator: DrawerViewControllerDelegate {
     viewControllerDidTapGetBitcoin(controller)
   }
 
-  private func closeDrawer() {
-    drawerController?.openCenter(animated: true)
-  }
 }

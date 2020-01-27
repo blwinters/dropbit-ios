@@ -8,6 +8,8 @@
 
 import Foundation
 
+public typealias Satoshis = Int
+
 extension NSDecimalNumber {
 
   var significantFractionalDecimalDigits: Int {

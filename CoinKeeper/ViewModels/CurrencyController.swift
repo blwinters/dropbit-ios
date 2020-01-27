@@ -8,23 +8,6 @@
 
 import Foundation
 
-typealias SelectedCurrency = CurrencyType
-enum CurrencyType: String {
-  case BTC, fiat
-
-  mutating func toggle() {
-    switch self {
-    case .BTC:  self = .fiat
-    case .fiat: self = .BTC
-    }
-  }
-
-  var description: String {
-    return self.rawValue
-  }
-
-}
-
 protocol SelectedCurrencyUpdatable: AnyObject {
   func updateSelectedCurrency(to selectedCurrency: SelectedCurrency)
 }
