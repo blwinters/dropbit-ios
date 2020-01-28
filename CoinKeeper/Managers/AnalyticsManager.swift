@@ -28,6 +28,7 @@ enum AnalyticsManagerPropertiesType: String {
   case lightningUpgradedFunds = "Lightning Upgraded Funds"
   case hasLightningBalance = "Has Lightning Balance"
   case lightningLockedStatus = "Lightning Wallet Locked Status"
+  case preferredFiatCurrency = "Preferred Fiat Currency"
 }
 
 enum AnalyticsManagerEventType: String {
