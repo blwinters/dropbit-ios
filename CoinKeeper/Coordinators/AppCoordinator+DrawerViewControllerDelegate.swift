@@ -85,5 +85,4 @@ extension AppCoordinator: DrawerViewControllerDelegate {
     closeDrawer()
     viewControllerDidTapGetBitcoin(controller)
   }
-
 }
