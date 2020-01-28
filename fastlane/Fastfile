@@ -16,7 +16,7 @@ default_platform(:ios)
 platform :ios do
 
   before_all do |lane|
-    lanes_to_exclude = [:quick_test, :register, :local_test, :local_unit_tests, :autogen]
+    lanes_to_exclude = [:quick_test, :register, :local_test, :local_unit_tests, :autogen, :marketing_version]
     unless lanes_to_exclude.include?(lane)
       clear_derived_data
       bundle_install
@@ -101,6 +101,13 @@ platform :ios do
     register_devices(devices: device_hash)
     match(force: true)
   end
+
+	desc "Set new marketing version for the project"
+	lane :marketing_version do
+		from = prompt(text: "Enter previous version: ")
+		to = prompt(text: "Enter new version: ")
+		sh "sed -i '' 's/MARKETING_VERSION = #{from}/MARKETING_VERSION = #{to}/g' ../CoinKeeper.xcodeproj/project.pbxproj"
+	end
 
 	# match
 	desc "Recreate development certs and provisioning profiles (destructive). Command will prompt to verify nuking. Customized in Matchfile. Use this lane when development certs are about to expire or adding a new app_identifier in Matchfile."

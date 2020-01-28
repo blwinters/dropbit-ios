@@ -36,6 +36,21 @@ Set build number to current CI Job Number, no commit
 fastlane ios register
 ```
 Register new devices
+### ios marketing
+```
+fastlane ios marketing
+```
+Set new marketing version for the project
+### ios recreate_development
+```
+fastlane ios recreate_development
+```
+Recreate development certs and provisioning profiles (destructive). Command will prompt to verify nuking. Customized in Matchfile. Use this lane when development certs are about to expire or adding a new app_identifier in Matchfile.
+### ios recreate_distribution
+```
+fastlane ios recreate_distribution
+```
+Recreate distribution certs and provisioning profiles (destructive). Command will prompt to verify nuking. Customized in Matchfile. Use this lane when distribution certs are about to expire or adding a new app_identifier in Matchfile.
 ### ios local_test
 ```
 fastlane ios local_test
