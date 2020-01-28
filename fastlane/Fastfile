@@ -104,9 +104,8 @@ platform :ios do
 
 	desc "Set new marketing version for the project"
 	lane :marketing_version do
-		from = prompt(text: "Enter previous version: ")
 		to = prompt(text: "Enter new version: ")
-		sh "sed -i '' 's/MARKETING_VERSION = #{from}/MARKETING_VERSION = #{to}/g' ../CoinKeeper.xcodeproj/project.pbxproj"
+		sh "sed -i '' 's/MARKETING_VERSION.*$/MARKETING_VERSION = #{to};/g' ../CoinKeeper.xcodeproj/project.pbxproj"
 	end
 
 	# match

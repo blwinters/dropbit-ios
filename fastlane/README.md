@@ -36,9 +36,9 @@ Set build number to current CI Job Number, no commit
 fastlane ios register
 ```
 Register new devices
-### ios marketing
+### ios marketing_version
 ```
-fastlane ios marketing
+fastlane ios marketing_version
 ```
 Set new marketing version for the project
 ### ios recreate_development
