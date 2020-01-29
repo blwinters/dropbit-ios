@@ -53,7 +53,7 @@ class LightningQuickLoadViewModelTests: XCTestCase {
   func testModerateOnChainBalanceEqualsMaxAmount() {
     let onChainFiatBalance = NSDecimalNumber(integerAmount: 20_50, currency: .USD)
     let rate = CurrencyConverter.sampleRate
-    let balanceConverter = CurrencyConverter(rate: rate, fromAmount: onChainFiatBalance, fromType: .fiat)
+    let balanceConverter = CurrencyConverter(fromFiatAmount: onChainFiatBalance, rate: rate)
     let btcBalances = WalletBalances(onChain: balanceConverter.btcAmount, lightning: .zero)
     do {
       sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD, config: config)
@@ -81,7 +81,7 @@ class LightningQuickLoadViewModelTests: XCTestCase {
   func testHigherStandardAmountsAreDisabledByMaxAmount() {
     let onChainFiatBalance = NSDecimalNumber(integerAmount: 45_00, currency: .USD)
     let rate = CurrencyConverter.sampleRate
-    let balanceConverter = CurrencyConverter(rate: rate, fromAmount: onChainFiatBalance, fromType: .fiat)
+    let balanceConverter = CurrencyConverter(fromFiatAmount: onChainFiatBalance, rate: rate)
     let btcBalances = WalletBalances(onChain: balanceConverter.btcAmount, lightning: .zero)
     do {
       sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD, config: config)

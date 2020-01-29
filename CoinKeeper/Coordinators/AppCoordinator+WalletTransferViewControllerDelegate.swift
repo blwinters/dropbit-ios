@@ -73,7 +73,7 @@ extension AppCoordinator: WalletTransferViewControllerDelegate {
   func lightningPaymentData(forFiatAmount fiatAmount: NSDecimalNumber, isMax: Bool) -> Promise<PaymentData> {
     let context = self.persistenceManager.viewContext
     let exchangeRate = self.currencyController.exchangeRate
-    let converter = CurrencyConverter(rate: exchangeRate, fromAmount: fiatAmount, fromType: .fiat)
+    let converter = CurrencyConverter(fromFiatAmount: fiatAmount, rate: exchangeRate)
     if isMax {
       return buildLoadLightningPaymentData(selectedAmount: .max, exchangeRate: exchangeRate, in: context)
     } else {

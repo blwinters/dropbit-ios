@@ -38,7 +38,12 @@ extension DualAmountDisplayable {
   }
 
   var currencyConverter: CurrencyConverter {
-    return CurrencyConverter(rate: exchangeRate, fromAmount: fromAmount, fromType: currencyPair.fromType)
+    switch currencyPair.fromType {
+    case .BTC:
+      return CurrencyConverter(fromBtcAmount: fromAmount, rate: exchangeRate)
+    case .fiat:
+      return CurrencyConverter(fromFiatAmount: fromAmount, rate: exchangeRate)
+    }
   }
 
 }

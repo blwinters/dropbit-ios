@@ -51,7 +51,12 @@ class CurrencyController: CurrencyControllerProviding {
   }
 
   var currencyConverter: CurrencyConverter {
-    return CurrencyConverter(rate: exchangeRate, fromAmount: .zero, fromType: selectedCurrency)
+    switch selectedCurrency {
+    case .fiat:
+      return CurrencyConverter(fromFiatAmount: .zero, rate: exchangeRate)
+    case .BTC:
+      return CurrencyConverter(fromBtcAmount: .zero, rate: exchangeRate)
+    }
   }
 
   private var convertedCurrencyCode: Currency {

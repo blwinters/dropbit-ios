@@ -27,7 +27,7 @@ struct LightningQuickLoadViewModel {
 
     ///Run these validations separately to produce correct error message
     //check on chain balance exceeds minFiatAmount
-    let minStandardAmountConverter = CurrencyConverter(rate: rate, fromAmount: minFiatAmount, fromType: .fiat)
+    let minStandardAmountConverter = CurrencyConverter(fromFiatAmount: minFiatAmount, rate: rate)
     let onChainBalanceValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
                                                                  walletType: .onChain,
                                                                  config: config,
@@ -50,7 +50,7 @@ struct LightningQuickLoadViewModel {
     self.fiatCurrency = fiatCurrency
     self.fiatBalances = LightningQuickLoadViewModel.convertBalances(spendableBalances, toFiat: fiatCurrency, using: rate)
     let maxAmountResults = minReloadValidator.maxLoadAmount(using: spendableBalances)
-    let fiatMaxConverter = CurrencyConverter(rate: rate, fromAmount: maxAmountResults.btcAmount, fromType: .BTC)
+    let fiatMaxConverter = CurrencyConverter(fromBtcAmount: spendableBalances.onChain, rate: rate)
     self.controlConfigs = LightningQuickLoadViewModel.configs(withPresets: presetAmounts,
                                                               max: fiatMaxConverter.fiatAmount,
                                                               currency: fiatCurrency)
