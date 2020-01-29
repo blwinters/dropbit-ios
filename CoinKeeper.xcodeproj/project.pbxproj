@@ -74,6 +74,11 @@
 		3B17F49723E1DFB7001D582D /* WalletInfoSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F49623E1DFB7001D582D /* WalletInfoSettingsViewController.swift */; };
 		3B17F49923E1DFF0001D582D /* WalletInfoSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F49823E1DFF0001D582D /* WalletInfoSettingsViewControllerTests.swift */; };
 		3B17F49B23E1EE84001D582D /* AppCoordinator+WalletInfoSettingsViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F49A23E1EE84001D582D /* AppCoordinator+WalletInfoSettingsViewControllerDelegate.swift */; };
+		3B17F49D23E20E97001D582D /* WalletInfoUTXOsViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B17F49C23E20E97001D582D /* WalletInfoUTXOsViewController.storyboard */; };
+		3B17F49F23E20EA7001D582D /* WalletInfoUTXOsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F49E23E20EA7001D582D /* WalletInfoUTXOsViewController.swift */; };
+		3B17F4A223E213A1001D582D /* WalletInfoUTXOCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F4A023E213A1001D582D /* WalletInfoUTXOCell.swift */; };
+		3B17F4A323E213A1001D582D /* WalletInfoUTXOCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3B17F4A123E213A1001D582D /* WalletInfoUTXOCell.xib */; };
+		3B17F4A523E21CB8001D582D /* DisplayableUTXO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F4A423E21CB8001D582D /* DisplayableUTXO.swift */; };
 		3B1BE86021B57D0A00CCFE29 /* MemoEntryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1BE85F21B57D0A00CCFE29 /* MemoEntryPage.swift */; };
 		3B1BE86421B5819500CCFE29 /* SendPaymentPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1BE86321B5819500CCFE29 /* SendPaymentPage.swift */; };
 		3B1FF6A123C652E10002AB7E /* RBFOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1FF6A023C652E10002AB7E /* RBFOption.swift */; };
@@ -1414,6 +1419,11 @@
 		3B17F49623E1DFB7001D582D /* WalletInfoSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletInfoSettingsViewController.swift; sourceTree = "<group>"; };
 		3B17F49823E1DFF0001D582D /* WalletInfoSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletInfoSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		3B17F49A23E1EE84001D582D /* AppCoordinator+WalletInfoSettingsViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+WalletInfoSettingsViewControllerDelegate.swift"; sourceTree = "<group>"; };
+		3B17F49C23E20E97001D582D /* WalletInfoUTXOsViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WalletInfoUTXOsViewController.storyboard; sourceTree = "<group>"; };
+		3B17F49E23E20EA7001D582D /* WalletInfoUTXOsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletInfoUTXOsViewController.swift; sourceTree = "<group>"; };
+		3B17F4A023E213A1001D582D /* WalletInfoUTXOCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletInfoUTXOCell.swift; sourceTree = "<group>"; };
+		3B17F4A123E213A1001D582D /* WalletInfoUTXOCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletInfoUTXOCell.xib; sourceTree = "<group>"; };
+		3B17F4A423E21CB8001D582D /* DisplayableUTXO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableUTXO.swift; sourceTree = "<group>"; };
 		3B1BE85F21B57D0A00CCFE29 /* MemoEntryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoEntryPage.swift; sourceTree = "<group>"; };
 		3B1BE86321B5819500CCFE29 /* SendPaymentPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendPaymentPage.swift; sourceTree = "<group>"; };
 		3B1FF6A023C652E10002AB7E /* RBFOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBFOption.swift; sourceTree = "<group>"; };
@@ -2920,6 +2930,8 @@
 				A2372878237B489500086FEC /* PurchaseMerchantTableViewCell.xib */,
 				A237287A237C9E9900086FEC /* BitcoinAddressTableViewCell.swift */,
 				A237287C237CA12100086FEC /* BitcoinAddressTableViewCell.xib */,
+				3B17F4A023E213A1001D582D /* WalletInfoUTXOCell.swift */,
+				3B17F4A123E213A1001D582D /* WalletInfoUTXOCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -3202,6 +3214,7 @@
 				A230F1C522D664360017BC7A /* NewsData.swift */,
 				A24B9E8B230B13F200852718 /* LightningURL.swift */,
 				A2F5689323CCB010000409F9 /* WIFPrivateKey.swift */,
+				3B17F4A423E21CB8001D582D /* DisplayableUTXO.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -3309,6 +3322,7 @@
 				A267F51223958AAC0098170E /* EarnViewController.swift */,
 				A2CEEF71238C752000E4A8EF /* PrivateKeySweepViewController.swift */,
 				3B17F49623E1DFB7001D582D /* WalletInfoSettingsViewController.swift */,
+				3B17F49E23E20EA7001D582D /* WalletInfoUTXOsViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -3368,6 +3382,7 @@
 				A267F51423958ABC0098170E /* EarnViewController.storyboard */,
 				A2CEEF73238C7F0500E4A8EF /* PrivateKeySweepViewController.storyboard */,
 				3B17F49423E1DF33001D582D /* WalletInfoSettingsViewController.storyboard */,
+				3B17F49C23E20E97001D582D /* WalletInfoUTXOsViewController.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -4634,6 +4649,7 @@
 				3B547A702280A6FD007B0366 /* VerifiedStatusView.xib in Resources */,
 				308F6F03217F91A50094D6CB /* ServerAddressView.xib in Resources */,
 				A2952F7422BBBAAB00BDCE65 /* TimePeriodCell.xib in Resources */,
+				3B17F4A323E213A1001D582D /* WalletInfoUTXOCell.xib in Resources */,
 				3B0C4FE022A1ACBD000FE760 /* VerfiedTwitterUserIndicatorView.xib in Resources */,
 				B5EDFB37231EE00800B8E739 /* TransactionHistorySummaryHeader.xib in Resources */,
 				A2372879237B489500086FEC /* PurchaseMerchantTableViewCell.xib in Resources */,
@@ -4737,6 +4753,7 @@
 				3B44961F21B0661300A4E912 /* MemoEntryViewController.storyboard in Resources */,
 				A2B4E6F022FA488100E24324 /* LightningRefillViewController.storyboard in Resources */,
 				3B17F49523E1DF33001D582D /* WalletInfoSettingsViewController.storyboard in Resources */,
+				3B17F49D23E20E97001D582D /* WalletInfoUTXOsViewController.storyboard in Resources */,
 				3B936ADD2322C1250067CA97 /* LightningUpgradeCompleteViewController.storyboard in Resources */,
 				B51F8238207BAD8500692F5B /* WalletOverviewTopBar.xib in Resources */,
 				A29CE0CD2099ED5600761B91 /* SuccessFailViewController.storyboard in Resources */,
@@ -5407,7 +5424,9 @@
 				B52053E1227B6D3000E5D2ED /* AlertManager+Constants.swift in Sources */,
 				B52CC6A6221E401E00B00C9E /* CCMValidatedMetadata+CoreDataClass.swift in Sources */,
 				30E96A2921765546008079B8 /* BitcoinURL.swift in Sources */,
+				3B17F4A223E213A1001D582D /* WalletInfoUTXOCell.swift in Sources */,
 				3BB01BC3220A56F6006B4D25 /* AppCoordinator+NoConnectionViewControllerDelegate.swift in Sources */,
+				3B17F4A523E21CB8001D582D /* DisplayableUTXO.swift in Sources */,
 				B558B86922B959180033AFBD /* PersistenceBrokers.swift in Sources */,
 				B5C8F5CB216D3A8800E3E85B /* NetworkManager+DeviceEndpointRequestable.swift in Sources */,
 				3B44962321B06DE200A4E912 /* AppCoordinator+MemoEntryViewControllerDelegate.swift in Sources */,
@@ -5500,6 +5519,7 @@
 				A293E35220F798920099ED69 /* TransactionHistoryEmptyView.swift in Sources */,
 				B5219C812343C7A300EA5B05 /* TransactionDetailCellViewModel.swift in Sources */,
 				B5DC877A22F093D700FDDEED /* LNLedgerResponse.swift in Sources */,
+				3B17F49F23E20EA7001D582D /* WalletInfoUTXOsViewController.swift in Sources */,
 				B56C414821F7717C005668E3 /* ConfirmPaymentMemoView.swift in Sources */,
 				B5FAD64C20A4DC1D008EB727 /* PublicKeyDataSource.swift in Sources */,
 				3B13ED112254E24900905226 /* CurrencyController.swift in Sources */,

@@ -16,7 +16,6 @@ protocol WalletInfoSettingsViewControllerDelegate: ViewControllerDismissable {
 final class WalletInfoSettingsViewController: BaseViewController, StoryboardInitializable {
 
   private var masterPubkey: String!
-  private var utxos: [CKMVout]!
   private unowned var delegate: WalletInfoSettingsViewControllerDelegate!
 
   @IBOutlet weak var extendedKeyTitle: UILabel!
@@ -28,12 +27,10 @@ final class WalletInfoSettingsViewController: BaseViewController, StoryboardInit
   @IBOutlet weak var showUTXOsButton: PrimaryActionButton!
 
   static func newInstance(delegate: WalletInfoSettingsViewControllerDelegate,
-                          masterPubkey: String,
-                          utxos: [CKMVout]) -> WalletInfoSettingsViewController {
+                          masterPubkey: String) -> WalletInfoSettingsViewController {
     let controller = WalletInfoSettingsViewController.makeFromStoryboard()
     controller.delegate = delegate
     controller.masterPubkey = masterPubkey
-    controller.utxos = utxos
     return controller
   }
 

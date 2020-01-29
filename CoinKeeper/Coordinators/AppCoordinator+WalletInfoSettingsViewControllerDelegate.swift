@@ -15,6 +15,17 @@ extension AppCoordinator: WalletInfoSettingsViewControllerDelegate {
   }
 
   func viewControllerDidSelectShowUTXOs(_ viewController: UIViewController) {
-
+    let context = persistenceManager.viewContext
+    do {
+      let vouts = try CKMVout.findAllUnspent(in: context)
+      let utxos = vouts.compactMap(DisplayableUTXO.init)
+      let controller = WalletInfoUTXOsViewController.newInstance(utxos: utxos)
+      viewController.navigationController?.pushViewController(controller, animated: true)
+    } catch {
+      log.error(error, message: "Failed to fetch vouts.")
+      let message = "Something went wrong fetching your unspent transaction outputs. " +
+        "Please close the app and re-open to retry."
+      alertManager.showErrorHUD(message: message, forDuration: 3.5)
+    }
   }
 }

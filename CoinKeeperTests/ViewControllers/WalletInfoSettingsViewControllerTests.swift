@@ -19,7 +19,7 @@ class WalletInfoSettingsViewControllerTests: XCTestCase {
   override func setUp() {
     super.setUp()
     delegate = MockWalletInfoSettingsDelegate()
-    sut = WalletInfoSettingsViewController.newInstance(delegate: delegate, masterPubkey: fakeMasterPubkey, utxos: [])
+    sut = WalletInfoSettingsViewController.newInstance(delegate: delegate, masterPubkey: fakeMasterPubkey)
     _ = sut.view
   }
 
