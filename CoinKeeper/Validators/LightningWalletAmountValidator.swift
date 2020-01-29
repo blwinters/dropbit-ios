@@ -9,7 +9,6 @@
 import Foundation
 
 enum LightningWalletAmountValidatorError: ValidatorErrorType, Equatable {
-  case walletMaximum(btc: NSDecimalNumber)
   case reloadMinimum(btc: NSDecimalNumber)
   case invalidAmount
 
@@ -17,9 +16,6 @@ enum LightningWalletAmountValidatorError: ValidatorErrorType, Equatable {
     switch self {
     case .invalidAmount:
       return "Unable to convert amount to fiat, stopping"
-    case .walletMaximum(let maxBalance):
-      let formattedAmount = BitcoinFormatter(symbolType: .string).string(fromDecimal: maxBalance) ?? ""
-      return "Unable to load Lightning wallet via DropBit when Lightning balance would exceed \(formattedAmount)."
     case .reloadMinimum(let minReload):
       let formattedAmount = SatsFormatter().string(fromDecimal: minReload) ?? ""
       return """
@@ -33,8 +29,7 @@ enum LightningWalletAmountValidatorError: ValidatorErrorType, Equatable {
 struct LightningWalletValidationOptions: OptionSet {
   let rawValue: Int
 
-  static let maxWalletValue = LightningWalletValidationOptions(rawValue: 1 << 0)
-  static let minReloadAmount = LightningWalletValidationOptions(rawValue: 1 << 1)
+  static let minReloadAmount = LightningWalletValidationOptions(rawValue: 1 << 0)
 }
 
 struct LightningConfig: Equatable {
@@ -42,18 +37,12 @@ struct LightningConfig: Equatable {
   ///The minimum amount required for a transaction to load the lightning wallet, in BTC
   let minReloadAmount: NSDecimalNumber
 
-  ///The maximum total lightning balance a user can have, in BTC
-  let maxBalance: NSDecimalNumber
-
-  init(minReload: Satoshis?, maxBalance: Satoshis?) {
+  init(minReload: Satoshis?) {
     let reloadAmt = minReload ?? LightningConfig.defaultMinReload
-    let balanceAmt = maxBalance ?? LightningConfig.defaultMaxBalance
     self.minReloadAmount = NSDecimalNumber(sats: reloadAmt)
-    self.maxBalance = NSDecimalNumber(sats: balanceAmt)
   }
 
   private static let defaultMinReload: Satoshis = 60_000
-  private static let defaultMaxBalance: Satoshis = 2_500_000
 
   func loadPresetAmounts(for currency: Currency) -> [NSDecimalNumber] {
     switch currency {
@@ -63,7 +52,7 @@ struct LightningConfig: Equatable {
   }
 
   static var fallbackInstance: LightningConfig {
-    return LightningConfig(minReload: defaultMinReload, maxBalance: defaultMaxBalance)
+    return LightningConfig(minReload: defaultMinReload)
   }
 
 }
@@ -97,27 +86,6 @@ class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
       if candidateBTCAmount < config.minReloadAmount {
         throw LightningWalletAmountValidatorError.reloadMinimum(btc: config.minReloadAmount)
       }
-    }
-
-    if !ignoringOptions.contains(.maxWalletValue) {
-      let candidateLightningBalance = candidateBTCAmount + balancesNetPending.lightning
-
-      if candidateBTCAmount > config.maxBalance || candidateLightningBalance > config.maxBalance {
-        throw LightningWalletAmountValidatorError.walletMaximum(btc: config.maxBalance)
-      }
-    }
-  }
-
-  ///Returns a tuple of the max amount that the user can load into their lightning wallet
-  ///and a boolean representing whether the user's on-chain balance was the primary constraint.
-  func maxLoadAmount(using btcBalances: WalletBalances) -> (btcAmount: NSDecimalNumber, limitIsOnChainBalance: Bool) {
-    let lightningBalanceFiatCapacity: NSDecimalNumber = config.maxBalance.subtracting(btcBalances.lightning)
-    guard lightningBalanceFiatCapacity.isPositiveNumber else { return (.zero, false) }
-
-    if btcBalances.onChain < lightningBalanceFiatCapacity {
-      return (btcBalances.onChain, true)
-    } else {
-      return (lightningBalanceFiatCapacity, false)
     }
   }
 

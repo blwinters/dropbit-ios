@@ -15,10 +15,6 @@ struct LightningQuickLoadViewModel {
   let fiatCurrency: Currency
   let controlConfigs: [QuickLoadControlConfig]
 
-  ///If true, sending max should send all spendable utxos.
-  ///If false, sending max should send the specific amount shown.
-  let maxIsLimitedByOnChainBalance: Bool
-
   init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency, config: LightningConfig) throws {
     let presetAmounts = config.loadPresetAmounts(for: fiatCurrency)
     guard let minFiatAmount = presetAmounts.first else {
@@ -30,8 +26,7 @@ struct LightningQuickLoadViewModel {
     let minStandardAmountConverter = CurrencyConverter(fromFiatAmount: minFiatAmount, rate: rate)
     let onChainBalanceValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
                                                                  walletType: .onChain,
-                                                                 config: config,
-                                                                 ignoring: [.maxWalletValue])
+                                                                 config: config)
     do {
       try onChainBalanceValidator.validate(value: minStandardAmountConverter)
     } catch {
@@ -49,12 +44,10 @@ struct LightningQuickLoadViewModel {
     self.btcBalances = spendableBalances
     self.fiatCurrency = fiatCurrency
     self.fiatBalances = LightningQuickLoadViewModel.convertBalances(spendableBalances, toFiat: fiatCurrency, using: rate)
-    let maxAmountResults = minReloadValidator.maxLoadAmount(using: spendableBalances)
     let fiatMaxConverter = CurrencyConverter(fromBtcAmount: spendableBalances.onChain, rate: rate)
     self.controlConfigs = LightningQuickLoadViewModel.configs(withPresets: presetAmounts,
                                                               max: fiatMaxConverter.fiatAmount,
                                                               currency: fiatCurrency)
-    self.maxIsLimitedByOnChainBalance = maxAmountResults.limitIsOnChainBalance
   }
 
   private static func convertBalances(_ btcBalances: WalletBalances, toFiat currency: Currency, using rate: ExchangeRate) -> WalletBalances {

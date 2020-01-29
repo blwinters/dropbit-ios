@@ -224,7 +224,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
         try LightningWalletAmountValidator(balancesNetPending: walletBalances,
                                            walletType: type,
                                            config: viewModel.lightningConfig,
-                                           ignoring: [.maxWalletValue, .minReloadAmount]).validate(value: value)
+                                           ignoring: [.minReloadAmount]).validate(value: value)
 
         delegate.viewControllerNeedsFeeEstimates(self, btcAmount: amount)
           .get(on: .main) { response in

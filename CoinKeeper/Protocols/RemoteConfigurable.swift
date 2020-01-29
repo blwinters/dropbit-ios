@@ -39,7 +39,6 @@ struct RemoteConfig: Equatable {
   enum Key: String, CaseIterable {
     case referrals
     case twitterDelegate
-    case maxLightningBalance
     case minLightningReload
 
     var defaultsString: String {
@@ -110,8 +109,7 @@ class RemoteConfigManager: RemoteConfigManagerType {
     let enabledKeys: [RemoteConfig.Key] = RemoteConfig.Key.allCases.filter { key in
       return persistedBool(for: key) ?? isEnabledByDefault(for: key)
     }
-    let lightningConfig = LightningConfig(minReload: persistedInteger(for: .minLightningReload),
-                                          maxBalance: persistedInteger(for: .maxLightningBalance))
+    let lightningConfig = LightningConfig(minReload: persistedInteger(for: .minLightningReload))
     return RemoteConfig(enabledFeatures: enabledKeys, lightningConfig: lightningConfig)
   }
 
@@ -133,7 +131,6 @@ class RemoteConfigManager: RemoteConfigManagerType {
     switch key {
     case .referrals,
          .twitterDelegate,
-         .maxLightningBalance,
          .minLightningReload:
       return false
     }

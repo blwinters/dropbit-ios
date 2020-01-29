@@ -36,20 +36,6 @@ class LightningQuickLoadViewModelTests: XCTestCase {
     }
   }
 
-  func testHighLightningBalanceThrowsError() {
-    let balances = WalletBalances(onChain: .one, lightning: .one)
-    let expectedError = LightningWalletAmountValidatorError.walletMaximum(btc: config.maxBalance)
-    let rate = CurrencyConverter.sampleRate
-    do {
-      sut = try LightningQuickLoadViewModel(spendableBalances: balances, rate: rate, fiatCurrency: .USD, config: config)
-      XCTFail("Should throw error")
-    } catch let error as LightningWalletAmountValidatorError {
-      XCTAssertEqual(error, expectedError)
-    } catch {
-      XCTFail("Threw unexpected error: \(error.localizedDescription)")
-    }
-  }
-
   func testModerateOnChainBalanceEqualsMaxAmount() {
     let onChainFiatBalance = NSDecimalNumber(integerAmount: 20_50, currency: .USD)
     let rate = CurrencyConverter.sampleRate
@@ -58,21 +44,6 @@ class LightningQuickLoadViewModelTests: XCTestCase {
     do {
       sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD, config: config)
       XCTAssertEqual(sut.controlConfigs.last!.amount.amount, onChainFiatBalance)
-    } catch {
-      XCTFail("Threw unexpected error: \(error.localizedDescription)")
-    }
-  }
-
-  func testHighOnChainBalanceIsLimitedByMaxLightningBalance() {
-    let lightningBalance = NSDecimalNumber(sats: 2_000_000)
-    let expectedMaxBTCAmount = self.config.maxBalance.subtracting(lightningBalance)
-    let rate = CurrencyConverter.sampleRate
-    let converter = CurrencyConverter(rate: rate, fromAmount: expectedMaxBTCAmount, fromType: .BTC)
-    let expectedMaxFiatAmount = converter.fiatAmount
-    let btcBalances = WalletBalances(onChain: .one, lightning: lightningBalance)
-    do {
-      sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD, config: config)
-      XCTAssertEqual(sut.controlConfigs.last!.amount.amount, expectedMaxFiatAmount)
     } catch {
       XCTFail("Threw unexpected error: \(error.localizedDescription)")
     }
