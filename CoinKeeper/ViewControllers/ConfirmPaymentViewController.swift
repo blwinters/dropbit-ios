@@ -21,6 +21,14 @@ struct BitcoinFiatPair {
   let btcAmount: NSDecimalNumber
   let fiatAmount: NSDecimalNumber
   let fiatCurrency: Currency
+
+  var cents: Cents {
+    fiatAmount.asFractionalUnits(of: fiatCurrency)
+  }
+
+  var satoshis: Satoshis {
+    btcAmount.asFractionalUnits(of: .BTC)
+  }
 }
 
 class ConfirmPaymentViewController: PresentableViewController, StoryboardInitializable {

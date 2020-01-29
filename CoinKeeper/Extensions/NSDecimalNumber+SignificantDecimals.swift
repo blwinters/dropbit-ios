@@ -9,6 +9,7 @@
 import Foundation
 
 public typealias Satoshis = Int
+public typealias Cents = Int
 
 extension NSDecimalNumber {
 

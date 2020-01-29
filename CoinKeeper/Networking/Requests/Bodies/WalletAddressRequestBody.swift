@@ -9,26 +9,24 @@
 import Foundation
 
 public struct WalletAddressRequestAmount: Codable {
-  let btc: Int
+  let btc: Satoshis
 
   ///Always include this for legacy reasons.
-  let usd: Int
+  let usd: Cents
 
   ///The amount in the user's preferred fiat currency
-  let fiatValue: Int
+  let fiatValue: Cents
 
   ///The user's preferred fiat currency
   let fiatCurrency: String
 
   init(amountPair: BitcoinFiatPair, usdAmount: NSDecimalNumber) {
-    let usdCents = usdAmount.asFractionalUnits(of: .USD)
-    let fiatCents = amountPair.fiatAmount.asFractionalUnits(of: amountPair.fiatCurrency)
-
-    self.btc = amountPair.btcAmount.asFractionalUnits(of: .BTC)
+    self.btc = amountPair.satoshis
 
     //server requires a non-zero integer for small amounts, e.g. 1 sat
+    let usdCents = usdAmount.asFractionalUnits(of: .USD)
     self.usd = max(usdCents, 1)
-    self.fiatValue = max(fiatCents, 1)
+    self.fiatValue = max(amountPair.cents, 1)
 
     self.fiatCurrency = amountPair.fiatCurrency.code
   }
