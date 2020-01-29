@@ -13,4 +13,8 @@ extension AppCoordinator: WalletInfoSettingsViewControllerDelegate {
     UIPasteboard.general.string = pubkey
     alertManager.showSuccessHUD(withStatus: "Extended Public Key successfully copied to clipboard!", duration: 3.0, completion: nil)
   }
+
+  func viewControllerDidSelectShowUTXOs(_ viewController: UIViewController) {
+
+  }
 }
