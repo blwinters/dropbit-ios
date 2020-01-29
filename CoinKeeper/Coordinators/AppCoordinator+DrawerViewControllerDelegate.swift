@@ -16,8 +16,8 @@ extension AppCoordinator: BadgeUpdateDelegate {
 
 extension AppCoordinator: DrawerViewControllerDelegate {
 
-  func currentConfig() -> RemoteConfig {
-    return remoteConfigManager.latestConfig
+  var currentConfig: RemoteConfig {
+    remoteConfigManager.latestConfig
   }
 
   func closeDrawer() {

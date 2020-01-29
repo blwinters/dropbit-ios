@@ -82,7 +82,7 @@ class DrawerViewController: BaseViewController, StoryboardInitializable, RemoteC
   }
 
   func reloadRemoteConfigurableView() {
-    guard let config = self.remoteConfigDataSource?.currentConfig() else { return }
+    guard let config = self.remoteConfigDataSource?.currentConfig else { return }
 
     let circularIconOffset = ViewOffset(dx: 7, dy: -2)
 

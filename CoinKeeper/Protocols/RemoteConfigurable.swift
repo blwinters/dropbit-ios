@@ -9,7 +9,7 @@
 import Foundation
 
 protocol RemoteConfigDataSource: AnyObject {
-  func currentConfig() -> RemoteConfig
+  var currentConfig: RemoteConfig { get }
 }
 
 ///Conforming objects (view controllers), need to set a datasource
@@ -122,7 +122,7 @@ class RemoteConfigManager: RemoteConfigManagerType {
     return userDefaults.bool(forKey: key.defaultsString)
   }
 
-  private func persistedInteger(for key: FeatureConfig.Key) -> Int? {
+  private func persistedInteger(for key: RemoteConfig.Key) -> Int? {
     guard userDefaults.object(forKey: key.defaultsString) != nil else {
       return nil
     }
@@ -131,8 +131,11 @@ class RemoteConfigManager: RemoteConfigManagerType {
 
   private func isEnabledByDefault(for key: RemoteConfig.Key) -> Bool {
     switch key {
-    case .referrals:        return false
-    case .twitterDelegate:  return false
+    case .referrals,
+         .twitterDelegate,
+         .maxLightningBalance,
+         .minLightningReload:
+      return false
     }
   }
 
