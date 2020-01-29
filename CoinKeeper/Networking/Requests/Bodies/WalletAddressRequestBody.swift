@@ -32,6 +32,12 @@ public struct WalletAddressRequestAmount: Codable {
   }
 }
 
+extension WalletAddressRequestAmount {
+  var fiatCurrencyType: Currency? {
+    Currency(rawValue: fiatCurrency)
+  }
+}
+
 public class UserIdentityBody: Codable {
   let type: String
   let identity: String

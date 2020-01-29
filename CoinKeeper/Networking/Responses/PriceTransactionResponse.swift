@@ -28,10 +28,6 @@ struct PriceTransactionResponse: ResponseCodable {
 
 extension PriceTransactionResponse {
 
-  var averagePrice: NSDecimalNumber {
-    return NSDecimalNumber(value: average).rounded(forCurrency: .USD)
-  }
-
   static var sampleJSON: String {
     return """
     {

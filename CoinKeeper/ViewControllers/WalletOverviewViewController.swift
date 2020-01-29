@@ -230,7 +230,8 @@ extension WalletOverviewViewController: BalanceDisplayable {
   }
 
   var currencyPair: CurrencyPair {
-    guard let delegate = delegate else { return CurrencyPair(primary: .BTC, fiat: .USD) }
+    let defaultCurrency = Currency.defaultFiatCurrency(forLocale: .current)
+    guard let delegate = delegate else { return CurrencyPair(primary: .BTC, fiat: defaultCurrency) }
     let fiat = delegate.currencyController.fiatCurrency
     return CurrencyPair(primary: .BTC, fiat: fiat)
   }

@@ -209,15 +209,16 @@ extension AppCoordinator: ConfirmPaymentViewControllerDelegate {
 
   private func createInviteNotificationSMSComposer(for inviteBody: WalletAddressRequestBody) -> MFMessageComposeViewController? {
     guard MFMessageComposeViewController.canSendText(),
-      let phoneNumber = inviteBody.receiver.globalNumber()
+      let phoneNumber = inviteBody.receiver.globalNumber(),
+      let currency = inviteBody.amount.fiatCurrencyType
       else { return nil }
 
     let composeVC = MFMessageComposeViewController()
     composeVC.messageComposeDelegate = self.messageComposeDelegate
     composeVC.recipients = [phoneNumber.asE164()]
     let downloadURL = CoinNinjaUrlFactory.buildUrl(for: .download)?.absoluteString ?? ""
-    let amount = NSDecimalNumber(integerAmount: inviteBody.amount.usd, currency: .USD)
-    let amountDesc = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: amount) ?? ""
+    let amount = NSDecimalNumber(integerAmount: inviteBody.amount.fiatValue, currency: currency)
+    let amountDesc = FiatFormatter(currency: currency, withSymbol: true).string(fromDecimal: amount) ?? ""
     composeVC.body = """
       I just sent you \(amountDesc) in Bitcoin.
       Download the DropBit app to claim it. \(downloadURL)
