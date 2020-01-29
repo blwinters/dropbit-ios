@@ -25,6 +25,7 @@ protocol SettingsViewControllerDelegate: ViewControllerDismissable, ViewControll
   func viewControllerResyncBlockchain(_ viewController: UIViewController)
   func viewController(_ viewController: UIViewController, didEnableDustProtection didEnable: Bool)
   func viewController(_ viewController: UIViewController, didEnableYearlyHighNotification didEnable: Bool, completion: @escaping CKCompletion)
+  func viewControllerDidSelectWalletInfo(_ viewController: UIViewController)
 }
 
 class SettingsViewController: BaseViewController, StoryboardInitializable {
@@ -209,6 +210,12 @@ class SettingsViewController: BaseViewController, StoryboardInitializable {
     regtestVM = SettingsCellViewModel(type: regtestCellType)
     #endif
 
+    let walletInfoAction: BasicAction = { [weak self] in
+      guard let localSelf = self else { return }
+      localSelf.delegate.viewControllerDidSelectWalletInfo(localSelf)
+    }
+    let walletInfoVM = SettingsCellViewModel(type: .walletInfo(action: walletInfoAction))
+
     // form array of cell view models
     let viewModels = [
       legacyWordsVM,
@@ -216,7 +223,8 @@ class SettingsViewController: BaseViewController, StoryboardInitializable {
       dustProtectionVM,
       yearlyHighVM,
       adjustableFeesVM,
-      regtestVM
+      regtestVM,
+      walletInfoVM
       ]
       .compactMap { $0 }
 
