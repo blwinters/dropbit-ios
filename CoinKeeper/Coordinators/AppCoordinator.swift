@@ -51,7 +51,7 @@ class AppCoordinator: CoordinatorType {
   let persistenceCacheDataWorker: PersistenceCacheDataWorkerType
   let twitterAccessManager: TwitterAccessManagerType
   let ratingAndReviewManager: RatingAndReviewManagerType
-  let featureConfigManager: FeatureConfigManagerType
+  let remoteConfigManager: RemoteConfigManagerType
   var userIdentifiableManager: UserIdentifiableManagerType
   let ratesDataWorker: RatesDataWorker
   var localNotificationManager: LocalNotificationManagerType
@@ -112,7 +112,7 @@ class AppCoordinator: CoordinatorType {
     currencyController: CurrencyController = CurrencyController(),
     twitterAccessManager: TwitterAccessManagerType? = nil,
     ratingAndReviewManager: RatingAndReviewManagerType? = nil,
-    featureConfigManager: FeatureConfigManagerType? = nil,
+    remoteConfigManager: RemoteConfigManagerType? = nil,
     userIdentifiableManager: UserIdentifiableManagerType? = nil,
     uiTestArguments: [UITestArgument] = []
     ) {
@@ -156,7 +156,7 @@ class AppCoordinator: CoordinatorType {
     self.notificationManager = notificationMgr
     self.ratingAndReviewManager = RatingAndReviewManager(persistenceManager: persistenceManager)
     let configDefaults = persistenceManager.userDefaultsManager.configDefaults
-    self.featureConfigManager = featureConfigManager ?? FeatureConfigManager(userDefaults: configDefaults)
+    self.remoteConfigManager = remoteConfigManager ?? RemoteConfigManager(userDefaults: configDefaults)
     self.ratesDataWorker = RatesDataWorker(persistenceManager: persistenceManager,
                                            networkManager: theNetworkManager)
 
