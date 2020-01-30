@@ -32,13 +32,13 @@ struct LightningWalletValidationOptions: OptionSet {
   static let minReloadAmount = LightningWalletValidationOptions(rawValue: 1 << 0)
 }
 
-struct LightningConfig: Equatable {
+struct SettingsConfig: Equatable {
 
   ///The minimum amount required for a transaction to load the lightning wallet, in BTC
   let minReloadAmount: NSDecimalNumber
 
   init(minReload: Satoshis?) {
-    let reloadAmt = minReload ?? LightningConfig.defaultMinReload
+    let reloadAmt = minReload ?? SettingsConfig.defaultMinReload
     self.minReloadAmount = NSDecimalNumber(sats: reloadAmt)
   }
 
@@ -51,8 +51,8 @@ struct LightningConfig: Equatable {
     }
   }
 
-  static var fallbackInstance: LightningConfig {
-    return LightningConfig(minReload: defaultMinReload)
+  static var fallbackInstance: SettingsConfig {
+    return SettingsConfig(minReload: defaultMinReload)
   }
 
 }
@@ -62,11 +62,11 @@ class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
   let balancesNetPending: WalletBalances
   let walletTxType: WalletTransactionType
   let ignoringOptions: [LightningWalletValidationOptions]
-  let config: LightningConfig
+  let config: SettingsConfig
 
   init(balancesNetPending: WalletBalances,
        walletType: WalletTransactionType,
-       config: LightningConfig,
+       config: SettingsConfig,
        ignoring: [LightningWalletValidationOptions] = []) {
     self.balancesNetPending = balancesNetPending
     self.walletTxType = walletType

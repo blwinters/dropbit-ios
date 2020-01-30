@@ -15,7 +15,7 @@ struct LightningQuickLoadViewModel {
   let fiatCurrency: Currency
   let controlConfigs: [QuickLoadControlConfig]
 
-  init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency, config: LightningConfig) throws {
+  init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency, config: SettingsConfig) throws {
     let presetAmounts = config.loadPresetAmounts(for: fiatCurrency)
     guard let minFiatAmount = presetAmounts.first else {
       throw DBTError.System.missingValue(key: "standardAmounts.min")

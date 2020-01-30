@@ -48,11 +48,11 @@ struct RemoteConfig: Equatable {
 
   private var enabledFeatures: Set<Key> = []
 
-  let lightning: LightningConfig
+  let settings: SettingsConfig
 
-  init(enabledFeatures: [Key], lightningConfig: LightningConfig) {
+  init(enabledFeatures: [Key], settingsConfig: SettingsConfig) {
     self.enabledFeatures = Set(enabledFeatures)
-    self.lightning = lightningConfig
+    self.settings = settingsConfig
   }
 
   func shouldEnable(_ feature: Key) -> Bool {
@@ -73,7 +73,7 @@ protocol RemoteConfigManagerType: AnyObject {
 class RemoteConfigManager: RemoteConfigManagerType {
 
   let userDefaults: UserDefaults
-  var latestConfig = RemoteConfig(enabledFeatures: [], lightningConfig: .fallbackInstance) //cached in memory
+  var latestConfig = RemoteConfig(enabledFeatures: [], settingsConfig: .fallbackInstance) //cached in memory
 
   init(userDefaults: UserDefaults) {
     self.userDefaults = userDefaults
@@ -109,8 +109,8 @@ class RemoteConfigManager: RemoteConfigManagerType {
     let enabledKeys: [RemoteConfig.Key] = RemoteConfig.Key.allCases.filter { key in
       return persistedBool(for: key) ?? isEnabledByDefault(for: key)
     }
-    let lightningConfig = LightningConfig(minReload: persistedInteger(for: .minLightningReload))
-    return RemoteConfig(enabledFeatures: enabledKeys, lightningConfig: lightningConfig)
+    let settingsConfig = SettingsConfig(minReload: persistedInteger(for: .lightningLoadMinSats))
+    return RemoteConfig(enabledFeatures: enabledKeys, settingsConfig: settingsConfig)
   }
 
   private func persistedBool(for key: RemoteConfig.Key) -> Bool? {

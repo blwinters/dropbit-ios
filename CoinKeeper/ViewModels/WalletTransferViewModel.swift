@@ -12,16 +12,16 @@ class WalletTransferViewModel: CurrencySwappableEditAmountViewModel {
 
   var direction: TransferDirection
   var fiatAmount: NSDecimalNumber
-  let lightningConfig: LightningConfig
+  let settingsConfig: SettingsConfig
   var isSendingMax: Bool = false
 
   init(direction: TransferDirection,
        fiatAmount: NSDecimalNumber,
        exchangeRate: ExchangeRate,
-       lightningConfig: LightningConfig) {
+       settingsConfig: SettingsConfig) {
     self.direction = direction
     self.fiatAmount = fiatAmount
-    self.lightningConfig = lightningConfig
+    self.settingsConfig = settingsConfig
 
     let walletTxType: WalletTransactionType
     switch direction {

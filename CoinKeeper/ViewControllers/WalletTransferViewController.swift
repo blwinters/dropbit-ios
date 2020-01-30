@@ -144,7 +144,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
     do {
       let validator = LightningWalletAmountValidator(balancesNetPending: walletBalances,
                                                      walletType: .onChain,
-                                                     config: viewModel.lightningConfig)
+                                                     config: viewModel.settingsConfig)
       try validator.validate(value: viewModel.currencyConverter)
       delegate.lightningPaymentData(forBTCAmount: viewModel.btcAmount)
         .done { paymentData in
@@ -223,7 +223,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
         let value = CurrencyConverter(fromBtcAmount: amount, rate: rateManager.exchangeRate)
         try LightningWalletAmountValidator(balancesNetPending: walletBalances,
                                            walletType: type,
-                                           config: viewModel.lightningConfig,
+                                           config: viewModel.settingsConfig,
                                            ignoring: [.minReloadAmount]).validate(value: value)
 
         delegate.viewControllerNeedsFeeEstimates(self, btcAmount: amount)
@@ -276,7 +276,7 @@ extension WalletTransferViewController: LongPressConfirmButtonDelegate {
       do {
         let validator = LightningWalletAmountValidator(balancesNetPending: walletBalances,
                                                        walletType: .onChain,
-                                                       config: viewModel.lightningConfig)
+                                                       config: viewModel.settingsConfig)
         try validator.validate(value: viewModel.currencyConverter)
         delegate.viewControllerDidConfirmLoad(self, paymentData: data)
       } catch {

@@ -19,7 +19,7 @@ class LightningQuickLoadViewModelTests: XCTestCase {
     sut = nil
   }
 
-  let config = LightningConfig.fallbackInstance
+  let config = SettingsConfig.fallbackInstance
 
   func testLowOnChainBalanceThrowsError() {
     let oneSat = NSDecimalNumber(sats: 1)

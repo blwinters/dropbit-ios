@@ -46,9 +46,9 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
 
       case .toOnChain:
         let exchangeRate = self.currencyController.exchangeRate
-        let lightningConfig = self.currentConfig.lightning
+        let settingsConfig = self.currentConfig.settings
         let viewModel = WalletTransferViewModel(direction: direction, fiatAmount: .zero,
-                                                exchangeRate: exchangeRate, lightningConfig: lightningConfig)
+                                                exchangeRate: exchangeRate, settingsConfig: settingsConfig)
         let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel, alertManager: self.alertManager)
         self.toggleChartAndBalance()
         self.navigationController.present(transferViewController, animated: true, completion: nil)
@@ -61,9 +61,9 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
   private func createQuickLoadViewModel() throws -> LightningQuickLoadViewModel {
     let balances = self.spendableBalancesNetPending()
     let rate = self.currencyController.exchangeRate
-    let lightningConfig = self.currentConfig.lightning
+    let settingsConfig = self.currentConfig.settings
     return try LightningQuickLoadViewModel(spendableBalances: balances, rate: rate,
-                                           fiatCurrency: rate.currency, config: lightningConfig)
+                                           fiatCurrency: rate.currency, config: settingsConfig)
   }
 
   private func showQuickLoadBalanceError(for error: Error, viewController: UIViewController) {
@@ -155,9 +155,9 @@ extension AppCoordinator: LightningQuickLoadViewControllerDelegate {
   func viewControllerDidRequestCustomAmountLoad(_ viewController: LightningQuickLoadViewController) {
     viewController.dismiss(animated: true) {
       let exchangeRate = self.currencyController.exchangeRate
-      let lightningConfig = self.currentConfig.lightning
+      let settingsConfig = self.currentConfig.settings
       let viewModel = WalletTransferViewModel(direction: .toLightning(nil), fiatAmount: .zero,
-                                              exchangeRate: exchangeRate, lightningConfig: lightningConfig)
+                                              exchangeRate: exchangeRate, settingsConfig: settingsConfig)
       let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel, alertManager: self.alertManager)
       self.toggleChartAndBalance()
       self.navigationController.present(transferViewController, animated: true, completion: nil)
