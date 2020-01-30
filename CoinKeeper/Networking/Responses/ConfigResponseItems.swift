@@ -31,6 +31,9 @@ struct ConfigSettingsResponse: Codable {
   let invitationMaximum: Int?
 
   /// value represents whole dollars (USD)
+  let biometricsMaximum: Int?
+
+  /// value represents whole dollars (USD)
   let minimumLightningLoad: Int?
 
   let lnload: ConfigLightningLoadResponse?
