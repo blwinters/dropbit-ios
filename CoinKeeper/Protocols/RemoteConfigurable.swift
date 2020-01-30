@@ -39,7 +39,8 @@ struct RemoteConfig: Equatable {
   enum Key: String, CaseIterable {
     case referrals
     case twitterDelegate
-    case minLightningReload
+    case invitationMaxUSD
+    case lightningLoadMinSats
 
     var defaultsString: String {
       return self.rawValue
@@ -91,6 +92,12 @@ class RemoteConfigManager: RemoteConfigManagerType {
       self.set(isEnabled: twitterDelegateValue, for: .twitterDelegate)
     }
 
+    let maybeInviteMax = response.config.settings?.invitationMaximum
+    self.set(integer: maybeInviteMax, for: .invitationMaxUSD)
+
+    let maybeLightningLoadMin = response.config.settings?.minimumLightningLoad
+    self.set(integer: maybeLightningLoadMin, for: .lightningLoadMinSats)
+
     let newConfig = createConfig()
     if newConfig != previousConfig {
       self.latestConfig = newConfig
@@ -102,6 +109,10 @@ class RemoteConfigManager: RemoteConfigManagerType {
 
   private func set(isEnabled: Bool, for key: RemoteConfig.Key) {
     userDefaults.set(isEnabled, forKey: key.defaultsString)
+  }
+
+  private func set(integer: Int?, for key: RemoteConfig.Key) {
+    userDefaults.set(integer, forKey: key.defaultsString)
   }
 
   ///Creates a config based on persisted values, falling back to default values if not persisted
@@ -131,7 +142,8 @@ class RemoteConfigManager: RemoteConfigManagerType {
     switch key {
     case .referrals,
          .twitterDelegate,
-         .minLightningReload:
+         .lightningLoadMinSats,
+         .invitationMaxUSD:
       return false
     }
   }

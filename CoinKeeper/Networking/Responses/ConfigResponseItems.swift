@@ -12,6 +12,7 @@ struct FeatureEnabledResponse: Codable {
   let enabled: Bool
 }
 
+//swiftlint:disable weak_delegate
 struct ConfigSettingsResponse: Codable {
 
   /// server can send tweets on behalf of invitation senders
