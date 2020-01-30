@@ -210,6 +210,9 @@
 		3B5720782232CD1C0048A8CF /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5720772232CD1C0048A8CF /* DatabaseTests.swift */; };
 		3B57207B223300160048A8CF /* SQLiteCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B57207A223300160048A8CF /* SQLiteCoreDataStack.swift */; };
 		3B57207D2233004E0048A8CF /* BaseCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B57207C2233004E0048A8CF /* BaseCoreDataStack.swift */; };
+		3B58B9BD23E333B000890D06 /* AdvancedWalletInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B58B9BC23E333B000890D06 /* AdvancedWalletInfoViewController.swift */; };
+		3B58B9BF23E333D200890D06 /* AdvancedWalletInfoViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B58B9BE23E333D200890D06 /* AdvancedWalletInfoViewController.storyboard */; };
+		3B58B9C123E3340D00890D06 /* AdvancedWalletInfoViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B58B9C023E3340D00890D06 /* AdvancedWalletInfoViewControllerTests.swift */; };
 		3B598FDC2315BF5100FF50CD /* WalletFlagsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B598FDB2315BF5100FF50CD /* WalletFlagsParser.swift */; };
 		3B598FDE2315CB2D00FF50CD /* WalletFlagsParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B598FDD2315CB2D00FF50CD /* WalletFlagsParserTests.swift */; };
 		3B598FE02318337C00FF50CD /* LightningUpgradeStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B598FDF2318337C00FF50CD /* LightningUpgradeStartViewController.swift */; };
@@ -1529,6 +1532,9 @@
 		3B5720772232CD1C0048A8CF /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
 		3B57207A223300160048A8CF /* SQLiteCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteCoreDataStack.swift; sourceTree = "<group>"; };
 		3B57207C2233004E0048A8CF /* BaseCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoreDataStack.swift; sourceTree = "<group>"; };
+		3B58B9BC23E333B000890D06 /* AdvancedWalletInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedWalletInfoViewController.swift; sourceTree = "<group>"; };
+		3B58B9BE23E333D200890D06 /* AdvancedWalletInfoViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AdvancedWalletInfoViewController.storyboard; sourceTree = "<group>"; };
+		3B58B9C023E3340D00890D06 /* AdvancedWalletInfoViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedWalletInfoViewControllerTests.swift; sourceTree = "<group>"; };
 		3B598FDB2315BF5100FF50CD /* WalletFlagsParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletFlagsParser.swift; sourceTree = "<group>"; };
 		3B598FDD2315CB2D00FF50CD /* WalletFlagsParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletFlagsParserTests.swift; sourceTree = "<group>"; };
 		3B598FDF2318337C00FF50CD /* LightningUpgradeStartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightningUpgradeStartViewController.swift; sourceTree = "<group>"; };
@@ -3086,6 +3092,7 @@
 				A21DEE5622E8D6E900BBE508 /* WalletOverviewViewControllerTests.swift */,
 				3B598FE523184DD200FF50CD /* LightningUpgradeStartViewControllerTests.swift */,
 				3B17F49823E1DFF0001D582D /* WalletInfoSettingsViewControllerTests.swift */,
+				3B58B9C023E3340D00890D06 /* AdvancedWalletInfoViewControllerTests.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -3323,6 +3330,7 @@
 				A2CEEF71238C752000E4A8EF /* PrivateKeySweepViewController.swift */,
 				3B17F49623E1DFB7001D582D /* WalletInfoSettingsViewController.swift */,
 				3B17F49E23E20EA7001D582D /* WalletInfoUTXOsViewController.swift */,
+				3B58B9BC23E333B000890D06 /* AdvancedWalletInfoViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -3383,6 +3391,7 @@
 				A2CEEF73238C7F0500E4A8EF /* PrivateKeySweepViewController.storyboard */,
 				3B17F49423E1DF33001D582D /* WalletInfoSettingsViewController.storyboard */,
 				3B17F49C23E20E97001D582D /* WalletInfoUTXOsViewController.storyboard */,
+				3B58B9BE23E333D200890D06 /* AdvancedWalletInfoViewController.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -4638,6 +4647,7 @@
 				5B404284208CDD71005624B0 /* SendPaymentViewController.storyboard in Resources */,
 				A2952F7322BBBAAB00BDCE65 /* NewsTitleCell.xib in Resources */,
 				B536D12D21F1141000C344B6 /* SendPaymentMemoView.xib in Resources */,
+				3B58B9BF23E333D200890D06 /* AdvancedWalletInfoViewController.storyboard in Resources */,
 				A26C767F21081D5B001EB738 /* TextViewController.storyboard in Resources */,
 				3B5052B12045FAD7000C739F /* BackupRecoveryWordsViewController.storyboard in Resources */,
 				3B47037F2253B68700977784 /* SendReceiveActionView.xib in Resources */,
@@ -5385,6 +5395,7 @@
 				3B071A5520C2EEDD009C2BF6 /* CKMCounterpartyName+CoreDataClass.swift in Sources */,
 				3B37B93F228DDEB7002239AF /* CKMTwitterContact+CoreDataClass.swift in Sources */,
 				3BA389A92035E62F00B599A0 /* CNNavigationController.swift in Sources */,
+				3B58B9BD23E333B000890D06 /* AdvancedWalletInfoViewController.swift in Sources */,
 				B54A4217207FF365005B40A9 /* TransactionDetailBreakdownLabel.swift in Sources */,
 				A2573FB023688B4700060BEE /* CoinNinjaBroadcastProvider.swift in Sources */,
 				B5730E27239FF54A00106E19 /* FeatureConfigurable.swift in Sources */,
@@ -5935,6 +5946,7 @@
 				3BAB1449204EE7FD001D41A2 /* VerifyRecoveryWordsViewControllerTests.swift in Sources */,
 				B5192FB8216E9B5600DCC39B /* WalletResponseTests.swift in Sources */,
 				6B825EF6EEB51653F9B7E4A9 /* MockDigitEntryDisplayViewModel.swift in Sources */,
+				3B58B9C123E3340D00890D06 /* AdvancedWalletInfoViewControllerTests.swift in Sources */,
 				30C2561321C870E600887691 /* TutorialViewControllerTests.swift in Sources */,
 				B59C405C20E530FC00F04FE5 /* DeviceVerificationViewControllerTests.swift in Sources */,
 			);
