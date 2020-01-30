@@ -11,6 +11,7 @@ import UIKit
 protocol PaymentAmountValidatable {
 
   var balanceDataSource: BalanceDataSource? { get }
+  var txSendingConfig: TransactionSendingConfig { get }
 
 }
 
@@ -21,6 +22,7 @@ extension PaymentAmountValidatable {
     let balanceNetPending = balanceDataSource?.spendableBalancesNetPending() ?? .empty
     return CurrencyAmountValidator(balancesNetPending: balanceNetPending,
                                    balanceToCheck: balanceToCheck,
+                                   config: txSendingConfig,
                                    ignoring: ignoring)
   }
 

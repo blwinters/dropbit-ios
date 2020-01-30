@@ -58,7 +58,7 @@ class TransactionHistoryViewControllerTests: XCTestCase {
     var preferredFiatCurrency: Currency = .USD
 
     func latestExchangeRate() -> ExchangeRate {
-      .zero
+      .zeroUSD
     }
 
     func latestFees() -> Fees {

@@ -15,8 +15,9 @@ struct LightningQuickLoadViewModel {
   let fiatCurrency: Currency
   let controlConfigs: [QuickLoadControlConfig]
 
-  init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency, config: SettingsConfig) throws {
-    let presetAmounts = config.loadPresetAmounts(for: fiatCurrency)
+  init(spendableBalances: WalletBalances, config: TransactionSendingConfig) throws {
+    let rate = config.preferredExchangeRate
+    let presetAmounts = config.settings.lightningLoadPresetAmounts(for: rate.currency)
     guard let minFiatAmount = presetAmounts.first else {
       throw DBTError.System.missingValue(key: "standardAmounts.min")
     }
@@ -31,7 +32,7 @@ struct LightningQuickLoadViewModel {
       try onChainBalanceValidator.validate(value: minStandardAmountConverter)
     } catch {
       //map usableBalance error to
-      throw LightningWalletAmountValidatorError.reloadMinimum(btc: config.minReloadAmount)
+      throw LightningWalletAmountValidatorError.reloadMinimum(btc: config.settings.minReloadBTC)
     }
 
     //check lightning wallet has capacity for the minFiatAmount
@@ -42,7 +43,7 @@ struct LightningQuickLoadViewModel {
     try minReloadValidator.validate(value: minStandardAmountConverter)
 
     self.btcBalances = spendableBalances
-    self.fiatCurrency = fiatCurrency
+    self.fiatCurrency = rate.currency
     self.fiatBalances = LightningQuickLoadViewModel.convertBalances(spendableBalances, toFiat: fiatCurrency, using: rate)
     let fiatMaxConverter = CurrencyConverter(fromBtcAmount: spendableBalances.onChain, rate: rate)
     self.controlConfigs = LightningQuickLoadViewModel.configs(withPresets: presetAmounts,

@@ -120,7 +120,9 @@ class RemoteConfigManager: RemoteConfigManagerType {
     let enabledKeys: [RemoteConfig.Key] = RemoteConfig.Key.allCases.filter { key in
       return persistedBool(for: key) ?? isEnabledByDefault(for: key)
     }
-    let settingsConfig = SettingsConfig(minReload: persistedInteger(for: .lightningLoadMinSats))
+    let minReload = persistedInteger(for: .lightningLoadMinSats)
+    let maxInviteUSD = persistedInteger(for: .invitationMaxUSD)
+    let settingsConfig = SettingsConfig(minReload: minReload, maxInviteUSD: maxInviteUSD)
     return RemoteConfig(enabledFeatures: enabledKeys, settingsConfig: settingsConfig)
   }
 

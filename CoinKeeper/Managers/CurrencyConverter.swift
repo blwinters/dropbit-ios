@@ -10,8 +10,6 @@ import Foundation
 
 struct CurrencyConverter {
 
-  static let sampleRate = ExchangeRate(price: 7000.00, currency: .USD)
-
   let rate: ExchangeRate
   let fromAmount: NSDecimalNumber
   let fromCurrency: Currency

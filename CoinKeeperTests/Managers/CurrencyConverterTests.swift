@@ -23,7 +23,7 @@ class CurrencyConverterTests: XCTestCase {
   func testBTCToUSDWithZeroRatesReturnsNil() {
     let fromAmount: NSDecimalNumber = 15
 
-    self.sut = converter(fromUSDAmount: fromAmount, withRate: .zero)
+    self.sut = converter(fromUSDAmount: fromAmount, withRate: .zeroUSD)
 
     XCTAssertNil(self.sut.convertedAmount(), "converted amount should be nil with a zero rate")
   }

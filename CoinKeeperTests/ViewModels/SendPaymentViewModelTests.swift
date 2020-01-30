@@ -16,13 +16,16 @@ class SendPaymentViewModelTests: XCTestCase {
 
   override func setUp() {
     super.setUp()
-    let safeRate = ExchangeRate(price: 7000, currency: .USD)
+    let usdRate = ExchangeRate(price: 7000, currency: .USD)
     let currencyPair = CurrencyPair(primary: .BTC, fiat: .USD)
-    let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRate: safeRate,
+    let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRate: usdRate,
                                                            primaryAmount: .zero,
                                                            walletTransactionType: .onChain,
                                                            currencyPair: currencyPair)
-    self.sut = SendPaymentViewModel(editAmountViewModel: swappableVM, walletTransactionType: .onChain)
+    let config = TransactionSendingConfig(settings: MockSettingsConfig.default(),
+                                          preferredExchangeRate: usdRate,
+                                          usdExchangeRate: usdRate)
+    self.sut = SendPaymentViewModel(editAmountViewModel: swappableVM, config: config)
   }
 
   override func tearDown() {

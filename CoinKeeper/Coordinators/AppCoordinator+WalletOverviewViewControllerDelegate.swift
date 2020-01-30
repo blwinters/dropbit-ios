@@ -45,10 +45,9 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
         }
 
       case .toOnChain:
-        let exchangeRate = self.currencyController.exchangeRate
-        let settingsConfig = self.currentConfig.settings
-        let viewModel = WalletTransferViewModel(direction: direction, fiatAmount: .zero,
-                                                exchangeRate: exchangeRate, settingsConfig: settingsConfig)
+        let viewModel = WalletTransferViewModel(direction: direction,
+                                                fiatAmount: .zero,
+                                                config: self.txSendingConfig)
         let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel, alertManager: self.alertManager)
         self.toggleChartAndBalance()
         self.navigationController.present(transferViewController, animated: true, completion: nil)
@@ -60,10 +59,8 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
 
   private func createQuickLoadViewModel() throws -> LightningQuickLoadViewModel {
     let balances = self.spendableBalancesNetPending()
-    let rate = self.currencyController.exchangeRate
-    let settingsConfig = self.currentConfig.settings
-    return try LightningQuickLoadViewModel(spendableBalances: balances, rate: rate,
-                                           fiatCurrency: rate.currency, config: settingsConfig)
+    let config = self.txSendingConfig
+    return try LightningQuickLoadViewModel(spendableBalances: balances, config: config)
   }
 
   private func showQuickLoadBalanceError(for error: Error, viewController: UIViewController) {
@@ -143,7 +140,7 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
                                                            primaryAmount: converter.fromAmount,
                                                            walletTransactionType: walletTransactionType,
                                                            currencyPair: self.currencyController.currencyPair)
-    let sendPaymentVM = SendPaymentViewModel(editAmountViewModel: swappableVM, walletTransactionType: walletTransactionType)
+    let sendPaymentVM = SendPaymentViewModel(editAmountViewModel: swappableVM, config: self.txSendingConfig)
     let sendPaymentViewController = SendPaymentViewController.newInstance(delegate: self, viewModel: sendPaymentVM, alertManager: alertManager)
     navigationController.present(sendPaymentViewController, animated: true)
   }
@@ -154,10 +151,9 @@ extension AppCoordinator: LightningQuickLoadViewControllerDelegate {
 
   func viewControllerDidRequestCustomAmountLoad(_ viewController: LightningQuickLoadViewController) {
     viewController.dismiss(animated: true) {
-      let exchangeRate = self.currencyController.exchangeRate
-      let settingsConfig = self.currentConfig.settings
-      let viewModel = WalletTransferViewModel(direction: .toLightning(nil), fiatAmount: .zero,
-                                              exchangeRate: exchangeRate, settingsConfig: settingsConfig)
+      let viewModel = WalletTransferViewModel(direction: .toLightning(nil),
+                                              fiatAmount: .zero,
+                                              config: self.txSendingConfig)
       let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel, alertManager: self.alertManager)
       self.toggleChartAndBalance()
       self.navigationController.present(transferViewController, animated: true, completion: nil)

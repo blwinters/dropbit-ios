@@ -139,8 +139,8 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
                                                            primaryAmount: fallbackBTCAmount,
                                                            walletTransactionType: .onChain,
                                                            currencyPair: currencyPair)
-    scanViewController.fallbackPaymentViewModel = SendPaymentViewModel(editAmountViewModel: swappableVM, walletTransactionType: .onChain)
-
+    scanViewController.fallbackPaymentViewModel = SendPaymentViewModel(editAmountViewModel: swappableVM,
+                                                                       config: self.txSendingConfig)
     scanViewController.modalPresentationStyle = .formSheet
     navigationController.present(scanViewController, animated: true, completion: nil)
   }
@@ -204,8 +204,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
         case .success(let response):
           guard let fetchedModel = SendPaymentViewModel(response: response,
                                                         walletTransactionType: walletTransactionType,
-                                                        exchangeRate: self.exchangeRate,
-                                                        fiatCurrency: self.fiatCurrency,
+                                                        config: self.txSendingConfig,
                                                         delegate: nil)
             else { return }
           self.showSendPaymentViewController(withViewModel: fetchedModel, dismissing: viewController, completion: nil)
@@ -218,7 +217,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
                                                                  primaryAmount: .zero,
                                                                  walletTransactionType: walletTransactionType,
                                                                  currencyPair: currencyPair)
-          let viewModel = SendPaymentViewModel(editAmountViewModel: swappableVM, walletTransactionType: walletTransactionType)
+          let viewModel = SendPaymentViewModel(editAmountViewModel: swappableVM, config: self.txSendingConfig)
 
           self.showSendPaymentViewController(withViewModel: viewModel, dismissing: viewController) { sendPaymentViewController in
             sendPaymentViewController.present(errorAlert, animated: true, completion: nil)
@@ -246,7 +245,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
         self.analyticsManager.track(event: .externalLightningInvoiceInput, with: nil)
         let currencyPair = CurrencyPair(btcPrimaryWith: self.currencyController)
         let viewModel = SendPaymentViewModel(encodedInvoice: lightningInvoice, decodedInvoice: decodedInvoice,
-                                             exchangeRate: self.exchangeRate, currencyPair: currencyPair)
+                                             config: self.txSendingConfig, currencyPair: currencyPair)
         self.showSendPaymentViewController(withViewModel: viewModel, dismissing: viewController, completion: nil)
       case .failure(let error):
         let errorAlert = self.alertManager.defaultAlert(withTitle: self.paymentErrorTitle, description: error.localizedDescription)
@@ -272,7 +271,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
 
     let viewModel = SendPaymentViewModel(qrCode: qrCodeToUse,
                                          walletTransactionType: walletTransactionType,
-                                         exchangeRate: self.exchangeRate,
+                                         config: self.txSendingConfig,
                                          currencyPair: self.currencyController.currencyPair,
                                          delegate: nil)
 

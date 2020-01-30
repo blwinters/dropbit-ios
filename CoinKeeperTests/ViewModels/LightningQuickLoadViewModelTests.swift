@@ -19,15 +19,20 @@ class LightningQuickLoadViewModelTests: XCTestCase {
     sut = nil
   }
 
-  let config = SettingsConfig.fallbackInstance
+  let rate: ExchangeRate = .sampleUSD
+
+  var config: TransactionSendingConfig {
+    TransactionSendingConfig(settings: MockSettingsConfig.default(),
+                             preferredExchangeRate: rate,
+                             usdExchangeRate: rate)
+  }
 
   func testLowOnChainBalanceThrowsError() {
     let oneSat = NSDecimalNumber(sats: 1)
     let balances = WalletBalances(onChain: oneSat, lightning: .zero)
-    let expectedError = LightningWalletAmountValidatorError.reloadMinimum(btc: config.minReloadAmount)
-    let rate = CurrencyConverter.sampleRate
+    let expectedError = LightningWalletAmountValidatorError.reloadMinimum(btc: config.settings.minReloadBTC)
     do {
-      sut = try LightningQuickLoadViewModel(spendableBalances: balances, rate: rate, fiatCurrency: .USD, config: config)
+      sut = try LightningQuickLoadViewModel(spendableBalances: balances, config: config)
       XCTFail("Should throw error")
     } catch let error as LightningWalletAmountValidatorError {
       XCTAssertTrue(expectedError == error, "Threw unexpected error: \(error.localizedDescription)")
@@ -38,11 +43,10 @@ class LightningQuickLoadViewModelTests: XCTestCase {
 
   func testModerateOnChainBalanceEqualsMaxAmount() {
     let onChainFiatBalance = NSDecimalNumber(integerAmount: 20_50, currency: .USD)
-    let rate = CurrencyConverter.sampleRate
     let balanceConverter = CurrencyConverter(fromFiatAmount: onChainFiatBalance, rate: rate)
     let btcBalances = WalletBalances(onChain: balanceConverter.btcAmount, lightning: .zero)
     do {
-      sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD, config: config)
+      sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, config: config)
       XCTAssertEqual(sut.controlConfigs.last!.amount.amount, onChainFiatBalance)
     } catch {
       XCTFail("Threw unexpected error: \(error.localizedDescription)")
@@ -51,11 +55,10 @@ class LightningQuickLoadViewModelTests: XCTestCase {
 
   func testHigherStandardAmountsAreDisabledByMaxAmount() {
     let onChainFiatBalance = NSDecimalNumber(integerAmount: 45_00, currency: .USD)
-    let rate = CurrencyConverter.sampleRate
     let balanceConverter = CurrencyConverter(fromFiatAmount: onChainFiatBalance, rate: rate)
     let btcBalances = WalletBalances(onChain: balanceConverter.btcAmount, lightning: .zero)
     do {
-      sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, rate: rate, fiatCurrency: .USD, config: config)
+      sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, config: config)
       let expectedEnabledValues: [NSDecimalNumber] = [5, 10, 20, 45].map { NSDecimalNumber(value: $0) }
       let actualEnabledValues = sut.controlConfigs.filter { $0.isEnabled }.map { $0.amount.amount }
       XCTAssertEqual(expectedEnabledValues, actualEnabledValues)

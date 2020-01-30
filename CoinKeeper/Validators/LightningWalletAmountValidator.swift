@@ -32,45 +32,20 @@ struct LightningWalletValidationOptions: OptionSet {
   static let minReloadAmount = LightningWalletValidationOptions(rawValue: 1 << 0)
 }
 
-struct SettingsConfig: Equatable {
-
-  ///The minimum amount required for a transaction to load the lightning wallet, in BTC
-  let minReloadAmount: NSDecimalNumber
-
-  init(minReload: Satoshis?) {
-    let reloadAmt = minReload ?? SettingsConfig.defaultMinReload
-    self.minReloadAmount = NSDecimalNumber(sats: reloadAmt)
-  }
-
-  private static let defaultMinReload: Satoshis = 60_000
-
-  func loadPresetAmounts(for currency: Currency) -> [NSDecimalNumber] {
-    switch currency {
-    case .SEK:  return [50, 100, 200, 500, 1000].map { NSDecimalNumber(value: $0) }
-    default:    return [5, 10, 20, 50, 100].map { NSDecimalNumber(value: $0) }
-    }
-  }
-
-  static var fallbackInstance: SettingsConfig {
-    return SettingsConfig(minReload: defaultMinReload)
-  }
-
-}
-
 class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
 
   let balancesNetPending: WalletBalances
   let walletTxType: WalletTransactionType
   let ignoringOptions: [LightningWalletValidationOptions]
-  let config: SettingsConfig
+  let txSendingConfig: TransactionSendingConfig
 
   init(balancesNetPending: WalletBalances,
        walletType: WalletTransactionType,
-       config: SettingsConfig,
+       config: TransactionSendingConfig,
        ignoring: [LightningWalletValidationOptions] = []) {
     self.balancesNetPending = balancesNetPending
+    self.txSendingConfig = config
     self.walletTxType = walletType
-    self.config = config
     self.ignoringOptions = ignoring
     super.init()
   }
@@ -83,8 +58,8 @@ class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
     try validateBalanceNetPendingIsSufficient(forAmount: candidateBTCAmount, balances: balancesNetPending, walletTxType: walletTxType)
 
     if !ignoringOptions.contains(.minReloadAmount) {
-      if candidateBTCAmount < config.minReloadAmount {
-        throw LightningWalletAmountValidatorError.reloadMinimum(btc: config.minReloadAmount)
+      if candidateBTCAmount < txSendingConfig.settings.minReloadBTC {
+        throw LightningWalletAmountValidatorError.reloadMinimum(btc: txSendingConfig.settings.minReloadBTC)
       }
     }
   }

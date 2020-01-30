@@ -18,7 +18,8 @@ class CurrencyAmountValidatorTests: XCTestCase {
 
   override func setUp() {
     super.setUp()
-    self.sut = CurrencyAmountValidator(balancesNetPending: .empty, balanceToCheck: .onChain, ignoring: [.usableBalance])
+    let config = TransactionSendingConfig(settings: MockSettingsConfig.default(), preferredExchangeRate: rate, usdExchangeRate: rate)
+    self.sut = CurrencyAmountValidator(balancesNetPending: .empty, balanceToCheck: .onChain, config: config, ignoring: [.usableBalance])
   }
 
   override func tearDown() {

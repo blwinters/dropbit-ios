@@ -33,9 +33,8 @@ CurrencySwappableAmountEditor {
 
   private var currentTypeDisplay: WalletTransactionType?
 
-  var editAmountViewModel: CurrencySwappableEditAmountViewModel {
-    return viewModel
-  }
+  var editAmountViewModel: CurrencySwappableEditAmountViewModel { viewModel }
+  var txSendingConfig: TransactionSendingConfig { viewModel.txSendingConfig }
 
   /// The presenter of SendPaymentViewController can set this property to provide a recipient.
   /// It will be parsed and used to update the viewModel and view when ready.
@@ -430,7 +429,7 @@ extension SendPaymentViewController {
         self.alertManager?.hideActivityHUD(withDelay: nil, completion: {
           let viewModel = SendPaymentViewModel(encodedInvoice: lightningUrl.invoice,
                                                decodedInvoice: decodedInvoice,
-                                               exchangeRate: self.viewModel.exchangeRate,
+                                               config: self.viewModel.txSendingConfig,
                                                currencyPair: self.viewModel.currencyPair,
                                                delegate: self)
           self.applyFetchedBitcoinModelAndUpdateView(fetchedModel: viewModel)
@@ -456,8 +455,7 @@ extension SendPaymentViewController {
       case .success(let response):
         let maybeFetchedModel = SendPaymentViewModel(response: response,
                                                      walletTransactionType: self.viewModel.walletTransactionType,
-                                                     exchangeRate: self.viewModel.exchangeRate,
-                                                     fiatCurrency: self.viewModel.fiatCurrency)
+                                                     config: self.viewModel.txSendingConfig)
         guard let fetchedModel = maybeFetchedModel, fetchedModel.address != nil else {
             self.showValidatorAlert(for: DBTError.MerchantPaymentRequest.missingOutput, title: errorTitle)
             return
@@ -751,10 +749,11 @@ extension SendPaymentViewController {
                                             memo: viewModel.memo,
                                             amountInfo: sharedAmountInfo())
 
-    try CurrencyAmountValidator(balancesNetPending: delegate.balancesNetPending(),
-                                                    balanceToCheck: viewModel.walletTransactionType,
-                                                    ignoring: ignoredValidation).validate(value:
-                                                      viewModel.currencyConverter)
+    let validator = CurrencyAmountValidator(balancesNetPending: delegate.balancesNetPending(),
+                                            balanceToCheck: viewModel.walletTransactionType,
+                                            config: viewModel.txSendingConfig,
+                                            ignoring: ignoredValidation)
+    try validator.validate(value: viewModel.currencyConverter)
 
     switch recipient {
     case .bitcoinURL(let url):
@@ -806,9 +805,10 @@ extension SendPaymentViewController {
     }
 
     try validateInvitationMaximum(against: btcAmount)
-    try CurrencyAmountValidator(balancesNetPending: delegate.balancesNetPending(),
-                                balanceToCheck: viewModel.walletTransactionType).validate(value:
-                                  viewModel.currencyConverter)
+    let validator = CurrencyAmountValidator(balancesNetPending: delegate.balancesNetPending(),
+                                            balanceToCheck: viewModel.walletTransactionType,
+                                            config: viewModel.txSendingConfig)
+    try validator.validate(value: viewModel.currencyConverter)
     let inputs = SendingDelegateInputs(sendPaymentVM: self.viewModel, contact: newContact, payloadDTO: sharedPayload)
 
     delegate.viewControllerDidBeginAddressNegotiation(self,

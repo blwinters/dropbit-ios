@@ -17,6 +17,6 @@ class MockConfirmLightningPaymentViewModel: ConfirmLightningPaymentViewModel {
                btcAmount: .one,
                sharedPayload: nil,
                currencyPair: CurrencyPair(primary: .BTC, fiat: .USD),
-               exchangeRate: CurrencyConverter.sampleRate)
+               exchangeRate: .sampleUSD)
   }
 }

@@ -58,19 +58,22 @@ struct CurrencyAmountValidationOptions: OptionSet {
 /// Validating against a CurrencyConverter allows for validating either the USD or BTC values
 class CurrencyAmountValidator: ValidatorType<CurrencyConverter> {
 
-  static let invitationMax = Money(amount: NSDecimalNumber(value: 100), currency: .USD)
+//  static let invitationMax = Money(amount: NSDecimalNumber(value: 100), currency: .USD)
   static let lightningInvoiceMax = Money(amount: NSDecimalNumber(value: 50), currency: .USD)
 
   // Allows for validating against USD value while showing error message in BTC.
   let balancesNetPending: WalletBalances
   let validationsToSkip: CurrencyAmountValidationOptions
   let balanceType: WalletTransactionType
+  let config: TransactionSendingConfig
 
   init(balancesNetPending: WalletBalances,
        balanceToCheck: WalletTransactionType,
+       config: TransactionSendingConfig,
        ignoring: CurrencyAmountValidationOptions = []) {
     self.balancesNetPending = balancesNetPending
     self.balanceType = balanceToCheck
+    self.config = config
     self.validationsToSkip = ignoring
     super.init()
   }
@@ -86,7 +89,7 @@ class CurrencyAmountValidator: ValidatorType<CurrencyConverter> {
 
   override func validate(value: CurrencyConverter) throws {
     let btcValue = value.btcAmount
-    let usdValue = value.amount(forCurrency: .USD) ?? .zero
+    let satsValue = btcValue.asFractionalUnits(of: .BTC)
 
     switch btcValue {
     case .notANumber: throw CurrencyStringValidatorError.notANumber
@@ -94,11 +97,12 @@ class CurrencyAmountValidator: ValidatorType<CurrencyConverter> {
     default:          break
     }
 
-    let maxMoney = CurrencyAmountValidator.invitationMax
-
     if !validationsToSkip.contains(.invitationMaximum),
-      maxMoney.amount < usdValue {
-      throw CurrencyAmountValidatorError.invitationMaximum(maxMoney)
+      let maxInviteSats = config.maxInvitationSats,
+      maxInviteSats < satsValue,
+      let maxInviteUSD = config.settings.maxInviteUSD {
+      let maxInviteMoney = Money(amount: maxInviteUSD, currency: .USD)
+      throw CurrencyAmountValidatorError.invitationMaximum(maxInviteMoney)
     }
 
     let balance = relevantBalance

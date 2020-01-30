@@ -34,7 +34,7 @@ class CurrencyController: CurrencyControllerProviding {
   var selectedCurrency: SelectedCurrency
 
   init(selectedCurrency: SelectedCurrency = .fiat,
-       exchangeRate: ExchangeRate = .zero) {
+       exchangeRate: ExchangeRate = .zeroUSD) {
     self.selectedCurrency = selectedCurrency
     self.exchangeRate = exchangeRate
   }

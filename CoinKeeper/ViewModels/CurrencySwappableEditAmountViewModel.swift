@@ -176,7 +176,7 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
 
   static func emptyInstance() -> CurrencySwappableEditAmountViewModel {
     let currencyPair = CurrencyPair(primary: .BTC, fiat: .USD)
-    return CurrencySwappableEditAmountViewModel(exchangeRate: .zero,
+    return CurrencySwappableEditAmountViewModel(exchangeRate: .zeroUSD,
                                                 primaryAmount: 0,
                                                 walletTransactionType: .onChain,
                                                 currencyPair: currencyPair)
