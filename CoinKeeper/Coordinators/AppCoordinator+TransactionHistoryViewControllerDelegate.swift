@@ -88,12 +88,12 @@ extension AppCoordinator: TransactionHistoryViewControllerDelegate {
   }
 
   func viewController(_ viewController: TransactionHistoryViewController, didSelectItemAtIndexPath indexPath: IndexPath) {
-    if viewController.viewModel.walletTransactionType == .lightning {
+    if viewController.viewModel.walletTxType == .lightning {
       analyticsManager.track(event: .lightningTransactionDetailsPressed, with: nil)
     }
 
     let controller = TransactionHistoryDetailsViewController.newInstance(withDelegate: self,
-                                                                         walletTxType: viewController.viewModel.walletTransactionType,
+                                                                         walletTxType: viewController.viewModel.walletTxType,
                                                                          selectedIndexPath: indexPath,
                                                                          dataSource: viewController.viewModel.dataSource)
     viewController.present(controller, animated: true, completion: nil)

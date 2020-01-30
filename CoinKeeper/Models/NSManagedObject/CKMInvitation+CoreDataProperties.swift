@@ -28,7 +28,7 @@ extension CKMInvitation {
   @NSManaged public var fiatCurrency: String? //only set if sender supports multi-currency
   @NSManaged private(set) var fees: Int
   @NSManaged public var sentDate: Date?
-  @NSManaged private(set) var walletTransactionType: String
+  @NSManaged private(set) var walletTxType: String
   @NSManaged public var side: InvitationSide
   @NSManaged public var status: InvitationStatus
   @NSManaged public var counterpartyName: String?
@@ -82,8 +82,8 @@ extension CKMInvitation {
   }
 
   var walletTxTypeCase: WalletTransactionType {
-    get { return WalletTransactionType(rawValue: walletTransactionType) ?? .onChain }
-    set { self.walletTransactionType = newValue.rawValue }
+    get { return WalletTransactionType(rawValue: walletTxType) ?? .onChain }
+    set { self.walletTxType = newValue.rawValue }
   }
 
   var transactionStatus: TransactionStatus {

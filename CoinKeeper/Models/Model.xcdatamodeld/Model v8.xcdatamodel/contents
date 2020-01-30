@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="18G1012" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CKMAddress" representedClassName="CKMAddress" versionHashModifier="1" syncable="YES">
         <attribute name="addressId" attributeType="String"/>
         <relationship name="addressTransactionSummaries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CKMAddressTransactionSummary" inverseName="address" inverseEntity="CKMAddressTransactionSummary"/>
@@ -64,7 +64,7 @@
         <attribute name="status" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="txid" optional="YES" attributeType="String"/>
         <attribute name="usdAmountAtTimeOfInvitation" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="walletTransactionType" attributeType="String" defaultValueString="onChain"/>
+        <attribute name="walletTxType" attributeType="String" defaultValueString="onChain"/>
         <relationship name="counterpartyPhoneNumber" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CKMPhoneNumber" inverseName="invitations" inverseEntity="CKMPhoneNumber"/>
         <relationship name="counterpartyTwitterContact" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CKMTwitterContact" inverseName="invitations" inverseEntity="CKMTwitterContact"/>
         <relationship name="transaction" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CKMTransaction" inverseName="invitation" inverseEntity="CKMTransaction"/>
@@ -264,25 +264,25 @@
         <relationship name="wallet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CKMWallet" inverseName="walletEntries" inverseEntity="CKMWallet"/>
     </entity>
     <elements>
-        <element name="CKMAddress" positionX="-1170" positionY="315" width="128" height="103"/>
-        <element name="CKMAddressTransactionSummary" positionX="-1377" positionY="315" width="128" height="165"/>
-        <element name="CKMCounterparty" positionX="-1964" positionY="-63" width="128" height="118"/>
-        <element name="CKMCounterpartyAddress" positionX="-1935" positionY="351" width="128" height="73"/>
-        <element name="CKMDerivativePath" positionX="-972" positionY="315" width="128" height="163"/>
-        <element name="CKMInvitation" positionX="-1674" positionY="-36" width="144" height="298"/>
-        <element name="CKMLNAccount" positionX="160" positionY="192" width="128" height="135"/>
-        <element name="CKMLNInvoice" positionX="-2215.80078125" positionY="195.44140625" width="128" height="195"/>
-        <element name="CKMLNLedgerEntry" positionX="-2173.94140625" positionY="494.7109375" width="128" height="283"/>
-        <element name="CKMPhoneNumber" positionX="-2009" positionY="99" width="128" height="165"/>
-        <element name="CKMServerAddress" positionX="-1143" positionY="108" width="128" height="103"/>
-        <element name="CKMTemporarySentTransaction" positionX="-1928" positionY="459" width="128" height="163"/>
-        <element name="CKMTransaction" positionX="-1667" positionY="317" width="128" height="388"/>
-        <element name="CKMTransactionSharedPayload" positionX="-1858.9765625" positionY="76.22265625" width="128" height="135"/>
-        <element name="CKMTwitterContact" positionX="-2073.94921875" positionY="265.5859375" width="128" height="180"/>
-        <element name="CKMUser" positionX="-1523" positionY="144" width="128" height="133"/>
-        <element name="CKMVin" positionX="-1845" positionY="657" width="128" height="133"/>
-        <element name="CKMVout" positionX="-1503" positionY="639" width="128" height="165"/>
-        <element name="CKMWallet" positionX="-1368" positionY="99" width="128" height="210"/>
-        <element name="CKMWalletEntry" positionX="-1776.2578125" positionY="-547.37109375" width="128" height="223"/>
+        <element name="CKMAddress" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMAddressTransactionSummary" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMCounterparty" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMCounterpartyAddress" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMDerivativePath" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMInvitation" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMLNAccount" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMLNInvoice" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMLNLedgerEntry" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMPhoneNumber" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMServerAddress" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMTemporarySentTransaction" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMTransaction" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMTransactionSharedPayload" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMTwitterContact" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMUser" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMVin" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMVout" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMWallet" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CKMWalletEntry" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

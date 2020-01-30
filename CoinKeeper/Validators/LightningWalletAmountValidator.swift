@@ -40,12 +40,12 @@ class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
   let txSendingConfig: TransactionSendingConfig
 
   init(balancesNetPending: WalletBalances,
-       walletType: WalletTransactionType,
+       walletTxType: WalletTransactionType,
        config: TransactionSendingConfig,
        ignoring: [LightningWalletValidationOptions] = []) {
     self.balancesNetPending = balancesNetPending
     self.txSendingConfig = config
-    self.walletTxType = walletType
+    self.walletTxType = walletTxType
     self.ignoringOptions = ignoring
     super.init()
   }

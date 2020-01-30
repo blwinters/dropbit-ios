@@ -110,10 +110,10 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
   }
 
   func viewControllerDidTapReceivePayment(_ viewController: UIViewController,
-                                          converter: CurrencyConverter, walletTransactionType: WalletTransactionType) {
+                                          converter: CurrencyConverter, walletTxType: WalletTransactionType) {
     guard showLightningLockAlertIfNecessary() else { return }
     if let requestViewController = createRequestPayViewController(converter: converter) {
-      switch walletTransactionType {
+      switch walletTxType {
       case .onChain:
         analyticsManager.track(event: .requestButtonPressed, with: nil)
       case .lightning:
@@ -126,10 +126,10 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
 
   func viewControllerDidTapSendPayment(_ viewController: UIViewController,
                                        converter: CurrencyConverter,
-                                       walletTransactionType: WalletTransactionType) {
+                                       walletTxType: WalletTransactionType) {
     guard showLightningLockAlertIfNecessary() else { return }
     toggleChartAndBalance()
-    switch walletTransactionType {
+    switch walletTxType {
     case .onChain:
       analyticsManager.track(event: .payButtonWasPressed, with: nil)
     case .lightning:
@@ -138,7 +138,7 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
 
     let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRate: self.currencyController.exchangeRate,
                                                            primaryAmount: converter.fromAmount,
-                                                           walletTransactionType: walletTransactionType,
+                                                           walletTxType: walletTxType,
                                                            currencyPair: self.currencyController.currencyPair)
     let sendPaymentVM = SendPaymentViewModel(editAmountViewModel: swappableVM, config: self.txSendingConfig)
     let sendPaymentViewController = SendPaymentViewController.newInstance(delegate: self, viewModel: sendPaymentVM, alertManager: alertManager)

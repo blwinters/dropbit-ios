@@ -30,7 +30,7 @@ class MockSendPaymentViewControllerCoordinator: SendPaymentViewControllerCoordin
   func viewControllerDidSelectCloseWithToggle(_ viewController: UIViewController) { }
 
   func viewControllerDidTapReceivePayment(_ viewController: UIViewController,
-                                          converter: CurrencyConverter, walletTransactionType: WalletTransactionType) {}
+                                          converter: CurrencyConverter, walletTxType: WalletTransactionType) {}
 
   func viewControllerShouldTrackEvent(event: AnalyticsManagerEventType) {}
 

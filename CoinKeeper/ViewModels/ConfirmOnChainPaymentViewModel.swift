@@ -15,20 +15,20 @@ class BaseConfirmPaymentViewModel: DualAmountDisplayable {
 
   let paymentTarget: String? //address or encoded invoice
   let contact: ContactType?
-  let walletTransactionType: WalletTransactionType
+  let walletTxType: WalletTransactionType
   var btcAmount: NSDecimalNumber
   let currencyPair: CurrencyPair
   let exchangeRate: ExchangeRate
 
   init(paymentTarget: String?,
        contact: ContactType?,
-       walletTransactionType: WalletTransactionType,
+       walletTxType: WalletTransactionType,
        btcAmount: NSDecimalNumber,
        currencyPair: CurrencyPair,
        exchangeRate: ExchangeRate) {
     self.paymentTarget = paymentTarget
     self.contact = contact
-    self.walletTransactionType = walletTransactionType
+    self.walletTxType = walletTxType
     self.btcAmount = btcAmount
     self.currencyPair = currencyPair
     self.exchangeRate = exchangeRate
@@ -88,7 +88,7 @@ class ConfirmPaymentInviteViewModel: BaseConfirmPaymentViewModel {
   }
 
   init(contact: ContactType?,
-       walletTransactionType: WalletTransactionType,
+       walletTxType: WalletTransactionType,
        btcAmount: NSDecimalNumber,
        currencyPair: CurrencyPair,
        exchangeRate: ExchangeRate,
@@ -96,7 +96,7 @@ class ConfirmPaymentInviteViewModel: BaseConfirmPaymentViewModel {
     self.sharedPayloadDTO = sharedPayloadDTO
     super.init(paymentTarget: nil,
                contact: contact,
-               walletTransactionType: walletTransactionType,
+               walletTxType: walletTxType,
                btcAmount: btcAmount,
                currencyPair: currencyPair,
                exchangeRate: exchangeRate)
@@ -129,7 +129,7 @@ class ConfirmOnChainPaymentViewModel: BaseConfirmPaymentViewModel {
     self.outgoingTransactionData = outgoingTransactionData
     super.init(paymentTarget: address,
                contact: contact,
-               walletTransactionType: .onChain,
+               walletTxType: .onChain,
                btcAmount: btcAmount,
                currencyPair: currencyPair,
                exchangeRate: exchangeRate)
@@ -169,7 +169,7 @@ class ConfirmLightningPaymentViewModel: BaseConfirmPaymentViewModel {
     self.sharedPayloadDTO = sharedPayload
     super.init(paymentTarget: invoice,
                contact: contact,
-               walletTransactionType: .lightning,
+               walletTxType: .lightning,
                btcAmount: btcAmount,
                currencyPair: currencyPair,
                exchangeRate: exchangeRate)

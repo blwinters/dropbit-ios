@@ -37,7 +37,7 @@ struct CKPredicate {
     }
 
     static func with(transactionType: WalletTransactionType) -> NSPredicate {
-      let path = #keyPath(CKMInvitation.walletTransactionType)
+      let path = #keyPath(CKMInvitation.walletTxType)
       return NSPredicate(format: "\(path) == %@", transactionType.rawValue)
     }
 

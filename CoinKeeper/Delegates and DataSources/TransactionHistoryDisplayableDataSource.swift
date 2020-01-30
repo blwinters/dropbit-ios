@@ -38,14 +38,14 @@ protocol TransactionHistoryDataSourceType: AnyObject {
   func numberOfSections() -> Int
   func numberOfItems(inSection section: Int) -> Int
   func indexPathsToAnimate() -> [IndexPath]
-  var walletTransactionType: WalletTransactionType { get }
+  var walletTxType: WalletTransactionType { get }
   var delegate: TransactionHistoryDataSourceDelegate? { get set }
 }
 
 class TransactionHistoryOnChainDataSource: NSObject, TransactionHistoryDataSourceType, NSFetchedResultsControllerDelegate {
 
   let frc: NSFetchedResultsController<CKMTransaction>
-  let walletTransactionType: WalletTransactionType = .onChain
+  let walletTxType: WalletTransactionType = .onChain
 
   private var newIndexPaths: [IndexPath] = []
 
@@ -134,7 +134,7 @@ class TransactionHistoryOnChainDataSource: NSObject, TransactionHistoryDataSourc
 class TransactionHistoryLightningDataSource: NSObject, TransactionHistoryDataSourceType, NSFetchedResultsControllerDelegate {
 
   let frc: NSFetchedResultsController<CKMWalletEntry>
-  let walletTransactionType: WalletTransactionType = .lightning
+  let walletTxType: WalletTransactionType = .lightning
 
   private var newIndexPaths: [IndexPath] = []
 

@@ -22,7 +22,7 @@ class TransactionHistoryViewModel: NSObject, UICollectionViewDataSource, Exchang
   var currencyValueManager: CurrencyValueDataSourceType?
   var rateManager: ExchangeRateManager = ExchangeRateManager()
 
-  let walletTransactionType: WalletTransactionType
+  let walletTxType: WalletTransactionType
   let dataSource: TransactionHistoryDataSourceType
 
   let deviceCountryCode: Int
@@ -43,7 +43,7 @@ class TransactionHistoryViewModel: NSObject, UICollectionViewDataSource, Exchang
     self.delegate = delegate
     self.detailsDelegate = detailsDelegate
     self.currencyValueManager = currencyManager
-    self.walletTransactionType = transactionType
+    self.walletTxType = transactionType
     self.dataSource = dataSource
 
     if let persistedCode = deviceCountryCode {
@@ -194,7 +194,7 @@ class TransactionHistoryViewModel: NSObject, UICollectionViewDataSource, Exchang
 
   func emptyDataSetToDisplay() -> EmptyDataSetType {
     let itemCount = dataSource.numberOfItems(inSection: 0)
-    switch walletTransactionType {
+    switch walletTxType {
     case .onChain:
       switch itemCount {
       case 0:   return .noBalance
