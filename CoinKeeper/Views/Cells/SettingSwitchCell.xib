@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,25 +17,29 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xiw-rg-tDJ" customClass="SettingsCellTitleLabel" customModule="DropBit" customModuleProvider="target">
-                        <rect key="frame" x="32" y="22" width="0.0" height="0.0"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="398-bj-FQh">
-                        <rect key="frame" x="245" y="6.5" width="51" height="31"/>
-                        <connections>
-                            <action selector="toggle:" destination="KGk-i7-Jjw" eventType="valueChanged" id="m4a-9U-AKl"/>
-                        </connections>
-                    </switch>
+                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="2O4-Es-ffQ">
+                        <rect key="frame" x="30" y="0.0" width="255" height="44"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xiw-rg-tDJ" customClass="SettingsCellTitleLabel" customModule="DropBit" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="12" width="207" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="398-bj-FQh">
+                                <rect key="frame" x="217" y="6.5" width="40" height="31"/>
+                                <connections>
+                                    <action selector="toggle:" destination="KGk-i7-Jjw" eventType="valueChanged" id="m4a-9U-AKl"/>
+                                </connections>
+                            </switch>
+                        </subviews>
+                    </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="398-bj-FQh" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="xiw-rg-tDJ" secondAttribute="trailing" constant="8" id="7ps-Jl-0Ck"/>
-                    <constraint firstItem="xiw-rg-tDJ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="PFU-td-Ura"/>
-                    <constraint firstItem="xiw-rg-tDJ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="32" id="Q71-q0-UVl"/>
-                    <constraint firstItem="398-bj-FQh" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="UWa-Vt-d5a"/>
-                    <constraint firstAttribute="trailing" secondItem="398-bj-FQh" secondAttribute="trailing" constant="26" id="fES-NM-Ufq"/>
+                    <constraint firstItem="2O4-Es-ffQ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="30" id="8gV-iI-sEx"/>
+                    <constraint firstItem="2O4-Es-ffQ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="ReC-xM-zWJ"/>
+                    <constraint firstAttribute="trailing" secondItem="2O4-Es-ffQ" secondAttribute="trailing" constant="35" id="waa-LR-6t2"/>
+                    <constraint firstAttribute="bottom" secondItem="2O4-Es-ffQ" secondAttribute="bottom" id="zGF-Ew-fy7"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
