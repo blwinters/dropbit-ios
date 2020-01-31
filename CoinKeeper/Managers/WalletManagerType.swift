@@ -24,6 +24,7 @@ protocol WalletManagerType: AnyObject {
   func usableFeeRate(from feeRate: Double) -> Int
   func mnemonicWords() -> [String]
   func resetWallet(with words: [String])
+  func accountExtendedPublicKey() -> Result<String>
 
   func createAddressDataSource() -> AddressDataSourceType
 

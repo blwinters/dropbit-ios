@@ -432,6 +432,16 @@ class WalletManager: WalletManagerType {
     }
   }
 
+  func accountExtendedPublicKey() -> Result<String> {
+    var err: NSError?
+    err = nil
+    let key = wallet.accountExtendedMasterPublicKey(&err)
+    if let err = err {
+      return .rejected(err)
+    }
+    return .fulfilled(key)
+  }
+
   /// - parameter limitByPending: true to remove the smallest vouts, to not exceed spendableBalanceNetPending()
   private func usableVouts(in context: NSManagedObjectContext) -> [CKMVout] {
     let dustProtectionAmount = self.persistenceManager.brokers.preferences.dustProtectionMinimumAmount
