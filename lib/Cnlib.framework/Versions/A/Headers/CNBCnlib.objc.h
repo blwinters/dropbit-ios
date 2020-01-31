@@ -101,6 +101,10 @@
 @property (nonatomic) CNBCnlibBaseCoin* _Nullable baseCoin;
 @property (nonatomic) NSString* _Nonnull walletWords;
 /**
+ * AccountExtendedMasterPublicKey returns the stringified base58 encoded master extended public key.
+ */
+- (NSString* _Nonnull)accountExtendedMasterPublicKey:(NSError* _Nullable* _Nullable)error;
+/**
  * BuildTransactionMetadata will generate the tx metadata needed for client to consume.
  */
 - (CNBCnlibTransactionMetadata* _Nullable)buildTransactionMetadata:(CNBCnlibTransactionData* _Nullable)data error:(NSError* _Nullable* _Nullable)error;
@@ -446,6 +450,20 @@ FOUNDATION_EXPORT NSString* _Nonnull const CNBCnlibPlaceholderDestination;
 
 + (CNBCnlibBaseCoin* _Nullable) baseCoinBip84TestNet;
 + (void) setBaseCoinBip84TestNet:(CNBCnlibBaseCoin* _Nullable)v;
+
+/**
+ * ErrInvalidCoinValue describes an error in which the caller
+passed an invalid coin value.
+ */
++ (NSError* _Nullable) errInvalidCoinValue;
++ (void) setErrInvalidCoinValue:(NSError* _Nullable)v;
+
+/**
+ * ErrInvalidPurposeValue describes an error in which the caller
+passed an invalid purpose value.
+ */
++ (NSError* _Nullable) errInvalidPurposeValue;
++ (void) setErrInvalidPurposeValue:(NSError* _Nullable)v;
 
 @end
 

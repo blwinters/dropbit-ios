@@ -244,7 +244,6 @@
 		3B69FBEA21B83ED200C561E2 /* OutgoingInvitationDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69FBE921B83ED200C561E2 /* OutgoingInvitationDTO.swift */; };
 		3B6BCBF022735A4E00950105 /* TransactionHistoryDetailInvalidCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6BCBEF22735A4E00950105 /* TransactionHistoryDetailInvalidCellTests.swift */; };
 		3B6BCBF2227365D000950105 /* TransactionHistoryDetailValidCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6BCBF1227365D000950105 /* TransactionHistoryDetailValidCellTests.swift */; };
-		3B6DB24823DA29E0005A9152 /* Cnlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B6DB24723DA29E0005A9152 /* Cnlib.framework */; };
 		3B6DCA1B2034B76F00B87EF9 /* KeypadDigitView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3B6DCA1A2034B76F00B87EF9 /* KeypadDigitView.xib */; };
 		3B6DCA1D2034B83700B87EF9 /* KeypadDigitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6DCA1C2034B83700B87EF9 /* KeypadDigitView.swift */; };
 		3B6E4D59206E533D00D9CFFA /* ApiKeys.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E4D58206E533D00D9CFFA /* ApiKeys.generated.swift */; };
@@ -395,6 +394,7 @@
 		3BDB6C532220521000E75DD2 /* SendPaymentMemoViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDB6C522220520F00E75DD2 /* SendPaymentMemoViewTests.swift */; };
 		3BDBE63422839A6B009C23CB /* MockNeworkManager+Twitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDBE632228399F9009C23CB /* MockNeworkManager+Twitter.swift */; };
 		3BDBF43D2385C1C30076FE04 /* RatingAndReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDBF43C2385C1C30076FE04 /* RatingAndReviewManager.swift */; };
+		3BDE266923E4B5FF008E063F /* Cnlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BDE266823E4B5FF008E063F /* Cnlib.framework */; };
 		3BDFADFC2267AEFF0077DEF2 /* BlockstreamTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDFADFB2267AEFF0077DEF2 /* BlockstreamTarget.swift */; };
 		3BDFADFE2267B1FB0077DEF2 /* BlockstreamProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDFADFD2267B1FB0077DEF2 /* BlockstreamProvider.swift */; };
 		3BE1C52D232D2BC100583A83 /* LightningUpgradeStartPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE1C52C232D2BC100583A83 /* LightningUpgradeStartPage.swift */; };
@@ -1568,7 +1568,6 @@
 		3B69FBE921B83ED200C561E2 /* OutgoingInvitationDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutgoingInvitationDTO.swift; sourceTree = "<group>"; };
 		3B6BCBEF22735A4E00950105 /* TransactionHistoryDetailInvalidCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionHistoryDetailInvalidCellTests.swift; sourceTree = "<group>"; };
 		3B6BCBF1227365D000950105 /* TransactionHistoryDetailValidCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionHistoryDetailValidCellTests.swift; sourceTree = "<group>"; };
-		3B6DB24723DA29E0005A9152 /* Cnlib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Cnlib.framework; sourceTree = "<group>"; };
 		3B6DCA1A2034B76F00B87EF9 /* KeypadDigitView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeypadDigitView.xib; sourceTree = "<group>"; };
 		3B6DCA1C2034B83700B87EF9 /* KeypadDigitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeypadDigitView.swift; sourceTree = "<group>"; };
 		3B6E4D58206E533D00D9CFFA /* ApiKeys.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiKeys.generated.swift; sourceTree = "<group>"; };
@@ -1719,6 +1718,7 @@
 		3BDB6C522220520F00E75DD2 /* SendPaymentMemoViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendPaymentMemoViewTests.swift; sourceTree = "<group>"; };
 		3BDBE632228399F9009C23CB /* MockNeworkManager+Twitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockNeworkManager+Twitter.swift"; sourceTree = "<group>"; };
 		3BDBF43C2385C1C30076FE04 /* RatingAndReviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingAndReviewManager.swift; sourceTree = "<group>"; };
+		3BDE266823E4B5FF008E063F /* Cnlib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Cnlib.framework; sourceTree = "<group>"; };
 		3BDFADFB2267AEFF0077DEF2 /* BlockstreamTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockstreamTarget.swift; sourceTree = "<group>"; };
 		3BDFADFD2267B1FB0077DEF2 /* BlockstreamProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockstreamProvider.swift; sourceTree = "<group>"; };
 		3BE1C52C232D2BC100583A83 /* LightningUpgradeStartPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightningUpgradeStartPage.swift; sourceTree = "<group>"; };
@@ -2512,7 +2512,7 @@
 				D3050CCBBA9D3A897790120B /* Pods_DropBit.framework in Frameworks */,
 				3BC289B623C8C6F6005B9933 /* PromiseKit in Frameworks */,
 				3B227D7923CCD37D00D86BE8 /* FAPanels in Frameworks */,
-				3B6DB24823DA29E0005A9152 /* Cnlib.framework in Frameworks */,
+				3BDE266923E4B5FF008E063F /* Cnlib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3179,7 +3179,7 @@
 		3BAB4BB723A7C71000AADBF7 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				3B6DB24723DA29E0005A9152 /* Cnlib.framework */,
+				3BDE266823E4B5FF008E063F /* Cnlib.framework */,
 			);
 			path = lib;
 			sourceTree = "<group>";
