@@ -72,7 +72,7 @@ class SettingsViewControllerTests: XCTestCase {
 
   // MARK: mock coordinator
   class MockCoordinator: SettingsViewControllerDelegate {
-    func viewControllerDidSelectWalletInfo(_ viewController: UIViewController) { }
+    func viewControllerDidSelectAdvancedWalletInfo(_ viewController: UIViewController) { }
 
     func viewControllerDidSelectCloseWithToggle(_ viewController: UIViewController) { }
 

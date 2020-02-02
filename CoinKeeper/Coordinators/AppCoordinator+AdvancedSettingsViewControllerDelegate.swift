@@ -1,20 +1,22 @@
 //
-//  AppCoordinator+WalletInfoSettingsViewControllerDelegate.swift
+//  AppCoordinator+AdvancedSettingsViewControllerDelegate.swift
 //  DropBit
 //
-//  Created by BJ Miller on 1/29/20.
+//  Created by BJ Miller on 2/2/20.
 //  Copyright © 2020 Coin Ninja, LLC. All rights reserved.
 //
 
 import UIKit
 
-extension AppCoordinator: WalletInfoSettingsViewControllerDelegate {
-  func viewController(_ viewController: UIViewController, didTapMasterPubkey pubkey: String) {
-    UIPasteboard.general.string = pubkey
-    alertManager.showSuccessHUD(withStatus: "Extended Public Key successfully copied to clipboard!", duration: 3.0, completion: nil)
+extension AppCoordinator: AdvancedSettingsViewControllerDelegate {
+  func viewController(_ viewController: UIViewController, didSelectAdvancedSetting item: AdvancedSettingsItem) {
+    switch item {
+    case .masterPublicKey: break
+    case .utxos: viewControllerDidSelectShowUTXOs(viewController)
+    }
   }
 
-  func viewControllerDidSelectShowUTXOs(_ viewController: UIViewController) {
+  private func viewControllerDidSelectShowUTXOs(_ viewController: UIViewController) {
     let context = persistenceManager.viewContext
     do {
       let vouts = try CKMVout.findAllUnspent(in: context)
@@ -24,7 +26,7 @@ extension AppCoordinator: WalletInfoSettingsViewControllerDelegate {
     } catch {
       log.error(error, message: "Failed to fetch vouts.")
       let message = "Something went wrong fetching your unspent transaction outputs. " +
-        "Please close the app and re-open to retry."
+      "Please close the app and re-open to retry."
       alertManager.showErrorHUD(message: message, forDuration: 3.5)
     }
   }

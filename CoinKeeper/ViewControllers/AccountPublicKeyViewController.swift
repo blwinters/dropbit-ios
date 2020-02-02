@@ -1,5 +1,5 @@
 //
-//  WalletInfoSettingsViewController.swift
+//  AccountPublicKeyViewController.swift
 //  DropBit
 //
 //  Created by BJ Miller on 1/29/20.
@@ -8,15 +8,14 @@
 
 import UIKit
 
-protocol WalletInfoSettingsViewControllerDelegate: ViewControllerDismissable {
+protocol AccountPublicKeyViewControllerDelegate: ViewControllerDismissable {
   func viewController(_ viewController: UIViewController, didTapMasterPubkey pubkey: String)
-  func viewControllerDidSelectShowUTXOs(_ viewController: UIViewController)
 }
 
-final class WalletInfoSettingsViewController: BaseViewController, StoryboardInitializable {
+final class AccountPublicKeyViewController: BaseViewController, StoryboardInitializable {
 
   private var masterPubkey: String!
-  private unowned var delegate: WalletInfoSettingsViewControllerDelegate!
+  private unowned var delegate: AccountPublicKeyViewControllerDelegate!
 
   @IBOutlet weak var extendedKeyTitle: UILabel!
   @IBOutlet weak var extendedKeyValue: UILabel!
@@ -24,11 +23,10 @@ final class WalletInfoSettingsViewController: BaseViewController, StoryboardInit
   @IBOutlet weak var copyExtendedKeyView: UIView!
   @IBOutlet var copyExtendedKeyGesture: UITapGestureRecognizer!
   @IBOutlet weak var copyInstructionLabel: UILabel!
-  @IBOutlet weak var showUTXOsButton: PrimaryActionButton!
 
-  static func newInstance(delegate: WalletInfoSettingsViewControllerDelegate,
-                          masterPubkey: String) -> WalletInfoSettingsViewController {
-    let controller = WalletInfoSettingsViewController.makeFromStoryboard()
+  static func newInstance(delegate: AccountPublicKeyViewControllerDelegate,
+                          masterPubkey: String) -> AccountPublicKeyViewController {
+    let controller = AccountPublicKeyViewController.makeFromStoryboard()
     controller.delegate = delegate
     controller.masterPubkey = masterPubkey
     return controller
@@ -53,18 +51,11 @@ final class WalletInfoSettingsViewController: BaseViewController, StoryboardInit
     copyInstructionLabel.textColor = .darkGrayText
     copyInstructionLabel.font = UIFont.regular(12.0)
 
-    showUTXOsButton.setTitle("Show UTXOs", for: .normal)
-    showUTXOsButton.style = .standard
-
     let generator = QRCodeGenerator()
     extendedKeyImage.image = generator.image(from: masterPubkey, size: extendedKeyImage.frame.size)
   }
 
   @IBAction func handleMasterPubkeyTap(_ sender: Any) {
     delegate.viewController(self, didTapMasterPubkey: masterPubkey)
-  }
-
-  @IBAction func showUTXOs(_ sender: UIButton) {
-    delegate.viewControllerDidSelectShowUTXOs(self)
   }
 }

@@ -188,17 +188,9 @@ extension AppCoordinator: SettingsViewControllerDelegate {
     )
   }
 
-  func viewControllerDidSelectWalletInfo(_ viewController: UIViewController) {
-    guard let wmgr = walletManager else { return }
-    let result = wmgr.accountExtendedPublicKey()
-    switch result {
-    case .fulfilled(let key):
-      let controller = WalletInfoSettingsViewController.newInstance(delegate: self, masterPubkey: key)
-      viewController.navigationController?.pushViewController(controller, animated: true)
-    case .rejected(let error):
-      let controller = alertManager.defaultAlert(withError: error)
-      viewController.navigationController?.present(controller, animated: true, completion: nil)
-    }
+  func viewControllerDidSelectAdvancedWalletInfo(_ viewController: UIViewController) {
+    let controller = AdvancedSettingsViewController.newInstance(delegate: self)
+    viewController.navigationController?.pushViewController(controller, animated: true)
   }
 
   private func deleteDeviceEndpoint() -> Promise<Void> {

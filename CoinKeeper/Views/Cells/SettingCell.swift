@@ -16,4 +16,8 @@ class SettingCell: SettingsBaseCell {
   override func load(with viewModel: SettingsCellViewModel) {
     titleLabel.text = viewModel.type.titleText
   }
+
+  func load(with title: String) {
+    titleLabel.text = title
+  }
 }
