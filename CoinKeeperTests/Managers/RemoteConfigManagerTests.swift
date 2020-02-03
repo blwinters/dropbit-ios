@@ -34,7 +34,6 @@ class RemoteConfigManagerTests: XCTestCase {
 //    sut.update(with: mockResponse)
 //    let retrievedSettings = sut.latestConfig
 
-
   }
 
   private func createMockResponse() -> ConfigResponse {
