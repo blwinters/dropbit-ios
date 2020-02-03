@@ -9,7 +9,7 @@
 import Foundation
 
 enum LightningWalletAmountValidatorError: ValidatorErrorType, Equatable {
-  case reloadMinimum(btc: NSDecimalNumber)
+  case reloadMinimum(Satoshis)
   case invalidAmount
 
   var displayMessage: String {
@@ -17,7 +17,7 @@ enum LightningWalletAmountValidatorError: ValidatorErrorType, Equatable {
     case .invalidAmount:
       return "Unable to convert amount to fiat, stopping"
     case .reloadMinimum(let minReload):
-      let formattedAmount = SatsFormatter().string(fromDecimal: minReload) ?? ""
+      let formattedAmount = SatsFormatter().stringWithSymbol(fromSats: minReload) ?? ""
       return """
       DropBit requires you to load a minimum of \(formattedAmount) to your Lightning wallet.
       You don’t currently have enough funds to meet the minimum requirement.
@@ -59,7 +59,8 @@ class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
 
     if let minReloadValue = minReloadBTC, !ignoringOptions.contains(.minReloadAmount) {
       if candidateBTCAmount < minReloadValue {
-        throw LightningWalletAmountValidatorError.reloadMinimum(btc: minReloadValue)
+        let minReloadSats = minReloadValue.asFractionalUnits(of: .BTC)
+        throw LightningWalletAmountValidatorError.reloadMinimum(minReloadSats)
       }
     }
   }

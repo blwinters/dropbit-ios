@@ -20,7 +20,7 @@ class LightningQuickLoadViewModelTests: XCTestCase {
   }
 
   let rate: ExchangeRate = .sampleUSD
-  let minReloadSats: Int = 60_000
+  let minReloadSats: Satoshis = 60_000
 
   var config: TransactionSendingConfig {
     let settingsConfig = MockSettingsConfig(minReloadSats: minReloadSats, maxInviteUSD: nil)
@@ -32,8 +32,7 @@ class LightningQuickLoadViewModelTests: XCTestCase {
   func testLowOnChainBalanceThrowsError() {
     let oneSat = NSDecimalNumber(sats: 1)
     let balances = WalletBalances(onChain: oneSat, lightning: .zero)
-    let minReloadBTC = NSDecimalNumber(sats: minReloadSats)
-    let expectedError = LightningWalletAmountValidatorError.reloadMinimum(btc: minReloadBTC)
+    let expectedError = LightningWalletAmountValidatorError.reloadMinimum(sats: minReloadSats)
     do {
       sut = try LightningQuickLoadViewModel(spendableBalances: balances, config: config)
       XCTFail("Should throw error")

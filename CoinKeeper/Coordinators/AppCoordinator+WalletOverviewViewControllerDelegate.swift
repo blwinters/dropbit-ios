@@ -64,9 +64,11 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
   }
 
   private func showQuickLoadBalanceError(for error: Error, viewController: UIViewController) {
-    if let validatorError = error as? LightningWalletAmountValidatorError, case .reloadMinimum = validatorError {
+    if let validatorError = error as? LightningWalletAmountValidatorError,
+      case let .reloadMinimum(sats) = validatorError {
+      let satsDesc = SatsFormatter().stringWithSymbol(fromSats: sats) ?? ""
       let message = """
-      DropBit requires you to load a minimum of $5.00 to your Lightning wallet.
+      DropBit requires you to load a minimum of \(satsDesc) to your Lightning wallet.
       You don’t currently have enough funds to meet the minimum requirement.
       """.removingMultilineLineBreaks()
 

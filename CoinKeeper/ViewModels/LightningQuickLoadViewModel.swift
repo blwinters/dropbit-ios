@@ -22,17 +22,25 @@ struct LightningQuickLoadViewModel {
       throw DBTError.System.missingValue(key: "standardAmounts.min")
     }
 
+    let minStandardAmountConverter = CurrencyConverter(fromFiatAmount: minFiatAmount, rate: rate)
+
     ///Run these validations separately to produce correct error message
     //check on chain balance exceeds minFiatAmount
-    let minStandardAmountConverter = CurrencyConverter(fromFiatAmount: minFiatAmount, rate: rate)
-    let onChainBalanceValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
-                                                                 walletTxType: .onChain,
-                                                                 minReloadBTC: config.settings.minReloadBTC)
+    let balanceValidator = LightningWalletAmountValidator(
+      balancesNetPending: spendableBalances,
+      walletTxType: .onChain,
+      minReloadBTC: nil //ignore reload min for balance validation
+    )
+
     do {
-      try onChainBalanceValidator.validate(value: minStandardAmountConverter)
+      try balanceValidator.validate(value: minStandardAmountConverter)
     } catch {
-      //map usableBalance error to
-      throw LightningWalletAmountValidatorError.reloadMinimum(btc: config.settings.minReloadBTC ?? .zero)
+      if case CurrencyAmountValidatorError.usableBalance = error,
+        let minReloadSats = config.minLightningLoad?.asFractionalUnits(of: .BTC) {
+        throw LightningWalletAmountValidatorError.reloadMinimum(minReloadSats)
+      } else {
+        throw error
+      }
     }
 
     //check lightning wallet has capacity for the minFiatAmount
