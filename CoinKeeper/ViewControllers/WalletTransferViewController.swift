@@ -137,7 +137,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
     do {
       let validator = LightningWalletAmountValidator(balancesNetPending: walletBalances,
                                                      walletTxType: .onChain,
-                                                     minReloadBTC: viewModel.txSendingConfig.settings.minReloadBTC)
+                                                     minReloadBTC: viewModel.txSendingConfig.minLightningLoad)
       try validator.validate(value: viewModel.currencyConverter)
       delegate.lightningPaymentData(forBTCAmount: viewModel.btcAmount)
         .done { paymentData in
@@ -216,7 +216,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
         let value = CurrencyConverter(fromBtcAmount: amount, rate: rateManager.exchangeRate)
         try LightningWalletAmountValidator(balancesNetPending: walletBalances,
                                            walletTxType: type,
-                                           minReloadBTC: viewModel.txSendingConfig.settings.minReloadBTC,
+                                           minReloadBTC: viewModel.txSendingConfig.minLightningLoad,
                                            ignoring: [.minReloadAmount]).validate(value: value)
 
         delegate.viewControllerNeedsFeeEstimates(self, btcAmount: amount)
@@ -270,7 +270,7 @@ extension WalletTransferViewController: LongPressConfirmButtonDelegate {
       do {
         let validator = LightningWalletAmountValidator(balancesNetPending: walletBalances,
                                                        walletTxType: .onChain,
-                                                       minReloadBTC: viewModel.txSendingConfig.settings.minReloadBTC)
+                                                       minReloadBTC: viewModel.txSendingConfig.minLightningLoad)
         try validator.validate(value: viewModel.currencyConverter)
         delegate.viewControllerDidConfirmLoad(self, paymentData: data)
       } catch {

@@ -24,11 +24,17 @@ struct TransactionSendingConfig {
     let maxInviteConverter = CurrencyConverter(fromFiatAmount: maxUSD, rate: usdExchangeRate)
     return maxInviteConverter.btcAmount.asFractionalUnits(of: .BTC)
   }
+
+  ///Lightning load minimum in BTC
+  var minLightningLoad: NSDecimalNumber? {
+    settings.minLightningLoadBTC
+  }
+
 }
 
 protocol SettingsConfigType {
 
-  var minReloadBTC: NSDecimalNumber? { get }
+  var minLightningLoadBTC: NSDecimalNumber? { get }
   var maxInviteUSD: NSDecimalNumber? { get }
   func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber]
 
@@ -37,14 +43,14 @@ protocol SettingsConfigType {
 struct SettingsConfig: SettingsConfigType, Equatable {
 
   ///The minimum amount required for a transaction to load the lightning wallet
-  let minReloadBTC: NSDecimalNumber?
+  let minLightningLoadBTC: NSDecimalNumber?
 
   ///The maximum amount allowed for DropBit invitations, expected to be nil if ConfigResponse returns null
   let maxInviteUSD: NSDecimalNumber?
 
   ///`maxInviteUSD: Int?` represents whole dollars
   init(minReload: Satoshis?, maxInviteUSD: Int?) {
-    self.minReloadBTC = minReload.flatMap { NSDecimalNumber(sats: $0) }
+    self.minLightningLoadBTC = minReload.flatMap { NSDecimalNumber(sats: $0) }
     self.maxInviteUSD = maxInviteUSD.flatMap { NSDecimalNumber(value: $0) }
   }
 

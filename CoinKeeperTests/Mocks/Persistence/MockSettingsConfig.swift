@@ -11,11 +11,11 @@ import Foundation
 
 struct MockSettingsConfig: SettingsConfigType {
 
-  let minReloadBTC: NSDecimalNumber?
+  let minLightningLoadBTC: NSDecimalNumber?
   let maxInviteUSD: NSDecimalNumber?
 
   init(minReloadSats: Satoshis?, maxInviteUSD: NSDecimalNumber?) {
-    self.minReloadBTC = minReloadSats.flatMap { NSDecimalNumber(sats: $0) }
+    self.minLightningLoadBTC = minReloadSats.flatMap { NSDecimalNumber(sats: $0) }
     self.maxInviteUSD = maxInviteUSD
   }
 

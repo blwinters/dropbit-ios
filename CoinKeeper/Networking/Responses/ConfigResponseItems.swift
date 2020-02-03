@@ -35,7 +35,7 @@ struct ConfigSettingsResponse: Codable {
 
   let minimumLightningLoad: Satoshis?
 
-  let lnload: ConfigLightningLoadResponse?
+  let lnLoad: ConfigLightningLoadResponse?
 }
 
 struct ConfigResponseItems: ResponseDecodable {

@@ -38,7 +38,7 @@ struct LightningQuickLoadViewModel {
     //check lightning wallet has capacity for the minFiatAmount
     let minReloadValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
                                                             walletTxType: .onChain,
-                                                            minReloadBTC: config.settings.minReloadBTC,
+                                                            minReloadBTC: config.minLightningLoad,
                                                             ignoring: [.minReloadAmount])
     try minReloadValidator.validate(value: minStandardAmountConverter)
 

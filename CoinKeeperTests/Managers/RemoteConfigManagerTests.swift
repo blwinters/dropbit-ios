@@ -26,14 +26,15 @@ class RemoteConfigManagerTests: XCTestCase {
     sut = nil
   }
 
-  func testResponseIsPersistedAndReturned() {
+  func testValueIsPersistedAndReturned_lightningLoadMin() {
     let initialConfig = sut.latestConfig
     XCTAssertNil(initialConfig.settings.maxInviteUSD)
-    XCTAssertEqual(initialConfig.settings, SettingsConfig.fallbackInstance)
-//    let mockResponse = createMockResponse()
-//    sut.update(with: mockResponse)
-//    let retrievedSettings = sut.latestConfig
-
+    XCTAssertNil(initialConfig.settings.minLightningLoadBTC)
+    let mockResponse = createMockResponse()
+    let configDidChange = sut.update(with: mockResponse)
+    XCTAssert(configDidChange)
+    let retrievedValue = sut.latestConfig.settings.minLightningLoadBTC?.asFractionalUnits(of: .BTC)
+    XCTAssertEqual(mockResponse.config.settings?.minimumLightningLoad, retrievedValue)
   }
 
   private func createMockResponse() -> ConfigResponse {
@@ -47,8 +48,8 @@ class RemoteConfigManagerTests: XCTestCase {
     let settingsResponse = ConfigSettingsResponse(twitterDelegate: true,
                                                   invitationMaximum: 50,
                                                   biometricsMaximum: 100,
-                                                  minimumLightningLoad: 3,
-                                                  lnload: lnLoadResponse)
+                                                  minimumLightningLoad: 50_000,
+                                                  lnLoad: lnLoadResponse)
     let mockResponse = ConfigResponse(updatedAt: Date(),
                                       config: ConfigResponseItems(buy: [],
                                                                   referral: nil,
