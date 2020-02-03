@@ -13,14 +13,14 @@ protocol ViewControllerDismissable: AnyObject {
   /// The delegate should dismiss the viewController
   func viewControllerDidSelectClose(_ viewController: UIViewController)
   func viewControllerDidSelectClose(_ viewController: UIViewController, completion: CKCompletion?)
-  func viewControllerDidSelectCloseWithToggle(_ viewController: UIViewController)
+  func viewControllerDidSelectCloseShowCharts(_ viewController: UIViewController)
 }
 
 extension AppCoordinator: ViewControllerDismissable {
 
-  func viewControllerDidSelectCloseWithToggle(_ viewController: UIViewController) {
+  func viewControllerDidSelectCloseShowCharts(_ viewController: UIViewController) {
     viewControllerDidSelectClose(viewController) {
-      self.toggleChartAndBalance()
+      self.showChart()
     }
   }
 

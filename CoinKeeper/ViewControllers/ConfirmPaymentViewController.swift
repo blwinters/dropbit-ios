@@ -80,7 +80,7 @@ class ConfirmPaymentViewController: PresentableViewController, StoryboardInitial
   }
 
   @IBAction func closeButtonWasTouched() {
-    delegate.viewControllerDidSelectClose(self)
+    delegate.viewControllerDidSelectCloseShowCharts(self)
   }
 
   override func viewDidLoad() {
