@@ -33,19 +33,24 @@ final class WalletInfoUTXOsViewController: BaseViewController, StoryboardInitial
 
     title = "UTXOs"
 
-    infoLabel.text = "Tap to see more info"
+    let infoText = utxos.isEmpty ? "There are no UTXOs in this wallet" : "Tap to see more info"
+    infoLabel.text = infoText
     infoLabel.font = .medium(13.0)
     infoLabel.textColor = .darkBlueText
 
-    utxoTableView.delegate = self
-    utxoTableView.dataSource = self
-    utxoTableView.registerNib(cellType: WalletInfoUTXOCell.self)
-    utxoTableView.backgroundColor = .extraLightGrayBackground
-    utxoTableView.applyCornerRadius(15.0)
-    utxoTableView.layer.borderWidth = 1.0
-    utxoTableView.layer.borderColor = UIColor.mediumGrayBorder.cgColor
-    utxoTableView.tableFooterView = UIView()
-    utxoTableView.separatorInset = .zero
+    if utxos.isEmpty {
+      utxoTableView.isHidden = true
+    } else {
+      utxoTableView.delegate = self
+      utxoTableView.dataSource = self
+      utxoTableView.registerNib(cellType: WalletInfoUTXOCell.self)
+      utxoTableView.backgroundColor = .extraLightGrayBackground
+      utxoTableView.applyCornerRadius(15.0)
+      utxoTableView.layer.borderWidth = 1.0
+      utxoTableView.layer.borderColor = UIColor.mediumGrayBorder.cgColor
+      utxoTableView.tableFooterView = UIView()
+      utxoTableView.separatorInset = .zero
+    }
   }
 }
 

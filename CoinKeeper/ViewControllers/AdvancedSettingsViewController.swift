@@ -38,12 +38,16 @@ final class AdvancedSettingsViewController: BaseViewController, StoryboardInitia
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    title = "ADVANCED"
     tableView.delegate = self
     tableView.dataSource = self
     tableView.registerNib(cellType: SettingCell.self)
     tableView.tableFooterView = UIView()
     tableView.backgroundColor = .clear
+  }
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    navigationItem.title = "ADVANCED"
   }
 }
 
