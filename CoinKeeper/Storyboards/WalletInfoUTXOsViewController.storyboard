@@ -16,27 +16,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NSJ-CR-MTr">
+                                <rect key="frame" x="186" y="71" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="93F-My-LhR">
-                                <rect key="frame" x="20" y="64" width="374" height="778"/>
+                                <rect key="frame" x="20" y="104" width="374" height="738"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="NSJ-CR-MTr" firstAttribute="top" secondItem="Wy5-9e-YjX" secondAttribute="top" constant="27" id="6be-BR-S1o"/>
+                            <constraint firstItem="NSJ-CR-MTr" firstAttribute="centerX" secondItem="g6W-7s-NRe" secondAttribute="centerX" id="6hM-nD-8H7"/>
                             <constraint firstItem="93F-My-LhR" firstAttribute="leading" secondItem="Wy5-9e-YjX" secondAttribute="leading" constant="20" id="H3D-pG-hN0"/>
+                            <constraint firstItem="93F-My-LhR" firstAttribute="top" secondItem="NSJ-CR-MTr" secondAttribute="bottom" constant="12" id="ZND-WE-el2"/>
                             <constraint firstItem="Wy5-9e-YjX" firstAttribute="trailing" secondItem="93F-My-LhR" secondAttribute="trailing" constant="20" id="cB6-dr-PvH"/>
-                            <constraint firstItem="93F-My-LhR" firstAttribute="top" secondItem="Wy5-9e-YjX" secondAttribute="top" constant="20" id="olX-lL-FOA"/>
                             <constraint firstItem="Wy5-9e-YjX" firstAttribute="bottom" secondItem="93F-My-LhR" secondAttribute="bottom" constant="20" id="yXx-S4-4Gm"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Wy5-9e-YjX"/>
                     </view>
                     <connections>
+                        <outlet property="infoLabel" destination="NSJ-CR-MTr" id="CZt-iO-RaT"/>
                         <outlet property="utxoTableView" destination="93F-My-LhR" id="Kui-c1-Jir"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BUg-EX-xbe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="152" y="138"/>
+            <point key="canvasLocation" x="150.72463768115944" y="137.94642857142856"/>
         </scene>
     </scenes>
 </document>

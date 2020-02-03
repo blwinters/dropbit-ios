@@ -28,6 +28,6 @@ struct DisplayableUTXO {
   }
 
   var confirmationDescription: String {
-    isConfirmed ? "yes" : "no"
+    isConfirmed ? "Confirmed" : "Pending"
   }
 }

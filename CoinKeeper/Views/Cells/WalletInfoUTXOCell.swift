@@ -58,9 +58,14 @@ class WalletInfoUTXOCell: UITableViewCell {
     let formattedFiat = CKCurrencyFormatter.string(for: fiatAmount, currency: .USD, walletTransactionType: .onChain)
     btcLabel.text = formattedBTC
     fiatLabel.text = formattedFiat
-    txidLabel.text = utxo.txid
-    indexLabel.text = "Index: \(utxo.index)"
-    isConfirmedLabel.text = "Confirmed: \(utxo.confirmationDescription)"
+
+    let halfIndex = Int(Double(utxo.txid.count) / 2.0)
+    let firstHalf = utxo.txid.substring(start: 0, offsetBy: halfIndex) ?? ""
+    let lastHalf = utxo.txid.substring(start: halfIndex, offsetBy: halfIndex) ?? ""
+
+    txidLabel.text = "txid: \(firstHalf)\n\(lastHalf)"
+    indexLabel.text = "Output Index: \(utxo.index)"
+    isConfirmedLabel.text = utxo.confirmationDescription
   }
 
   func toggleView() {
