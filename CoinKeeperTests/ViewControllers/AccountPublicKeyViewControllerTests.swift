@@ -19,7 +19,11 @@ class AccountPublicKeyViewControllerTests: XCTestCase {
   override func setUp() {
     super.setUp()
     delegate = MockWalletInfoSettingsDelegate()
-    sut = AccountPublicKeyViewController.newInstance(delegate: delegate, masterPubkey: fakeMasterPubkey)
+    let coin = BTCMainnetCoin(purpose: .segwit)
+    sut = AccountPublicKeyViewController.newInstance(delegate: delegate,
+                                                     masterPubkey: fakeMasterPubkey,
+                                                     accountDerivation: coin.accountExtendedPubKeyPathString
+    )
     _ = sut.view
   }
 
@@ -35,12 +39,14 @@ class AccountPublicKeyViewControllerTests: XCTestCase {
     XCTAssertNotNil(sut.copyExtendedKeyView)
     XCTAssertNotNil(sut.copyExtendedKeyGestureFromQR)
     XCTAssertNotNil(sut.copyInstructionLabel)
+    XCTAssertNotNil(sut.accountDerivationPathLabel)
   }
 
   func testInitialState() {
     XCTAssertEqual(sut.extendedKeyValue.text, fakeMasterPubkey)
     XCTAssertEqual(sut.copyExtendedKeyView.backgroundColor, UIColor.clear)
     XCTAssertEqual(sut.copyInstructionLabel.text, "Tap key to save to clipboard")
+    XCTAssertEqual(sut.accountDerivationPathLabel.text, "M/84'/0'/0'")
   }
 
   // MARK: test actions produce results

@@ -15,21 +15,25 @@ protocol AccountPublicKeyViewControllerDelegate: AnyObject {
 final class AccountPublicKeyViewController: BaseViewController, StoryboardInitializable {
 
   private var masterPubkey: String!
+  private var accountDerivationString = ""
   private unowned var delegate: AccountPublicKeyViewControllerDelegate!
 
   @IBOutlet var extendedPubKeyBackgroundView: UIView!
-  @IBOutlet weak var extendedKeyValue: UILabel!
-  @IBOutlet weak var extendedKeyImage: UIImageView!
-  @IBOutlet weak var copyExtendedKeyView: UIView!
+  @IBOutlet var extendedKeyValue: UILabel!
+  @IBOutlet var extendedKeyImage: UIImageView!
+  @IBOutlet var copyExtendedKeyView: UIView!
   @IBOutlet var copyExtendedKeyGestureFromQR: UITapGestureRecognizer!
   @IBOutlet var copyExtendedKeyGestureFromText: UITapGestureRecognizer!
-  @IBOutlet weak var copyInstructionLabel: UILabel!
+  @IBOutlet var copyInstructionLabel: UILabel!
+  @IBOutlet var accountDerivationPathLabel: UILabel!
 
   static func newInstance(delegate: AccountPublicKeyViewControllerDelegate,
-                          masterPubkey: String) -> AccountPublicKeyViewController {
+                          masterPubkey: String,
+                          accountDerivation: String) -> AccountPublicKeyViewController {
     let controller = AccountPublicKeyViewController.makeFromStoryboard()
     controller.delegate = delegate
     controller.masterPubkey = masterPubkey
+    controller.accountDerivationString = accountDerivation
     return controller
   }
 
@@ -52,10 +56,14 @@ final class AccountPublicKeyViewController: BaseViewController, StoryboardInitia
 
     copyInstructionLabel.text = "Tap key to save to clipboard"
     copyInstructionLabel.textColor = .darkGrayText
-    copyInstructionLabel.font = UIFont.regular(12.0)
+    copyInstructionLabel.font = .regular(12.0)
 
     let generator = QRCodeGenerator()
     extendedKeyImage.image = generator.image(from: masterPubkey, size: extendedKeyImage.frame.size)
+
+    accountDerivationPathLabel.text = accountDerivationString
+    accountDerivationPathLabel.textColor = .darkGrayText
+    accountDerivationPathLabel.font = .regular(12.0)
   }
 
   @IBAction func handleMasterPubkeyTap(_ sender: Any) {

@@ -36,7 +36,11 @@ extension AppCoordinator: AdvancedSettingsViewControllerDelegate {
     let result = wmgr.accountExtendedPublicKey()
     switch result {
     case .fulfilled(let key):
-      let controller = AccountPublicKeyViewController.newInstance(delegate: self, masterPubkey: key)
+      let controller = AccountPublicKeyViewController.newInstance(
+        delegate: self,
+        masterPubkey: key,
+        accountDerivation: wmgr.coin.accountExtendedPubKeyPathString
+      )
       viewController.navigationController?.pushViewController(controller, animated: true)
     case .rejected(let error):
       let controller = alertManager.defaultAlert(withError: error)

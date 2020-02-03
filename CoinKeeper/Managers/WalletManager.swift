@@ -22,7 +22,7 @@ class WalletManager: WalletManagerType {
   private(set) var wallet: CNBCnlibHDWallet
   private let persistenceManager: PersistenceManagerType
 
-  let coin: CNBCnlibBaseCoin
+  let coin: BaseCoin
 
   init?(words: [String], persistenceManager: PersistenceManagerType = PersistenceManager()) {
     let relevantCoin = persistenceManager.usableCoin

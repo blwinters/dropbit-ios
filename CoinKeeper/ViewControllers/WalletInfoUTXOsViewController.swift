@@ -36,7 +36,7 @@ final class WalletInfoUTXOsViewController: BaseViewController, StoryboardInitial
     infoLabel.text = "Tap to see more info"
     infoLabel.font = .medium(13.0)
     infoLabel.textColor = .darkBlueText
-    
+
     utxoTableView.delegate = self
     utxoTableView.dataSource = self
     utxoTableView.registerNib(cellType: WalletInfoUTXOCell.self)
