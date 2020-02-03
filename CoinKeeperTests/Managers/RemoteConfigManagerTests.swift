@@ -37,12 +37,12 @@ class RemoteConfigManagerTests: XCTestCase {
   }
 
   private func createMockResponse() -> ConfigResponse {
-    let standardValues = [5, 10, 15, 20, 35]
+    let standardValues = [5, 10, 20, 50, 100]
     let lnLoadResponse = ConfigLightningLoadResponse(AUD: standardValues,
                                                      CAD: standardValues,
                                                      EUR: standardValues,
                                                      GBP: standardValues,
-                                                     SEK: standardValues.map { $0 * 10},
+                                                     SEK: standardValues.map { $0 * 10 },
                                                      USD: standardValues)
     let settingsResponse = ConfigSettingsResponse(twitterDelegate: true,
                                                   invitationMaximum: 50,
