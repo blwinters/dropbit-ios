@@ -20,17 +20,20 @@ class LightningQuickLoadViewModelTests: XCTestCase {
   }
 
   let rate: ExchangeRate = .sampleUSD
+  let minReloadSats: Int = 60_000
 
   var config: TransactionSendingConfig {
-    TransactionSendingConfig(settings: MockSettingsConfig.default(),
-                             preferredExchangeRate: rate,
-                             usdExchangeRate: rate)
+    let settingsConfig = MockSettingsConfig(minReloadSats: minReloadSats, maxInviteUSD: nil)
+    return TransactionSendingConfig(settings: settingsConfig,
+                                    preferredExchangeRate: rate,
+                                    usdExchangeRate: rate)
   }
 
   func testLowOnChainBalanceThrowsError() {
     let oneSat = NSDecimalNumber(sats: 1)
     let balances = WalletBalances(onChain: oneSat, lightning: .zero)
-    let expectedError = LightningWalletAmountValidatorError.reloadMinimum(btc: config.settings.minReloadBTC)
+    let minReloadBTC = NSDecimalNumber(sats: minReloadSats)
+    let expectedError = LightningWalletAmountValidatorError.reloadMinimum(btc: minReloadBTC)
     do {
       sut = try LightningQuickLoadViewModel(spendableBalances: balances, config: config)
       XCTFail("Should throw error")

@@ -33,8 +33,7 @@ struct ConfigSettingsResponse: Codable {
   /// value represents whole dollars (USD)
   let biometricsMaximum: Int?
 
-  /// value represents whole dollars (USD)
-  let minimumLightningLoad: Int?
+  let minimumLightningLoad: Satoshis?
 
   let lnload: ConfigLightningLoadResponse?
 }
