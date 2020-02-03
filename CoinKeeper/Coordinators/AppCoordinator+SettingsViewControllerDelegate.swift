@@ -188,6 +188,11 @@ extension AppCoordinator: SettingsViewControllerDelegate {
     )
   }
 
+  func viewControllerDidSelectAdvancedWalletInfo(_ viewController: UIViewController) {
+    let controller = AdvancedSettingsViewController.newInstance(delegate: self)
+    viewController.navigationController?.pushViewController(controller, animated: true)
+  }
+
   private func deleteDeviceEndpoint() -> Promise<Void> {
     guard let endpointIds = persistenceManager.brokers.device.deviceEndpointIds() else {
       return .value(())
