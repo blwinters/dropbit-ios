@@ -37,14 +37,14 @@ class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
   let balancesNetPending: WalletBalances
   let walletTxType: WalletTransactionType
   let ignoringOptions: [LightningWalletValidationOptions]
-  let txSendingConfig: TransactionSendingConfig
+  let minReloadBTC: NSDecimalNumber?
 
   init(balancesNetPending: WalletBalances,
        walletTxType: WalletTransactionType,
-       config: TransactionSendingConfig,
+       minReloadBTC: NSDecimalNumber?,
        ignoring: [LightningWalletValidationOptions] = []) {
     self.balancesNetPending = balancesNetPending
-    self.txSendingConfig = config
+    self.minReloadBTC = minReloadBTC
     self.walletTxType = walletTxType
     self.ignoringOptions = ignoring
     super.init()
@@ -57,9 +57,9 @@ class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
     try validateAmountIsNonZeroNumber(candidateBTCAmount)
     try validateBalanceNetPendingIsSufficient(forAmount: candidateBTCAmount, balances: balancesNetPending, walletTxType: walletTxType)
 
-    if !ignoringOptions.contains(.minReloadAmount) {
-      if candidateBTCAmount < txSendingConfig.settings.minReloadBTC {
-        throw LightningWalletAmountValidatorError.reloadMinimum(btc: txSendingConfig.settings.minReloadBTC)
+    if let minReloadValue = minReloadBTC, !ignoringOptions.contains(.minReloadAmount) {
+      if candidateBTCAmount < minReloadValue {
+        throw LightningWalletAmountValidatorError.reloadMinimum(btc: minReloadValue)
       }
     }
   }

@@ -28,7 +28,7 @@ struct TransactionSendingConfig {
 
 protocol SettingsConfigType {
 
-  var minReloadBTC: NSDecimalNumber { get }
+  var minReloadBTC: NSDecimalNumber? { get }
   var maxInviteUSD: NSDecimalNumber? { get }
   func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber]
 
@@ -37,15 +37,14 @@ protocol SettingsConfigType {
 struct SettingsConfig: SettingsConfigType, Equatable {
 
   ///The minimum amount required for a transaction to load the lightning wallet
-  let minReloadBTC: NSDecimalNumber
+  let minReloadBTC: NSDecimalNumber?
 
   ///The maximum amount allowed for DropBit invitations, expected to be nil if ConfigResponse returns null
   let maxInviteUSD: NSDecimalNumber?
 
   ///`maxInviteUSD: Int?` represents whole dollars
   init(minReload: Satoshis?, maxInviteUSD: Int?) {
-    let reloadAmt = minReload ?? SettingsConfig.defaultMinReload
-    self.minReloadBTC = NSDecimalNumber(sats: reloadAmt)
+    self.minReloadBTC = minReload.flatMap { NSDecimalNumber(sats: $0) }
     self.maxInviteUSD = maxInviteUSD.flatMap { NSDecimalNumber(value: $0) }
   }
 
@@ -56,11 +55,8 @@ struct SettingsConfig: SettingsConfigType, Equatable {
     }
   }
 
-  private static let defaultMinReload: Satoshis = 60_000
-  private static let defaultMaxInviteUSD: Int = 100
-
   static var fallbackInstance: SettingsConfig {
-    return SettingsConfig(minReload: defaultMinReload, maxInviteUSD: defaultMaxInviteUSD)
+    return SettingsConfig(minReload: 60_000, maxInviteUSD: 100)
   }
 
 }
