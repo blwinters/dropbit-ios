@@ -24,7 +24,7 @@ class MockSendPaymentViewControllerCoordinator: SendPaymentViewControllerCoordin
     self.networkManager = networkManager
   }
 
-  func viewControllerDidSelectCloseWithToggle(_ viewController: UIViewController) { }
+  func viewControllerDidSelectCloseShowCharts(_ viewController: UIViewController) { }
 
   func viewControllerDidTapReceivePayment(_ viewController: UIViewController,
                                           converter: CurrencyConverter, walletTransactionType: WalletTransactionType) {}

@@ -24,6 +24,7 @@ extension AppCoordinator: SuccessFailViewControllerDelegate {
     switch viewController.viewModel {
     case is PaymentSuccessFailViewModel:
       CKNotificationCenter.publish(key: .didSendTransactionSuccessfully)
+      if success { showChart() }
       viewController.dismiss(animated: false) { [weak self] in
         self?.navigationController.topViewController()?.dismiss(animated: true, completion: completion)
       }

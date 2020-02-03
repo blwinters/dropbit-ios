@@ -63,7 +63,7 @@ class ConfirmPaymentViewControllerTests: XCTestCase {
       return Promise { _ in }
     }
 
-    func viewControllerDidSelectCloseWithToggle(_ viewController: UIViewController) { }
+    func viewControllerDidSelectCloseShowCharts(_ viewController: UIViewController) { }
     var alertManager: AlertManagerType = MockAlertManager(notificationManager:
       NotificationManager(permissionManager: PermissionManager(),
                           networkInteractor: NetworkManager(persistenceManager: PersistenceManager(),

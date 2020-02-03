@@ -76,7 +76,7 @@ class SuccessFailViewControllerTests: XCTestCase {
 
   // MARK: mock coordinator
   class MockCoordinator: SuccessFailViewControllerDelegate {
-    func viewControllerDidSelectCloseWithToggle(_ viewController: UIViewController) { }
+    func viewControllerDidSelectCloseShowCharts(_ viewController: UIViewController) { }
     func viewControllerDidRetry(_ viewController: SuccessFailViewController) {}
 
     var wasToldAboutSuccess = false
