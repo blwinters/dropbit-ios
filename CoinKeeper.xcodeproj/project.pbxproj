@@ -326,6 +326,7 @@
 		3B9A8DF72150388F00C78C2C /* AppCoordinator+WalletDelegateType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9A8DF62150388F00C78C2C /* AppCoordinator+WalletDelegateType.swift */; };
 		3B9A8DFA2150414300C78C2C /* MockWalletDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9A8DF821503E6500C78C2C /* MockWalletDelegate.swift */; };
 		3B9A8E062152A93200C78C2C /* SendPaymentViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9A8E052152A93100C78C2C /* SendPaymentViewControllerTests.swift */; };
+		3B9B015323E85FC400886899 /* Cnlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B9B015223E85FC400886899 /* Cnlib.framework */; };
 		3B9EE87C2058370000C0CC8C /* AlertManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9EE87B2058370000C0CC8C /* AlertManagerTests.swift */; };
 		3B9EE87E2058674C00C0CC8C /* MockNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9EE87D2058674B00C0CC8C /* MockNavigationController.swift */; };
 		3BA360842090B0C100732C43 /* CKMTransaction+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA360822090B0C100732C43 /* CKMTransaction+CoreDataClass.swift */; };
@@ -392,7 +393,6 @@
 		3BDB6C532220521000E75DD2 /* SendPaymentMemoViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDB6C522220520F00E75DD2 /* SendPaymentMemoViewTests.swift */; };
 		3BDBE63422839A6B009C23CB /* MockNeworkManager+Twitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDBE632228399F9009C23CB /* MockNeworkManager+Twitter.swift */; };
 		3BDBF43D2385C1C30076FE04 /* RatingAndReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDBF43C2385C1C30076FE04 /* RatingAndReviewManager.swift */; };
-		3BDE266923E4B5FF008E063F /* Cnlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BDE266823E4B5FF008E063F /* Cnlib.framework */; };
 		3BDE266B23E71657008E063F /* AdvancedSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDE266A23E71657008E063F /* AdvancedSettingsViewController.swift */; };
 		3BDE266D23E71764008E063F /* AdvancedSettingsViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BDE266C23E71764008E063F /* AdvancedSettingsViewController.storyboard */; };
 		3BDE266F23E771FC008E063F /* AppCoordinator+AdvancedSettingsViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDE266E23E771FC008E063F /* AppCoordinator+AdvancedSettingsViewControllerDelegate.swift */; };
@@ -1651,6 +1651,7 @@
 		3B9A8DF62150388F00C78C2C /* AppCoordinator+WalletDelegateType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+WalletDelegateType.swift"; sourceTree = "<group>"; };
 		3B9A8DF821503E6500C78C2C /* MockWalletDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWalletDelegate.swift; sourceTree = "<group>"; };
 		3B9A8E052152A93100C78C2C /* SendPaymentViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendPaymentViewControllerTests.swift; sourceTree = "<group>"; };
+		3B9B015223E85FC400886899 /* Cnlib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Cnlib.framework; sourceTree = "<group>"; };
 		3B9EE87B2058370000C0CC8C /* AlertManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManagerTests.swift; sourceTree = "<group>"; };
 		3B9EE87D2058674B00C0CC8C /* MockNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNavigationController.swift; sourceTree = "<group>"; };
 		3BA360822090B0C100732C43 /* CKMTransaction+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKMTransaction+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -1717,7 +1718,6 @@
 		3BDB6C522220520F00E75DD2 /* SendPaymentMemoViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendPaymentMemoViewTests.swift; sourceTree = "<group>"; };
 		3BDBE632228399F9009C23CB /* MockNeworkManager+Twitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockNeworkManager+Twitter.swift"; sourceTree = "<group>"; };
 		3BDBF43C2385C1C30076FE04 /* RatingAndReviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingAndReviewManager.swift; sourceTree = "<group>"; };
-		3BDE266823E4B5FF008E063F /* Cnlib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Cnlib.framework; sourceTree = "<group>"; };
 		3BDE266A23E71657008E063F /* AdvancedSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsViewController.swift; sourceTree = "<group>"; };
 		3BDE266C23E71764008E063F /* AdvancedSettingsViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AdvancedSettingsViewController.storyboard; sourceTree = "<group>"; };
 		3BDE266E23E771FC008E063F /* AppCoordinator+AdvancedSettingsViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+AdvancedSettingsViewControllerDelegate.swift"; sourceTree = "<group>"; };
@@ -2514,7 +2514,7 @@
 				D3050CCBBA9D3A897790120B /* Pods_DropBit.framework in Frameworks */,
 				3BC289B623C8C6F6005B9933 /* PromiseKit in Frameworks */,
 				3B227D7923CCD37D00D86BE8 /* FAPanels in Frameworks */,
-				3BDE266923E4B5FF008E063F /* Cnlib.framework in Frameworks */,
+				3B9B015323E85FC400886899 /* Cnlib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3182,7 +3182,7 @@
 		3BAB4BB723A7C71000AADBF7 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				3BDE266823E4B5FF008E063F /* Cnlib.framework */,
+				3B9B015223E85FC400886899 /* Cnlib.framework */,
 			);
 			path = lib;
 			sourceTree = "<group>";
