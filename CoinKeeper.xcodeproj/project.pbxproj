@@ -801,6 +801,7 @@
 		B5192FB4216E938000DCC39B /* StringDictResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5192FB3216E938000DCC39B /* StringDictResponseTests.swift */; };
 		B5192FB6216E9A9400DCC39B /* UserResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5192FB5216E9A9400DCC39B /* UserResponseTests.swift */; };
 		B5192FB8216E9B5600DCC39B /* WalletResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5192FB7216E9B5600DCC39B /* WalletResponseTests.swift */; };
+		B519EC4523E86B0F0049656A /* RemoteConfigManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B519EC4423E86B0F0049656A /* RemoteConfigManagerTests.swift */; };
 		B51AE4A7209398FE008380CC /* CKMPhoneNumber+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51AE4A5209398FD008380CC /* CKMPhoneNumber+CoreDataProperties.swift */; };
 		B51AE4A8209398FE008380CC /* CKMPhoneNumber+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51AE4A6209398FE008380CC /* CKMPhoneNumber+CoreDataClass.swift */; };
 		B51AE4AA2093AED4008380CC /* String+Substrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51AE4A92093AED4008380CC /* String+Substrings.swift */; };
@@ -2061,6 +2062,7 @@
 		B5192FB3216E938000DCC39B /* StringDictResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringDictResponseTests.swift; sourceTree = "<group>"; };
 		B5192FB5216E9A9400DCC39B /* UserResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponseTests.swift; sourceTree = "<group>"; };
 		B5192FB7216E9B5600DCC39B /* WalletResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletResponseTests.swift; sourceTree = "<group>"; };
+		B519EC4423E86B0F0049656A /* RemoteConfigManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigManagerTests.swift; sourceTree = "<group>"; };
 		B51A14B62081266600F5DE23 /* TransactionHistoryPrimaryAmountLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionHistoryPrimaryAmountLabel.swift; sourceTree = "<group>"; };
 		B51AE4A5209398FD008380CC /* CKMPhoneNumber+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CKMPhoneNumber+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B51AE4A6209398FE008380CC /* CKMPhoneNumber+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CKMPhoneNumber+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -3529,6 +3531,7 @@
 				30F0B64A2139D6C300BF7DBB /* CoinNinjaUrlFactory.swift */,
 				3B2EBF7422318476003C0D0E /* ContactCacheManagerTests.swift */,
 				3B5720772232CD1C0048A8CF /* DatabaseTests.swift */,
+				B519EC4423E86B0F0049656A /* RemoteConfigManagerTests.swift */,
 				3B598FDD2315CB2D00FF50CD /* WalletFlagsParserTests.swift */,
 			);
 			path = Managers;
@@ -5813,6 +5816,7 @@
 				3B474153217A1582004DA223 /* MessageResponseTests.swift in Sources */,
 				B56F36AC233AB82200984A51 /* ConfirmPaymentMemoViewTests.swift in Sources */,
 				3B1555E620D2B4A200D6A70C /* TransactionCoreDataTests.swift in Sources */,
+				B519EC4523E86B0F0049656A /* RemoteConfigManagerTests.swift in Sources */,
 				A21DEE5722E8D6E900BBE508 /* WalletOverviewViewControllerTests.swift in Sources */,
 				3B5052BB2046E6AD000C739F /* BackupRecoveryWordsCollectionDDSTests.swift in Sources */,
 				A2E9846823831F9200107C53 /* MerchantAttributeViewTests.swift in Sources */,
