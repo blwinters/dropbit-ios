@@ -64,10 +64,21 @@ struct RemoteConfig: Equatable {
 
 protocol RemoteConfigManagerType: AnyObject {
 
+  var userDefaults: UserDefaults { get }
   var latestConfig: RemoteConfig { get }
 
   ///Returns true if the update contained changes compared to `latestConfig`
   func update(with response: ConfigResponse) -> Bool
+
+}
+
+extension RemoteConfigManagerType {
+
+  func deletePersistedConfig() {
+    for key in RemoteConfig.Key.allCases {
+      self.userDefaults.set(nil, forKey: key.defaultsString)
+    }
+  }
 
 }
 
@@ -81,6 +92,7 @@ class RemoteConfigManager: RemoteConfigManagerType {
     self.latestConfig = createConfig()
   }
 
+  @discardableResult
   func update(with response: ConfigResponse) -> Bool {
     let previousConfig = latestConfig
 
