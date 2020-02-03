@@ -42,7 +42,7 @@ class WalletInfoUTXOCell: UITableViewCell {
     txidLabel.numberOfLines = 2
     txidLabel.adjustsFontSizeToFitWidth = true
     txidLabel.minimumScaleFactor = 0.5
-    txidLabel.font = .regular(14.0)
+    txidLabel.font = .medium(14.0)
     indexLabel.font = .regular(12.0)
     isConfirmedLabel.font = .regular(12.0)
 
