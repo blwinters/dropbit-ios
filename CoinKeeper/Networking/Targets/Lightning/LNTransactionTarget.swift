@@ -12,6 +12,7 @@ import Foundation
 public struct LNPayBody: Encodable {
   let request: String
   let value: Int
+  var estimate: Bool?
 }
 
 public struct LNWithdrawBody: Encodable {

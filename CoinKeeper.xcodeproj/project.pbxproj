@@ -200,6 +200,7 @@
 		3B5052BB2046E6AD000C739F /* BackupRecoveryWordsCollectionDDSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5052BA2046E6AD000C739F /* BackupRecoveryWordsCollectionDDSTests.swift */; };
 		3B5052BF20473FC9000C739F /* BackupRecoveryWordsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5052BD20473FC9000C739F /* BackupRecoveryWordsCell.swift */; };
 		3B5220F32087B29600376DD8 /* UIScreen+RelativeSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5220F22087B29600376DD8 /* UIScreen+RelativeSize.swift */; };
+		3B53DFB023E8BB4E001C2DB4 /* EstimatedLightningFeeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B53DFAF23E8BB4E001C2DB4 /* EstimatedLightningFeeViewModel.swift */; };
 		3B547A6E2280A6F1007B0366 /* VerifiedStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B547A6D2280A6F0007B0366 /* VerifiedStatusView.swift */; };
 		3B547A702280A6FD007B0366 /* VerifiedStatusView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3B547A6F2280A6FD007B0366 /* VerifiedStatusView.xib */; };
 		3B547A722280AEE5007B0366 /* ChangeRemoveVerificationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B547A712280AEE5007B0366 /* ChangeRemoveVerificationButton.swift */; };
@@ -1523,6 +1524,7 @@
 		3B5052BA2046E6AD000C739F /* BackupRecoveryWordsCollectionDDSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRecoveryWordsCollectionDDSTests.swift; sourceTree = "<group>"; };
 		3B5052BD20473FC9000C739F /* BackupRecoveryWordsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRecoveryWordsCell.swift; sourceTree = "<group>"; };
 		3B5220F22087B29600376DD8 /* UIScreen+RelativeSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+RelativeSize.swift"; sourceTree = "<group>"; };
+		3B53DFAF23E8BB4E001C2DB4 /* EstimatedLightningFeeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstimatedLightningFeeViewModel.swift; sourceTree = "<group>"; };
 		3B547A6D2280A6F0007B0366 /* VerifiedStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifiedStatusView.swift; sourceTree = "<group>"; };
 		3B547A6F2280A6FD007B0366 /* VerifiedStatusView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VerifiedStatusView.xib; sourceTree = "<group>"; };
 		3B547A712280AEE5007B0366 /* ChangeRemoveVerificationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeRemoveVerificationButton.swift; sourceTree = "<group>"; };
@@ -3436,6 +3438,7 @@
 				30349F862188A99700A32AFA /* ServerAddressViewModel.swift */,
 				3B13ED102254E24900905226 /* CurrencyController.swift */,
 				A257CEBB230325580063670B /* WalletTransferViewModel.swift */,
+				3B53DFAF23E8BB4E001C2DB4 /* EstimatedLightningFeeViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -5132,6 +5135,7 @@
 				3B82692320331189009B11EC /* UIFont+FontStrings.swift in Sources */,
 				3BCBFCC6229EE91E00F633BA /* SettingsCellTitleLabel.swift in Sources */,
 				B5B9132921419F84003A24E9 /* PhoneNumberKit+AreaCodes.swift in Sources */,
+				3B53DFB023E8BB4E001C2DB4 /* EstimatedLightningFeeViewModel.swift in Sources */,
 				3B731D382253D97A0044B4F8 /* UIView+Fade.swift in Sources */,
 				A2B4E6EE22FA476A00E24324 /* LightningRefillViewController.swift in Sources */,
 				A2853B1823DA51B200533272 /* LaunchURLType.swift in Sources */,

@@ -25,7 +25,7 @@ struct LNTransactionResult: LNResponseDecodable {
 
   let id: String
   var accountId: String?
-  let createdAt: Date
+  let createdAt: Date?
   let updatedAt: Date?
   let expiresAt: Date?
   let status: LNTransactionStatus
