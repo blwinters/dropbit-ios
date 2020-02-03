@@ -54,9 +54,17 @@ class WalletInfoUTXOCell: UITableViewCell {
     let btcAmount = NSDecimalNumber(integerAmount: utxo.amount, currency: .BTC)
     let converter = CurrencyConverter(fromBtcTo: .USD, fromAmount: btcAmount, rates: rates)
     let fiatAmount = converter.amount(forCurrency: .USD)
-    let formattedBTC = CKCurrencyFormatter.string(for: btcAmount, currency: .BTC, walletTransactionType: .onChain)
+
+    let btcFormatter = BitcoinFormatter(symbolType: .image, symbolFont: nil, imageSize: 14)
+    let formattedBTC = btcFormatter.attributedString(from: btcAmount)
+    btcLabel.text = nil
+    btcLabel.attributedText = formattedBTC
+    let attributes = btcLabel.attributedText?.attributes(at: 0, effectiveRange: nil)
+    let horizontalOffset = CGFloat(8)
+    let textWidth = (formattedBTC?.string.size(withAttributes: attributes).width ?? 0) + horizontalOffset
+    btcLabel.widthAnchor.constraint(equalToConstant: textWidth).isActive = true
+
     let formattedFiat = CKCurrencyFormatter.string(for: fiatAmount, currency: .USD, walletTransactionType: .onChain)
-    btcLabel.text = formattedBTC
     fiatLabel.text = formattedFiat
 
     let halfIndex = Int(Double(utxo.txid.count) / 2.0)
