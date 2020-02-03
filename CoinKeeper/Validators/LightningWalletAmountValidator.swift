@@ -20,7 +20,6 @@ enum LightningWalletAmountValidatorError: ValidatorErrorType, Equatable {
       let formattedAmount = SatsFormatter().stringWithSymbol(fromSats: minReload) ?? ""
       return """
       DropBit requires you to load a minimum of \(formattedAmount) to your Lightning wallet.
-      You don’t currently have enough funds to meet the minimum requirement.
       """.removingMultilineLineBreaks()
     }
   }
