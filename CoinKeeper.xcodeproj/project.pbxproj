@@ -70,7 +70,7 @@
 		3B1555E620D2B4A200D6A70C /* TransactionCoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1555E520D2B4A200D6A70C /* TransactionCoreDataTests.swift */; };
 		3B1555E820D2C47000D6A70C /* VinCoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1555E720D2C47000D6A70C /* VinCoreDataTests.swift */; };
 		3B1555EA20D2D48D00D6A70C /* VoutCoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1555E920D2D48D00D6A70C /* VoutCoreDataTests.swift */; };
-		3B17F49523E1DF33001D582D /* WalletInfoSettingsViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B17F49423E1DF33001D582D /* WalletInfoSettingsViewController.storyboard */; };
+		3B17F49523E1DF33001D582D /* AccountPublicKeyViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B17F49423E1DF33001D582D /* AccountPublicKeyViewController.storyboard */; };
 		3B17F49723E1DFB7001D582D /* AccountPublicKeyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F49623E1DFB7001D582D /* AccountPublicKeyViewController.swift */; };
 		3B17F49923E1DFF0001D582D /* WalletInfoSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F49823E1DFF0001D582D /* WalletInfoSettingsViewControllerTests.swift */; };
 		3B17F49B23E1EE84001D582D /* AppCoordinator+AccountPublicKeyViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F49A23E1EE84001D582D /* AppCoordinator+AccountPublicKeyViewControllerDelegate.swift */; };
@@ -1419,7 +1419,7 @@
 		3B1555E520D2B4A200D6A70C /* TransactionCoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCoreDataTests.swift; sourceTree = "<group>"; };
 		3B1555E720D2C47000D6A70C /* VinCoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VinCoreDataTests.swift; sourceTree = "<group>"; };
 		3B1555E920D2D48D00D6A70C /* VoutCoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoutCoreDataTests.swift; sourceTree = "<group>"; };
-		3B17F49423E1DF33001D582D /* WalletInfoSettingsViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WalletInfoSettingsViewController.storyboard; sourceTree = "<group>"; };
+		3B17F49423E1DF33001D582D /* AccountPublicKeyViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AccountPublicKeyViewController.storyboard; sourceTree = "<group>"; };
 		3B17F49623E1DFB7001D582D /* AccountPublicKeyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountPublicKeyViewController.swift; sourceTree = "<group>"; };
 		3B17F49823E1DFF0001D582D /* WalletInfoSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletInfoSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		3B17F49A23E1EE84001D582D /* AppCoordinator+AccountPublicKeyViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+AccountPublicKeyViewControllerDelegate.swift"; sourceTree = "<group>"; };
@@ -3392,7 +3392,7 @@
 				3B0C785523197B0A00D4C216 /* LightningUpgradePageViewController.storyboard */,
 				A267F51423958ABC0098170E /* EarnViewController.storyboard */,
 				A2CEEF73238C7F0500E4A8EF /* PrivateKeySweepViewController.storyboard */,
-				3B17F49423E1DF33001D582D /* WalletInfoSettingsViewController.storyboard */,
+				3B17F49423E1DF33001D582D /* AccountPublicKeyViewController.storyboard */,
 				3B17F49C23E20E97001D582D /* WalletInfoUTXOsViewController.storyboard */,
 				3BDE266C23E71764008E063F /* AdvancedSettingsViewController.storyboard */,
 			);
@@ -4765,7 +4765,7 @@
 				3BA8F2B12358A3A300BEC698 /* SettingsWithInfoCell.xib in Resources */,
 				3B44961F21B0661300A4E912 /* MemoEntryViewController.storyboard in Resources */,
 				A2B4E6F022FA488100E24324 /* LightningRefillViewController.storyboard in Resources */,
-				3B17F49523E1DF33001D582D /* WalletInfoSettingsViewController.storyboard in Resources */,
+				3B17F49523E1DF33001D582D /* AccountPublicKeyViewController.storyboard in Resources */,
 				3B17F49D23E20E97001D582D /* WalletInfoUTXOsViewController.storyboard in Resources */,
 				3B936ADD2322C1250067CA97 /* LightningUpgradeCompleteViewController.storyboard in Resources */,
 				B51F8238207BAD8500692F5B /* WalletOverviewTopBar.xib in Resources */,
