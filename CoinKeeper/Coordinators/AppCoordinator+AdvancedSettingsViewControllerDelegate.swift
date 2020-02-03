@@ -11,12 +11,12 @@ import UIKit
 extension AppCoordinator: AdvancedSettingsViewControllerDelegate {
   func viewController(_ viewController: UIViewController, didSelectAdvancedSetting item: AdvancedSettingsItem) {
     switch item {
-    case .masterPublicKey: break
-    case .utxos: viewControllerDidSelectShowUTXOs(viewController)
+    case .masterPublicKey: showAccountExtendedKey(from: viewController)
+    case .utxos: showUTXOs(from: viewController)
     }
   }
 
-  private func viewControllerDidSelectShowUTXOs(_ viewController: UIViewController) {
+  private func showUTXOs(from viewController: UIViewController) {
     let context = persistenceManager.viewContext
     do {
       let vouts = try CKMVout.findAllUnspent(in: context)
@@ -28,6 +28,19 @@ extension AppCoordinator: AdvancedSettingsViewControllerDelegate {
       let message = "Something went wrong fetching your unspent transaction outputs. " +
       "Please close the app and re-open to retry."
       alertManager.showErrorHUD(message: message, forDuration: 3.5)
+    }
+  }
+
+  private func showAccountExtendedKey(from viewController: UIViewController) {
+    guard let wmgr = walletManager else { return }
+    let result = wmgr.accountExtendedPublicKey()
+    switch result {
+    case .fulfilled(let key):
+      let controller = AccountPublicKeyViewController.newInstance(delegate: self, masterPubkey: key)
+      viewController.navigationController?.pushViewController(controller, animated: true)
+    case .rejected(let error):
+      let controller = alertManager.defaultAlert(withError: error)
+      viewController.navigationController?.present(controller, animated: true, completion: nil)
     }
   }
 }
