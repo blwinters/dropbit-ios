@@ -35,6 +35,10 @@ extension MockNetworkManager: LightningRequestable {
     return Promise { _ in }
   }
 
+  func estimateLightningPaymentRequest(_ request: String, sats: Int) -> Promise<LNTransactionResponse> {
+    Promise { _ in }
+  }
+
   func preauthorizeLightningPayment(sats: Int, encodedPayload: String) -> Promise<LNTransactionResponse> {
     return Promise { _ in }
   }
