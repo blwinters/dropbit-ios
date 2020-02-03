@@ -272,6 +272,9 @@ extension ConfirmPaymentViewController {
     } else {
       // Recipient is btc address
       primaryAddressLabel.isHidden = false
+      primaryAddressLabel.numberOfLines = 5
+      primaryAddressLabel.minimumScaleFactor = 0.4
+      primaryAddressLabel.adjustsFontSizeToFitWidth = true
     }
   }
 
