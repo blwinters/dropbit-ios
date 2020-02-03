@@ -72,7 +72,7 @@
 		3B1555EA20D2D48D00D6A70C /* VoutCoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1555E920D2D48D00D6A70C /* VoutCoreDataTests.swift */; };
 		3B17F49523E1DF33001D582D /* AccountPublicKeyViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B17F49423E1DF33001D582D /* AccountPublicKeyViewController.storyboard */; };
 		3B17F49723E1DFB7001D582D /* AccountPublicKeyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F49623E1DFB7001D582D /* AccountPublicKeyViewController.swift */; };
-		3B17F49923E1DFF0001D582D /* WalletInfoSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F49823E1DFF0001D582D /* WalletInfoSettingsViewControllerTests.swift */; };
+		3B17F49923E1DFF0001D582D /* AccountPublicKeyViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F49823E1DFF0001D582D /* AccountPublicKeyViewControllerTests.swift */; };
 		3B17F49B23E1EE84001D582D /* AppCoordinator+AccountPublicKeyViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F49A23E1EE84001D582D /* AppCoordinator+AccountPublicKeyViewControllerDelegate.swift */; };
 		3B17F49D23E20E97001D582D /* WalletInfoUTXOsViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B17F49C23E20E97001D582D /* WalletInfoUTXOsViewController.storyboard */; };
 		3B17F49F23E20EA7001D582D /* WalletInfoUTXOsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17F49E23E20EA7001D582D /* WalletInfoUTXOsViewController.swift */; };
@@ -1421,7 +1421,7 @@
 		3B1555E920D2D48D00D6A70C /* VoutCoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoutCoreDataTests.swift; sourceTree = "<group>"; };
 		3B17F49423E1DF33001D582D /* AccountPublicKeyViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AccountPublicKeyViewController.storyboard; sourceTree = "<group>"; };
 		3B17F49623E1DFB7001D582D /* AccountPublicKeyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountPublicKeyViewController.swift; sourceTree = "<group>"; };
-		3B17F49823E1DFF0001D582D /* WalletInfoSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletInfoSettingsViewControllerTests.swift; sourceTree = "<group>"; };
+		3B17F49823E1DFF0001D582D /* AccountPublicKeyViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountPublicKeyViewControllerTests.swift; sourceTree = "<group>"; };
 		3B17F49A23E1EE84001D582D /* AppCoordinator+AccountPublicKeyViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+AccountPublicKeyViewControllerDelegate.swift"; sourceTree = "<group>"; };
 		3B17F49C23E20E97001D582D /* WalletInfoUTXOsViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WalletInfoUTXOsViewController.storyboard; sourceTree = "<group>"; };
 		3B17F49E23E20EA7001D582D /* WalletInfoUTXOsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletInfoUTXOsViewController.swift; sourceTree = "<group>"; };
@@ -3094,7 +3094,7 @@
 				3BBDF7E722E780AD00E35EA0 /* TransactionHistoryDetailsViewControllerTests.swift */,
 				A21DEE5622E8D6E900BBE508 /* WalletOverviewViewControllerTests.swift */,
 				3B598FE523184DD200FF50CD /* LightningUpgradeStartViewControllerTests.swift */,
-				3B17F49823E1DFF0001D582D /* WalletInfoSettingsViewControllerTests.swift */,
+				3B17F49823E1DFF0001D582D /* AccountPublicKeyViewControllerTests.swift */,
 				3B58B9C023E3340D00890D06 /* AdvancedSettingsViewControllerTests.swift */,
 			);
 			path = ViewControllers;
@@ -5851,7 +5851,7 @@
 				3BEF22972260CD4A001F6D25 /* GetBitcoinViewControllerTests.swift in Sources */,
 				B5D77CCD2222002D002C360E /* MockRecipientParser.swift in Sources */,
 				3BDA364120B2FCF8001E24FB /* SuccessFailViewControllerTests.swift in Sources */,
-				3B17F49923E1DFF0001D582D /* WalletInfoSettingsViewControllerTests.swift in Sources */,
+				3B17F49923E1DFF0001D582D /* AccountPublicKeyViewControllerTests.swift in Sources */,
 				3B1555E420D27CF500D6A70C /* TransactionResponseTests.swift in Sources */,
 				3B474172218201D9004DA223 /* SubscriptionResponseTests.swift in Sources */,
 				3B8FF10D20337495003436EE /* PinCreationViewControllerTests.swift in Sources */,

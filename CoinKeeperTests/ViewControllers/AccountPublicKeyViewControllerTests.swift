@@ -1,5 +1,5 @@
 //
-//  WalletInfoSettingsViewControllerTests.swift
+//  AccountPublicKeyViewControllerTests.swift
 //  DropBitTests
 //
 //  Created by BJ Miller on 1/29/20.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import DropBit
 
-class WalletInfoSettingsViewControllerTests: XCTestCase {
+class AccountPublicKeyViewControllerTests: XCTestCase {
 
   let fakeMasterPubkey = "zpub6u4KbU8TSgNuZSxzv7HaGq5Tk361gMHdZxnM4UYuwzg5CMLcNytzhobitV4Zq6vWtWHpG9QijsigkxAzXvQWyLRfLq1L7VxPP1tky1hPfD4"
   var sut: AccountPublicKeyViewController!
@@ -29,18 +29,18 @@ class WalletInfoSettingsViewControllerTests: XCTestCase {
   }
 
   func testOutletsAreConnected() {
-    XCTAssertNotNil(sut.extendedKeyTitle)
     XCTAssertNotNil(sut.extendedKeyValue)
+    XCTAssertNotNil(sut.extendedPubKeyBackgroundView)
     XCTAssertNotNil(sut.extendedKeyImage)
     XCTAssertNotNil(sut.copyExtendedKeyView)
+    XCTAssertNotNil(sut.copyExtendedKeyGestureFromQR)
     XCTAssertNotNil(sut.copyInstructionLabel)
   }
 
   func testInitialState() {
-    XCTAssertEqual(sut.extendedKeyTitle.text, "Master Extended Public Key:")
     XCTAssertEqual(sut.extendedKeyValue.text, fakeMasterPubkey)
     XCTAssertEqual(sut.copyExtendedKeyView.backgroundColor, UIColor.clear)
-    XCTAssertEqual(sut.copyInstructionLabel.text, "(Tap QR Code or key to copy)")
+    XCTAssertEqual(sut.copyInstructionLabel.text, "Tap key to save to clipboard")
   }
 
   // MARK: test actions produce results
@@ -57,14 +57,5 @@ class MockWalletInfoSettingsDelegate: AccountPublicKeyViewControllerDelegate {
   func viewController(_ viewController: UIViewController, didTapMasterPubkey pubkey: String) {
     wasAskedToTapMasterKey = true
     passedPubkey = pubkey
-  }
-
-  func viewControllerDidSelectClose(_ viewController: UIViewController) {
-  }
-
-  func viewControllerDidSelectClose(_ viewController: UIViewController, completion: CKCompletion?) {
-  }
-
-  func viewControllerDidSelectCloseWithToggle(_ viewController: UIViewController) {
   }
 }
