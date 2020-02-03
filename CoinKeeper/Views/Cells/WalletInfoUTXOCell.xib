@@ -33,15 +33,31 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" distribution="equalSpacing" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="HzT-G3-9q9">
+                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" distribution="equalSpacing" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="HzT-G3-9q9">
                                                 <rect key="frame" x="0.0" y="20.5" width="256" height="20.5"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Aw-a5-LLk">
-                                                        <rect key="frame" x="0.0" y="0.0" width="42" height="20.5"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="MhZ-2b-D46">
+                                                        <rect key="frame" x="0.0" y="0.0" width="60" height="20.5"/>
+                                                        <subviews>
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bitcoinImage" translatesAutoresizingMaskIntoConstraints="NO" id="Lm2-Sp-oec">
+                                                                <rect key="frame" x="0.0" y="3.5" width="14" height="14"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="14" id="HQ0-WE-zFY"/>
+                                                                    <constraint firstAttribute="width" secondItem="Lm2-Sp-oec" secondAttribute="height" multiplier="1:1" id="tEv-nR-Mn3"/>
+                                                                </constraints>
+                                                            </imageView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Aw-a5-LLk">
+                                                                <rect key="frame" x="18" y="0.0" width="42" height="20.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <view contentMode="scaleToFill" horizontalCompressionResistancePriority="749" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YRo-AB-Dip">
+                                                        <rect key="frame" x="70" y="0.0" width="134" height="20.5"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </view>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P3d-py-SCw">
                                                         <rect key="frame" x="214" y="0.0" width="42" height="20.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -122,13 +138,16 @@
                 <outlet property="simpleBackgroundView" destination="9T4-GM-Oco" id="9Le-qv-mVT"/>
                 <outlet property="txidLabel" destination="khb-RB-gsp" id="3mh-4J-u8u"/>
                 <outletCollection property="labelGroup" destination="Neb-eZ-Pel" collectionClass="NSMutableArray" id="7nf-X3-N6u"/>
-                <outletCollection property="labelGroup" destination="2Aw-a5-LLk" collectionClass="NSMutableArray" id="oB1-QQ-bSl"/>
                 <outletCollection property="labelGroup" destination="P3d-py-SCw" collectionClass="NSMutableArray" id="eUO-yO-9er"/>
                 <outletCollection property="labelGroup" destination="khb-RB-gsp" collectionClass="NSMutableArray" id="cFy-gi-Ykg"/>
                 <outletCollection property="labelGroup" destination="toI-Z0-Vqf" collectionClass="NSMutableArray" id="rbZ-6g-cm8"/>
                 <outletCollection property="labelGroup" destination="fDZ-R9-Ro4" collectionClass="NSMutableArray" id="Y9d-v5-5lA"/>
+                <outletCollection property="labelGroup" destination="2Aw-a5-LLk" collectionClass="NSMutableArray" id="oB1-QQ-bSl"/>
             </connections>
             <point key="canvasLocation" x="137.68115942028987" y="206.25"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="bitcoinImage" width="26" height="26"/>
+    </resources>
 </document>

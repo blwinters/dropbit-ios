@@ -55,14 +55,7 @@ class WalletInfoUTXOCell: UITableViewCell {
     let converter = CurrencyConverter(fromBtcTo: .USD, fromAmount: btcAmount, rates: rates)
     let fiatAmount = converter.amount(forCurrency: .USD)
 
-    let btcFormatter = BitcoinFormatter(symbolType: .image, symbolFont: nil, imageSize: 14)
-    let formattedBTC = btcFormatter.attributedString(from: btcAmount)
-    btcLabel.text = nil
-    btcLabel.attributedText = formattedBTC
-    let attributes = btcLabel.attributedText?.attributes(at: 0, effectiveRange: nil)
-    let horizontalOffset = CGFloat(8)
-    let textWidth = (formattedBTC?.string.size(withAttributes: attributes).width ?? 0) + horizontalOffset
-    btcLabel.widthAnchor.constraint(equalToConstant: textWidth).isActive = true
+    btcLabel.text = BitcoinFormatter(symbolType: .none).string(fromDecimal: btcAmount)
 
     let formattedFiat = CKCurrencyFormatter.string(for: fiatAmount, currency: .USD, walletTransactionType: .onChain)
     fiatLabel.text = formattedFiat
