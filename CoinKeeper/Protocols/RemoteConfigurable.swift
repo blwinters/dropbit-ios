@@ -107,7 +107,7 @@ class RemoteConfigManager: RemoteConfigManagerType {
     let maybeInviteMax = response.config.settings?.invitationMaximum
     self.set(integer: maybeInviteMax, for: .invitationMaxUSD)
 
-    let maybeLightningLoadMin = response.config.settings?.minimumLightningLoad
+    let maybeLightningLoadMin = response.config.settings?.lightningLoad?.minimum
     self.set(integer: maybeLightningLoadMin, for: .lightningLoadMinSats)
 
     let newConfig = createConfig()

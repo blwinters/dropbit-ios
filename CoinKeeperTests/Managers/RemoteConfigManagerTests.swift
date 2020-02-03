@@ -34,22 +34,16 @@ class RemoteConfigManagerTests: XCTestCase {
     let configDidChange = sut.update(with: mockResponse)
     XCTAssert(configDidChange)
     let retrievedValue = sut.latestConfig.settings.minLightningLoadBTC?.asFractionalUnits(of: .BTC)
-    XCTAssertEqual(mockResponse.config.settings?.minimumLightningLoad, retrievedValue)
+    XCTAssertEqual(mockResponse.config.settings?.lightningLoad?.minimum, retrievedValue)
   }
 
   private func createMockResponse() -> ConfigResponse {
     let standardValues = [5, 10, 20, 50, 100]
-    let lnLoadResponse = ConfigLightningLoadResponse(AUD: standardValues,
-                                                     CAD: standardValues,
-                                                     EUR: standardValues,
-                                                     GBP: standardValues,
-                                                     SEK: standardValues.map { $0 * 10 },
-                                                     USD: standardValues)
+    let lnLoadResponse = ConfigLightningLoadResponse(minimum: 50_000, sharedCurrencyValues: standardValues)
     let settingsResponse = ConfigSettingsResponse(twitterDelegate: true,
                                                   invitationMaximum: 50,
                                                   biometricsMaximum: 100,
-                                                  minimumLightningLoad: 50_000,
-                                                  lnLoad: lnLoadResponse)
+                                                  lightningLoad: lnLoadResponse)
     let mockResponse = ConfigResponse(updatedAt: Date(),
                                       config: ConfigResponseItems(buy: [],
                                                                   referral: nil,
@@ -57,4 +51,19 @@ class RemoteConfigManagerTests: XCTestCase {
     return mockResponse
   }
 
+}
+
+extension ConfigLightningLoadResponse {
+
+  init(minimum: Satoshis?, sharedCurrencyValues values: [Int]) {
+    self.init(minimum: minimum,
+              currencies: ConfigCurrenciesResponse(
+                AUD: values,
+                CAD: values,
+                EUR: values,
+                GBP: values,
+                SEK: values,
+                USD: values)
+    )
+  }
 }

@@ -12,13 +12,18 @@ struct FeatureEnabledResponse: Codable {
   let enabled: Bool
 }
 
-struct ConfigLightningLoadResponse: Codable {
+struct ConfigCurrenciesResponse: Codable {
   let AUD: [Int]
   let CAD: [Int]
   let EUR: [Int]
   let GBP: [Int]
   let SEK: [Int]
   let USD: [Int]
+}
+
+struct ConfigLightningLoadResponse: Codable {
+  let minimum: Satoshis?
+  let currencies: ConfigCurrenciesResponse?
 }
 
 //swiftlint:disable weak_delegate
@@ -33,9 +38,7 @@ struct ConfigSettingsResponse: Codable {
   /// value represents whole dollars (USD)
   let biometricsMaximum: Int?
 
-  let minimumLightningLoad: Satoshis?
-
-  let lnLoad: ConfigLightningLoadResponse?
+  let lightningLoad: ConfigLightningLoadResponse?
 }
 
 struct ConfigResponseItems: ResponseDecodable {
