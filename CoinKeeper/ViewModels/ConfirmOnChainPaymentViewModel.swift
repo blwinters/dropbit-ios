@@ -211,7 +211,7 @@ enum ConfirmTransactionFeeModel {
   case standard(CNBCnlibTransactionData)
   case required(CNBCnlibTransactionData)
   case adjustable(AdjustableTransactionFeeViewModel)
-  case lightning
+  case lightning(EstimatedLightningFeeViewModel?)
 
   var transactionData: CNBCnlibTransactionData? {
     switch self {
@@ -225,8 +225,37 @@ enum ConfirmTransactionFeeModel {
   }
 
   var networkFeeAmount: Int {
-    guard let txData = transactionData else { return 0 }
-    return Int(txData.feeAmount)
+    if let txData = transactionData {
+      return txData.feeAmount
+    } else if case let ConfirmTransactionFeeModel.lightning(vm) = self {
+      return vm?.networkFee ?? 0
+    }
+
+    return 0
+  }
+
+  func networkFeeDisplayString(exchangeRates: ExchangeRates) -> String? {
+    if transactionData != nil {
+      let feeDecimalAmount = NSDecimalNumber(integerAmount: networkFeeAmount, currency: .BTC)
+      let feeConverter = CurrencyConverter(fromBtcTo: .USD,
+                                           fromAmount: feeDecimalAmount,
+                                           rates: exchangeRates)
+      let btcFee = String(describing: feeConverter.amount(forCurrency: .BTC) ?? 0)
+      let fiatFeeAmount = feeConverter.amount(forCurrency: .USD)
+      let fiatFeeString = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: fiatFeeAmount ?? .zero) ?? ""
+      return "Network Fee \(btcFee) (\(fiatFeeString))"
+    } else if case ConfirmTransactionFeeModel.lightning(_) = self {
+      if networkFeeAmount == 0 {
+        return nil
+      }
+      let feeDecimalAmount = NSDecimalNumber(integerAmount: networkFeeAmount, currency: .BTC)
+      let feeConverter = CurrencyConverter(fromBtcTo: .USD, fromAmount: feeDecimalAmount, rates: exchangeRates)
+      let fiatFeeAmount = feeConverter.amount(forCurrency: .USD)
+      let fiatFeeString = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: fiatFeeAmount ?? .zero) ?? "$0.00"
+      let satsDesc = networkFeeAmount == 1 ? "sat" : "sats"
+      return "Estimated Lightning Network Fee \(networkFeeAmount) \(satsDesc) (\(fiatFeeString))"
+    }
+    return nil
   }
 
 }

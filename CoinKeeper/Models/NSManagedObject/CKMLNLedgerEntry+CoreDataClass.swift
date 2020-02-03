@@ -16,7 +16,8 @@ public class CKMLNLedgerEntry: NSManagedObject {
   static func updateOrCreate(with result: LNTransactionResult,
                              forWallet wallet: CKMWallet,
                              in context: NSManagedObjectContext) -> CKMLNLedgerEntry {
-    let entry = findOrCreate(with: result.cleanedId, wallet: wallet, createdAt: result.createdAt, in: context)
+    let created = result.createdAt ?? Date()
+    let entry = findOrCreate(with: result.cleanedId, wallet: wallet, createdAt: created, in: context)
     configure(entry, with: result, in: context)
     return entry
   }
@@ -60,7 +61,7 @@ public class CKMLNLedgerEntry: NSManagedObject {
   private static func configure(_ entry: CKMLNLedgerEntry, with result: LNTransactionResult, in context: NSManagedObjectContext) {
     entry.id = result.cleanedId
     entry.accountId = result.accountId
-    entry.walletEntry?.sortDate = result.createdAt
+    entry.walletEntry?.sortDate = (result.createdAt ?? Date())
     entry.createdAt = result.createdAt
     entry.updatedAt = result.updatedAt
     entry.expiresAt = result.expiresAt

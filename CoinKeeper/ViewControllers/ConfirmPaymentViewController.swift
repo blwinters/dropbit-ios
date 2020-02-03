@@ -196,7 +196,7 @@ extension ConfirmPaymentViewController {
     if let viewModel = viewModel {
       switch viewModel.walletTransactionType {
       case .lightning:
-        networkFeeLabel.isHidden = true
+        networkFeeLabel.isHidden = (feeModel.networkFeeAmount == 0)
         primaryAddressLabel.lineBreakMode = .byTruncatingMiddle
         walletTransactionTypeButton.style = .lightning(rounded: true)
         walletTransactionTypeButton.setAttributedTitle(NSAttributedString.lightningSelectedButtonTitle, for: .normal)
@@ -252,14 +252,7 @@ extension ConfirmPaymentViewController {
       adjustableFeesContainer.isHidden = true
     }
 
-    let feeDecimalAmount = NSDecimalNumber(integerAmount: feeModel.networkFeeAmount, currency: .BTC)
-    let feeConverter = CurrencyConverter(fromBtcTo: .USD,
-                                         fromAmount: feeDecimalAmount,
-                                         rates: self.viewModel.exchangeRates)
-    let btcFee = String(describing: feeConverter.amount(forCurrency: .BTC) ?? 0)
-    let fiatFeeAmount = feeConverter.amount(forCurrency: .USD)
-    let fiatFeeString = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: fiatFeeAmount ?? .zero) ?? ""
-    networkFeeLabel.text = "Network Fee \(btcFee) (\(fiatFeeString))"
+    networkFeeLabel.text = feeModel.networkFeeDisplayString(exchangeRates: viewModel.exchangeRates)
   }
 
   fileprivate func updateRecipientViews() {
