@@ -28,7 +28,7 @@ final class AdvancedSettingsViewController: BaseViewController, StoryboardInitia
 
   @IBOutlet var tableView: UITableView!
 
-  private unowned var delegate: AdvancedSettingsViewControllerDelegate!
+  private weak var delegate: AdvancedSettingsViewControllerDelegate!
 
   static func newInstance(delegate: AdvancedSettingsViewControllerDelegate) -> AdvancedSettingsViewController {
     let controller = AdvancedSettingsViewController.makeFromStoryboard()
