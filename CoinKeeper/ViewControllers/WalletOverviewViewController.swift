@@ -23,6 +23,7 @@ protocol WalletOverviewViewControllerDelegate: WalletOverviewTopBarDelegate & Ba
                                        walletTxType: WalletTransactionType)
   func viewControllerShouldAdjustForBottomSafeArea(_ viewController: UIViewController) -> Bool
   func viewControllerDidSelectTransfer(_ viewController: UIViewController)
+  func viewControllerDidFinishLoading(_ viewController: WalletOverviewViewController)
   func viewControllerDidTapWalletTooltip()
   func isSyncCurrentlyRunning() -> Bool
   func viewControllerDidRequestPrimaryCurrencySwap()
@@ -138,6 +139,7 @@ class WalletOverviewViewController: BaseViewController, StoryboardInitializable 
 
     if let delegate = delegate {
       self.subscribeToBadgeNotifications(with: delegate.badgeManager)
+      delegate.viewControllerDidFinishLoading(self)
 
       let bottomOffsetIfNeeded: CGFloat = 20
       if delegate.viewControllerShouldAdjustForBottomSafeArea(self) {
@@ -417,14 +419,12 @@ extension WalletOverviewViewController: TransactionHistorySummaryCollectionViewD
     guard !topBar.balanceView.isHidden
       && navigationController?.topViewController() is FAPanelController else { return }
 
-    topBar.toggleChartAndBalance()
-    sendReceiveActionView.isHidden = false
+    topBar.showChart()
   }
 
   func collectionViewDidCoverWalletBalance() {
     guard topBar.balanceView.isHidden else { return }
 
-    topBar.toggleChartAndBalance()
-    sendReceiveActionView.isHidden = true
+    topBar.showBalance()
   }
 }

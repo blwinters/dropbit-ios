@@ -15,7 +15,7 @@ protocol WalletManagerType: AnyObject {
   static func secureEntropy() -> Data
   func validateBase58Check(for address: String) -> Bool
   func validateBech32Encoding(for address: String) -> Bool
-  var coin: CNBCnlibBaseCoin { get }
+  var coin: BaseCoin { get }
   var wallet: CNBCnlibHDWallet { get }
   func hexEncodedPublicKey() throws -> String
   func hexEncodedPublicKeyPromise() -> Promise<String>
@@ -24,6 +24,7 @@ protocol WalletManagerType: AnyObject {
   func usableFeeRate(from feeRate: Double) -> Int
   func mnemonicWords() -> [String]
   func resetWallet(with words: [String])
+  func accountExtendedPublicKey() -> Result<String>
 
   func createAddressDataSource() -> AddressDataSourceType
 

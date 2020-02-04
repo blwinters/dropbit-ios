@@ -21,4 +21,8 @@ class BaseCoin: CNBCnlibBaseCoin {
   init(purpose: CoinPurpose, coinType: CoinType) {
     super.init(purpose.rawValue, coin: coinType.rawValue, account: 0)!
   }
+
+  var accountExtendedPubKeyPathString: String {
+    "M/\(purpose)'/\(coin)'/\(account)'"
+  }
 }

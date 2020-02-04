@@ -14,6 +14,7 @@ protocol LightningRequestable: AnyObject {
   func createLightningPaymentRequest(sats: Int, expires: Int?, memo: String?) -> Promise<LNCreatePaymentRequestResponse>
   func getLightningLedger(parameters: LNLedgerUrlParameters) -> Promise<LNLedgerResponse>
   func payLightningPaymentRequest(_ request: String, sats: Int) -> Promise<LNTransactionResponse>
+  func estimateLightningPaymentRequest(_ request: String, sats: Int) -> Promise<LNTransactionResponse>
   func preauthorizeLightningPayment(sats: Int, encodedPayload: String) -> Promise<LNTransactionResponse>
   func cancelPreauthorizedLightningPayment(withId id: String) -> Promise<LNTransactionResponse>
   func withdrawLightningFunds(to address: String, sats: Int) -> Promise<LNTransactionResponse>
@@ -43,6 +44,11 @@ extension NetworkManager: LightningRequestable {
         self.analyticsManager.track(event: .paymentToInvoiceFailed, with: nil)
         throw error
     }
+  }
+
+  func estimateLightningPaymentRequest(_ request: String, sats: Int) -> Promise<LNTransactionResponse> {
+    let body = LNPayBody(request: request, value: sats, estimate: true)
+    return cnProvider.request(LNTransactionTarget.pay(body))
   }
 
   func preauthorizeLightningPayment(sats: Int, encodedPayload: String) -> Promise<LNTransactionResponse> {

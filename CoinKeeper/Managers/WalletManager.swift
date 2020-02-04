@@ -22,7 +22,7 @@ class WalletManager: WalletManagerType {
   private(set) var wallet: CNBCnlibHDWallet
   private let persistenceManager: PersistenceManagerType
 
-  let coin: CNBCnlibBaseCoin
+  let coin: BaseCoin
 
   init?(words: [String], persistenceManager: PersistenceManagerType = PersistenceManager()) {
     let relevantCoin = persistenceManager.usableCoin
@@ -430,6 +430,16 @@ class WalletManager: WalletManagerType {
     } catch {
       return Promise(error: error)
     }
+  }
+
+  func accountExtendedPublicKey() -> Result<String> {
+    var err: NSError?
+    err = nil
+    let key = wallet.accountExtendedMasterPublicKey(&err)
+    if let err = err {
+      return .rejected(err)
+    }
+    return .fulfilled(key)
   }
 
   /// - parameter limitByPending: true to remove the smallest vouts, to not exceed spendableBalanceNetPending()

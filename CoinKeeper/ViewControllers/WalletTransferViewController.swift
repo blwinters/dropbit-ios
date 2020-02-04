@@ -116,7 +116,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
 
   @IBAction func closeButtonWasTouched() {
     editAmountView.primaryAmountTextField.resignFirstResponder()
-    delegate.viewControllerDidSelectCloseWithToggle(self)
+    delegate.viewControllerDidSelectCloseShowCharts(self)
   }
 
   private func buildTransactionIfNecessary() {

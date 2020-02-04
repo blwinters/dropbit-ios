@@ -12,6 +12,10 @@ import Sheeeeeeeeet
 
 extension AppCoordinator: WalletOverviewViewControllerDelegate {
 
+  func viewControllerDidFinishLoading(_ viewController: WalletOverviewViewController) {
+    walletOverviewViewController = viewController
+  }
+
   func setSelectedWalletTransactionType(_ viewController: UIViewController, to selectedType: WalletTransactionType) {
     persistenceManager.brokers.preferences.selectedWalletTransactionType = selectedType
   }
@@ -49,7 +53,7 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
                                                 fiatAmount: .zero,
                                                 config: self.txSendingConfig)
         let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel, alertManager: self.alertManager)
-        self.toggleChartAndBalance()
+        self.showBalance()
         self.navigationController.present(transferViewController, animated: true, completion: nil)
       }
     }
@@ -130,7 +134,7 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
                                        converter: CurrencyConverter,
                                        walletTxType: WalletTransactionType) {
     guard showLightningLockAlertIfNecessary() else { return }
-    toggleChartAndBalance()
+    showBalance()
     switch walletTxType {
     case .onChain:
       analyticsManager.track(event: .payButtonWasPressed, with: nil)
@@ -157,7 +161,7 @@ extension AppCoordinator: LightningQuickLoadViewControllerDelegate {
                                               fiatAmount: .zero,
                                               config: self.txSendingConfig)
       let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel, alertManager: self.alertManager)
-      self.toggleChartAndBalance()
+      self.showBalance()
       self.navigationController.present(transferViewController, animated: true, completion: nil)
     }
   }

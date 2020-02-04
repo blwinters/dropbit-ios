@@ -19,8 +19,9 @@ class BitcoinAddressTableViewCell: UITableViewCell {
     return NSMutableAttributedString(attributedString: buyBitcoinImageString)
   }()
 
-  @IBOutlet var titleLabel: UILabel!
+  @IBOutlet var titleLabel: PaddedLabel!
   @IBOutlet var containerView: UIView!
+  @IBOutlet var lightGrayView: UIView!
   @IBOutlet var bitcoinAddressLabel: PaddedLabel!
 
   override func awakeFromNib() {
@@ -30,9 +31,10 @@ class BitcoinAddressTableViewCell: UITableViewCell {
     selectionStyle = .none
 
     titleLabel.font = .medium(16)
-    titleLabel.backgroundColor = .lightGrayBackground
+    titleLabel.adjustsFontSizeToFitWidth = true
     titleLabel.text = "DropBit Bitcoin Receive Address"
-    titleLabel.backgroundColor = .lightGrayBackground
+
+    lightGrayView.backgroundColor = .lightGrayBackground
 
     containerView.applyCornerRadius(10)
     containerView.layer.borderColor = UIColor.mediumGrayBorder.cgColor

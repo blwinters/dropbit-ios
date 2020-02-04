@@ -21,7 +21,7 @@ extension AppCoordinator: SendPaymentViewControllerDelegate {
 
   func sendPaymentViewControllerWillDismiss(_ viewController: UIViewController) {
     viewControllerDidSelectClose(viewController, completion: { [weak self] in
-      self?.toggleChartAndBalance()
+      self?.showChart()
     })
   }
 
