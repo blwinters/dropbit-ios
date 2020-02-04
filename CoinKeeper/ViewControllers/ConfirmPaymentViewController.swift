@@ -289,7 +289,7 @@ extension ConfirmPaymentViewController {
       primaryAddressLabel.isHidden = false
       primaryAddressLabel.minimumScaleFactor = 0.4
       primaryAddressLabel.adjustsFontSizeToFitWidth = true
-      switch viewModel.walletTransactionType {
+      switch viewModel.walletTxType {
       case .onChain:
         primaryAddressLabel.numberOfLines = 1
       case .lightning:
