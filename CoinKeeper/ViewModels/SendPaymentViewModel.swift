@@ -210,11 +210,11 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
     }
   }
 
-  var standardIgnoredOptions: CurrencyAmountValidationOptions {
+  var standardShouldIgnoreOptions: CurrencyAmountValidationOptions {
     return [.invitationMaximum]
   }
 
-  var invitationMaximumIgnoredOptions: CurrencyAmountValidationOptions {
+  var invitationMaximumShouldIgnoreOptions: CurrencyAmountValidationOptions {
     return [.usableBalance]
   }
 

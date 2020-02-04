@@ -76,7 +76,7 @@ class SendPaymentViewModelTests: XCTestCase {
     let expectedOptions: CurrencyAmountValidationOptions = [.invitationMaximum]
 
     // when
-    let actualOptions = sut.standardIgnoredOptions
+    let actualOptions = sut.standardShouldIgnoreOptions
 
     // then
     XCTAssertEqual(actualOptions, expectedOptions)
@@ -87,7 +87,7 @@ class SendPaymentViewModelTests: XCTestCase {
     let expectedOptions: CurrencyAmountValidationOptions = [.usableBalance]
 
     // when
-    let actualOptions = sut.invitationMaximumIgnoredOptions
+    let actualOptions = sut.invitationMaximumShouldIgnoreOptions
 
     // then
     XCTAssertEqual(actualOptions, expectedOptions)

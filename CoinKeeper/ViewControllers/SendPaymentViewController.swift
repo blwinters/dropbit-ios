@@ -700,7 +700,7 @@ extension SendPaymentViewController: SendPaymentMemoViewDelegate {
 extension SendPaymentViewController {
 
   func validateAmount() throws {
-    let ignoredOptions = viewModel.standardIgnoredOptions
+    let ignoredOptions = viewModel.standardShouldIgnoreOptions
     let amountValidator = createCurrencyAmountValidator(ignoring: ignoredOptions, balanceToCheck: viewModel.walletTxType)
     try amountValidator.validate(value: viewModel.currencyConverter)
   }
@@ -711,7 +711,7 @@ extension SendPaymentViewController {
       contact.kind != .registeredUser
       else { return }
 
-    let ignoredOptions = viewModel.invitationMaximumIgnoredOptions
+    let ignoredOptions = viewModel.invitationMaximumShouldIgnoreOptions
     let validator = createCurrencyAmountValidator(ignoring: ignoredOptions, balanceToCheck: viewModel.walletTxType)
     let validationConverter = CurrencyConverter(fromBtcAmount: btcAmount, converter: viewModel.currencyConverter)
     try validator.validate(value: validationConverter)
@@ -740,7 +740,7 @@ extension SendPaymentViewController {
 
   private func validatePayment(toTarget paymentTarget: String, matches type: CKRecipientType) throws {
     let recipient = try viewModel.recipientParser.findSingleRecipient(inText: paymentTarget, ofTypes: [type])
-    let ignoredValidation: CurrencyAmountValidationOptions = type != .phoneNumber ? viewModel.standardIgnoredOptions : []
+    let ignoredValidation: CurrencyAmountValidationOptions = type != .phoneNumber ? viewModel.standardShouldIgnoreOptions : []
 
     // This is still required here to pass along the local memo
     let sharedPayloadDTO = SharedPayloadDTO(addressPubKeyState: .none,
