@@ -58,9 +58,6 @@ struct CurrencyAmountValidationOptions: OptionSet {
 /// Validating against a CurrencyConverter allows for validating either the USD or BTC values
 class CurrencyAmountValidator: ValidatorType<CurrencyConverter> {
 
-//  static let invitationMax = Money(amount: NSDecimalNumber(value: 100), currency: .USD)
-  static let lightningInvoiceMax = Money(amount: NSDecimalNumber(value: 50), currency: .USD)
-
   // Allows for validating against USD value while showing error message in BTC.
   let balancesNetPending: WalletBalances
   let validationsToSkip: CurrencyAmountValidationOptions

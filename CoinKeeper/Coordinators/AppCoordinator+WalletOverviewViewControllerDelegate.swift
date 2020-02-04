@@ -95,7 +95,8 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
   }
 
   func viewControllerDidTapWalletTooltip() {
-    navigationController.present(LightningTooltipViewController.newInstance(), animated: true, completion: nil)
+    let vc = LightningTooltipViewController.newInstance(preferredCurrency: self.preferredFiatCurrency)
+    navigationController.present(vc, animated: true, completion: nil)
   }
 
   func viewControllerDidTapScan(_ viewController: UIViewController, converter: CurrencyConverter) {
