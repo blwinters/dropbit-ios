@@ -234,24 +234,20 @@ enum ConfirmTransactionFeeModel {
     return 0
   }
 
-  func networkFeeDisplayString(exchangeRates: ExchangeRates) -> String? {
+  func networkFeeDisplayString(exchangeRate: ExchangeRate) -> String? {
     if transactionData != nil {
       let feeDecimalAmount = NSDecimalNumber(integerAmount: networkFeeAmount, currency: .BTC)
-      let feeConverter = CurrencyConverter(fromBtcTo: .USD,
-                                           fromAmount: feeDecimalAmount,
-                                           rates: exchangeRates)
-      let btcFee = String(describing: feeConverter.amount(forCurrency: .BTC) ?? 0)
-      let fiatFeeAmount = feeConverter.amount(forCurrency: .USD)
-      let fiatFeeString = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: fiatFeeAmount ?? .zero) ?? ""
+      let feeConverter = CurrencyConverter(fromBtcAmount: feeDecimalAmount, rate: exchangeRate)
+      let btcFee = String(describing: feeConverter.btcAmount)
+      let fiatFeeString = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: feeConverter.fiatAmount) ?? ""
       return "Network Fee \(btcFee) (\(fiatFeeString))"
     } else if case ConfirmTransactionFeeModel.lightning(_) = self {
       if networkFeeAmount == 0 {
         return nil
       }
       let feeDecimalAmount = NSDecimalNumber(integerAmount: networkFeeAmount, currency: .BTC)
-      let feeConverter = CurrencyConverter(fromBtcTo: .USD, fromAmount: feeDecimalAmount, rates: exchangeRates)
-      let fiatFeeAmount = feeConverter.amount(forCurrency: .USD)
-      let fiatFeeString = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: fiatFeeAmount ?? .zero) ?? "$0.00"
+      let feeConverter = CurrencyConverter(fromBtcAmount: feeDecimalAmount, rate: exchangeRate)
+      let fiatFeeString = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: feeConverter.fiatAmount) ?? "$0.00"
       let satsDesc = networkFeeAmount == 1 ? "sat" : "sats"
       return "Estimated Lightning Network Fee \(networkFeeAmount) \(satsDesc) (\(fiatFeeString))"
     }

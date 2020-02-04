@@ -11,13 +11,12 @@ import UIKit
 final class WalletInfoUTXOsViewController: BaseViewController, StoryboardInitializable {
 
   fileprivate var utxos: [DisplayableUTXO] = []
-  private lazy var rates = {
-    ExchangeRateManager().exchangeRates
-  }()
+  fileprivate var exchangeRate: ExchangeRate!
 
-  static func newInstance(utxos: [DisplayableUTXO]) -> WalletInfoUTXOsViewController {
+  static func newInstance(utxos: [DisplayableUTXO], exchangeRate: ExchangeRate) -> WalletInfoUTXOsViewController {
     let controller = WalletInfoUTXOsViewController.makeFromStoryboard()
     controller.utxos = utxos
+    controller.exchangeRate = exchangeRate
     return controller
   }
 
@@ -62,7 +61,7 @@ extension WalletInfoUTXOsViewController: UITableViewDelegate, UITableViewDataSou
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let utxo = utxos[indexPath.row]
     let cell = tableView.dequeue(WalletInfoUTXOCell.self, for: indexPath)
-    cell.load(with: utxo, rates: rates)
+    cell.load(with: utxo, rate: exchangeRate)
     return cell
   }
 
