@@ -11,15 +11,15 @@ import Foundation
 import XCTest
 
 class CurrencyAmountValidatorTests: XCTestCase {
+  var config: TransactionSendingConfig!
   var sut: CurrencyAmountValidator!
 
   let rate = ExchangeRate(price: 8000, currency: .USD)
-  let maxMoney = Money(amount: NSDecimalNumber(decimal: 100.0), currency: .USD)
 
   override func setUp() {
     super.setUp()
-    let config = TransactionSendingConfig(settings: MockSettingsConfig.default(), preferredExchangeRate: rate, usdExchangeRate: rate)
-    self.sut = CurrencyAmountValidator(balancesNetPending: .empty, balanceToCheck: .onChain, config: config, ignoring: [.usableBalance])
+    config = TransactionSendingConfig(settings: MockSettingsConfig.default(), preferredExchangeRate: rate, usdExchangeRate: rate)
+    self.sut = createValidator()
   }
 
   override func tearDown() {
@@ -27,26 +27,53 @@ class CurrencyAmountValidatorTests: XCTestCase {
     super.tearDown()
   }
 
-  func testValueGreaterThan100USDReturnsError() {
-    let money = Money(amount: NSDecimalNumber(decimal: 1000.0), currency: .USD)
-    let converter = CurrencyConverter(fromFiatAmount: money.amount, rate: rate)
+  private func createValidator() -> CurrencyAmountValidator {
+    return CurrencyAmountValidator(balancesNetPending: .empty, balanceToCheck: .onChain,
+                                   config: config, ignoring: [.usableBalance])
+  }
+
+  func testValueGreaterThan100USDThrowsError() {
+    let converter = CurrencyConverter(fromFiatAmount: 150, rate: rate)
 
     do {
       try self.sut.validate(value: converter)
       XCTFail("Should throw error")
     } catch let error as CurrencyAmountValidatorError {
-      guard case let .invitationMaximum(errorMoney) = error else {
+      guard case let .invitationMaximum(errorMoney) = error,
+        let maxInviteUSD = config.settings.maxInviteUSD else {
         XCTFail("should throw .invitationMaximum")
         return
       }
+
+      let maxMoney = Money(amount: maxInviteUSD, currency: .USD)
       XCTAssertEqual(errorMoney, maxMoney, "associated money object should be maxMoney")
     } catch {
       XCTFail("should throw error of type CurrencyAmountValidatorError")
     }
   }
 
-  func testValueLessThan100USDShouldNotThrow() {
-    let converter = CurrencyConverter(fromFiatAmount: maxMoney.amount, rate: rate)
+  func testNilInvitationLimitShouldNotThrow() {
+    let settings = MockSettingsConfig(minReloadSats: nil, maxInviteUSD: nil)
+    self.config = TransactionSendingConfig(settings: settings, preferredExchangeRate: rate, usdExchangeRate: rate)
+    self.sut = createValidator()
+
+    let converter = CurrencyConverter(fromFiatAmount: 150, rate: rate)
+
+    do {
+      try self.sut.validate(value: converter)
+    } catch {
+      XCTFail("Validation with nil invitation limit should not throw error")
+    }
+  }
+
+  func test99USDShouldNotThrow() {
+    let converter = CurrencyConverter(fromFiatAmount: 99, rate: rate)
+    XCTAssertNoThrow(try self.sut.validate(value: converter),
+                     "value less than 100 USD should not throw")
+  }
+
+  func test100USDShouldNotThrow() {
+    let converter = CurrencyConverter(fromFiatAmount: 100, rate: rate)
 
     XCTAssertNoThrow(try self.sut.validate(value: converter),
                      "value less than 100 USD should not throw")
