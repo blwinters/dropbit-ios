@@ -23,8 +23,8 @@ class LightningQuickLoadViewModelTests: XCTestCase {
   let minReloadSats: Satoshis = 60_000
 
   var config: TransactionSendingConfig {
-    let settingsConfig = MockSettingsConfig(minReloadSats: minReloadSats, maxInviteUSD: nil)
-    return TransactionSendingConfig(settings: settingsConfig,
+    let settings = MockSettingsConfig(minReloadSats: minReloadSats, maxInviteUSD: nil, maxBiometricsUSD: nil)
+    return TransactionSendingConfig(settings: settings,
                                     preferredExchangeRate: rate,
                                     usdExchangeRate: rate)
   }

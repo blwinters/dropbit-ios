@@ -40,6 +40,7 @@ struct RemoteConfig: Equatable {
     case referrals
     case twitterDelegate
     case invitationMaxUSD
+    case biometricsMaxUSD
     case lightningLoadMinSats
 
     var defaultsString: String {
@@ -110,6 +111,9 @@ class RemoteConfigManager: RemoteConfigManagerType {
     let maybeLightningLoadMin = response.config.settings?.lightningLoad?.minimum
     self.set(integer: maybeLightningLoadMin, for: .lightningLoadMinSats)
 
+    let maybeBiometricsMax = response.config.settings?.biometricsMaximum
+    self.set(integer: maybeBiometricsMax, for: .biometricsMaxUSD)
+
     let newConfig = createConfig()
     if newConfig != previousConfig {
       self.latestConfig = newConfig
@@ -134,7 +138,10 @@ class RemoteConfigManager: RemoteConfigManagerType {
     }
     let minReload = persistedInteger(for: .lightningLoadMinSats)
     let maxInviteUSD = persistedInteger(for: .invitationMaxUSD)
-    let settingsConfig = SettingsConfig(minReload: minReload, maxInviteUSD: maxInviteUSD)
+    let maxBiometricsUSD = persistedInteger(for: .biometricsMaxUSD)
+    let settingsConfig = SettingsConfig(minReload: minReload,
+                                        maxInviteUSD: maxInviteUSD,
+                                        maxBiometricsUSD: maxBiometricsUSD)
     return RemoteConfig(enabledFeatures: enabledKeys, settingsConfig: settingsConfig)
   }
 
@@ -157,6 +164,7 @@ class RemoteConfigManager: RemoteConfigManagerType {
     case .referrals,
          .twitterDelegate,
          .lightningLoadMinSats,
+         .biometricsMaxUSD,
          .invitationMaxUSD:
       return false
     }

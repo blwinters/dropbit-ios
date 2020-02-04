@@ -36,6 +36,7 @@ protocol SettingsConfigType {
 
   var minLightningLoadBTC: NSDecimalNumber? { get }
   var maxInviteUSD: NSDecimalNumber? { get }
+  var maxBiometricsUSD: NSDecimalNumber? { get }
   func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber]
 
 }
@@ -48,10 +49,13 @@ struct SettingsConfig: SettingsConfigType, Equatable {
   ///The maximum amount allowed for DropBit invitations, expected to be nil if ConfigResponse returns null
   let maxInviteUSD: NSDecimalNumber?
 
+  let maxBiometricsUSD: NSDecimalNumber?
+
   ///`maxInviteUSD: Int?` represents whole dollars
-  init(minReload: Satoshis?, maxInviteUSD: Int?) {
+  init(minReload: Satoshis?, maxInviteUSD: Int?, maxBiometricsUSD: Int?) {
     self.minLightningLoadBTC = minReload.flatMap { NSDecimalNumber(sats: $0) }
     self.maxInviteUSD = maxInviteUSD.flatMap { NSDecimalNumber(value: $0) }
+    self.maxBiometricsUSD = maxBiometricsUSD.flatMap { NSDecimalNumber(value: $0) }
   }
 
   func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber] {
@@ -62,7 +66,7 @@ struct SettingsConfig: SettingsConfigType, Equatable {
   }
 
   static var fallbackInstance: SettingsConfig {
-    return SettingsConfig(minReload: 60_000, maxInviteUSD: 100)
+    return SettingsConfig(minReload: 60_000, maxInviteUSD: 100, maxBiometricsUSD: 100)
   }
 
 }

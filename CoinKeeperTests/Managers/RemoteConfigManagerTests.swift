@@ -46,6 +46,16 @@ class RemoteConfigManagerTests: XCTestCase {
     XCTAssertEqual(mockResponse.config.settings?.invitationMaximum, retrievedValue)
   }
 
+  func testValueIsPersistedAndReturned_BiometricsMaximum() {
+    let initialConfig = sut.latestConfig
+    XCTAssertNil(initialConfig.settings.maxBiometricsUSD)
+    let mockResponse = createMockResponse()
+    let configDidChange = sut.update(with: mockResponse)
+    XCTAssert(configDidChange)
+    let retrievedValue = sut.latestConfig.settings.maxBiometricsUSD?.intValue
+    XCTAssertEqual(mockResponse.config.settings?.biometricsMaximum, retrievedValue)
+  }
+
   private func createMockResponse() -> ConfigResponse {
     let standardValues = [5, 10, 20, 50, 100]
     let lnLoadResponse = ConfigLightningLoadResponse(minimum: 50_000, sharedCurrencyValues: standardValues)
