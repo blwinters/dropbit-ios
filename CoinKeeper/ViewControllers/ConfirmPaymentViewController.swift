@@ -323,16 +323,7 @@ extension ConfirmPaymentViewController {
     case .registeredUser:
       primaryAddressLabel.text = displayIdentity
       primaryAddressLabel.isHidden = false // phone number
-      secondaryAddressLabel.isHidden = false // address
-      secondaryAddressLabel.adjustsFontSizeToFitWidth = true
-      switch viewModel.walletTransactionType {
-      case .onChain:
-        secondaryAddressLabel.numberOfLines = 1
-        secondaryAddressLabel.minimumScaleFactor = 0.5
-      case .lightning:
-        secondaryAddressLabel.numberOfLines = 4
-        secondaryAddressLabel.minimumScaleFactor = 0.25
-      }
+      secondaryAddressLabel.isHidden = true // address
     }
   }
 
