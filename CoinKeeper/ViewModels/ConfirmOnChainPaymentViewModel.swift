@@ -235,11 +235,12 @@ enum ConfirmTransactionFeeModel {
   }
 
   func networkFeeDisplayString(exchangeRate: ExchangeRate) -> String? {
+    let fiatFormatter = FiatFormatter(currency: exchangeRate.currency, withSymbol: true)
     if transactionData != nil {
       let feeDecimalAmount = NSDecimalNumber(integerAmount: networkFeeAmount, currency: .BTC)
       let feeConverter = CurrencyConverter(fromBtcAmount: feeDecimalAmount, rate: exchangeRate)
       let btcFee = String(describing: feeConverter.btcAmount)
-      let fiatFeeString = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: feeConverter.fiatAmount) ?? ""
+      let fiatFeeString = fiatFormatter.string(fromDecimal: feeConverter.fiatAmount) ?? ""
       return "Network Fee \(btcFee) (\(fiatFeeString))"
     } else if case ConfirmTransactionFeeModel.lightning(_) = self {
       if networkFeeAmount == 0 {
@@ -247,7 +248,7 @@ enum ConfirmTransactionFeeModel {
       }
       let feeDecimalAmount = NSDecimalNumber(integerAmount: networkFeeAmount, currency: .BTC)
       let feeConverter = CurrencyConverter(fromBtcAmount: feeDecimalAmount, rate: exchangeRate)
-      let fiatFeeString = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: feeConverter.fiatAmount) ?? "$0.00"
+      let fiatFeeString = fiatFormatter.string(fromDecimal: feeConverter.fiatAmount) ?? "$0.00"
       let satsDesc = networkFeeAmount == 1 ? "sat" : "sats"
       return "Estimated Lightning Network Fee \(networkFeeAmount) \(satsDesc) (\(fiatFeeString))"
     }
