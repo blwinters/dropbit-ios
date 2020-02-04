@@ -270,11 +270,16 @@ extension ConfirmPaymentViewController {
       // May refer to either an actual contact or a manually entered phone number
       updateView(withContact: contact)
     } else {
-      // Recipient is btc address
+      // Recipient is btc address or lightning invoice
       primaryAddressLabel.isHidden = false
-      primaryAddressLabel.numberOfLines = 5
       primaryAddressLabel.minimumScaleFactor = 0.4
       primaryAddressLabel.adjustsFontSizeToFitWidth = true
+      switch viewModel.walletTransactionType {
+      case .onChain:
+        primaryAddressLabel.numberOfLines = 1
+      case .lightning:
+        primaryAddressLabel.numberOfLines = 5
+      }
     }
   }
 
@@ -318,7 +323,7 @@ extension ConfirmPaymentViewController {
     case .registeredUser:
       primaryAddressLabel.text = displayIdentity
       primaryAddressLabel.isHidden = false // phone number
-      secondaryAddressLabel.isHidden = false // address
+      secondaryAddressLabel.isHidden = true // address
     }
   }
 
