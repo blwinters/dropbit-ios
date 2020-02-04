@@ -33,7 +33,7 @@ struct SettingsCellViewModel {
       onChange(control.isOn)
     case .regtest(enabled: _, onChange: let onChange):
       onChange(control.isOn)
-    case .licenses, .legacyWords, .recoveryWords, .adjustableFees, .currencyOptions:
+    case .licenses, .legacyWords, .recoveryWords, .adjustableFees, .currencyOptions, .advanced:
       break
     }
   }
@@ -44,8 +44,7 @@ struct SettingsCellViewModel {
       infoAction(type)
     case .legacyWords(action: _, infoAction: let infoAction):
       infoAction(type)
-    case .licenses, .recoveryWords, .yearlyHighPushNotification,
-         .adjustableFees, .currencyOptions, .regtest:
+    case .licenses, .recoveryWords, .yearlyHighPushNotification, .adjustableFees, .currencyOptions, .regtest, .advanced:
       break
     }
   }
@@ -56,7 +55,7 @@ struct SettingsCellViewModel {
       action()
     case .recoveryWords(_, let action):
       action()
-    case .licenses(let action), .adjustableFees(let action):
+    case .licenses(let action), .adjustableFees(let action), .advanced(action: let action):
       action()
     case .currencyOptions(_, let action):
       action()
@@ -76,6 +75,7 @@ enum SettingsCellType {
   case adjustableFees(action: BasicAction)
   case currencyOptions(currency: Currency, action: BasicAction)
   case regtest(enabled: Bool, onChange: (Bool) -> Void)
+  case advanced(action: BasicAction)
 
   /// Returns nil if the text is conditional
   var titleText: String {
@@ -88,6 +88,7 @@ enum SettingsCellType {
     case .currencyOptions:            return "Currency Options"
     case .licenses:                   return "Open Source"
     case .regtest:                    return "Use RegTest"
+    case .advanced:                   return "Advanced"
     }
   }
 

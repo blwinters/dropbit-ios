@@ -243,11 +243,23 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
   }
 
   private func showConfirmLightningPayment(with viewModel: ConfirmLightningPaymentViewModel) {
-    let confirmPayVC = ConfirmPaymentViewController.newInstance(type: .payment,
-                                                                viewModel: viewModel,
-                                                                feeModel: .lightning,
-                                                                delegate: self)
-    self.navigationController.present(confirmPayVC, animated: true, completion: nil)
+    let sats = viewModel.btcAmount.asFractionalUnits(of: .BTC)
+    alertManager.showActivityHUD(withStatus: nil)
+    networkManager.estimateLightningPaymentRequest(viewModel.invoice, sats: sats)
+      .done { (response: LNTransactionResponse) in
+        let feeModel = EstimatedLightningFeeViewModel(networkFee: response.result.networkFee, dropbitFee: 0)
+        let controller = ConfirmPaymentViewController.newInstance(type: .payment,
+                                                                  viewModel: viewModel,
+                                                                  feeModel: .lightning(feeModel),
+                                                                  delegate: self)
+        self.alertManager.hideActivityHUD(withDelay: nil, completion: nil)
+        self.navigationController.present(controller, animated: true, completion: nil)
+    }
+    .catch { error in
+      self.alertManager.hideActivityHUD(withDelay: nil, completion: nil)
+      let controller = self.alertManager.defaultAlert(withError: error)
+      self.navigationController.present(controller, animated: true, completion: nil)
+    }
   }
 
   struct UsableFeeRates {
@@ -352,7 +364,7 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
             .map { .adjustable($0) }
         case .lightning:
           return Promise { seal in
-            seal.fulfill(ConfirmTransactionFeeModel.lightning)
+            seal.fulfill(ConfirmTransactionFeeModel.lightning(nil))
           }
         }
       }

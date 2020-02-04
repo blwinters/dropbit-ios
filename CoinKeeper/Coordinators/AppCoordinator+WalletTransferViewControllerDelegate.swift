@@ -63,7 +63,7 @@ extension AppCoordinator: WalletTransferViewControllerDelegate {
     }
 
     viewController.dismiss(animated: false) {
-      self.toggleChartAndBalance()
+      self.showChart()
       self.navigationController.topViewController()?.present(successFailVC, animated: false) {
         successFailVC.action?()
       }
@@ -89,7 +89,7 @@ extension AppCoordinator: WalletTransferViewControllerDelegate {
 
   func viewControllerDidConfirmLoad(_ viewController: UIViewController, paymentData transactionData: PaymentData) {
     viewController.dismiss(animated: false) {
-      self.toggleChartAndBalance()
+      self.showChart()
       self.selectLightningWallet()
       self.handleSuccessfulOnChainPaymentVerification(with: transactionData.broadcastData,
                                                outgoingTransactionData: transactionData.outgoingData,

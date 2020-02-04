@@ -55,6 +55,7 @@ class AppCoordinator: CoordinatorType {
   var userIdentifiableManager: UserIdentifiableManagerType
   let ratesDataWorker: RatesDataWorker
   var localNotificationManager: LocalNotificationManagerType
+  weak var walletOverviewViewController: WalletOverviewViewController?
   let uiTestArguments: [UITestArgument]
 
   // swiftlint:disable:next weak_delegate
@@ -458,13 +459,12 @@ class AppCoordinator: CoordinatorType {
     launchStateManager.unauthenticateUser()
   }
 
-  private var walletOverviewViewController: WalletOverviewViewController? {
-    guard let topViewController = (navigationController.topViewController() as? FAPanelController) else { return nil }
-    return topViewController.center as? WalletOverviewViewController
+  func showBalance() {
+    walletOverviewViewController?.topBar.showBalance()
   }
 
-  func toggleChartAndBalance() {
-    walletOverviewViewController?.topBar.toggleChartAndBalance()
+  func showChart() {
+    walletOverviewViewController?.topBar.showChart()
   }
 
   func selectLightningWallet() {

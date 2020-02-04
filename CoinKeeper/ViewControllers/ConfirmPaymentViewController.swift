@@ -86,7 +86,7 @@ class ConfirmPaymentViewController: PresentableViewController, StoryboardInitial
   }
 
   @IBAction func closeButtonWasTouched() {
-    delegate.viewControllerDidSelectClose(self)
+    delegate.viewControllerDidSelectCloseShowCharts(self)
   }
 
   override func viewDidLoad() {
@@ -203,7 +203,7 @@ extension ConfirmPaymentViewController {
     if let viewModel = viewModel {
       switch viewModel.walletTransactionType {
       case .lightning:
-        networkFeeLabel.isHidden = true
+        networkFeeLabel.isHidden = (feeModel.networkFeeAmount == 0)
         primaryAddressLabel.lineBreakMode = .byTruncatingMiddle
         walletTransactionTypeButton.style = .lightning(rounded: true)
         walletTransactionTypeButton.setAttributedTitle(NSAttributedString.lightningSelectedButtonTitle, for: .normal)
@@ -259,13 +259,7 @@ extension ConfirmPaymentViewController {
       adjustableFeesContainer.isHidden = true
     }
 
-    let feeDecimalAmount = NSDecimalNumber(sats: feeModel.networkFeeAmount)
-    let exchangeRate = self.viewModel.exchangeRate
-    let feeConverter = CurrencyConverter(fromBtcAmount: feeDecimalAmount, rate: exchangeRate)
-    let btcFee = String(describing: feeConverter.amount(forCurrency: .BTC) ?? 0)
-    let fiatFeeAmount = feeConverter.convertedAmount() ?? .zero
-    let fiatFeeString = FiatFormatter(currency: exchangeRate.currency, withSymbol: true).string(fromDecimal: fiatFeeAmount) ?? ""
-    networkFeeLabel.text = "Network Fee \(btcFee) (\(fiatFeeString))"
+    networkFeeLabel.text = feeModel.networkFeeDisplayString(exchangeRate: viewModel.exchangeRate)
   }
 
   fileprivate func updateRecipientViews() {
@@ -283,8 +277,16 @@ extension ConfirmPaymentViewController {
       // May refer to either an actual contact or a manually entered phone number
       updateView(withContact: contact)
     } else {
-      // Recipient is btc address
+      // Recipient is btc address or lightning invoice
       primaryAddressLabel.isHidden = false
+      primaryAddressLabel.minimumScaleFactor = 0.4
+      primaryAddressLabel.adjustsFontSizeToFitWidth = true
+      switch viewModel.walletTransactionType {
+      case .onChain:
+        primaryAddressLabel.numberOfLines = 1
+      case .lightning:
+        primaryAddressLabel.numberOfLines = 5
+      }
     }
   }
 
@@ -328,7 +330,7 @@ extension ConfirmPaymentViewController {
     case .registeredUser:
       primaryAddressLabel.text = displayIdentity
       primaryAddressLabel.isHidden = false // phone number
-      secondaryAddressLabel.isHidden = false // address
+      secondaryAddressLabel.isHidden = true // address
     }
   }
 

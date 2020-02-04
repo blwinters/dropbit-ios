@@ -113,7 +113,7 @@ class RequestPayViewControllerTests: XCTestCase {
                                            memo: String?,
                                            completion: @escaping (String) -> Void) { }
 
-    func viewControllerDidSelectCloseWithToggle(_ viewController: UIViewController) { }
+    func viewControllerDidSelectCloseShowCharts(_ viewController: UIViewController) { }
 
     var didCreateInvoice = false
     func viewControllerDidCreateInvoice(_ viewController: UIViewController) {

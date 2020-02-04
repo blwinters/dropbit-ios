@@ -100,9 +100,14 @@ enum TopBarLeftButtonType {
     self.balanceView.updateLabels(with: labels, selectedCurrency: delegate.selectedCurrency())
   }
 
-  func toggleChartAndBalance() {
-    rightBalanceContainerView.isHidden = chartButton.isHidden
-    chartButton.isHidden = !chartButton.isHidden
+  func showChart() {
+    rightBalanceContainerView.isHidden = true
+    chartButton.isHidden = false
+  }
+
+  func showBalance() {
+    rightBalanceContainerView.isHidden = false
+    chartButton.isHidden = true
   }
 
   private func selectedCurrency() -> SelectedCurrency {

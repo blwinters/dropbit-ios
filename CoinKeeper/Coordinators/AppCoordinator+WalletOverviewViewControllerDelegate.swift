@@ -12,6 +12,10 @@ import Sheeeeeeeeet
 
 extension AppCoordinator: WalletOverviewViewControllerDelegate {
 
+  func viewControllerDidFinishLoading(_ viewController: WalletOverviewViewController) {
+    walletOverviewViewController = viewController
+  }
+
   func setSelectedWalletTransactionType(_ viewController: UIViewController, to selectedType: WalletTransactionType) {
     persistenceManager.brokers.preferences.selectedWalletTransactionType = selectedType
   }
@@ -50,7 +54,7 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
         let viewModel = WalletTransferViewModel(direction: direction, fiatAmount: .zero,
                                                 exchangeRate: exchangeRate, lightningConfig: lightningConfig)
         let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel, alertManager: self.alertManager)
-        self.toggleChartAndBalance()
+        self.showBalance()
         self.navigationController.present(transferViewController, animated: true, completion: nil)
       }
     }
@@ -131,7 +135,7 @@ extension AppCoordinator: WalletOverviewViewControllerDelegate {
                                        converter: CurrencyConverter,
                                        walletTransactionType: WalletTransactionType) {
     guard showLightningLockAlertIfNecessary() else { return }
-    toggleChartAndBalance()
+    showBalance()
     switch walletTransactionType {
     case .onChain:
       analyticsManager.track(event: .payButtonWasPressed, with: nil)
@@ -159,7 +163,7 @@ extension AppCoordinator: LightningQuickLoadViewControllerDelegate {
       let viewModel = WalletTransferViewModel(direction: .toLightning(nil), fiatAmount: .zero,
                                               exchangeRate: exchangeRate, lightningConfig: lightningConfig)
       let transferViewController = WalletTransferViewController.newInstance(delegate: self, viewModel: viewModel, alertManager: self.alertManager)
-      self.toggleChartAndBalance()
+      self.showBalance()
       self.navigationController.present(transferViewController, animated: true, completion: nil)
     }
   }

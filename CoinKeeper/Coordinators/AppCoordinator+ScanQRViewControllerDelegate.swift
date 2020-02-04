@@ -78,6 +78,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
                   return Promise.value((privateKeyCopy, txData))
               }
           }.done { (privateKey, txData) in
+            self.showBalance()
             self.showPrivateKeySweepViewController(privateKey: privateKey, data: txData)
           }.catch { error in
             self.alertManager.showErrorHUD(message: error.localizedDescription, forDuration: 2.5)
@@ -244,6 +245,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
       switch response {
       case .success(let decodedInvoice):
         self.analyticsManager.track(event: .externalLightningInvoiceInput, with: nil)
+        self.showBalance()
         let currencyPair = CurrencyPair(btcPrimaryWith: self.currencyController)
         let viewModel = SendPaymentViewModel(encodedInvoice: lightningInvoice, decodedInvoice: decodedInvoice,
                                              exchangeRate: self.exchangeRate, currencyPair: currencyPair)
@@ -295,6 +297,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
         viewControllerWillProcess(viewController, qrCode: qrCode,
                                   walletTransactionType: .onChain,
                                   fallbackViewModel: fallbackViewModel)
+        showBalance()
       } catch {
         viewControllerDidAttemptInvalidDestination(viewController, error: error)
       }

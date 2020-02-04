@@ -72,10 +72,13 @@ class SettingsViewControllerTests: XCTestCase {
 
   // MARK: mock coordinator
   class MockCoordinator: SettingsViewControllerDelegate {
+    func viewControllerDidSelectAdvancedWalletInfo(_ viewController: UIViewController) { }
 
     func viewControllerDidSelectCurrencyOptions(_ viewController: UIViewController) { }
 
     func viewControllerDidSelectCloseWithToggle(_ viewController: UIViewController) { }
+
+    func viewControllerDidSelectCloseShowCharts(_ viewController: UIViewController) { }
 
     func verifiedPhoneNumber() -> String? {
       return nil

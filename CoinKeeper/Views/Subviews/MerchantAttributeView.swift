@@ -38,6 +38,8 @@ class MerchantAttributeView: UIView {
   override func awakeFromNib() {
     super.awakeFromNib()
 
+    linkButton.titleLabel?.adjustsFontSizeToFitWidth = true
+    descriptionLabel.adjustsFontSizeToFitWidth = true
     backgroundColor = .lightGrayBackground
   }
 

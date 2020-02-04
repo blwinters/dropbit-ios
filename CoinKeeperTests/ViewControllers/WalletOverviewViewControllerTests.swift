@@ -57,6 +57,7 @@ class WalletOverviewViewControllerTests: XCTestCase {
       balanceUpdateManager = BalanceUpdateManager()
     }
 
+    func viewControllerDidFinishLoading(_ viewController: WalletOverviewViewController) { }
     func viewControllerDidTapScan(_ viewController: UIViewController, converter: CurrencyConverter) { }
     func setSelectedWalletTransactionType(_ viewController: UIViewController, to selectedType: WalletTransactionType) { }
     func selectedWalletTransactionType() -> WalletTransactionType {

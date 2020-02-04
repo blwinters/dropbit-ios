@@ -20,7 +20,7 @@ class ConfirmPaymentViewControllerTests: XCTestCase {
     mockCoordinator = MockCoordinator()
     let viewModel = MockConfirmLightningPaymentViewModel()
     sut = ConfirmPaymentViewController.newInstance(type: .payment, viewModel: viewModel,
-                                                   feeModel: .lightning, delegate: mockCoordinator)
+                                                   feeModel: .lightning(nil), delegate: mockCoordinator)
     _ = sut.view
   }
 
@@ -63,7 +63,7 @@ class ConfirmPaymentViewControllerTests: XCTestCase {
       return Promise { _ in }
     }
 
-    func viewControllerDidSelectCloseWithToggle(_ viewController: UIViewController) { }
+    func viewControllerDidSelectCloseShowCharts(_ viewController: UIViewController) { }
     var alertManager: AlertManagerType = MockAlertManager(notificationManager:
       NotificationManager(permissionManager: PermissionManager(),
                           networkInteractor: NetworkManager(analyticsManager: AnalyticsManager())))

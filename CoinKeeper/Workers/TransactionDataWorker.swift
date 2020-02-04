@@ -117,7 +117,7 @@ class TransactionDataWorker: TransactionDataWorkerType {
     .then(in: context) { response -> Promise<Void> in
       let threshold = self.fourteenDaysAgo
       let resultFilter: ((LNTransactionResult) -> Bool) = { res in
-        return res.type == .lightning && res.createdAt > threshold && !res.isPreauth
+        return res.type == .lightning && (res.createdAt ?? Date()) > threshold && !res.isPreauth
       }
       let recentLedgerEntryIds = response.ledger.filter(resultFilter).map { $0.cleanedId }
 
