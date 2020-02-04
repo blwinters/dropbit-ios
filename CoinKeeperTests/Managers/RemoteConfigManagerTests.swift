@@ -36,6 +36,25 @@ class RemoteConfigManagerTests: XCTestCase {
     XCTAssertEqual(mockResponse.config.settings?.lightningLoad?.minimum, retrievedValue)
   }
 
+  func testValueIsPersistedAndReturned_lightningLoadCurrencies() {
+    let initialConfig = sut.latestConfig
+    XCTAssertNil(initialConfig.settings.lightningLoadPresets)
+    let mockResponse = createMockResponse()
+    let configDidChange = sut.update(with: mockResponse)
+    XCTAssert(configDidChange)
+
+    let retrievedPresets = sut.latestConfig.settings.lightningLoadPresets
+    XCTAssertNotNil(retrievedPresets)
+    XCTAssertNotEqual(retrievedPresets?.USD, retrievedPresets?.SEK)
+    let expectedSEKValues = mockResponse.config.settings?.lightningLoad?.currencies?.SEK.toDecimals() ?? []
+    let actualSEKValues = retrievedPresets?.SEK ?? []
+    XCTAssertEqual(expectedSEKValues, actualSEKValues)
+
+    let expectedCurrencies = mockResponse.config.settings?.lightningLoad?.currencies
+    let expectedPresets = expectedCurrencies.flatMap { LightningLoadPresetAmounts(currenciesResponse: $0) }
+    XCTAssertEqual(expectedPresets, retrievedPresets)
+  }
+
   func testValueIsPersistedAndReturned_inviteMax() {
     let initialConfig = sut.latestConfig
     XCTAssertNil(initialConfig.settings.maxInviteUSD)
@@ -58,7 +77,14 @@ class RemoteConfigManagerTests: XCTestCase {
 
   private func createMockResponse() -> ConfigResponse {
     let standardValues = [5, 10, 20, 50, 100]
-    let lnLoadResponse = ConfigLightningLoadResponse(minimum: 50_000, sharedCurrencyValues: standardValues)
+    let currencies = ConfigCurrenciesResponse(AUD: standardValues,
+                                              CAD: standardValues,
+                                              EUR: standardValues,
+                                              GBP: standardValues,
+                                              SEK: standardValues.map { $0 * 10 },
+                                              USD: standardValues)
+
+    let lnLoadResponse = ConfigLightningLoadResponse(minimum: 50_000, currencies: currencies)
     let settingsResponse = ConfigSettingsResponse(twitterDelegate: true,
                                                   invitationMaximum: 50,
                                                   biometricsMaximum: 100,

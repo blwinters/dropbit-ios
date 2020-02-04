@@ -13,19 +13,21 @@ struct MockSettingsConfig: SettingsConfigType {
 
   let minLightningLoadBTC: NSDecimalNumber?
   let maxInviteUSD: NSDecimalNumber?
-  var maxBiometricsUSD: NSDecimalNumber?
+  let maxBiometricsUSD: NSDecimalNumber?
+  let lightningLoadPresets: LightningLoadPresetAmounts?
 
-  init(minReloadSats: Satoshis?, maxInviteUSD: NSDecimalNumber?, maxBiometricsUSD: NSDecimalNumber?) {
+  init(minReloadSats: Satoshis?,
+       maxInviteUSD: NSDecimalNumber?,
+       maxBiometricsUSD: NSDecimalNumber?,
+       presetAmounts: LightningLoadPresetAmounts?) {
     self.minLightningLoadBTC = minReloadSats.flatMap { NSDecimalNumber(sats: $0) }
     self.maxInviteUSD = maxInviteUSD
     self.maxBiometricsUSD = maxBiometricsUSD
-  }
-
-  func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber] {
-    [5, 10, 20, 50, 100].map { NSDecimalNumber(value: $0) }
+    self.lightningLoadPresets = presetAmounts
   }
 
   static func `default`() -> MockSettingsConfig {
-    return MockSettingsConfig(minReloadSats: 60_000, maxInviteUSD: 100, maxBiometricsUSD: 100)
+    let presetAmounts = LightningLoadPresetAmounts(sharedValues: [2, 4, 6, 8, 10])
+    return MockSettingsConfig(minReloadSats: 60_000, maxInviteUSD: 100, maxBiometricsUSD: 100, presetAmounts: presetAmounts)
   }
 }

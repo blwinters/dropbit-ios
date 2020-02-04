@@ -6,6 +6,8 @@
 //  Copyright © 2018 Coin Ninja, LLC. All rights reserved.
 //
 
+import Foundation
+
 extension Array {
   subscript(safe index: Int) -> Element? {
     return indices ~= index ? self[index] : nil
@@ -47,5 +49,11 @@ extension Array where Array.Element: Hashable {
 
   func uniqued() -> [Element] {
     return Array(self.asSet())
+  }
+}
+
+extension Array where Element == Int {
+  func toDecimals() -> [NSDecimalNumber] {
+    self.map { NSDecimalNumber(value: $0) }
   }
 }

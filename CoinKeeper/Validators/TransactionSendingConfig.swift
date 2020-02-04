@@ -37,7 +37,27 @@ protocol SettingsConfigType {
   var minLightningLoadBTC: NSDecimalNumber? { get }
   var maxInviteUSD: NSDecimalNumber? { get }
   var maxBiometricsUSD: NSDecimalNumber? { get }
-  func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber]
+  var lightningLoadPresets: LightningLoadPresetAmounts? { get }
+
+}
+
+extension SettingsConfigType {
+
+  func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber] {
+    guard let presets = lightningLoadPresets else {
+      return [5, 10, 20, 50, 100].map { NSDecimalNumber(value: $0) }
+    }
+
+    switch currency {
+    case .AUD:  return presets.AUD
+    case .CAD:  return presets.CAD
+    case .EUR:  return presets.EUR
+    case .GBP:  return presets.GBP
+    case .SEK:  return presets.SEK
+    case .USD:  return presets.USD
+    case .BTC:  return []
+    }
+  }
 
 }
 
@@ -51,22 +71,49 @@ struct SettingsConfig: SettingsConfigType, Equatable {
 
   let maxBiometricsUSD: NSDecimalNumber?
 
+  let lightningLoadPresets: LightningLoadPresetAmounts?
+
   ///`maxInviteUSD: Int?` represents whole dollars
-  init(minReload: Satoshis?, maxInviteUSD: Int?, maxBiometricsUSD: Int?) {
+  init(minReload: Satoshis?, maxInviteUSD: Int?, maxBiometricsUSD: Int?, presetAmounts: LightningLoadPresetAmounts?) {
     self.minLightningLoadBTC = minReload.flatMap { NSDecimalNumber(sats: $0) }
     self.maxInviteUSD = maxInviteUSD.flatMap { NSDecimalNumber(value: $0) }
     self.maxBiometricsUSD = maxBiometricsUSD.flatMap { NSDecimalNumber(value: $0) }
-  }
-
-  func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber] {
-    switch currency {
-    case .SEK:  return [50, 100, 200, 500, 1000].map { NSDecimalNumber(value: $0) }
-    default:    return [5, 10, 20, 50, 100].map { NSDecimalNumber(value: $0) }
-    }
+    self.lightningLoadPresets = presetAmounts
   }
 
   static var fallbackInstance: SettingsConfig {
-    return SettingsConfig(minReload: 60_000, maxInviteUSD: 100, maxBiometricsUSD: 100)
+    let presetAmounts = LightningLoadPresetAmounts(sharedValues: [5, 10, 20, 50, 100])
+    return SettingsConfig(minReload: 60_000, maxInviteUSD: 100, maxBiometricsUSD: 100, presetAmounts: presetAmounts)
   }
 
+}
+
+struct LightningLoadPresetAmounts: Equatable {
+  let AUD: [NSDecimalNumber]
+  let CAD: [NSDecimalNumber]
+  let EUR: [NSDecimalNumber]
+  let GBP: [NSDecimalNumber]
+  let SEK: [NSDecimalNumber]
+  let USD: [NSDecimalNumber]
+}
+
+extension LightningLoadPresetAmounts {
+  init(sharedValues: [Int]) {
+    let decimalValues = sharedValues.toDecimals()
+    self.init(AUD: decimalValues,
+              CAD: decimalValues,
+              EUR: decimalValues,
+              GBP: decimalValues,
+              SEK: decimalValues,
+              USD: decimalValues)
+  }
+
+  init(currenciesResponse res: ConfigCurrenciesResponse) {
+    self.init(AUD: res.AUD.toDecimals(),
+              CAD: res.CAD.toDecimals(),
+              EUR: res.EUR.toDecimals(),
+              GBP: res.GBP.toDecimals(),
+              SEK: res.SEK.toDecimals(),
+              USD: res.USD.toDecimals())
+  }
 }

@@ -53,7 +53,7 @@ class CurrencyAmountValidatorTests: XCTestCase {
   }
 
   func testNilInvitationLimitShouldNotThrow() {
-    let settings = MockSettingsConfig(minReloadSats: nil, maxInviteUSD: nil, maxBiometricsUSD: nil)
+    let settings = MockSettingsConfig(minReloadSats: nil, maxInviteUSD: nil, maxBiometricsUSD: nil, presetAmounts: nil)
     self.config = TransactionSendingConfig(settings: settings, preferredExchangeRate: rate, usdExchangeRate: rate)
     self.sut = createValidator()
 

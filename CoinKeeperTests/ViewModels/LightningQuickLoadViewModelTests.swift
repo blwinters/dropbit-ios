@@ -12,7 +12,13 @@ import XCTest
 
 class LightningQuickLoadViewModelTests: XCTestCase {
 
+  var config: TransactionSendingConfig!
   var sut: LightningQuickLoadViewModel!
+
+  override func setUp() {
+    super.setUp()
+    self.config = createConfig()
+  }
 
   override func tearDown() {
     super.tearDown()
@@ -22,8 +28,9 @@ class LightningQuickLoadViewModelTests: XCTestCase {
   let rate: ExchangeRate = .sampleUSD
   let minReloadSats: Satoshis = 60_000
 
-  var config: TransactionSendingConfig {
-    let settings = MockSettingsConfig(minReloadSats: minReloadSats, maxInviteUSD: nil, maxBiometricsUSD: nil)
+  func createConfig() -> TransactionSendingConfig {
+    let mockPresets = LightningLoadPresetAmounts(sharedValues: [8, 16, 32, 64, 128])
+    let settings = MockSettingsConfig(minReloadSats: minReloadSats, maxInviteUSD: nil, maxBiometricsUSD: nil, presetAmounts: mockPresets)
     return TransactionSendingConfig(settings: settings,
                                     preferredExchangeRate: rate,
                                     usdExchangeRate: rate)
@@ -56,12 +63,12 @@ class LightningQuickLoadViewModelTests: XCTestCase {
   }
 
   func testHigherStandardAmountsAreDisabledByMaxAmount() {
-    let onChainFiatBalance = NSDecimalNumber(integerAmount: 45_00, currency: .USD)
+    let onChainFiatBalance = NSDecimalNumber(integerAmount: 35_00, currency: .USD)
     let balanceConverter = CurrencyConverter(fromFiatAmount: onChainFiatBalance, rate: rate)
     let btcBalances = WalletBalances(onChain: balanceConverter.btcAmount, lightning: .zero)
     do {
       sut = try LightningQuickLoadViewModel(spendableBalances: btcBalances, config: config)
-      let expectedEnabledValues: [NSDecimalNumber] = [5, 10, 20, 45].map { NSDecimalNumber(value: $0) }
+      let expectedEnabledValues: [NSDecimalNumber] = [8, 16, 32, 35].map { NSDecimalNumber(value: $0) }
       let actualEnabledValues = sut.controlConfigs.filter { $0.isEnabled }.map { $0.amount.amount }
       XCTAssertEqual(expectedEnabledValues, actualEnabledValues)
 
