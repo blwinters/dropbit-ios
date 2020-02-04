@@ -28,13 +28,22 @@ class RemoteConfigManagerTests: XCTestCase {
 
   func testValueIsPersistedAndReturned_lightningLoadMin() {
     let initialConfig = sut.latestConfig
-    XCTAssertNil(initialConfig.settings.maxInviteUSD)
     XCTAssertNil(initialConfig.settings.minLightningLoadBTC)
     let mockResponse = createMockResponse()
     let configDidChange = sut.update(with: mockResponse)
     XCTAssert(configDidChange)
     let retrievedValue = sut.latestConfig.settings.minLightningLoadBTC?.asFractionalUnits(of: .BTC)
     XCTAssertEqual(mockResponse.config.settings?.lightningLoad?.minimum, retrievedValue)
+  }
+
+  func testValueIsPersistedAndReturned_inviteMax() {
+    let initialConfig = sut.latestConfig
+    XCTAssertNil(initialConfig.settings.maxInviteUSD)
+    let mockResponse = createMockResponse()
+    let configDidChange = sut.update(with: mockResponse)
+    XCTAssert(configDidChange)
+    let retrievedValue = sut.latestConfig.settings.maxInviteUSD?.intValue
+    XCTAssertEqual(mockResponse.config.settings?.invitationMaximum, retrievedValue)
   }
 
   private func createMockResponse() -> ConfigResponse {

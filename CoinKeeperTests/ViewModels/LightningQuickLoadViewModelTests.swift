@@ -32,7 +32,7 @@ class LightningQuickLoadViewModelTests: XCTestCase {
   func testLowOnChainBalanceThrowsError() {
     let oneSat = NSDecimalNumber(sats: 1)
     let balances = WalletBalances(onChain: oneSat, lightning: .zero)
-    let expectedError = LightningWalletAmountValidatorError.reloadMinimum(sats: minReloadSats)
+    let expectedError = LightningWalletAmountValidatorError.reloadMinimum(minReloadSats)
     do {
       sut = try LightningQuickLoadViewModel(spendableBalances: balances, config: config)
       XCTFail("Should throw error")
