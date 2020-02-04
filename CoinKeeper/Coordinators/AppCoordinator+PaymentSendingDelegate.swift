@@ -46,8 +46,10 @@ extension AppCoordinator: PaymentSendingDelegate {
     outgoingTxDataWithAmount.sharedPayloadDTO?.amountInfo = payloadAmountInfo
     outgoingTxDataWithAmount.sender = self.sharedPayloadSenderIdentity(forReceiver: outgoingTransactionData.receiver)
 
-    let usdThreshold = 100_00
-    let shouldDisableBiometrics = payloadAmountInfo.usdAmount > usdThreshold
+    var shouldDisableBiometrics = false //do not disable if config value is nil
+    if let usdThreshold: Cents = self.currentConfig.settings.maxBiometricsUSD?.asFractionalUnits(of: .USD) {
+      shouldDisableBiometrics = payloadAmountInfo.usdAmount > usdThreshold
+    }
 
     let pinEntryViewModel = PaymentVerificationPinEntryViewModel(amountDisablesBiometrics: shouldDisableBiometrics)
 
