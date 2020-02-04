@@ -33,6 +33,7 @@ class CurrencyAmountValidatorTests: XCTestCase {
 
     do {
       try self.sut.validate(value: converter)
+      XCTFail("Should throw error")
     } catch let error as CurrencyAmountValidatorError {
       guard case let .invitationMaximum(errorMoney) = error else {
         XCTFail("should throw .invitationMaximum")
