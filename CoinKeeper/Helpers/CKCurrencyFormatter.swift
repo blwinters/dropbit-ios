@@ -56,12 +56,12 @@ class CKCurrencyFormatter {
 
   static func string(for amount: NSDecimalNumber?,
                      currency: Currency,
-                     walletTransactionType: WalletTransactionType) -> String? {
+                     walletTxType: WalletTransactionType) -> String? {
     guard let amount = amount else { return nil }
     if currency.isFiat {
       return FiatFormatter(currency: currency, withSymbol: true).string(fromDecimal: amount)
     } else {
-      switch walletTransactionType {
+      switch walletTxType {
       case .lightning:
         return SatsFormatter().string(fromDecimal: amount)
       case .onChain:

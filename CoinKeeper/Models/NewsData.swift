@@ -74,7 +74,7 @@ class NewsData {
   var weeklyPriceResponse: [PriceSummaryResponse] = []
   var weeklyPriceData: LineChartDataSet = LineChartDataSet()
 
-  var currentPrice: ExchangeRate = .zero
+  var currentPrice: ExchangeRate = .zeroUSD
 
   var displayPrice: String {
     return currentPrice.displayString

@@ -66,7 +66,7 @@ class WalletOverviewViewControllerTests: XCTestCase {
     func viewControllerDidTapReceivePayment(_ viewController: UIViewController, converter: CurrencyConverter) { }
     func viewControllerDidTapSendPayment(_ viewController: UIViewController,
                                          converter: CurrencyConverter,
-                                         walletTransactionType: WalletTransactionType) { }
+                                         walletTxType: WalletTransactionType) { }
     func viewControllerShouldAdjustForBottomSafeArea(_ viewController: UIViewController) -> Bool {
       return true
     }
@@ -81,7 +81,7 @@ class WalletOverviewViewControllerTests: XCTestCase {
     func viewControllerDidRequestBadgeUpdate(_ viewController: UIViewController) { }
 
     func viewControllerDidTapReceivePayment(_ viewController: UIViewController,
-                                            converter: CurrencyConverter, walletTransactionType: WalletTransactionType) {}
+                                            converter: CurrencyConverter, walletTxType: WalletTransactionType) {}
 
     func viewControllerShouldTrackEvent(event: AnalyticsManagerEventType) {}
 

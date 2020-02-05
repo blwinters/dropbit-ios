@@ -75,22 +75,28 @@ struct MockDetailDataGenerator {
     }
 
     static func amountFactory(for sats: Int, invitationStatus: InvitationStatus?, transactionStatus: TransactionStatus) -> MockAmountsFactory {
-//      let cents = 350
-//      let fiatWhenInvited = NSDecimalNumber(integerAmount: cents, currency: .USD)
-//      let fiatWhenTransacted = NSDecimalNumber(integerAmount: cents + 5, currency: .USD)
+      let currency: Currency = .USD
+      let cents = 350
+      let fiatWhenInvited = NSDecimalNumber(integerAmount: cents, currency: currency)
+      let fiatWhenTransacted = NSDecimalNumber(integerAmount: cents + 5, currency: currency)
 
-      var amtFactory = MockDetailCellVM.testAmountFactory(sats: sats)
+      var amtFactory = MockDetailCellVM.testAmountFactory(sats: sats,
+                                                          fiatCurrency: currency,
+                                                          fiatWhenInvited: fiatWhenInvited,
+                                                          fiatWhenTransacted: fiatWhenTransacted)
       if let inviteStatus = invitationStatus {
         switch inviteStatus {
-        case .notSent:
+        case .notSent, .completed: //use default instance
           break
-        case .requestSent, .addressProvided, .canceled, .expired:
-          amtFactory = MockDetailCellVM.testAmountFactory(sats: sats)
-        case .completed:
-          amtFactory = MockDetailCellVM.testAmountFactory(sats: sats)
+        case .requestSent, .addressProvided:
+          amtFactory = MockDetailCellVM.testAmountFactory(sats: sats, fiatCurrency: currency,
+                                                          fiatWhenInvited: fiatWhenInvited)
+        case .canceled, .expired:
+          amtFactory = MockDetailCellVM.testAmountFactory(sats: sats, fiatCurrency: currency)
         }
       } else if transactionStatus == .completed {
-        amtFactory = MockDetailCellVM.testAmountFactory(sats: sats)
+        amtFactory = MockDetailCellVM.testAmountFactory(sats: sats, fiatCurrency: currency,
+                                                        fiatWhenTransacted: fiatWhenTransacted)
       }
 
       return amtFactory

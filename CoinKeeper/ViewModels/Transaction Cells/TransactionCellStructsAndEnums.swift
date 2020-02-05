@@ -80,7 +80,7 @@ struct MockAmountsFactory: TransactionAmountsFactoryType {
        exchangeRate: ExchangeRate,
        fiatWhenInvited: NSDecimalNumber? = nil,
        fiatWhenTransacted: NSDecimalNumber? = nil) {
-    let converter = CurrencyConverter(rate: exchangeRate, fromAmount: fiatAmount, fromType: .fiat)
+    let converter = CurrencyConverter(fromFiatAmount: fiatAmount, rate: exchangeRate)
     self.init(btcAmount: converter.btcAmount,
               fiatCurrency: fiatCurrency,
               exchangeRate: exchangeRate,

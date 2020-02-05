@@ -18,9 +18,9 @@ protocol WalletOverviewViewControllerDelegate: WalletOverviewTopBarDelegate & Ba
   func setSelectedWalletTransactionType(_ viewController: UIViewController, to selectedType: WalletTransactionType)
   func selectedWalletTransactionType() -> WalletTransactionType
   func viewControllerDidTapReceivePayment(_ viewController: UIViewController,
-                                          converter: CurrencyConverter, walletTransactionType: WalletTransactionType)
+                                          converter: CurrencyConverter, walletTxType: WalletTransactionType)
   func viewControllerDidTapSendPayment(_ viewController: UIViewController, converter: CurrencyConverter,
-                                       walletTransactionType: WalletTransactionType)
+                                       walletTxType: WalletTransactionType)
   func viewControllerShouldAdjustForBottomSafeArea(_ viewController: UIViewController) -> Bool
   func viewControllerDidSelectTransfer(_ viewController: UIViewController)
   func viewControllerDidFinishLoading(_ viewController: WalletOverviewViewController)
@@ -225,14 +225,15 @@ extension WalletOverviewViewController: BalanceDisplayable {
       return .zero
     }
     let balances = provider.balancesNetPending()
-    switch walletTransactionType {
+    switch walletTxType {
     case .onChain:    return balances.onChain
     case .lightning:  return balances.lightning
     }
   }
 
   var currencyPair: CurrencyPair {
-    guard let delegate = delegate else { return CurrencyPair(primary: .BTC, fiat: .USD) }
+    let defaultCurrency = Currency.defaultFiatCurrency(forLocale: .current)
+    guard let delegate = delegate else { return CurrencyPair(primary: .BTC, fiat: defaultCurrency) }
     let fiat = delegate.currencyController.fiatCurrency
     return CurrencyPair(primary: .BTC, fiat: fiat)
   }
@@ -244,7 +245,7 @@ extension WalletOverviewViewController: BalanceDisplayable {
     baseViewControllers.compactMap { $0 as? ExchangeRateUpdatable }.forEach { $0.didUpdateExchangeRateManager(exchangeRateManager) }
   }
 
-  var walletTransactionType: WalletTransactionType {
+  var walletTxType: WalletTransactionType {
     return delegate?.selectedWalletTransactionType() ?? .onChain
   }
 }
@@ -321,7 +322,7 @@ extension WalletOverviewViewController: SendReceiveActionViewDelegate {
   func actionViewDidSelectReceive(_ view: UIView) {
     guard let delegate = delegate else { return }
     let converter = delegate.currencyController.currencyConverter
-    delegate.viewControllerDidTapReceivePayment(self, converter: converter, walletTransactionType: walletTransactionType)
+    delegate.viewControllerDidTapReceivePayment(self, converter: converter, walletTxType: walletTxType)
   }
 
   func actionViewDidSelectScan(_ view: UIView) {
@@ -334,7 +335,7 @@ extension WalletOverviewViewController: SendReceiveActionViewDelegate {
     guard let delegate = delegate else { return }
     let converter = delegate.currencyController.currencyConverter
     delegate.viewControllerDidTapSendPayment(self, converter: converter,
-                                                walletTransactionType: currentWallet)
+                                                walletTxType: currentWallet)
   }
 }
 

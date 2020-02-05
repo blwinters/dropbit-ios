@@ -24,7 +24,7 @@ class RequestPayViewModel: CurrencySwappableEditAmountViewModel {
   }
 
   func qrImage(withSize size: CGSize) -> UIImage? {
-    switch walletTransactionType {
+    switch walletTxType {
     case .lightning:
       guard let invoice = lightningInvoice else { return nil }
       return qrCodeGenerator.image(from: invoice.request, size: size)

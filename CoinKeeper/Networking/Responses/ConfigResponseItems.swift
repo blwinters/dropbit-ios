@@ -12,6 +12,21 @@ struct FeatureEnabledResponse: Codable {
   let enabled: Bool
 }
 
+struct ConfigCurrenciesResponse: Codable {
+  let AUD: [Int]
+  let CAD: [Int]
+  let EUR: [Int]
+  let GBP: [Int]
+  let SEK: [Int]
+  let USD: [Int]
+}
+
+struct ConfigLightningLoadResponse: Codable {
+  let minimum: Satoshis?
+  let currencies: ConfigCurrenciesResponse?
+}
+
+//swiftlint:disable weak_delegate
 struct ConfigSettingsResponse: Codable {
 
   /// server can send tweets on behalf of invitation senders
@@ -21,7 +36,9 @@ struct ConfigSettingsResponse: Codable {
   let invitationMaximum: Int?
 
   /// value represents whole dollars (USD)
-  let minimumLightningLoad: Int?
+  let biometricsMaximum: Int?
+
+  let lightningLoad: ConfigLightningLoadResponse?
 }
 
 struct ConfigResponseItems: ResponseDecodable {
@@ -36,10 +53,7 @@ extension ConfigResponseItems {
     return "{}"
   }
 
-   static var requiredStringKeys: [KeyPath<ConfigResponseItems, String>] {
-    return []
-   }
-
-   static var optionalStringKeys: [WritableKeyPath<ConfigResponseItems, String?>] { return [] }
+  static var requiredStringKeys: [KeyPath<ConfigResponseItems, String>] { return [] }
+  static var optionalStringKeys: [WritableKeyPath<ConfigResponseItems, String?>] { return [] }
 
 }

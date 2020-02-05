@@ -59,7 +59,7 @@ extension CurrencySwappableAmountEditor {
 
   /// Editor should call this in response to delegate method calls of CurrencySwappableEditAmountViewModelDelegate
   func refreshBothAmounts() {
-    let txType = editAmountViewModel.walletTransactionType
+    let txType = editAmountViewModel.walletTxType
     let labels = editAmountViewModel.editableDualAmountLabels(walletTxType: txType)
     editAmountView.update(with: labels)
   }
@@ -108,7 +108,7 @@ extension CurrencySwappableAmountEditor {
   }
 
   private func refreshSecondaryAmount() {
-    let walletTxType = editAmountViewModel.walletTransactionType
+    let walletTxType = editAmountViewModel.walletTxType
     let secondaryLabel = editAmountViewModel.editableDualAmountLabels(walletTxType: walletTxType).secondary
     editAmountView.secondaryAmountLabel.attributedText = secondaryLabel
   }

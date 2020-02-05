@@ -16,14 +16,14 @@ class CurrencyConverterTests: XCTestCase {
   let safeRate = ExchangeRate(price: 7000, currency: .USD)
 
   func converter(fromUSDAmount usdAmount: NSDecimalNumber, withRate rate: ExchangeRate) -> CurrencyConverter {
-    return CurrencyConverter(rate: rate, fromAmount: usdAmount, fromType: .fiat)
+    return CurrencyConverter(fromFiatAmount: usdAmount, rate: rate)
   }
 
   // MARK: invalid rates
   func testBTCToUSDWithZeroRatesReturnsNil() {
     let fromAmount: NSDecimalNumber = 15
 
-    self.sut = converter(fromUSDAmount: fromAmount, withRate: .zero)
+    self.sut = converter(fromUSDAmount: fromAmount, withRate: .zeroUSD)
 
     XCTAssertNil(self.sut.convertedAmount(), "converted amount should be nil with a zero rate")
   }

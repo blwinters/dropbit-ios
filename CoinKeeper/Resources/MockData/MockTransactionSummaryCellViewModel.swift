@@ -57,9 +57,16 @@ class MockTransactionSummaryCellViewModel: TransactionSummaryCellViewModelType {
     return ExchangeRate(price: 8500, currency: .USD)
   }
 
-  static func testAmountFactory(sats: Int) -> MockAmountsFactory {
+  static func testAmountFactory(sats: Int,
+                                fiatCurrency: Currency = .USD,
+                                fiatWhenInvited: NSDecimalNumber? = nil,
+                                fiatWhenTransacted: NSDecimalNumber? = nil) -> MockAmountsFactory {
     let btcAmount = NSDecimalNumber(sats: sats)
-    return MockAmountsFactory(btcAmount: btcAmount, fiatCurrency: .USD, exchangeRate: testRate)
+    return MockAmountsFactory(btcAmount: btcAmount,
+                              fiatCurrency: fiatCurrency,
+                              exchangeRate: testRate,
+                              fiatWhenInvited: fiatWhenInvited,
+                              fiatWhenTransacted: fiatWhenTransacted)
   }
 
   static func testAmountFactory(cents: Int) -> MockAmountsFactory {

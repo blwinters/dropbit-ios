@@ -815,6 +815,7 @@
 		B5192FB4216E938000DCC39B /* StringDictResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5192FB3216E938000DCC39B /* StringDictResponseTests.swift */; };
 		B5192FB6216E9A9400DCC39B /* UserResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5192FB5216E9A9400DCC39B /* UserResponseTests.swift */; };
 		B5192FB8216E9B5600DCC39B /* WalletResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5192FB7216E9B5600DCC39B /* WalletResponseTests.swift */; };
+		B519EC4523E86B0F0049656A /* RemoteConfigManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B519EC4423E86B0F0049656A /* RemoteConfigManagerTests.swift */; };
 		B51AE4A7209398FE008380CC /* CKMPhoneNumber+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51AE4A5209398FD008380CC /* CKMPhoneNumber+CoreDataProperties.swift */; };
 		B51AE4A8209398FE008380CC /* CKMPhoneNumber+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51AE4A6209398FE008380CC /* CKMPhoneNumber+CoreDataClass.swift */; };
 		B51AE4AA2093AED4008380CC /* String+Substrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51AE4A92093AED4008380CC /* String+Substrings.swift */; };
@@ -1042,6 +1043,8 @@
 		B5705450230B4812006DD57F /* Typealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB05AC0209CF407000297E1 /* Typealiases.swift */; };
 		B572E4FF23DFA0D700ACEB90 /* ExchangeRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B538508823AC1A3400997240 /* ExchangeRate.swift */; };
 		B572E50023DFA0F000ACEB90 /* Locale+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BEC1AF32229CC8D00824A35 /* Locale+Constants.swift */; };
+		B572E50223DFA15500ACEB90 /* SelectedCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B572E50123DFA15500ACEB90 /* SelectedCurrency.swift */; };
+		B572E50323DFA15500ACEB90 /* SelectedCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B572E50123DFA15500ACEB90 /* SelectedCurrency.swift */; };
 		B5730E27239FF54A00106E19 /* RemoteConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5730E26239FF54A00106E19 /* RemoteConfigurable.swift */; };
 		B5730E2923A0026700106E19 /* ConfigResponseItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5730E2823A0026700106E19 /* ConfigResponseItems.swift */; };
 		B575B61622E9F68700CECFB7 /* LNLedgerTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B575B61522E9F68700CECFB7 /* LNLedgerTarget.swift */; };
@@ -1221,6 +1224,8 @@
 		B5C8F5CB216D3A8800E3E85B /* NetworkManager+DeviceEndpointRequestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8F5CA216D3A8800E3E85B /* NetworkManager+DeviceEndpointRequestable.swift */; };
 		B5C9472C210E08C3002CBAE4 /* AddressRequestUpdateDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C9472B210E08C3002CBAE4 /* AddressRequestUpdateDisplayable.swift */; };
 		B5C9472E210E57D7002CBAE4 /* AddressRequestUpdateDisplayableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C9472D210E57D7002CBAE4 /* AddressRequestUpdateDisplayableTests.swift */; };
+		B5CA9EBF23E36605005B5E55 /* TransactionSendingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CA9EBE23E36605005B5E55 /* TransactionSendingConfig.swift */; };
+		B5CA9EC123E37B65005B5E55 /* MockSettingsConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CA9EC023E37B65005B5E55 /* MockSettingsConfig.swift */; };
 		B5CD0C13234982DF0035E6F3 /* TitleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD0C12234982DF0035E6F3 /* TitleDetailView.swift */; };
 		B5CFA32A221DF594002B1BDD /* ContactCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CFA329221DF594002B1BDD /* ContactCacheManager.swift */; };
 		B5CFA32D221DF9AF002B1BDD /* ContactCache.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B5CFA32B221DF9AF002B1BDD /* ContactCache.xcdatamodeld */; };
@@ -2087,6 +2092,7 @@
 		B5192FB3216E938000DCC39B /* StringDictResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringDictResponseTests.swift; sourceTree = "<group>"; };
 		B5192FB5216E9A9400DCC39B /* UserResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponseTests.swift; sourceTree = "<group>"; };
 		B5192FB7216E9B5600DCC39B /* WalletResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletResponseTests.swift; sourceTree = "<group>"; };
+		B519EC4423E86B0F0049656A /* RemoteConfigManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigManagerTests.swift; sourceTree = "<group>"; };
 		B51A14B62081266600F5DE23 /* TransactionHistoryPrimaryAmountLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionHistoryPrimaryAmountLabel.swift; sourceTree = "<group>"; };
 		B51AE4A5209398FD008380CC /* CKMPhoneNumber+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CKMPhoneNumber+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B51AE4A6209398FE008380CC /* CKMPhoneNumber+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CKMPhoneNumber+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -2303,6 +2309,7 @@
 		B56E15A62167EAE6003B69D4 /* NetworkManager+DeviceRequestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+DeviceRequestable.swift"; sourceTree = "<group>"; };
 		B56F36AB233AB82200984A51 /* ConfirmPaymentMemoViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPaymentMemoViewTests.swift; sourceTree = "<group>"; };
 		B56F3F3A237C614600949B37 /* TransactionNotificationsElasticQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionNotificationsElasticQuery.swift; sourceTree = "<group>"; };
+		B572E50123DFA15500ACEB90 /* SelectedCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedCurrency.swift; sourceTree = "<group>"; };
 		B5730E26239FF54A00106E19 /* RemoteConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigurable.swift; sourceTree = "<group>"; };
 		B5730E2823A0026700106E19 /* ConfigResponseItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigResponseItems.swift; sourceTree = "<group>"; };
 		B575B61522E9F68700CECFB7 /* LNLedgerTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNLedgerTarget.swift; sourceTree = "<group>"; };
@@ -2449,6 +2456,8 @@
 		B5C8F5CA216D3A8800E3E85B /* NetworkManager+DeviceEndpointRequestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+DeviceEndpointRequestable.swift"; sourceTree = "<group>"; };
 		B5C9472B210E08C3002CBAE4 /* AddressRequestUpdateDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressRequestUpdateDisplayable.swift; sourceTree = "<group>"; };
 		B5C9472D210E57D7002CBAE4 /* AddressRequestUpdateDisplayableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressRequestUpdateDisplayableTests.swift; sourceTree = "<group>"; };
+		B5CA9EBE23E36605005B5E55 /* TransactionSendingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSendingConfig.swift; sourceTree = "<group>"; };
+		B5CA9EC023E37B65005B5E55 /* MockSettingsConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsConfig.swift; sourceTree = "<group>"; };
 		B5CD0C12234982DF0035E6F3 /* TitleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleDetailView.swift; sourceTree = "<group>"; };
 		B5CFA329221DF594002B1BDD /* ContactCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCacheManager.swift; sourceTree = "<group>"; };
 		B5CFA32C221DF9AF002B1BDD /* ContactCache.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContactCache.xcdatamodel; sourceTree = "<group>"; };
@@ -2982,10 +2991,10 @@
 				A2372878237B489500086FEC /* PurchaseMerchantTableViewCell.xib */,
 				A237287A237C9E9900086FEC /* BitcoinAddressTableViewCell.swift */,
 				A237287C237CA12100086FEC /* BitcoinAddressTableViewCell.xib */,
-				3B17F4A023E213A1001D582D /* WalletInfoUTXOCell.swift */,
-				3B17F4A123E213A1001D582D /* WalletInfoUTXOCell.xib */,
 				A2B5ED3323E0C6EE001DDBCB /* EarnTableViewCell.swift */,
 				A2B5ED3523E0C6FF001DDBCB /* EarnTableViewCell.xib */,
+				3B17F4A023E213A1001D582D /* WalletInfoUTXOCell.swift */,
+				3B17F4A123E213A1001D582D /* WalletInfoUTXOCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -3567,6 +3576,7 @@
 				30F0B64A2139D6C300BF7DBB /* CoinNinjaUrlFactory.swift */,
 				3B2EBF7422318476003C0D0E /* ContactCacheManagerTests.swift */,
 				3B5720772232CD1C0048A8CF /* DatabaseTests.swift */,
+				B519EC4423E86B0F0049656A /* RemoteConfigManagerTests.swift */,
 				3B598FDD2315CB2D00FF50CD /* WalletFlagsParserTests.swift */,
 			);
 			path = Managers;
@@ -3599,6 +3609,7 @@
 				A29CE10720A3684700761B91 /* StringEmptyValidator.swift */,
 				A257CEC5230C3F6D0063670B /* LightningInvoiceValidator.swift */,
 				A2B4EAFF2326B9F6005D0A65 /* LightningWalletAmountValidator.swift */,
+				B5CA9EBE23E36605005B5E55 /* TransactionSendingConfig.swift */,
 			);
 			path = Validators;
 			sourceTree = "<group>";
@@ -4428,6 +4439,7 @@
 				B5D833FA22492EFD00C45ABE /* MockPersistenceDatabaseManager.swift */,
 				B5D833FE2249305200C45ABE /* MockPersistenceKeychainManager.swift */,
 				3B2EBF72223176D9003C0D0E /* MockUserDefaultsManager.swift */,
+				B5CA9EC023E37B65005B5E55 /* MockSettingsConfig.swift */,
 				B5C5FEE622BABF8400287FF7 /* Brokers */,
 			);
 			path = Persistence;
@@ -5363,6 +5375,7 @@
 				B51AE4AA2093AED4008380CC /* String+Substrings.swift in Sources */,
 				A257CEB82302F3BA0063670B /* AppCoordinator+WalletTransferViewControllerDelegate.swift in Sources */,
 				B5EBFD11215C07270008EB4A /* AddressDataSource.swift in Sources */,
+				B5CA9EBF23E36605005B5E55 /* TransactionSendingConfig.swift in Sources */,
 				A2DBC50222D78DAF008C532B /* CurrencySwappableEditAmountView.swift in Sources */,
 				B56512F62153DDA500A5D044 /* WalletCheckInTarget.swift in Sources */,
 				B59C9E24230EC86C00E4F3C8 /* TransactionDirectionView.swift in Sources */,
@@ -5860,6 +5873,7 @@
 				3B474153217A1582004DA223 /* MessageResponseTests.swift in Sources */,
 				B56F36AC233AB82200984A51 /* ConfirmPaymentMemoViewTests.swift in Sources */,
 				3B1555E620D2B4A200D6A70C /* TransactionCoreDataTests.swift in Sources */,
+				B519EC4523E86B0F0049656A /* RemoteConfigManagerTests.swift in Sources */,
 				A21DEE5722E8D6E900BBE508 /* WalletOverviewViewControllerTests.swift in Sources */,
 				3B5052BB2046E6AD000C739F /* BackupRecoveryWordsCollectionDDSTests.swift in Sources */,
 				A2E9846823831F9200107C53 /* MerchantAttributeViewTests.swift in Sources */,
@@ -6018,6 +6032,7 @@
 				3BDA207F203DE6F600CBA6B1 /* BiometricAuthenticationManagerTests.swift in Sources */,
 				3B9EE87E2058674C00C0CC8C /* MockNavigationController.swift in Sources */,
 				3BF3B0C7217500330021E45F /* MockNetworkManager+NotificationNetworkInteractable.swift in Sources */,
+				B5CA9EC123E37B65005B5E55 /* MockSettingsConfig.swift in Sources */,
 				6B8255C03822227D00EC3C53 /* MockBiometricAuthenticationManager.swift in Sources */,
 				3B00C26B220E07C0001FC46B /* GeneratedTestWords.generated.swift in Sources */,
 				B5192FB6216E9A9400DCC39B /* UserResponseTests.swift in Sources */,

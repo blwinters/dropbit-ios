@@ -15,46 +15,48 @@ struct LightningQuickLoadViewModel {
   let fiatCurrency: Currency
   let controlConfigs: [QuickLoadControlConfig]
 
-  ///If true, sending max should send all spendable utxos.
-  ///If false, sending max should send the specific amount shown.
-  let maxIsLimitedByOnChainBalance: Bool
-
-  init(spendableBalances: WalletBalances, rate: ExchangeRate, fiatCurrency: Currency, config: LightningConfig) throws {
-    let presetAmounts = config.loadPresetAmounts(for: fiatCurrency)
+  init(spendableBalances: WalletBalances, config: TransactionSendingConfig) throws {
+    let rate = config.preferredExchangeRate
+    let presetAmounts = config.settings.lightningLoadPresetAmounts(for: rate.currency)
     guard let minFiatAmount = presetAmounts.first else {
       throw DBTError.System.missingValue(key: "standardAmounts.min")
     }
 
+    let minStandardAmountConverter = CurrencyConverter(fromFiatAmount: minFiatAmount, rate: rate)
+
     ///Run these validations separately to produce correct error message
     //check on chain balance exceeds minFiatAmount
-    let minStandardAmountConverter = CurrencyConverter(rate: rate, fromAmount: minFiatAmount, fromType: .fiat)
-    let onChainBalanceValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
-                                                                 walletType: .onChain,
-                                                                 config: config,
-                                                                 ignoring: [.maxWalletValue])
+    let balanceValidator = LightningWalletAmountValidator(
+      balancesNetPending: spendableBalances,
+      walletTxType: .onChain,
+      minReloadBTC: nil //ignore reload min for balance validation
+    )
+
     do {
-      try onChainBalanceValidator.validate(value: minStandardAmountConverter)
+      try balanceValidator.validate(value: minStandardAmountConverter)
     } catch {
-      //map usableBalance error to
-      throw LightningWalletAmountValidatorError.reloadMinimum(btc: config.minReloadAmount)
+      if case CurrencyAmountValidatorError.usableBalance = error,
+        let minReloadSats = config.minLightningLoad?.asFractionalUnits(of: .BTC) {
+        throw LightningWalletAmountValidatorError.reloadMinimum(minReloadSats)
+      } else {
+        throw error
+      }
     }
 
     //check lightning wallet has capacity for the minFiatAmount
     let minReloadValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
-                                                            walletType: .onChain,
-                                                            config: config,
+                                                            walletTxType: .onChain,
+                                                            minReloadBTC: config.minLightningLoad,
                                                             ignoring: [.minReloadAmount])
     try minReloadValidator.validate(value: minStandardAmountConverter)
 
     self.btcBalances = spendableBalances
-    self.fiatCurrency = fiatCurrency
+    self.fiatCurrency = rate.currency
     self.fiatBalances = LightningQuickLoadViewModel.convertBalances(spendableBalances, toFiat: fiatCurrency, using: rate)
-    let maxAmountResults = minReloadValidator.maxLoadAmount(using: spendableBalances)
-    let fiatMaxConverter = CurrencyConverter(rate: rate, fromAmount: maxAmountResults.btcAmount, fromType: .BTC)
+    let fiatMaxConverter = CurrencyConverter(fromBtcAmount: spendableBalances.onChain, rate: rate)
     self.controlConfigs = LightningQuickLoadViewModel.configs(withPresets: presetAmounts,
                                                               max: fiatMaxConverter.fiatAmount,
                                                               currency: fiatCurrency)
-    self.maxIsLimitedByOnChainBalance = maxAmountResults.limitIsOnChainBalance
   }
 
   private static func convertBalances(_ btcBalances: WalletBalances, toFiat currency: Currency, using rate: ExchangeRate) -> WalletBalances {

@@ -39,8 +39,7 @@ struct ExchangeRate {
   }
 
   ///Useful as a non-nil default value
-  static var zero: ExchangeRate {
-    return ExchangeRate(price: .zero, currency: .USD)
-  }
+  static let zeroUSD = ExchangeRate(price: .zero, currency: .USD)
+  static let sampleUSD = ExchangeRate(price: 7000.00, currency: .USD)
 
 }

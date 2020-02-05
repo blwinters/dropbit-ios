@@ -15,20 +15,20 @@ class BaseConfirmPaymentViewModel: DualAmountDisplayable {
 
   let paymentTarget: String? //address or encoded invoice
   let contact: ContactType?
-  let walletTransactionType: WalletTransactionType
+  let walletTxType: WalletTransactionType
   var btcAmount: NSDecimalNumber
   let currencyPair: CurrencyPair
   let exchangeRate: ExchangeRate
 
   init(paymentTarget: String?,
        contact: ContactType?,
-       walletTransactionType: WalletTransactionType,
+       walletTxType: WalletTransactionType,
        btcAmount: NSDecimalNumber,
        currencyPair: CurrencyPair,
        exchangeRate: ExchangeRate) {
     self.paymentTarget = paymentTarget
     self.contact = contact
-    self.walletTransactionType = walletTransactionType
+    self.walletTxType = walletTxType
     self.btcAmount = btcAmount
     self.currencyPair = currencyPair
     self.exchangeRate = exchangeRate
@@ -88,7 +88,7 @@ class ConfirmPaymentInviteViewModel: BaseConfirmPaymentViewModel {
   }
 
   init(contact: ContactType?,
-       walletTransactionType: WalletTransactionType,
+       walletTxType: WalletTransactionType,
        btcAmount: NSDecimalNumber,
        currencyPair: CurrencyPair,
        exchangeRate: ExchangeRate,
@@ -96,7 +96,7 @@ class ConfirmPaymentInviteViewModel: BaseConfirmPaymentViewModel {
     self.sharedPayloadDTO = sharedPayloadDTO
     super.init(paymentTarget: nil,
                contact: contact,
-               walletTransactionType: walletTransactionType,
+               walletTxType: walletTxType,
                btcAmount: btcAmount,
                currencyPair: currencyPair,
                exchangeRate: exchangeRate)
@@ -129,7 +129,7 @@ class ConfirmOnChainPaymentViewModel: BaseConfirmPaymentViewModel {
     self.outgoingTransactionData = outgoingTransactionData
     super.init(paymentTarget: address,
                contact: contact,
-               walletTransactionType: .onChain,
+               walletTxType: .onChain,
                btcAmount: btcAmount,
                currencyPair: currencyPair,
                exchangeRate: exchangeRate)
@@ -169,7 +169,7 @@ class ConfirmLightningPaymentViewModel: BaseConfirmPaymentViewModel {
     self.sharedPayloadDTO = sharedPayload
     super.init(paymentTarget: invoice,
                contact: contact,
-               walletTransactionType: .lightning,
+               walletTxType: .lightning,
                btcAmount: btcAmount,
                currencyPair: currencyPair,
                exchangeRate: exchangeRate)
@@ -235,11 +235,12 @@ enum ConfirmTransactionFeeModel {
   }
 
   func networkFeeDisplayString(exchangeRate: ExchangeRate) -> String? {
+    let fiatFormatter = FiatFormatter(currency: exchangeRate.currency, withSymbol: true)
     if transactionData != nil {
       let feeDecimalAmount = NSDecimalNumber(integerAmount: networkFeeAmount, currency: .BTC)
       let feeConverter = CurrencyConverter(fromBtcAmount: feeDecimalAmount, rate: exchangeRate)
       let btcFee = String(describing: feeConverter.btcAmount)
-      let fiatFeeString = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: feeConverter.fiatAmount) ?? ""
+      let fiatFeeString = fiatFormatter.string(fromDecimal: feeConverter.fiatAmount) ?? ""
       return "Network Fee \(btcFee) (\(fiatFeeString))"
     } else if case ConfirmTransactionFeeModel.lightning(_) = self {
       if networkFeeAmount == 0 {
@@ -247,7 +248,7 @@ enum ConfirmTransactionFeeModel {
       }
       let feeDecimalAmount = NSDecimalNumber(integerAmount: networkFeeAmount, currency: .BTC)
       let feeConverter = CurrencyConverter(fromBtcAmount: feeDecimalAmount, rate: exchangeRate)
-      let fiatFeeString = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: feeConverter.fiatAmount) ?? "$0.00"
+      let fiatFeeString = fiatFormatter.string(fromDecimal: feeConverter.fiatAmount) ?? "$0.00"
       let satsDesc = networkFeeAmount == 1 ? "sat" : "sats"
       return "Estimated Lightning Network Fee \(networkFeeAmount) \(satsDesc) (\(fiatFeeString))"
     }

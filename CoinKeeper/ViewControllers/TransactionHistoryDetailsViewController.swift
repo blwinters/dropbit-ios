@@ -132,7 +132,7 @@ extension TransactionHistoryDetailsViewController: TransactionHistoryDetailCellD
 
   func didTapTwitterShare(detailCell: TransactionHistoryDetailBaseCell) {
     guard let item = actionableItem(for: detailCell) else { return }
-    delegate.viewControllerRequestedShareTransactionOnTwitter(self, walletTxType: self.viewModel.walletTransactionType,
+    delegate.viewControllerRequestedShareTransactionOnTwitter(self, walletTxType: self.viewModel.walletTxType,
                                                               transaction: item, shouldDismiss: false)
   }
 

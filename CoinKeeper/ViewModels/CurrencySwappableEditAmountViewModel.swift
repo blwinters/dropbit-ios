@@ -73,17 +73,17 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
   var fromCurrency: Currency
   var toCurrency: Currency
   var fiatCurrency: Currency
-  var walletTransactionType: WalletTransactionType
+  var walletTxType: WalletTransactionType
 
   weak var delegate: CurrencySwappableEditAmountViewModelDelegate?
 
   init(exchangeRate: ExchangeRate,
        primaryAmount: NSDecimalNumber,
-       walletTransactionType: WalletTransactionType,
+       walletTxType: WalletTransactionType,
        currencyPair: CurrencyPair,
        delegate: CurrencySwappableEditAmountViewModelDelegate? = nil) {
     self.exchangeRate = exchangeRate
-    self.walletTransactionType = walletTransactionType
+    self.walletTxType = walletTxType
     self.fromAmount = primaryAmount
     self.fromCurrency = currencyPair.primary
     self.toCurrency = currencyPair.secondary
@@ -94,7 +94,7 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
   init(viewModel vm: CurrencySwappableEditAmountViewModel) {
     self.exchangeRate = vm.exchangeRate
     self.fromAmount = vm.primaryAmount
-    self.walletTransactionType = vm.walletTransactionType
+    self.walletTxType = vm.walletTxType
     self.fromCurrency = vm.primaryCurrency
     self.toCurrency = vm.secondaryCurrency
     self.fiatCurrency = vm.fiatCurrency
@@ -155,7 +155,7 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
   }
 
   var isEditingSats: Bool {
-    return primaryCurrency == .BTC && walletTransactionType == .lightning
+    return primaryCurrency == .BTC && walletTxType == .lightning
   }
 
   var primaryAttributes: StringAttributes {
@@ -176,9 +176,9 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
 
   static func emptyInstance() -> CurrencySwappableEditAmountViewModel {
     let currencyPair = CurrencyPair(primary: .BTC, fiat: .USD)
-    return CurrencySwappableEditAmountViewModel(exchangeRate: .zero,
+    return CurrencySwappableEditAmountViewModel(exchangeRate: .zeroUSD,
                                                 primaryAmount: 0,
-                                                walletTransactionType: .onChain,
+                                                walletTxType: .onChain,
                                                 currencyPair: currencyPair)
   }
 
