@@ -98,14 +98,14 @@ class DrawerViewController: BaseViewController, StoryboardInitializable, RemoteC
     let spendIcon = UIImage(imageLiteralResourceName: "drawerSpendBitcoinIcon")
     let supportIcon = UIImage(imageLiteralResourceName: "drawerSupportIcon")
 
-    let settingsCritera: BadgeInfo = [.wordsNotBackedUp: .actionNeeded]
+    let settingsCriteria: BadgeInfo = [.wordsNotBackedUp: .actionNeeded]
     let verifyCriteria: BadgeInfo = [.unverifiedPhone: .actionNeeded]
 
     let settingsData: [DrawerData] = [
       backupWordsDrawerData(),
       DrawerData(image: getBitcoinImage, title: "Get Bitcoin", kind: .getBitcoin),
       DrawerData(image: earnImage, title: "Earn", kind: .earn),
-      DrawerData(image: settingsImage, title: "Settings", kind: .settings, badgeCriteria: settingsCritera, badgeOffset: circularIconOffset),
+      DrawerData(image: settingsImage, title: "Settings", kind: .settings, badgeCriteria: settingsCriteria, badgeOffset: circularIconOffset),
       DrawerData(image: verifyIcon, title: "Verify", kind: .verify, badgeCriteria: verifyCriteria, badgeOffset: circularIconOffset),
       DrawerData(image: spendIcon, title: "Spend", kind: .spend),
       DrawerData(image: supportIcon, title: "Support", kind: .support)

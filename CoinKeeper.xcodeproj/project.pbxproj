@@ -1015,6 +1015,8 @@
 		B567CBEB20C5534400105C2C /* NSManagedObjectContext+Changes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B567CBEA20C5534400105C2C /* NSManagedObjectContext+Changes.swift */; };
 		B5697271208A428A00835F01 /* BalanceDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5697270208A428A00835F01 /* BalanceDisplayable.swift */; };
 		B5697273208A8E0A00835F01 /* WalletOverviewTopBarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5697272208A8E0A00835F01 /* WalletOverviewTopBarTests.swift */; };
+		B56A3CCE23EB0B5100C05BF3 /* SelectedCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56A3CCD23EB0B5100C05BF3 /* SelectedCurrency.swift */; };
+		B56A3CCF23EB0B6C00C05BF3 /* SelectedCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56A3CCD23EB0B5100C05BF3 /* SelectedCurrency.swift */; };
 		B56B63782200CDD300CCC153 /* CKMTransactionSharedPayload+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56B63772200CDD300CCC153 /* CKMTransactionSharedPayload+CoreDataProperties.swift */; };
 		B56B637A2200CDF100CCC153 /* CKMTransactionSharedPayload+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56B63792200CDF100CCC153 /* CKMTransactionSharedPayload+CoreDataClass.swift */; };
 		B56B6804234E25990073BA0D /* DropBitSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56B6803234E25990073BA0D /* DropBitSnapshot.swift */; };
@@ -2284,6 +2286,7 @@
 		B567CBEA20C5534400105C2C /* NSManagedObjectContext+Changes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+Changes.swift"; sourceTree = "<group>"; };
 		B5697270208A428A00835F01 /* BalanceDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceDisplayable.swift; sourceTree = "<group>"; };
 		B5697272208A8E0A00835F01 /* WalletOverviewTopBarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletOverviewTopBarTests.swift; sourceTree = "<group>"; };
+		B56A3CCD23EB0B5100C05BF3 /* SelectedCurrency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectedCurrency.swift; sourceTree = "<group>"; };
 		B56B63762200C82D00CCC153 /* Model v4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model v4.xcdatamodel"; sourceTree = "<group>"; };
 		B56B63772200CDD300CCC153 /* CKMTransactionSharedPayload+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKMTransactionSharedPayload+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B56B63792200CDF100CCC153 /* CKMTransactionSharedPayload+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKMTransactionSharedPayload+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -3255,7 +3258,7 @@
 				B538508823AC1A3400997240 /* ExchangeRate.swift */,
 				5B40427B208CCC27005624B0 /* OnChainQRCode.swift */,
 				B5B37B26206AFE22001816F6 /* Currency.swift */,
-				B572E50123DFA15500ACEB90 /* SelectedCurrency.swift */,
+				B56A3CCD23EB0B5100C05BF3 /* SelectedCurrency.swift */,
 				A20E47EF20C0436E00CA8589 /* ContactType.swift */,
 				B5B0DC7C22134AE00010AB2A /* CKCountry.swift */,
 				B5E7F22022148ECA00358A24 /* FlagEmojiFactory.swift */,
@@ -4837,7 +4840,7 @@
 				3BA8F2B12358A3A300BEC698 /* SettingsWithInfoCell.xib in Resources */,
 				3B44961F21B0661300A4E912 /* MemoEntryViewController.storyboard in Resources */,
 				A2B4E6F022FA488100E24324 /* LightningRefillViewController.storyboard in Resources */,
-        B538508523ABCBBE00997240 /* SelectedCurrencyCell.xib in Resources */,
+				B538508523ABCBBE00997240 /* SelectedCurrencyCell.xib in Resources */,
 				3B17F49523E1DF33001D582D /* AccountPublicKeyViewController.storyboard in Resources */,
 				3B17F49D23E20E97001D582D /* WalletInfoUTXOsViewController.storyboard in Resources */,
 				3B936ADD2322C1250067CA97 /* LightningUpgradeCompleteViewController.storyboard in Resources */,
@@ -5130,6 +5133,7 @@
 				B54A4215207FF310005B40A9 /* TransactionDetailSecondaryAmountLabel.swift in Sources */,
 				A2372873237B0C2900086FEC /* FetchImageType.swift in Sources */,
 				A2AB08CD230585220029AA04 /* CKMLNAccount+CoreDataClass.swift in Sources */,
+				B56A3CCE23EB0B5100C05BF3 /* SelectedCurrency.swift in Sources */,
 				A2C5D7F523AC0EC8000B15B9 /* UserIdentifiableManager.swift in Sources */,
 				B5401C5F228C8DB1004C77BC /* AppCoordinator+RemoteNotifications.swift in Sources */,
 				3B8B19332289C1EF003BA4D7 /* UserIdentityResponse.swift in Sources */,
@@ -5457,7 +5461,6 @@
 				B552EDED211E33D000332BB5 /* HashingManager.swift in Sources */,
 				A24933762396B9AD0030C421 /* AppCoordinator+EarnViewControllerDelegate.swift in Sources */,
 				3B44961D21B065C200A4E912 /* MemoEntryViewController.swift in Sources */,
-				B572E50223DFA15500ACEB90 /* SelectedCurrency.swift in Sources */,
 				B527AFBD2195CFF6007D9484 /* UIView+AccessibilityIdentifier.swift in Sources */,
 				A2CEEF72238C752000E4A8EF /* PrivateKeySweepViewController.swift in Sources */,
 				B5DDB0F521DE5ED200A25929 /* KeychainMigrationWorker.swift in Sources */,
@@ -6123,7 +6126,6 @@
 				A2568E5C23D649D200CE5F6B /* MoyaResponse+ErrorMessage.swift in Sources */,
 				A2568E1323D6403500CE5F6B /* PriceTarget.swift in Sources */,
 				A2853B0523D9EA3F00533272 /* CheckInResponse.swift in Sources */,
-				B572E50323DFA15500ACEB90 /* SelectedCurrency.swift in Sources */,
 				A2568E2023D6420500CE5F6B /* NSDecimalNumber+SignificantDecimals.swift in Sources */,
 				A2568E6D23D8A44900CE5F6B /* NewsNetworkManager.swift in Sources */,
 				A2568E6123D64B0100CE5F6B /* NSDecimalNumber+NilInitializer.swift in Sources */,
@@ -6132,6 +6134,7 @@
 				A2568E4F23D6478900CE5F6B /* MetadataParticipant.swift in Sources */,
 				A2568E5423D6485B00CE5F6B /* PersistenceUserDefaultsType.swift in Sources */,
 				A2568E3123D6440C00CE5F6B /* StringDictResponse.swift in Sources */,
+				B56A3CCF23EB0B6C00C05BF3 /* SelectedCurrency.swift in Sources */,
 				A2568E5B23D6496F00CE5F6B /* CKRequestHeadersProvider.swift in Sources */,
 				A2568E4C23D6471900CE5F6B /* String+Count.swift in Sources */,
 				A2568E5023D6481400CE5F6B /* URLRequest+Helpers.swift in Sources */,
