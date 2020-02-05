@@ -39,12 +39,12 @@ class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
   let minReloadBTC: NSDecimalNumber?
 
   init(balancesNetPending: WalletBalances,
-       walletType: WalletTransactionType,
+       walletTxType: WalletTransactionType,
        minReloadBTC: NSDecimalNumber?,
        ignoring: [LightningWalletValidationOptions] = []) {
     self.balancesNetPending = balancesNetPending
     self.minReloadBTC = minReloadBTC
-    self.walletTxType = walletType
+    self.walletTxType = walletTxType
     self.ignoringOptions = ignoring
     super.init()
   }

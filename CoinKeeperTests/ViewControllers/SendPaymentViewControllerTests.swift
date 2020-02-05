@@ -26,7 +26,7 @@ class SendPaymentViewControllerTests: XCTestCase {
     let currencyPair = CurrencyPair(primary: .USD, fiat: .USD)
     let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRate: usdRate,
                                                            primaryAmount: 3500,
-                                                           walletTransactionType: .onChain,
+                                                           walletTxType: .onChain,
                                                            currencyPair: currencyPair)
     let config = TransactionSendingConfig(settings: MockSettingsConfig.default(),
                                           preferredExchangeRate: usdRate,

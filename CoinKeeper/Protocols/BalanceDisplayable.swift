@@ -106,7 +106,7 @@ protocol BalanceDisplayable: ExchangeRateUpdatable, BalanceUpdateable, DualAmoun
   var balanceProvider: ConvertibleBalanceProvider? { get } // implementation should be a weak reference
   var topBar: WalletOverviewTopBar! { get } // IBOutlet
   var walletBalanceView: WalletBalanceView { get }
-  var walletTransactionType: WalletTransactionType { get }
+  var walletTxType: WalletTransactionType { get }
 
 }
 
@@ -155,7 +155,7 @@ extension BalanceDisplayable where Self: UIViewController {
   }
 
   private func updatedDataSource() {
-    let labels = dualAmountLabels(walletTxType: walletTransactionType)
+    let labels = dualAmountLabels(walletTxType: walletTxType)
     topBar.update(with: labels)
     walletBalanceView.update(with: labels)
   }

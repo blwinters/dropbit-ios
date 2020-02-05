@@ -79,7 +79,7 @@ class RequestPayViewControllerTests: XCTestCase {
     let currencyPair = CurrencyPair(primary: .BTC, fiat: .USD)
     let swappableViewModel = CurrencySwappableEditAmountViewModel(exchangeRate: sampleRate,
                                                                   primaryAmount: 50,
-                                                                  walletTransactionType: .onChain,
+                                                                  walletTxType: .onChain,
                                                                   currencyPair: currencyPair,
                                                                   delegate: nil)
     self.sut.viewModel = RequestPayViewModel(receiveAddress: address, amountViewModel: swappableViewModel)

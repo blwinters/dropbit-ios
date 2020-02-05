@@ -60,13 +60,13 @@ extension AddressRequestUpdateDisplayable {
   }
 
   var fiatDescription: String {
-    var walletTransactionType: WalletTransactionType, currency: Currency, amount: NSDecimalNumber
+    var walletTxType: WalletTransactionType, currency: Currency, amount: NSDecimalNumber
 
     switch addressType {
     case .btc:
       amount = fiatMoney.amount
       currency = fiatMoney.currency
-      walletTransactionType = .onChain
+      walletTxType = .onChain
     case .lightning:
       if fiatMoney.amount < 1 {
         amount = NSDecimalNumber(integerAmount: btcAmount, currency: .BTC)
@@ -76,12 +76,12 @@ extension AddressRequestUpdateDisplayable {
         currency = fiatMoney.currency
       }
 
-      walletTransactionType = .lightning
+      walletTxType = .lightning
     }
 
     return CKCurrencyFormatter.string(for: amount,
                                       currency: currency,
-                                      walletTransactionType: walletTransactionType) ?? "-"
+                                      walletTxType: walletTxType) ?? "-"
   }
 
   /// This should not be used directly. Use `btcDescription` instead.

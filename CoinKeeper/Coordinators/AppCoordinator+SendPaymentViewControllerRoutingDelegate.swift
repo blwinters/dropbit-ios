@@ -372,7 +372,7 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
 
         let displayConfirmPaymentViewController: CKCompletion = {
           let viewModel = ConfirmPaymentInviteViewModel(contact: contact,
-                                                        walletTransactionType: inputs.walletTxType,
+                                                        walletTxType: inputs.walletTxType,
                                                         btcAmount: btcAmount,
                                                         currencyPair: currencyPair,
                                                         exchangeRate: inputs.rate,
