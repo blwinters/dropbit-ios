@@ -25,18 +25,31 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
 
   // MARK: outlets
   @IBOutlet var closeButton: UIButton!
+  @IBOutlet var expirationLabel: ExpirationLabel!
   @IBOutlet var walletToggleView: WalletToggleView!
+
+  @IBOutlet var stackView: UIStackView!
+  @IBOutlet var stackLeadingConstraint: NSLayoutConstraint!
+  @IBOutlet var stackTrailingConstraint: NSLayoutConstraint!
+  @IBOutlet var stackTopConstraint: NSLayoutConstraint!
+  @IBOutlet var stackBottomConstraint: NSLayoutConstraint!
+
+  @IBOutlet var amountContainer: UIView!
+  @IBOutlet var addAmountButton: AddButton!
   @IBOutlet var editAmountView: CurrencySwappableEditAmountView!
+
   @IBOutlet var qrImageView: UIImageView!
+  @IBOutlet var qrImageHeightConstraint: NSLayoutConstraint!
   @IBOutlet var memoTextField: UITextField!
   @IBOutlet var memoLabel: UILabel!
-  @IBOutlet var expirationLabel: ExpirationLabel!
+
+  @IBOutlet var tapReceiveAddressContainer: UIView! //useful for stack view layout and show/hide
   @IBOutlet var receiveAddressLabel: UILabel!
   @IBOutlet var receiveAddressTapGesture: UITapGestureRecognizer!
   @IBOutlet var receiveAddressBGView: UIView!
   @IBOutlet var tapInstructionLabel: UILabel!
+
   @IBOutlet var bottomActionButton: PrimaryActionButton!
-  @IBOutlet var addAmountButton: AddButton!
 
   @objc private func memoButtonTapped() {
     delegate.viewControllerDidSelectMemoButton(self, memo: memoTextField.text) { [weak self] memo in
@@ -175,11 +188,10 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
   func setupStyle() {
     switch viewModel.walletTxType {
     case .onChain:
+      amountContainer.isHidden = false
       expirationLabel.isHidden = true
-      receiveAddressBGView.isHidden = false
-      tapInstructionLabel.isHidden = false
       qrImageView.isHidden = false
-      receiveAddressLabel.isHidden = false
+      tapReceiveAddressContainer.isHidden = false
       memoTextField.isHidden = true
       walletToggleView.selectBitcoinButton()
       bottomActionButton.style = .bitcoin(rounded: true)
@@ -190,6 +202,11 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
   }
 
   private func setupSubviews() {
+    let relativeSize = UIScreen.main.relativeSize
+    applyStackInsets(for: relativeSize)
+    stackView.spacing = screenAdjustedStackSpacing(for: relativeSize)
+    qrImageHeightConstraint.constant = screenAdjustedQRHeight(for: relativeSize)
+
     receiveAddressLabel.textColor = .darkBlueText
     receiveAddressLabel.font = .semiBold(13)
 
@@ -200,6 +217,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
 
     tapInstructionLabel.textColor = .darkGrayText
     tapInstructionLabel.font = .medium(10)
+    tapInstructionLabel.textAlignment = .center
 
     bottomActionButton.setTitle("SEND REQUEST", for: .normal)
 
@@ -212,20 +230,51 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
     memoLabel.font = .light(14)
   }
 
+  ///Sets the constants on constraints of the Stack Centering Container
+  private func applyStackInsets(for size: UIScreen.RelativeSize) {
+    let insets = screenAdjustedStackInsets(for: size)
+    stackTopConstraint.constant = insets.top
+    stackLeadingConstraint.constant = insets.left
+    stackTrailingConstraint.constant = insets.right
+    stackBottomConstraint.constant = insets.bottom
+  }
+
+  private func screenAdjustedQRHeight(for size: UIScreen.RelativeSize) -> CGFloat {
+    switch size {
+    case .short:    return 190
+    case .medium:   return 220
+    case .tall:     return 250
+    }
+  }
+
+  private func screenAdjustedStackSpacing(for size: UIScreen.RelativeSize) -> CGFloat {
+    switch size {
+    case .short,
+         .medium:   return 16
+    case .tall:     return 32
+    }
+  }
+
+  private func screenAdjustedStackInsets(for size: UIScreen.RelativeSize) -> UIEdgeInsets {
+    switch size {
+    case .short:    return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    case .medium,
+         .tall:     return UIEdgeInsets(top: 32, left: 24, bottom: 16, right: 24)
+    }
+  }
+
   private func setupStyleForLightningRequest() {
     if let invoice = viewModel.lightningInvoice {
       qrImageView.isHidden = false
       addAmountButton.isHidden = true
       expirationLabel.isHidden = false
       expirationLabel.configure(hoursRemaining: 48)
-
-      tapInstructionLabel.isHidden = false
       receiveAddressLabel.text = invoice.request
-      receiveAddressLabel.isHidden = false
-      receiveAddressBGView.isHidden = false
+      tapReceiveAddressContainer.isHidden = false
       bottomActionButton.style = .bitcoin(rounded: true)
       memoTextField.isHidden = true
       walletToggleView.isHidden = true
+      amountContainer.isHidden = true
       memoLabel.isHidden = false
       memoLabel.text = memoTextField.text
       bottomActionButton.setTitle("SEND REQUEST", for: .normal)
@@ -235,9 +284,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
       expirationLabel.isHidden = true
       qrImageView.isHidden = true
       memoTextField.isHidden = false
-      tapInstructionLabel.isHidden = true
-      receiveAddressLabel.isHidden = true
-      receiveAddressBGView.isHidden = true
+      tapReceiveAddressContainer.isHidden = true
       bottomActionButton.setTitle("CREATE INVOICE", for: .normal)
     }
 
