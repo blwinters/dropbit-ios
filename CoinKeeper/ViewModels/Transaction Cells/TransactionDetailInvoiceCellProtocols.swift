@@ -24,10 +24,10 @@ protocol TransactionDetailInvoiceCellDisplayable: TransactionSummaryCellDisplaya
 
 extension TransactionDetailInvoiceCellDisplayable {
 
-  var invoiceIsExpired: Bool { return hoursUntilExpiration == nil }
-  var shouldHideQRHistoricalContainer: Bool { return invoiceIsExpired }
-  var shouldHideMemoLabel: Bool { return (memo ?? "").isEmpty }
-
+  var invoiceIsExpired: Bool { hoursUntilExpiration == nil }
+  var shouldHideQRHistoricalContainer: Bool { invoiceIsExpired }
+  var shouldHideMemoLabel: Bool { (memo ?? "").isEmpty }
+  var shouldHideHistoricalValuesLabel: Bool { detailAmountLabels.historicalPriceAttributedText == nil }
 }
 
 protocol TransactionDetailInvoiceCellViewModelType: TransactionDetailCellViewModelType, TransactionDetailInvoiceCellDisplayable {

@@ -34,8 +34,8 @@ extension SettingsViewController: UITableViewDataSource {
     switch cellVM.type {
     case .dustProtection:
       cell = tableView.dequeue(SettingSwitchWithInfoCell.self, for: indexPath)
-    case .recoveryWords:
-      cell = tableView.dequeue(SettingsRecoveryWordsCell.self, for: indexPath)
+    case .recoveryWords, .currencyOptions:
+      cell = tableView.dequeue(SettingsTitleDetailCell.self, for: indexPath)
     case .yearlyHighPushNotification, .regtest:
       cell = tableView.dequeue(SettingSwitchCell.self, for: indexPath)
     case .legacyWords:

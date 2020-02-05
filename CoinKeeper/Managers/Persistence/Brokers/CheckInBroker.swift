@@ -11,11 +11,6 @@ import PromiseKit
 
 class CheckInBroker: CKPersistenceBroker, CheckInBrokerType {
 
-  var cachedBTCUSDRate: Double {
-    get { return userDefaultsManager.double(for: .exchangeRateBTCUSD) }
-    set { userDefaultsManager.set(newValue, for: .exchangeRateBTCUSD) }
-  }
-
   var cachedBlockHeight: Int {
     get { return userDefaultsManager.integer(for: .blockheight) }
     set { userDefaultsManager.set(newValue, for: .blockheight) }
@@ -47,13 +42,43 @@ class CheckInBroker: CKPersistenceBroker, CheckInBrokerType {
     }
   }
 
-  func processCheckIn(response: CheckInResponse) -> Promise<Void> {
-    cachedBTCUSDRate = response.pricing.last
-    cachedBlockHeight = response.blockheight
-    cachedBestFee = response.fees.fast
-    cachedBetterFee = response.fees.med
-    cachedGoodFee = response.fees.slow
-    return Promise.value(())
+  func cacheFiatRate(_ rate: Double, for currency: Currency) {
+    guard rate > 0 else { return }
+    let key = userDefaultsManager.exchangeRateKey(for: currency)
+    userDefaultsManager.standardDefaults.set(rate, forKey: key)
+  }
+
+  func cachedFiatRate(for currency: Currency) -> Double {
+    return userDefaultsManager.exchangeRate(for: currency) ?? 1
+  }
+
+  func allCachedFiatRates() -> ExchangeRates {
+    var rates: ExchangeRates = [:]
+    for currency in Currency.allCases {
+      rates[currency] = self.cachedFiatRate(for: currency)
+    }
+    return rates
+  }
+
+  func persistCheckIn(response: CheckInResponse) {
+    cacheCheckInPrices(response.currency)
+
+    cachedBestFee = max(response.fees.best, 0)
+    cachedBetterFee = max(response.fees.better, 0)
+    cachedGoodFee = max(response.fees.good, 0)
+
+    if response.blockheight > 0 {
+      cachedBlockHeight = response.blockheight
+    }
+  }
+
+  private func cacheCheckInPrices(_ response: ExchangeRatesResponse) {
+    cacheFiatRate(response.aud, for: .AUD)
+    cacheFiatRate(response.cad, for: .CAD)
+    cacheFiatRate(response.eur, for: .EUR)
+    cacheFiatRate(response.gbp, for: .GBP)
+    cacheFiatRate(response.sek, for: .SEK)
+    cacheFiatRate(response.usd, for: .USD)
   }
 
 }

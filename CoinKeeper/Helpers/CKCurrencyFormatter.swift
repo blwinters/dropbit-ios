@@ -14,9 +14,9 @@ enum CurrencySymbolType {
 }
 
 enum CurrencyFormatType {
-  case bitcoin, sats, fiat(CurrencyCode)
+  case bitcoin, sats, fiat(Currency)
 
-  init(walletTxType: WalletTransactionType, currency: CurrencyCode) {
+  init(walletTxType: WalletTransactionType, currency: Currency) {
     if currency.isFiat {
       self = .fiat(currency)
     } else {
@@ -24,7 +24,12 @@ enum CurrencyFormatType {
     }
   }
 
-  var currency: CurrencyCode {
+  init(walletTxType: WalletTransactionType, fiatCurrency: Currency, selected: SelectedCurrency) {
+    let currency: Currency = (selected == .fiat) ? fiatCurrency : .BTC
+    self.init(walletTxType: walletTxType, currency: currency)
+  }
+
+  var currency: Currency {
     switch self {
     case .bitcoin, .sats:       return .BTC
     case .fiat(let currency):   return currency
@@ -33,13 +38,13 @@ enum CurrencyFormatType {
 }
 
 class CKCurrencyFormatter {
-  let currency: CurrencyCode
+  let currency: Currency
   var symbolType: CurrencySymbolType
   let showNegativeSymbol: Bool
   let negativeHasSpace: Bool
 
   ///Use a custom subclass instead of this formatter directly
-  fileprivate init(currency: CurrencyCode,
+  fileprivate init(currency: Currency,
                    symbolType: CurrencySymbolType,
                    showNegativeSymbol: Bool,
                    negativeHasSpace: Bool) {
@@ -50,13 +55,13 @@ class CKCurrencyFormatter {
   }
 
   static func string(for amount: NSDecimalNumber?,
-                     currency: CurrencyCode,
-                     walletTransactionType: WalletTransactionType) -> String? {
+                     currency: Currency,
+                     walletTxType: WalletTransactionType) -> String? {
     guard let amount = amount else { return nil }
     if currency.isFiat {
       return FiatFormatter(currency: currency, withSymbol: true).string(fromDecimal: amount)
     } else {
-      switch walletTransactionType {
+      switch walletTxType {
       case .lightning:
         return SatsFormatter().string(fromDecimal: amount)
       case .onChain:
@@ -77,7 +82,7 @@ class CKCurrencyFormatter {
   }
 
   func decimalString(fromDecimal decimalNumber: NSDecimalNumber) -> String? {
-    return numberFormatterWithoutSymbol(for: currency).string(from: decimalNumber)
+    return decimalFormatter().string(from: decimalNumber)
   }
 
   func string(fromDecimal decimalNumber: NSDecimalNumber) -> String? {
@@ -85,7 +90,11 @@ class CKCurrencyFormatter {
 
     var formattedString = amountString
     if symbolType == .string {
-      formattedString = currency.symbol + amountString
+      if currency.symbolIsTrailing {
+        formattedString = amountString + currency.symbolWithSpace
+      } else {
+        formattedString = currency.symbolWithSpace + amountString
+      }
     }
 
     if showNegativeSymbol, decimalNumber.isNegativeNumber {
@@ -96,7 +105,7 @@ class CKCurrencyFormatter {
     return formattedString
   }
 
-  fileprivate func numberFormatterWithoutSymbol(for currency: CurrencyCode, asInteger: Bool = false) -> NumberFormatter {
+  fileprivate func decimalFormatter(asInteger: Bool = false) -> NumberFormatter {
     let formatter = NumberFormatter()
     formatter.maximumFractionDigits = asInteger ? 0 : currency.decimalPlaces
     formatter.locale = Locale.current //determines grouping/decimal separators
@@ -110,7 +119,7 @@ class CKCurrencyFormatter {
 }
 
 class FiatFormatter: CKCurrencyFormatter {
-  init(currency: CurrencyCode,
+  init(currency: Currency,
        withSymbol: Bool,
        showNegativeSymbol: Bool = false,
        negativeHasSpace: Bool = false) {
@@ -120,8 +129,8 @@ class FiatFormatter: CKCurrencyFormatter {
                negativeHasSpace: negativeHasSpace)
   }
 
-  override func numberFormatterWithoutSymbol(for currency: CurrencyCode, asInteger: Bool = false) -> NumberFormatter {
-    let formatter = super.numberFormatterWithoutSymbol(for: currency, asInteger: asInteger)
+  override func decimalFormatter(asInteger: Bool = false) -> NumberFormatter {
+    let formatter = super.decimalFormatter(asInteger: asInteger)
     if !asInteger {
       formatter.minimumFractionDigits = currency.decimalPlaces
     }
@@ -132,20 +141,20 @@ class FiatFormatter: CKCurrencyFormatter {
 
 class RoundedFiatFormatter: FiatFormatter {
 
-  override func numberFormatterWithoutSymbol(for currency: CurrencyCode, asInteger: Bool = false) -> NumberFormatter {
-    return super.numberFormatterWithoutSymbol(for: currency, asInteger: true)
+  override func decimalFormatter(asInteger: Bool = false) -> NumberFormatter {
+    return super.decimalFormatter(asInteger: true)
   }
 }
 
 class EditingFiatAmountFormatter: CKCurrencyFormatter {
 
-  init(currency: CurrencyCode) {
+  init(currency: Currency) {
     super.init(currency: currency, symbolType: .string,
                showNegativeSymbol: false, negativeHasSpace: true)
   }
 
-  override func numberFormatterWithoutSymbol(for currency: CurrencyCode, asInteger: Bool = false) -> NumberFormatter {
-    let formatter = super.numberFormatterWithoutSymbol(for: currency)
+  override func decimalFormatter(asInteger: Bool = false) -> NumberFormatter {
+    let formatter = super.decimalFormatter()
     formatter.minimumFractionDigits = 0 //do not require decimal places while editing
     return formatter
   }
@@ -186,7 +195,7 @@ class BitcoinFormatter: CKCurrencyFormatter {
     switch symbolType {
     case .string:
       let attributes: StringAttributes? = symbolFont.flatMap { [.font: $0] }
-      return NSAttributedString(string: currency.symbol, attributes: attributes)
+      return NSAttributedString(string: currency.symbolWithSpace, attributes: attributes)
     default:
       let image = UIImage(named: "bitcoinLogo")
       let textAttribute = NSTextAttachment()
@@ -226,7 +235,7 @@ class SatsFormatter: CKCurrencyFormatter {
   }
 
   func stringWithSymbol(fromSats sats: Int) -> String? {
-    let satsAsDecimal = NSDecimalNumber(integerAmount: sats, currency: .BTC)
+    let satsAsDecimal = NSDecimalNumber(sats: sats)
     return string(fromDecimal: satsAsDecimal)
   }
 

@@ -12,7 +12,7 @@ import PromiseKit
 
 extension MockNetworkManager: TransactionBroadcastable {
 
-  func broadcastTx(with transactionData: CNBCnlibTransactionData) -> Promise<String> {
+  func broadcastTx(with transactionData: CNBCnlibTransactionData, walletManager: WalletManagerType) -> Promise<String> {
     return Promise { _ in }
   }
 

@@ -21,7 +21,7 @@ protocol AddressRequestUpdateDisplayable {
   var receiverPhoneNumber: GlobalPhoneNumber? { get }
   var receiverHandle: String? { get }
   var btcAmount: Int { get }
-  var fiatAmount: Int { get }
+  var fiatMoney: Money { get }
   var side: InvitationSide { get }
   var status: InvitationStatus { get }
   var addressType: WalletAddressType { get }
@@ -60,35 +60,35 @@ extension AddressRequestUpdateDisplayable {
   }
 
   var fiatDescription: String {
-    var walletTransactionType: WalletTransactionType, currency: CurrencyCode, amount: NSDecimalNumber
+    var walletTxType: WalletTransactionType, currency: Currency, amount: NSDecimalNumber
 
     switch addressType {
     case .btc:
-      amount = NSDecimalNumber(integerAmount: fiatAmount, currency: .USD)
-      currency = .USD
-      walletTransactionType = .onChain
+      amount = fiatMoney.amount
+      currency = fiatMoney.currency
+      walletTxType = .onChain
     case .lightning:
-      if fiatAmount < 100 {
+      if fiatMoney.amount < 1 {
         amount = NSDecimalNumber(integerAmount: btcAmount, currency: .BTC)
         currency = .BTC
       } else {
-        amount = NSDecimalNumber(integerAmount: fiatAmount, currency: .USD)
-        currency = .USD
+        amount = fiatMoney.amount
+        currency = fiatMoney.currency
       }
 
-      walletTransactionType = .lightning
+      walletTxType = .lightning
     }
 
     return CKCurrencyFormatter.string(for: amount,
                                       currency: currency,
-                                      walletTransactionType: walletTransactionType) ?? "-"
+                                      walletTxType: walletTxType) ?? "-"
   }
 
   /// This should not be used directly. Use `btcDescription` instead.
   func formattedAmountWithoutSymbol(for number: NSDecimalNumber) -> String {
     let formatter = NumberFormatter()
     formatter.numberStyle = .decimal
-    formatter.maximumFractionDigits = CurrencyCode.BTC.decimalPlaces
+    formatter.maximumFractionDigits = Currency.BTC.decimalPlaces
     if number < NSDecimalNumber.one {
       formatter.maximumIntegerDigits = 0
     }
@@ -109,7 +109,7 @@ struct AddressRequestUpdate: AddressRequestUpdateDisplayable {
   var receiverHandle: String?
   var txid: String?
   var btcAmount: Int
-  var fiatAmount: Int
+  var fiatMoney: Money
   var side: InvitationSide
   var status: InvitationStatus
   var addressType: WalletAddressType
@@ -122,9 +122,26 @@ struct AddressRequestUpdate: AddressRequestUpdateDisplayable {
     self.senderPhoneNumber = response.metadata?.sender.flatMap { GlobalPhoneNumber(participant: $0) }
     self.receiverPhoneNumber = response.metadata?.receiver.flatMap { GlobalPhoneNumber(participant: $0) }
     self.btcAmount = response.metadata?.amount?.btc ?? 0
-    self.fiatAmount = response.metadata?.amount?.usd ?? 0
+    self.fiatMoney = response.metadata?.amount?.fiatMoney ?? Money(amount: .zero, currency: .USD)
     self.side = InvitationSide(requestSide: requestSide)
     self.status = CKMInvitation.statusToPersist(for: responseStatus, side: requestSide)
     self.addressType = response.addressTypeCase
   }
+}
+
+extension MetadataAmount {
+
+  var fiatMoney: Money? {
+    if let fiatAmount =  self.fiatValue, fiatAmount != 0,
+      let currency = self.fiatCurrency.flatMap({ code in Currency(rawValue: code) }) {
+      let fiatDecimalAmount = NSDecimalNumber(integerAmount: fiatAmount, currency: currency)
+      return Money(amount: fiatDecimalAmount, currency: currency)
+    } else if let usdValue = self.usd {
+      let usdAmount = NSDecimalNumber(integerAmount: usdValue, currency: .USD)
+      return Money(amount: usdAmount, currency: .USD)
+    } else {
+      return nil
+    }
+  }
+
 }

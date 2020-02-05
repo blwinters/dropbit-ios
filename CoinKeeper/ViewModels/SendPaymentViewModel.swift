@@ -44,11 +44,14 @@ enum RecipientDisplayStyle {
 
 class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
 
+  let txSendingConfig: TransactionSendingConfig
+
   var paymentRecipient: PaymentRecipient? {
     didSet {
       hasInvoiceWithAmount = false
     }
   }
+
   var requiredFeeRate: Double?
   var sharedMemoDesired = true
   var sharedMemoAllowed = true
@@ -65,7 +68,7 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
 
   func sendMax(with data: CNBCnlibTransactionData) {
     self.sendMaxTransactionData = data
-    let btcAmount = NSDecimalNumber(integerAmount: data.amount, currency: .BTC)
+    let btcAmount = NSDecimalNumber(sats: Int(data.amount))
     setBTCAmountAsPrimary(btcAmount)
     delegate?.viewModelNeedsAmountLabelRefresh(self, secondaryOnly: false)
   }
@@ -102,16 +105,17 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
 
   init(encodedInvoice: String,
        decodedInvoice: LNDecodePaymentRequestResponse,
-       exchangeRates: ExchangeRates,
+       config: TransactionSendingConfig,
        currencyPair: CurrencyPair,
        delegate: CurrencySwappableEditAmountViewModelDelegate? = nil) {
     let currencyPair = CurrencyPair(primary: .BTC, fiat: currencyPair.fiat)
-    let amount = NSDecimalNumber(integerAmount: decodedInvoice.numSatoshis ?? 0, currency: .BTC)
-    let viewModel = CurrencySwappableEditAmountViewModel(exchangeRates: exchangeRates,
+    let amount = NSDecimalNumber(sats: decodedInvoice.numSatoshis ?? 0)
+    let viewModel = CurrencySwappableEditAmountViewModel(exchangeRate: config.preferredExchangeRate,
                                                          primaryAmount: amount,
-                                                         walletTransactionType: .lightning,
+                                                         walletTxType: .lightning,
                                                          currencyPair: currencyPair,
                                                          delegate: delegate)
+    self.txSendingConfig = config
     super.init(viewModel: viewModel)
     self.paymentRecipient = .paymentTarget(encodedInvoice)
     self.requiredFeeRate = nil
@@ -122,24 +126,26 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
 
   // delegate may be nil at init since the delegate is likely a view controller which requires this view model for its own creation
   init(qrCode: OnChainQRCode,
-       walletTransactionType: WalletTransactionType,
-       exchangeRates: ExchangeRates,
+       walletTxType: WalletTransactionType,
+       config: TransactionSendingConfig,
        currencyPair: CurrencyPair,
        delegate: CurrencySwappableEditAmountViewModelDelegate? = nil) {
     let currencyPair = CurrencyPair(primary: .BTC, fiat: currencyPair.fiat)
-    let viewModel = CurrencySwappableEditAmountViewModel(exchangeRates: exchangeRates,
+    let viewModel = CurrencySwappableEditAmountViewModel(exchangeRate: config.preferredExchangeRate,
                                                          primaryAmount: qrCode.btcAmount ?? .zero,
-                                                         walletTransactionType: walletTransactionType,
+                                                         walletTxType: walletTxType,
                                                          currencyPair: currencyPair,
                                                          delegate: delegate)
+    self.txSendingConfig = config
     super.init(viewModel: viewModel)
     self.paymentRecipient = qrCode.address.flatMap { .paymentTarget($0) }
     self.requiredFeeRate = nil
     self.memo = nil
   }
 
-  init(editAmountViewModel: CurrencySwappableEditAmountViewModel, walletTransactionType: WalletTransactionType,
+  init(editAmountViewModel: CurrencySwappableEditAmountViewModel, config: TransactionSendingConfig,
        address: String? = nil, requiredFeeRate: Double? = nil, memo: String? = nil) {
+    self.txSendingConfig = config
     super.init(viewModel: editAmountViewModel)
     self.paymentRecipient = address.flatMap { .paymentTarget($0) }
     self.requiredFeeRate = requiredFeeRate
@@ -147,20 +153,19 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
   }
 
   convenience init?(response: MerchantPaymentRequestResponse,
-                    walletTransactionType: WalletTransactionType,
-                    exchangeRates: ExchangeRates,
-                    fiatCurrency: CurrencyCode,
+                    walletTxType: WalletTransactionType,
+                    config: TransactionSendingConfig,
                     delegate: CurrencySwappableEditAmountViewModelDelegate? = nil) {
     guard let output = response.outputs.first else { return nil }
-    let btcAmount = NSDecimalNumber(integerAmount: output.amount, currency: .BTC)
-    let currencyPair = CurrencyPair(primary: .BTC, secondary: fiatCurrency, fiat: fiatCurrency)
-    let viewModel = CurrencySwappableEditAmountViewModel(exchangeRates: exchangeRates,
+    let btcAmount = NSDecimalNumber(sats: output.amount)
+    let currencyPair = CurrencyPair(primary: .BTC, fiat: config.preferredExchangeRate.currency)
+    let viewModel = CurrencySwappableEditAmountViewModel(exchangeRate: config.preferredExchangeRate,
                                                          primaryAmount: btcAmount,
-                                                         walletTransactionType: walletTransactionType,
+                                                         walletTxType: walletTxType,
                                                          currencyPair: currencyPair,
                                                          delegate: delegate)
     self.init(editAmountViewModel: viewModel,
-              walletTransactionType: walletTransactionType,
+              config: config,
               address: output.address,
               requiredFeeRate: response.requiredFeeRate,
               memo: response.memo)
@@ -193,7 +198,7 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
       return type.kind == .registeredUser ? .encrypted : .unencryptedInvite
     }
 
-    if walletTransactionType == .lightning, let recipient = paymentRecipient {
+    if walletTxType == .lightning, let recipient = paymentRecipient {
       switch recipient {
       case .phoneContact(let contactType):    return lnPolicy(for: contactType)
       case .twitterContact(let contactType):  return lnPolicy(for: contactType)
@@ -205,16 +210,16 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
     }
   }
 
-  var standardIgnoredOptions: CurrencyAmountValidationOptions {
+  var standardShouldIgnoreOptions: CurrencyAmountValidationOptions {
     return [.invitationMaximum]
   }
 
-  var invitationMaximumIgnoredOptions: CurrencyAmountValidationOptions {
+  var invitationMaximumShouldIgnoreOptions: CurrencyAmountValidationOptions {
     return [.usableBalance]
   }
 
   var validPaymentRecipientType: CKRecipientType {
-    switch walletTransactionType {
+    switch walletTxType {
     case .onChain:    return .bitcoinURL
     case .lightning:  return .lightningURL
     }

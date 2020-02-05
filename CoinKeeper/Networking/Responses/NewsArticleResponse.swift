@@ -61,11 +61,11 @@ struct NewsArticleResponse: ResponseDecodable {
 
   func getFullSource() -> String {
     if let source = source, let added = added {
-      return source + " • " + CKDateFormatter.displayFull.string(from: added)
+      return source + " • " + CKDateFormatter.displayFullUS.string(from: added)
     } else if let source = source {
       return source
     } else if let added = added {
-      return CKDateFormatter.displayFull.string(from: added)
+      return CKDateFormatter.displayFullUS.string(from: added)
     } else {
       return ""
     }

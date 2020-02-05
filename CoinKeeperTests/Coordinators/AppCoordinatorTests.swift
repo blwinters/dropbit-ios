@@ -166,7 +166,7 @@ class AppCoordinatorTests: MockedPersistenceTestCase {
     wallet: MockWalletManager) {
       configurePersistenceMocksForTestingSyncRoutine()
 
-      let mockNetworkManager = MockNetworkManager(persistenceManager: mockPersistenceManager)
+      let mockNetworkManager = MockNetworkManager()
       let mockWalletManager = MockWalletManager(words: TestHelpers.fakeWords(), persistenceManager: mockPersistenceManager)!
       return (mockNetworkManager, mockWalletManager)
   }
@@ -188,11 +188,10 @@ class AppCoordinatorTests: MockedPersistenceTestCase {
   }
 
   private func mocksForTestingUnverification() -> (network: MockNetworkManager, alert: MockAlertManager) {
-    let mockNetworkManager = MockNetworkManager(persistenceManager: mockPersistenceManager)
+    let mockNetworkManager = MockNetworkManager()
     let mockAlertManager = MockAlertManager(notificationManager:
       NotificationManager(permissionManager: PermissionManager(),
-                          networkInteractor: NetworkManager(persistenceManager: PersistenceManager(),
-                                                            analyticsManager: AnalyticsManager())))
+                          networkInteractor: NetworkManager(analyticsManager: AnalyticsManager())))
     return (mockNetworkManager, mockAlertManager)
   }
 
@@ -303,7 +302,7 @@ class AppCoordinatorTests: MockedPersistenceTestCase {
   func testDelegateRelationshipsAreSet() {
     XCTAssertNotNil(sut.notificationManager.delegate, "NotificationManager delegate should not be nil")
     XCTAssertNotNil(sut.networkManager.headerDelegate, "NetworkManager headerDelegate should not be nil")
-    XCTAssertNotNil(sut.networkManager.walletDelegate, "NetworkManager walletDelegate should not be nil")
+    XCTAssertNotNil(sut.ratesDataWorker.walletDelegate, "RatesDataWorker walletDelegate should not be nil")
     XCTAssertNotNil(sut.alertManager.urlOpener, "AlertManager urlOpener should not be nil")
   }
 

@@ -17,6 +17,20 @@ protocol ConfirmPaymentViewControllerDelegate: ViewControllerDismissable, AllPay
 
 }
 
+struct BitcoinFiatPair {
+  let btcAmount: NSDecimalNumber
+  let fiatAmount: NSDecimalNumber
+  let fiatCurrency: Currency
+
+  var cents: Cents {
+    fiatAmount.asFractionalUnits(of: fiatCurrency)
+  }
+
+  var satoshis: Satoshis {
+    btcAmount.asFractionalUnits(of: .BTC)
+  }
+}
+
 class ConfirmPaymentViewController: PresentableViewController, StoryboardInitializable {
 
   static func newInstance(type: TransactionType,
@@ -89,7 +103,7 @@ class ConfirmPaymentViewController: PresentableViewController, StoryboardInitial
     setupViews()
 
     if let viewModel = viewModel {
-      switch viewModel.walletTransactionType {
+      switch viewModel.walletTxType {
       case .onChain:    confirmView.confirmButton.configure(with: .onChain, delegate: self)
       case .lightning:  confirmView.confirmButton.configure(with: .lightning, delegate: self)
       }
@@ -101,7 +115,7 @@ class ConfirmPaymentViewController: PresentableViewController, StoryboardInitial
   }
 
   private func routeConfirmedPayment(for viewModel: BaseConfirmPaymentViewModel, feeModel: ConfirmTransactionFeeModel) {
-    switch viewModel.walletTransactionType {
+    switch viewModel.walletTxType {
     case .onChain:
       guard let onChainVM = viewModel as? ConfirmOnChainPaymentViewModel else { return }
       confirmOnChainPayment(with: onChainVM, feeModel: feeModel)
@@ -125,7 +139,7 @@ class ConfirmPaymentViewController: PresentableViewController, StoryboardInitial
     delegate.viewControllerDidConfirmOnChainPayment(
       self,
       transactionData: txData,
-      rates: viewModel.exchangeRates,
+      rate: viewModel.exchangeRate,
       outgoingTransactionData: feeAdjustedOutgoingTxData
     )
   }
@@ -141,17 +155,18 @@ class ConfirmPaymentViewController: PresentableViewController, StoryboardInitial
                              feeModel: ConfirmTransactionFeeModel) {
     guard let contact = viewModel.contact else { return }
     let btcAmount = viewModel.btcAmount
-    let converter = CurrencyConverter(fromBtcTo: .USD, fromAmount: btcAmount, rates: viewModel.exchangeRates)
-
-    let pair = (btcAmount: btcAmount, usdAmount: converter.amount(forCurrency: .USD) ?? NSDecimalNumber(decimal: 0.0))
+    let converter = CurrencyConverter(fromBtcAmount: btcAmount, rate: viewModel.exchangeRate)
+    let amountPair = BitcoinFiatPair(btcAmount: btcAmount,
+                                     fiatAmount: converter.fiatAmount,
+                                     fiatCurrency: converter.fiatCurrency)
     let outgoingInvitationDTO = OutgoingInvitationDTO(contact: contact,
-                                                      btcPair: pair,
+                                                      amountPair: amountPair,
                                                       fee: feeModel.networkFeeAmount,
-                                                      walletTxType: viewModel.walletTransactionType,
+                                                      walletTxType: viewModel.walletTxType,
                                                       sharedPayloadDTO: viewModel.sharedPayloadDTO)
     delegate.viewControllerDidConfirmInvite(self,
                                             outgoingInvitationDTO: outgoingInvitationDTO,
-                                            walletTxType: viewModel.walletTransactionType)
+                                            walletTxType: viewModel.walletTxType)
   }
 
 }
@@ -194,7 +209,7 @@ extension ConfirmPaymentViewController {
     secondaryAddressLabel.font = .regular(13)
 
     if let viewModel = viewModel {
-      switch viewModel.walletTransactionType {
+      switch viewModel.walletTxType {
       case .lightning:
         networkFeeLabel.isHidden = (feeModel.networkFeeAmount == 0)
         primaryAddressLabel.lineBreakMode = .byTruncatingMiddle
@@ -231,7 +246,7 @@ extension ConfirmPaymentViewController {
   }
 
   fileprivate func updateAmountViews() {
-    let labels = viewModel.dualAmountLabels(walletTxType: viewModel.walletTransactionType)
+    let labels = viewModel.dualAmountLabels(walletTxType: viewModel.walletTxType)
     primaryCurrencyLabel.attributedText = labels.primary
     secondaryCurrencyLabel.attributedText = labels.secondary
   }
@@ -252,7 +267,7 @@ extension ConfirmPaymentViewController {
       adjustableFeesContainer.isHidden = true
     }
 
-    networkFeeLabel.text = feeModel.networkFeeDisplayString(exchangeRates: viewModel.exchangeRates)
+    networkFeeLabel.text = feeModel.networkFeeDisplayString(exchangeRate: viewModel.exchangeRate)
   }
 
   fileprivate func updateRecipientViews() {
@@ -274,7 +289,7 @@ extension ConfirmPaymentViewController {
       primaryAddressLabel.isHidden = false
       primaryAddressLabel.minimumScaleFactor = 0.4
       primaryAddressLabel.adjustsFontSizeToFitWidth = true
-      switch viewModel.walletTransactionType {
+      switch viewModel.walletTxType {
       case .onChain:
         primaryAddressLabel.numberOfLines = 1
       case .lightning:

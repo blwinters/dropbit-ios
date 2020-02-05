@@ -44,7 +44,7 @@ final class LightningUpgradeStartViewController: BaseViewController, StoryboardI
 
   private(set) weak var delegate: LightningUpgradeStartViewControllerDelegate!
 
-  var exchangeRates: ExchangeRates = ExchangeRateManager().exchangeRates
+  var exchangeRate: ExchangeRate = ExchangeRateManager().exchangeRate
 
   private var data: CNBCnlibTransactionData?
   var nextStep: CKCompletion = {}
@@ -92,11 +92,11 @@ final class LightningUpgradeStartViewController: BaseViewController, StoryboardI
   private func showAmountViewIfNecessary(with data: CNBCnlibTransactionData?) {
     guard let data = data, data.amount != 0 else { return }
     let fontSize: CGFloat = 12
-    let btcAmount = NSDecimalNumber(integerAmount: Int(data.amount), currency: .BTC)
-    let feeAmount = NSDecimalNumber(integerAmount: Int(data.feeAmount), currency: .BTC)
-    self.exchangeRates = ExchangeRateManager().exchangeRates // update latest rates
-    let amountConverter = CurrencyConverter(fromBtcTo: .USD, fromAmount: btcAmount, rates: exchangeRates)
-    let feeConverter = CurrencyConverter(fromBtcTo: .USD, fromAmount: feeAmount, rates: exchangeRates)
+    let btcAmount = NSDecimalNumber(sats: Int(data.amount))
+    let feeAmount = NSDecimalNumber(sats: Int(data.feeAmount))
+    self.exchangeRate = ExchangeRateManager().exchangeRate // update latest rates
+    let amountConverter = CurrencyConverter(fromBtcAmount: btcAmount, rate: exchangeRate)
+    let feeConverter = CurrencyConverter(fromBtcAmount: feeAmount, rate: exchangeRate)
     let fiatFormatter = FiatFormatter(currency: .USD, withSymbol: true)
     guard let amountString = fiatFormatter.string(fromDecimal: amountConverter.fiatAmount),
       let feeString = fiatFormatter.string(fromDecimal: feeConverter.fiatAmount) else { return }

@@ -53,9 +53,9 @@ extension CurrencySwappableEditAmountViewModel: UITextFieldDelegate {
 
     do {
       if isEditingFractionalComponent {
-        try shouldChangeFractionalCharacters(in: textField, with: string, ofType: newCharacterType)
+        try shouldChangeFractionalCharacters(in: textField, range: range, with: string, ofType: newCharacterType)
       } else {
-        try shouldChangeIntegerCharacters(in: textField, with: string, ofType: newCharacterType)
+        try shouldChangeIntegerCharacters(in: textField, range: range, with: string, ofType: newCharacterType)
       }
     } catch {
       return false
@@ -65,11 +65,12 @@ extension CurrencySwappableEditAmountViewModel: UITextFieldDelegate {
   }
 
   private func shouldChangeIntegerCharacters(in textField: UITextField,
+                                             range: NSRange,
                                              with string: String,
                                              ofType charType: EditAmountCharacterType) throws {
     guard let currentText = textField.text else { return }
 
-    let symbol = primarySymbol(for: walletTransactionType)?.string ?? ""
+    let symbol = primarySymbol(for: walletTxType)?.string ?? ""
     let currentNumberText = currentText.replacingOccurrences(of: symbol, with: "")
 
     switch charType {
@@ -78,7 +79,7 @@ extension CurrencySwappableEditAmountViewModel: UITextFieldDelegate {
         if primaryRequiresInteger { //proxy for sats
           throw EditTextError.cannotAppendCharacter
         } else {
-          applyStringDirectly(textField: textField, newString: string)
+          applyStringDirectly(textField: textField, range: range, newString: string)
         }
       } else if currentNumberText == "0" {
         throw EditTextError.cannotAppendCharacter
@@ -89,7 +90,7 @@ extension CurrencySwappableEditAmountViewModel: UITextFieldDelegate {
       if primaryRequiresInteger { throw EditTextError.cannotAppendCharacter }
       //ensure leading zero if user first enters decimalSeparator
       let textToAppend = currentNumberText.isEmpty ? ("0" + decimalSeparator) : decimalSeparator
-      applyStringDirectly(textField: textField, newString: textToAppend)
+      applyStringDirectly(textField: textField, range: range, newString: textToAppend)
 
     case .number, .backspace:
       updateAmountAndRefresh(currentText: currentText, appending: string)
@@ -97,10 +98,11 @@ extension CurrencySwappableEditAmountViewModel: UITextFieldDelegate {
   }
 
   private func shouldChangeFractionalCharacters(in textField: UITextField,
+                                                range: NSRange,
                                                 with string: String,
                                                 ofType charType: EditAmountCharacterType) throws {
-    guard let currentText = textField.text else { return }
-    let fractionalComponent = currentText.components(separatedBy: decimalSeparator).last ?? ""
+    guard let currentAmountText = sanitizedAmountString(textField.text) else { return }
+    let fractionalComponent = currentAmountText.components(separatedBy: decimalSeparator).last ?? ""
     let willNotExceedDecimalPlaces = (fractionalComponent.count + string.count) <= primaryCurrency.decimalPlaces
 
     switch charType {
@@ -109,18 +111,18 @@ extension CurrencySwappableEditAmountViewModel: UITextFieldDelegate {
     case .backspace:
       if fractionalComponent.count == 1 { // remove last digit and decimal separator manually
         let stringToDrop = decimalSeparator + fractionalComponent
-        dropStringAndRefresh(currentText: currentText, dropping: stringToDrop)
+        dropStringAndRefresh(currentText: currentAmountText, dropping: stringToDrop)
       } else {
-        applyStringDirectly(textField: textField, newString: string)
+        applyStringDirectly(textField: textField, range: range, newString: string)
       }
 
     case .zero:
       guard willNotExceedDecimalPlaces else { throw EditTextError.cannotAppendCharacter }
-      applyStringDirectly(textField: textField, newString: string)
+      applyStringDirectly(textField: textField, range: range, newString: string)
 
     case .number:
       guard willNotExceedDecimalPlaces else { throw EditTextError.cannotAppendCharacter }
-      updateAmountAndRefresh(currentText: currentText, appending: string)
+      updateAmountAndRefresh(currentText: currentAmountText, appending: string)
     }
   }
 
@@ -152,29 +154,40 @@ extension CurrencySwappableEditAmountViewModel: UITextFieldDelegate {
     delegate?.viewModelNeedsAmountLabelRefresh(self, secondaryOnly: false)
   }
 
-  private func applyStringDirectly(textField: UITextField, newString: String) {
+  private func applyStringDirectly(textField: UITextField, range: NSRange, newString: String) {
     guard let currentText = textField.attributedText else { return }
-    let newString = createNewAttributedString(from: currentText, applying: newString)
+    let newString = createNewAttributedString(from: currentText, range: range, applying: newString)
     textField.attributedText = newString
+    updateSelectedRangeIfNecessary(in: textField)
     self.primaryAmount = sanitizedAmount(fromRawText: newString.string)
     delegate?.viewModelNeedsAmountLabelRefresh(self, secondaryOnly: true)
   }
 
   ///Applies the character (or backspace) to the current attributed string, without reformatting the string as a whole.
   ///This is useful when typing backspaces and zeroes.
-  private func createNewAttributedString(from currentString: NSAttributedString, applying newString: String) -> NSAttributedString {
+  private func createNewAttributedString(from currentString: NSAttributedString, range: NSRange, applying newString: String) -> NSAttributedString {
     let mutableString = NSMutableAttributedString(attributedString: currentString)
     if newString.isEmpty {
-      mutableString.deleteCharacters(in: NSRange(location: mutableString.length - 1, length: 1))
+      let trailingSymbolOffset = primaryCurrency.symbolIsTrailing ? primaryCurrency.symbolWithSpace.count : 0
+      let deletionLocation = mutableString.length - 1 - trailingSymbolOffset
+      mutableString.deleteCharacters(in: NSRange(location: deletionLocation, length: 1))
       mutableString.increaseSizeIfAble(to: standardPrimaryFontSize, maxWidth: maxPrimaryWidth)
     } else {
       let characterAttributes = attributesForAppendingCharacter(to: currentString)
       let formattedCharacter = NSAttributedString(string: newString, attributes: characterAttributes)
-      mutableString.append(formattedCharacter)
+      mutableString.insert(formattedCharacter, at: range.location)
       mutableString.decreaseSizeIfNecessary(to: reducedPrimaryFontSize, maxWidth: maxPrimaryWidth)
     }
 
     return mutableString
+  }
+
+  private func updateSelectedRangeIfNecessary(in textField: UITextField) {
+    let separators = decimalSeparator + groupingSeparator
+    guard primaryCurrency.symbolIsTrailing,
+      let amountString = textField.text?.removingNonDecimalCharacters(keepingCharactersIn: separators),
+      let newPosition = textField.position(from: textField.beginningOfDocument, offset: amountString.count) else { return }
+    textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
   }
 
   private func attributesForAppendingCharacter(to currentText: NSAttributedString) -> StringAttributes {

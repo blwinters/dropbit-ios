@@ -15,14 +15,8 @@ struct ConfigResponse: ResponseDecodable {
 
 extension ConfigResponse {
 
-  static var sampleJSON: String {
-    return "{}"
-  }
-
-   static var requiredStringKeys: [KeyPath<ConfigResponse, String>] {
-    return []
-   }
-
-   static var optionalStringKeys: [WritableKeyPath<ConfigResponse, String?>] { return [] }
+  static var sampleJSON: String { "{}" }
+  static var requiredStringKeys: [KeyPath<ConfigResponse, String>] { [] }
+  static var optionalStringKeys: [WritableKeyPath<ConfigResponse, String?>] { [] }
 
 }

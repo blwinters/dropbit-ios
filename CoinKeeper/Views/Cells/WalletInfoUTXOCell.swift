@@ -49,15 +49,14 @@ class WalletInfoUTXOCell: UITableViewCell {
     labelGroup.forEach { $0.textColor = .outgoingGray }
   }
 
-  func load(with utxo: DisplayableUTXO, rates: ExchangeRates) {
+  func load(with utxo: DisplayableUTXO, rate: ExchangeRate) {
     addressLabel.text = utxo.address
     let btcAmount = NSDecimalNumber(integerAmount: utxo.amount, currency: .BTC)
-    let converter = CurrencyConverter(fromBtcTo: .USD, fromAmount: btcAmount, rates: rates)
-    let fiatAmount = converter.amount(forCurrency: .USD)
+    let converter = CurrencyConverter(fromBtcAmount: btcAmount, rate: rate)
 
     btcLabel.text = BitcoinFormatter(symbolType: .none).string(fromDecimal: btcAmount)
 
-    let formattedFiat = CKCurrencyFormatter.string(for: fiatAmount, currency: .USD, walletTransactionType: .onChain)
+    let formattedFiat = FiatFormatter(currency: rate.currency, withSymbol: true).string(fromDecimal: converter.fiatAmount)
     fiatLabel.text = formattedFiat
 
     let halfIndex = Int(Double(utxo.txid.count) / 2.0)

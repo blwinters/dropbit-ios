@@ -27,12 +27,15 @@ class LightningTooltipViewController: BaseViewController, StoryboardInitializabl
   @IBOutlet var lightningListHeaderBackgroundView: UIView!
   @IBOutlet var lightningListStackView: UIStackView!
 
-  static func newInstance() -> LightningTooltipViewController {
+  static func newInstance(preferredCurrency: Currency) -> LightningTooltipViewController {
     let vc = LightningTooltipViewController.makeFromStoryboard()
+    vc.fiatCurrency = preferredCurrency
     vc.modalPresentationStyle = .overFullScreen
     vc.modalTransitionStyle = .crossDissolve
     return vc
   }
+
+  private var fiatCurrency: Currency = .USD
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -87,22 +90,34 @@ class LightningTooltipViewController: BaseViewController, StoryboardInitializabl
   }
 
   private func setupListItems() {
+    let threshold = amountThreshold(for: self.fiatCurrency)
     let bitcoinItems: [LightningTooltipListItem] = [
       LightningTooltipListItem(imageName: "lightningTooltipBitcoinAmount",
-                               text: "SENDING OVER $\(CurrencyAmountValidator.lightningInvoiceMax.amount)"),
+                               text: "SENDING OVER \(threshold)"),
       LightningTooltipListItem(imageName: "lightningTooltipBitcoinSpeed", text: "SLOWER"),
       LightningTooltipListItem(imageName: "lightningTooltipBitcoinFees", text: "HIGHER FEES")
     ]
 
     let lightningItems: [LightningTooltipListItem] = [
       LightningTooltipListItem(imageName: "lightningTooltipLightningAmount",
-                               text: "SENDING UNDER $\(CurrencyAmountValidator.lightningInvoiceMax.amount)"),
+                               text: "SENDING UNDER \(threshold)"),
       LightningTooltipListItem(imageName: "lightningTooltipLightningSpeed", text: "FAST"),
       LightningTooltipListItem(imageName: "lightningTooltipLightningFees", text: "LOW FEES")
     ]
 
     bitcoinItems.forEach { self.bitcoinListStackView.addArrangedSubview($0) }
     lightningItems.forEach { self.lightningListStackView.addArrangedSubview($0) }
+  }
+
+  private func amountThreshold(for currency: Currency) -> String {
+    let amount: Int
+    switch currency {
+    case .SEK:  amount = 500
+    default:    amount = 50
+    }
+
+    let formatter = RoundedFiatFormatter(currency: currency, withSymbol: true)
+    return formatter.string(fromNumber: NSNumber(value: amount)) ?? "$50"
   }
 
   private func setupTappableOverlay() {

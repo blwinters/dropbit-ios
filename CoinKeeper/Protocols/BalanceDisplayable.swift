@@ -82,16 +82,19 @@ extension BalanceDataSource {
 
 /**
  Holds the exchange rates returned by the CurrencyValueManager as well as
- the block notification token until the view controller is deinitialized.
+ the block notification tokens until the view controller is deinitialized.
  */
 class ExchangeRateManager {
-  var exchangeRates: ExchangeRates = [:]
-  var notificationToken: NotificationToken?
+  var exchangeRate: ExchangeRate
+  var exchangeRateToken: NotificationToken?
   var balanceToken: NotificationToken?
+  var currencyToken: NotificationToken?
 
   init() {
-    let cachedExchangeRate = CKUserDefaults().standardDefaults.double(forKey: CKUserDefaults.Key.exchangeRateBTCUSD.defaultsString)
-    self.exchangeRates = [.BTC: 1, .USD: cachedExchangeRate]
+    let defaults = CKUserDefaults()
+    let defaultCurrency = Currency.defaultFiatCurrency(forLocale: .current)
+    let exchangeRate = defaults.exchangeRate(for: defaultCurrency) ?? 1
+    self.exchangeRate = ExchangeRate(double: exchangeRate, currency: defaultCurrency)
   }
 }
 
@@ -103,7 +106,7 @@ protocol BalanceDisplayable: ExchangeRateUpdatable, BalanceUpdateable, DualAmoun
   var balanceProvider: ConvertibleBalanceProvider? { get } // implementation should be a weak reference
   var topBar: WalletOverviewTopBar! { get } // IBOutlet
   var walletBalanceView: WalletBalanceView { get }
-  var walletTransactionType: WalletTransactionType { get }
+  var walletTxType: WalletTransactionType { get }
 
 }
 
@@ -116,7 +119,7 @@ extension BalanceDisplayable where Self: UIViewController {
   // overrides implementation in ExchangeRateUpdatable
   private func subscribeToRateUpdates() {
     // The observer block token is automatically deregistered when the rateManager is deallocated from the view controller
-    rateManager.notificationToken = CKNotificationCenter.subscribe(key: .didUpdateExchangeRates, object: nil, queue: nil, using: { [weak self] _ in
+    rateManager.exchangeRateToken = CKNotificationCenter.subscribe(key: .didUpdateExchangeRates, object: nil, queue: nil, using: { [weak self] _ in
       self?.updateRatesAndBalances()
     })
 
@@ -124,6 +127,9 @@ extension BalanceDisplayable where Self: UIViewController {
       self?.updateRatesAndBalances()
     }
 
+    rateManager.currencyToken = CKNotificationCenter.subscribe(key: .didUpdatePreferredFiat, object: nil, queue: nil) { [weak self] (_) in
+      self?.updateRatesAndBalances()
+    }
   }
 
   /// Call this on viewDidLoad
@@ -136,7 +142,7 @@ extension BalanceDisplayable where Self: UIViewController {
   func updateRatesAndBalances() {
 
     // Calling updateRates() here relies on latestExchangeRates being non-escaping (synchronous),
-    // so that rateManager.exchangeRates are set before the below code executes
+    // so that rateManager.exchangeRate are set before the below code executes
     updateRatesWithLatest()
 
     updateViewWithBalance()
@@ -149,7 +155,7 @@ extension BalanceDisplayable where Self: UIViewController {
   }
 
   private func updatedDataSource() {
-    let labels = dualAmountLabels(walletTxType: walletTransactionType)
+    let labels = dualAmountLabels(walletTxType: walletTxType)
     topBar.update(with: labels)
     walletBalanceView.update(with: labels)
   }

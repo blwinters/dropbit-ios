@@ -465,7 +465,7 @@ class TransactionHistoryDetailValidCellTests: XCTestCase {
   }
 
   func testHistoricalIsShownAndSet() {
-    let amountFactory = MockAmountsFactory(btcAmount: .one, fiatCurrency: .USD, exchangeRates: MockDetailCellVM.testRates,
+    let amountFactory = MockAmountsFactory(btcAmount: .one, fiatCurrency: .USD, exchangeRate: MockDetailCellVM.testRate,
                                            fiatWhenInvited: .one, fiatWhenTransacted: .one)
     let viewModel = MockDetailCellVM(direction: .out,
                                      amountFactory: amountFactory,
@@ -479,7 +479,7 @@ class TransactionHistoryDetailValidCellTests: XCTestCase {
 
   func testHistoricalAmountsDoNotShowNegativeSign() {
     let historicalFiat = NSDecimalNumber(integerAmount: -100, currency: .USD)
-    let amountFactory = MockAmountsFactory(btcAmount: .one, fiatCurrency: .USD, exchangeRates: MockDetailCellVM.testRates,
+    let amountFactory = MockAmountsFactory(btcAmount: .one, fiatCurrency: .USD, exchangeRate: MockDetailCellVM.testRate,
                                            fiatWhenInvited: historicalFiat, fiatWhenTransacted: historicalFiat)
     let viewModel = MockDetailCellVM(direction: .out,
                                      amountFactory: amountFactory,
@@ -558,7 +558,7 @@ class TransactionHistoryDetailValidCellTests: XCTestCase {
 
   func testDateLabelShowsDate() {
     let now = Date()
-    let expectedDisplayDate = CKDateFormatter.displayFull.string(from: now)
+    let expectedDisplayDate = CKDateFormatter.displayFullUS.string(from: now)
     let viewModel = MockDetailCellVM(date: now)
     sut.configure(with: viewModel, delegate: mockDelegate)
     XCTAssertEqual(sut.dateLabel.text, expectedDisplayDate)

@@ -32,21 +32,24 @@ extension AppCoordinator: PaymentSendingDelegate {
   func viewControllerDidConfirmOnChainPayment(
     _ viewController: UIViewController,
     transactionData: CNBCnlibTransactionData,
-    rates: ExchangeRates,
+    rate: ExchangeRate,
     outgoingTransactionData: OutgoingTransactionData
     ) {
     biometricsAuthenticationManager.resetPolicy()
 
-    let converter = CurrencyConverter(fromBtcTo: .USD,
-                                      fromAmount: NSDecimalNumber(integerAmount: outgoingTransactionData.amount, currency: .BTC),
-                                      rates: rates)
-    let amountInfo = SharedPayloadAmountInfo(converter: converter)
+    let btcAmount = NSDecimalNumber(sats: outgoingTransactionData.amount)
+    let usdRate = self.exchangeRate(for: .USD)
+    let converter = CurrencyConverter(fromBtcAmount: btcAmount, rate: usdRate)
+    let usdAmount = converter.fiatAmount.asFractionalUnits(of: .USD)
+    let payloadAmountInfo = SharedPayloadAmountInfo(usdAmount: usdAmount)
     var outgoingTxDataWithAmount = outgoingTransactionData
-    outgoingTxDataWithAmount.sharedPayloadDTO?.amountInfo = amountInfo
+    outgoingTxDataWithAmount.sharedPayloadDTO?.amountInfo = payloadAmountInfo
     outgoingTxDataWithAmount.sender = self.sharedPayloadSenderIdentity(forReceiver: outgoingTransactionData.receiver)
 
-    let usdThreshold = 100_00
-    let shouldDisableBiometrics = amountInfo.fiatAmount > usdThreshold
+    var shouldDisableBiometrics = false //do not disable if config value is nil
+    if let usdThreshold: Cents = self.currentConfig.settings.maxBiometricsUSD?.asFractionalUnits(of: .USD) {
+      shouldDisableBiometrics = payloadAmountInfo.usdAmount > usdThreshold
+    }
 
     let pinEntryViewModel = PaymentVerificationPinEntryViewModel(amountDisablesBiometrics: shouldDisableBiometrics)
 
@@ -214,8 +217,15 @@ extension AppCoordinator: PaymentSendingDelegate {
                                                     success: @escaping CKCompletion,
                                                     failure: @escaping CKErrorCompletion,
                                                     isInternalLightningLoad: Bool = false) {
-    self.networkManager.updateCachedMetadata()
-      .then { _ in self.networkManager.broadcastTx(with: transactionData) }
+    let metadataWorker = CachedMetadataWorker(persistence: persistenceManager, network: networkManager)
+
+    metadataWorker.updateCachedMetadata()
+      .then { _ -> Promise<String> in
+        guard let wmgr = self.mainWalletManager() else {
+          return Promise(error: DBTError.Persistence.noWalletWords)
+        }
+
+        return self.networkManager.broadcastTx(with: transactionData, walletManager: wmgr) }
       .then { txid -> Promise<String> in
 
         let satsValues = SatsTransferredValues(transactionType: .onChain, isInvite: false, lightningType: nil)

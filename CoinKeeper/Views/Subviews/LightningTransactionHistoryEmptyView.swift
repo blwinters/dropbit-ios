@@ -9,7 +9,38 @@
 import Foundation
 import UIKit
 
-class LightningTransactionHistoryEmptyView: UIView {
+protocol LightningLoadPresetDelegate: class {
+  ///This returns an array of 5 preset amounts, some views may only show a subset of the returned amounts.
+  func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber]
+  func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, selectionIndex: Int)
+}
+
+protocol LightningLoadPresetsDisplayable: AnyObject {
+  var delegate: LightningLoadPresetDelegate? { get }
+  var presetAmounts: [NSDecimalNumber] { get set }
+  var amountButtons: [UIButton] { get }
+}
+
+extension LightningLoadPresetsDisplayable {
+
+  ///Call this when setting up the view
+  func configure(with currency: Currency, presetAmounts: [NSDecimalNumber]) {
+    self.presetAmounts = presetAmounts
+    let formatter = RoundedFiatFormatter(currency: currency, withSymbol: true)
+    let amountStrings = presetAmounts.compactMap { formatter.string(fromDecimal: $0) }
+    let buttonAmounts = zip(amountButtons, amountStrings)
+    for (button, amount) in buttonAmounts {
+      button.setTitle(amount, for: .normal)
+    }
+  }
+
+  func didRequestLoad(selectionIndex: Int) {
+    let amount = presetAmounts[safe: selectionIndex] ?? .zero //.zero is passed for .custom
+    delegate?.didRequestLightningLoad(withAmount: amount, selectionIndex: selectionIndex)
+  }
+}
+
+class LightningTransactionHistoryEmptyView: UIView, LightningLoadPresetsDisplayable {
 
   @IBOutlet var titleLabel: UILabel!
   @IBOutlet var detailLabel: UILabel!
@@ -19,7 +50,7 @@ class LightningTransactionHistoryEmptyView: UIView {
   @IBOutlet var maxAmountButton: LightningActionButton!
   @IBOutlet var customAmountButton: UIButton!
 
-  weak var delegate: EmptyStateLightningLoadDelegate?
+  weak var delegate: LightningLoadPresetDelegate?
 
   override func awakeFromNib() {
     super.awakeFromNib()
@@ -39,24 +70,30 @@ class LightningTransactionHistoryEmptyView: UIView {
     return CGSize(width: 404, height: 221)
   }
 
+  var presetAmounts: [NSDecimalNumber] = []
+
+  var amountButtons: [UIButton] {
+    [lowAmountButton, mediumAmountButton, highAmountButton, maxAmountButton].compactMap { $0 }
+  }
+
   @IBAction func lowAmountButtonWasTouched() {
-    delegate?.didRequestLightningLoad(withAmount: .low)
+    didRequestLoad(selectionIndex: 0)
   }
 
   @IBAction func mediumAmountButtonWasTouched() {
-    delegate?.didRequestLightningLoad(withAmount: .medium)
+    didRequestLoad(selectionIndex: 1)
   }
 
   @IBAction func highAmountButtonWasTouched() {
-    delegate?.didRequestLightningLoad(withAmount: .high)
+    didRequestLoad(selectionIndex: 2)
   }
 
   @IBAction func maxAmountButtonWasTouched() {
-    delegate?.didRequestLightningLoad(withAmount: .max)
+    didRequestLoad(selectionIndex: 3)
   }
 
   @IBAction func customAmountButtonWasTouched() {
-    delegate?.didRequestLightningLoad(withAmount: .custom)
+    didRequestLoad(selectionIndex: 4)
   }
 
 }

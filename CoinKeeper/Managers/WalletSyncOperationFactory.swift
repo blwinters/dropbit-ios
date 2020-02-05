@@ -16,7 +16,7 @@ protocol WalletSyncDelegate: AnyObject {
   func syncManagerDidRequestDependencies(in context: NSManagedObjectContext, inBackground: Bool) -> Promise<SyncDependencies>
   func syncManagerDidRequestBackgroundContext() -> NSManagedObjectContext
   func syncManagerDidFinishSync()
-  func showAlertsForSyncedChanges(in context: NSManagedObjectContext) -> Promise<Void>
+  func showAlertsForSyncedChanges(in context: NSManagedObjectContext)
   func syncManagerDidSetWalletManager(walletManager: WalletManagerType, in context: NSManagedObjectContext) -> Promise<Void>
   func handleMissingWalletError(_ error: DBTError.Persistence)
 }
@@ -154,7 +154,7 @@ class WalletSyncOperationFactory {
       .then(in: context) { _ in dependencies.walletWorker.updateSentAddressRequests(in: context) }
       .recover(self.recoverSyncError)
       .then(in: context) { _ in self.fetchAndFulfillReceivedAddressRequests(with: dependencies, in: context) }
-      .then(in: context) { _ in dependencies.delegate.showAlertsForSyncedChanges(in: context) }
+      .get(in: context) { _ in dependencies.delegate.showAlertsForSyncedChanges(in: context) }
       .then(in: context) { _ in dependencies.twitterAccessManager.inflateTwitterUsersIfNeeded(in: context) }
       .then(in: context) { _ in self.updateWalletIfNeeded(dependencies: dependencies, context: context) }
   }
@@ -187,8 +187,8 @@ class WalletSyncOperationFactory {
       .then { _ in dependencies.keychainMigrationWorker.migrateIfPossible() }
       .then(in: context) { self.checkAndVerifyWallet(with: dependencies, in: context) }
       .then { dependencies.networkManager.checkIn() }
-      .then { dependencies.persistenceManager.brokers.checkIn.processCheckIn(response: $0) }
-      .then(in: context) { dependencies.txDataWorker.performFetchAndStoreAllOnChainTransactions(in: context, fullSync: true) }
+      .get { dependencies.persistenceManager.brokers.checkIn.persistCheckIn(response: $0) }
+      .then(in: context) { _ in dependencies.txDataWorker.performFetchAndStoreAllOnChainTransactions(in: context, fullSync: true) }
       .get { _ in dependencies.connectionManager.setAPIUnreachable(false) }
   }
 

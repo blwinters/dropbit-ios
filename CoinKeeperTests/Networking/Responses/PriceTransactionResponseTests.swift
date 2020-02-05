@@ -18,7 +18,7 @@ class PriceTransactionResponseTests: XCTestCase, ResponseStringsTestable {
   }
 
   func testNegativePriceThrowsError() {
-    let response = PriceTransactionResponse(average: -1)
+    let response = PriceTransactionResponse(average: -1, currency: .emptyInstance())
 
     XCTAssertThrowsError(try PriceTransactionResponse.validateResponse(response), "Negative price should throw error", { error in
       if let networkError = error as? DBTError.Network,
@@ -32,8 +32,7 @@ class PriceTransactionResponseTests: XCTestCase, ResponseStringsTestable {
   }
 
   func testZeroPriceThrowsError() {
-    let response = PriceTransactionResponse(average: 0)
-
+    let response = PriceTransactionResponse.emptyInstance()
     XCTAssertThrowsError(try PriceTransactionResponse.validateResponse(response), "Zero price should throw error", { _ in })
   }
 
@@ -50,6 +49,6 @@ class PriceTransactionResponseTests: XCTestCase, ResponseStringsTestable {
 
 extension PriceTransactionResponse: EmptyStringCopyable {
   func copyWithEmptyRequiredStrings() -> PriceTransactionResponse {
-    return PriceTransactionResponse(average: self.average)
+    return PriceTransactionResponse(average: self.average, currency: .emptyInstance())
   }
 }

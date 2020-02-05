@@ -55,8 +55,9 @@ extension UIColor {
   static var darkGrayText: UIColor { return UIColor(gray: 155) }
   static var dragIndicator: UIColor { return darkGrayText }
 
-  static var pageIndicator: UIColor { return UIColor(gray: 184) }
-  static var deselectedGrayText: UIColor { return pageIndicator }
+  static var mediumGrayText: UIColor { return UIColor(gray: 184) }
+  static var pageIndicator: UIColor { return mediumGrayText }
+  static var deselectedGrayText: UIColor { return mediumGrayText }
 
   static var graySeparator: UIColor { return UIColor(gray: 216) }
   static var widgetGray: UIColor { return UIColor(gray: 116) }

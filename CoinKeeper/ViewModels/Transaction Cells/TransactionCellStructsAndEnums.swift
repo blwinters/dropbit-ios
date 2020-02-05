@@ -11,10 +11,10 @@ import UIKit
 
 struct TransactionViewModelInputs {
   let currencies: CurrencyPair
-  let exchangeRates: ExchangeRates
+  let exchangeRate: ExchangeRate
   let deviceCountryCode: Int
 
-  var fiatCurrency: CurrencyCode {
+  var fiatCurrency: Currency {
     return currencies.fiat
   }
 
@@ -59,40 +59,37 @@ enum LightningTransferType {
 struct MockAmountsFactory: TransactionAmountsFactoryType {
   let btcAmount: NSDecimalNumber
   let currencyPair: CurrencyPair
-  let exchangeRates: ExchangeRates
+  let exchangeRate: ExchangeRate
   let fiatWhenInvited: NSDecimalNumber?
   let fiatWhenTransacted: NSDecimalNumber?
 
   init(btcAmount: NSDecimalNumber,
-       fiatCurrency: CurrencyCode,
-       exchangeRates: ExchangeRates,
+       fiatCurrency: Currency,
+       exchangeRate: ExchangeRate,
        fiatWhenInvited: NSDecimalNumber? = nil,
        fiatWhenTransacted: NSDecimalNumber? = nil) {
     self.currencyPair = CurrencyPair(primary: .BTC, fiat: fiatCurrency)
-    self.exchangeRates = exchangeRates
+    self.exchangeRate = exchangeRate
     self.btcAmount = btcAmount
     self.fiatWhenInvited = fiatWhenInvited
     self.fiatWhenTransacted = fiatWhenTransacted
   }
 
   init(fiatAmount: NSDecimalNumber,
-       fiatCurrency: CurrencyCode,
-       exchangeRates: ExchangeRates,
+       fiatCurrency: Currency,
+       exchangeRate: ExchangeRate,
        fiatWhenInvited: NSDecimalNumber? = nil,
        fiatWhenTransacted: NSDecimalNumber? = nil) {
-    let fiatCurrencyPair = CurrencyPair(primary: fiatCurrency, fiat: fiatCurrency)
-    let converter = CurrencyConverter(rates: exchangeRates,
-                                      fromAmount: fiatAmount,
-                                      currencyPair: fiatCurrencyPair)
+    let converter = CurrencyConverter(fromFiatAmount: fiatAmount, rate: exchangeRate)
     self.init(btcAmount: converter.btcAmount,
               fiatCurrency: fiatCurrency,
-              exchangeRates: exchangeRates,
+              exchangeRate: exchangeRate,
               fiatWhenInvited: fiatWhenInvited,
               fiatWhenTransacted: fiatWhenTransacted)
   }
 
   var netAtCurrentAmounts: ConvertedAmounts {
-    let converter = CurrencyConverter(fromBtcTo: currencyPair.fiat, fromAmount: btcAmount, rates: exchangeRates)
+    let converter = CurrencyConverter(fromBtcAmount: btcAmount, rate: exchangeRate)
     return ConvertedAmounts(converter: converter)
   }
 
@@ -284,9 +281,9 @@ struct DetailCellAmountLabels {
 struct ConvertedAmounts {
   let btc: NSDecimalNumber
   let fiat: NSDecimalNumber
-  let fiatCurrency: CurrencyCode //included for easy formatting
+  let fiatCurrency: Currency //included for easy formatting
 
-  init(btc: NSDecimalNumber, fiat: NSDecimalNumber, fiatCurrency: CurrencyCode) {
+  init(btc: NSDecimalNumber, fiat: NSDecimalNumber, fiatCurrency: Currency) {
     self.btc = btc
     self.fiat = fiat
     self.fiatCurrency = fiatCurrency
@@ -296,5 +293,9 @@ struct ConvertedAmounts {
     self.init(btc: converter.btcAmount,
               fiat: converter.fiatAmount,
               fiatCurrency: converter.fiatCurrency)
+  }
+
+  var fiatMoney: Money {
+    return Money(amount: fiat, currency: fiatCurrency)
   }
 }

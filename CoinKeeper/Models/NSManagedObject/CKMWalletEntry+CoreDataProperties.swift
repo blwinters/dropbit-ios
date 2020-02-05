@@ -29,6 +29,7 @@ extension CKMWalletEntry {
 
   @NSManaged public var wallet: CKMWallet?
   @NSManaged public var ledgerEntry: CKMLNLedgerEntry?
+  @NSManaged public var exchangeRates: CKMExchangeRates?
   @NSManaged public var twitterContact: CKMTwitterContact?
   @NSManaged public var phoneNumber: CKMPhoneNumber?
   @NSManaged public var sharedPayload: CKMTransactionSharedPayload?

@@ -96,7 +96,7 @@ class WalletAddressRequestResponseTests: XCTestCase, ResponseStringsTestable {
       return
     }
 
-    let nilBTCAmount = MetadataAmount(btc: nil, usd: 100)
+    let nilBTCAmount = MetadataAmount(btc: nil, usd: 100, fiatValue: 100, fiatCurrency: "USD")
     let btcResponse = sample.copy(withMetadata: WalletAddressRequestMetadata(amount: nilBTCAmount))
     XCTAssertThrowsError(try WalletAddressRequestResponse.validateResponse(btcResponse),
                          "WalletAddressRequestResponse with nil btcAmount should throw error", { _ in })
@@ -108,7 +108,7 @@ class WalletAddressRequestResponseTests: XCTestCase, ResponseStringsTestable {
       return
     }
 
-    let zeroBTCAmount = MetadataAmount(btc: 0, usd: 100)
+    let zeroBTCAmount = MetadataAmount(btc: 0, usd: 100, fiatValue: 100, fiatCurrency: "USD")
     let btcResponse = sample.copy(withMetadata: WalletAddressRequestMetadata(amount: zeroBTCAmount))
     XCTAssertThrowsError(try WalletAddressRequestResponse.validateResponse(btcResponse),
                          "WalletAddressRequestResponse with btcAmount == 0 should throw error", { _ in })
@@ -120,7 +120,7 @@ class WalletAddressRequestResponseTests: XCTestCase, ResponseStringsTestable {
       return
     }
 
-    let negativeBTCAmount = MetadataAmount(btc: -1, usd: 100)
+    let negativeBTCAmount = MetadataAmount(btc: -1, usd: 100, fiatValue: 100, fiatCurrency: "USD")
     let btcResponse = sample.copy(withMetadata: WalletAddressRequestMetadata(amount: negativeBTCAmount))
     XCTAssertThrowsError(try WalletAddressRequestResponse.validateResponse(btcResponse),
                          "WalletAddressRequestResponse with negative btcAmount should throw error", { _ in })
@@ -132,7 +132,7 @@ class WalletAddressRequestResponseTests: XCTestCase, ResponseStringsTestable {
       return
     }
 
-    let zeroBTCAmount = MetadataAmount(btc: 10_000, usd: 100)
+    let zeroBTCAmount = MetadataAmount(btc: 10_000, usd: 100, fiatValue: 100, fiatCurrency: "USD")
     let response = sample.copy(withMetadata: WalletAddressRequestMetadata(amount: zeroBTCAmount))
     XCTAssertNoThrow(try WalletAddressRequestResponse.validateResponse(response),
                      "WalletAddressRequestResponse with positive btcAmount and usdAmount should not throw error")
@@ -144,7 +144,7 @@ class WalletAddressRequestResponseTests: XCTestCase, ResponseStringsTestable {
       return
     }
 
-    let maxBTCAmount = MetadataAmount(btc: MAX_SATOSHI, usd: 100)
+    let maxBTCAmount = MetadataAmount(btc: MAX_SATOSHI, usd: 100, fiatValue: 100, fiatCurrency: "USD")
     let response = sample.copy(withMetadata: WalletAddressRequestMetadata(amount: maxBTCAmount))
     XCTAssertThrowsError(try WalletAddressRequestResponse.validateResponse(response),
                          "WalletAddressRequestResponse with max satoshi amount should throw error", { _ in })

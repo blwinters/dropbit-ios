@@ -15,7 +15,7 @@ protocol DualAmountDisplayable {
   var satsFormatter: SatsFormatter { get }
 
   var fromAmount: NSDecimalNumber { get }
-  var exchangeRates: ExchangeRates { get }
+  var exchangeRate: ExchangeRate { get }
   var currencyPair: CurrencyPair { get }
 
   func selectedCurrency() -> SelectedCurrency
@@ -38,9 +38,12 @@ extension DualAmountDisplayable {
   }
 
   var currencyConverter: CurrencyConverter {
-    return CurrencyConverter(rates: exchangeRates,
-                             fromAmount: fromAmount,
-                             currencyPair: currencyPair)
+    switch currencyPair.fromType {
+    case .BTC:
+      return CurrencyConverter(fromBtcAmount: fromAmount, rate: exchangeRate)
+    case .fiat:
+      return CurrencyConverter(fromFiatAmount: fromAmount, rate: exchangeRate)
+    }
   }
 
 }
@@ -60,8 +63,7 @@ extension DualAmountDisplayable {
   }
 
   var fiatFormatter: CKCurrencyFormatter {
-    let currency = currencyConverter.fiatCurrency
-    return FiatFormatter(currency: currency, withSymbol: true)
+    return FiatFormatter(currency: currencyPair.fiat, withSymbol: true)
   }
 
   var bitcoinFormatter: BitcoinFormatter {
@@ -96,7 +98,7 @@ extension DualAmountDisplayable {
   }
 
   private func attributedString(for amount: NSDecimalNumber?,
-                                currency: CurrencyCode,
+                                currency: Currency,
                                 attributes: StringAttributes,
                                 walletTxType: WalletTransactionType) -> NSAttributedString? {
     guard let amount = amount else { return nil }
@@ -149,20 +151,20 @@ extension DualAmountEditable {
   }
 
   func primarySymbol(for walletTxType: WalletTransactionType) -> NSAttributedString? {
-    let primaryCurrency = selectedCurrency().code
-    let primaryFormat = CurrencyFormatType(walletTxType: walletTxType, currency: primaryCurrency)
+    let selected = selectedCurrency()
+    let primaryFormat = CurrencyFormatType(walletTxType: walletTxType, fiatCurrency: currencyPair.fiat, selected: selected)
 
     var symbol: String?
     var attributes: StringAttributes = [:]
     switch primaryFormat {
     case .bitcoin:
-      symbol = primaryFormat.currency.symbol
+      symbol = primaryFormat.currency.symbolWithSpace
       attributes[.font] = bitcoinSymbolFont
     case .sats:
       symbol = primaryFormat.currency.integerSymbol(forAmount: fromAmount)
       attributes[.font] = UIFont.regular(primaryFont.pointSize)
     case .fiat:
-      symbol = primaryFormat.currency.symbol
+      symbol = primaryFormat.currency.symbolWithSpace
       attributes[.font] = UIFont.regular(primaryFont.pointSize)
     }
 

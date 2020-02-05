@@ -29,7 +29,7 @@ class WalletAddressDataWorkerTests: MockedPersistenceTestCase {
     super.setUp()
 
     mockBrokers.mockUser.userIdValue = "34gvbew4gv-qw3yrq3fjh-w3qruihwefs-3fsw34g"
-    mockNetworkManager = MockNetworkManager(persistenceManager: mockPersistenceManager, analyticsManager: MockAnalyticsManager())
+    mockNetworkManager = MockNetworkManager(analyticsManager: MockAnalyticsManager())
     mockWalletManager = MockWalletManager(words: [])
     mockInvitationDelegate = MockInvitationDelegate()
     mockAnalyticsManager = MockAnalyticsManager()
@@ -97,12 +97,13 @@ class WalletAddressDataWorkerTests: MockedPersistenceTestCase {
 
   private func generateUnacknowledgedInvitation(with contact: ContactType, in context: NSManagedObjectContext) {
     let acknowledgementId = UUID().uuidString
-    let pair: BitcoinUSDPair = (btcAmount: 1, usdAmount: 7000)
-    let outgoingInvitationDTO = OutgoingInvitationDTO(contact: contact, btcPair: pair, fee: 19,
+    let pair = BitcoinFiatPair(btcAmount: 1, fiatAmount: 7000, fiatCurrency: .USD)
+    let outgoingInvitationDTO = OutgoingInvitationDTO(contact: contact, amountPair: pair, fee: 19,
                                                       walletTxType: .onChain, sharedPayloadDTO: nil)
 
     PersistenceManager().brokers.invitation.persistUnacknowledgedInvitation(
       withDTO: outgoingInvitationDTO,
+      requestAmount: WalletAddressRequestAmount(amountPair: pair, usdAmount: pair.fiatAmount),
       acknowledgmentId: acknowledgementId,
       in: context)
   }

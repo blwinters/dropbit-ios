@@ -60,89 +60,87 @@ struct TransactionAmounts {
 
 struct TransactionAmountsFactory: TransactionAmountsFactoryType {
 
-  private let fiatCurrency: CurrencyCode
-  private let currentRate: Double
+  private let fiatCurrency: Currency
+  private let currentRate: ExchangeRate
   private let walletTxType: WalletTransactionType
   private let transferType: LightningTransferType?
 
   ///This value may be positive or negative depending on how it affects the balance
   private let netWalletAmount: NSDecimalNumber
 
-  private var rateWhenTransacted: Double?
-  private var primaryFiatAmountWhenInitiated: NSDecimalNumber? //already converted
+  private var rateWhenTransacted: ExchangeRate?
+  private var primaryFiatMoneyWhenInitiated: Money? //already converted
   private var bitcoinNetworkFee: NSDecimalNumber?
   private var lightningNetworkFee: NSDecimalNumber?
   private var dropBitFee: NSDecimalNumber?
 
   init(transaction: CKMTransaction,
-       fiatCurrency: CurrencyCode,
-       currentRates: ExchangeRates,
+       fiatCurrency: Currency,
+       currentRate: ExchangeRate,
        transferType: LightningTransferType?) {
     self.fiatCurrency = fiatCurrency
-    self.currentRate = currentRates[fiatCurrency] ?? 1
+    self.currentRate = currentRate
     self.walletTxType = .onChain
     self.transferType = transferType
 
-    self.netWalletAmount = NSDecimalNumber(integerAmount: transaction.netWalletAmount, currency: .BTC)
-    let btcNetworkFee = NSDecimalNumber(integerAmount: transaction.networkFee, currency: .BTC)
+    self.netWalletAmount = NSDecimalNumber(sats: transaction.netWalletAmount)
+    let btcNetworkFee = NSDecimalNumber(sats: transaction.networkFee)
     self.bitcoinNetworkFee = btcNetworkFee
-    self.dropBitFee = NSDecimalNumber(integerAmount: transaction.dropBitProcessingFee, currency: .BTC)
-    self.rateWhenTransacted = transaction.dayAveragePrice?.doubleValue
+    self.dropBitFee = NSDecimalNumber(sats: transaction.dropBitProcessingFee)
+    self.rateWhenTransacted = transaction.exchangeRate(for: fiatCurrency)
 
     if let invite = transaction.invitation {
-      let fiatTxAmount = NSDecimalNumber(integerAmount: invite.fiatAmount, currency: .USD)
       if transaction.isIncoming {
-        primaryFiatAmountWhenInitiated = fiatTxAmount
+        primaryFiatMoneyWhenInitiated = invite.fiatMoney
       } else {
         ///When outgoing, convert the fee amount to fiat, then combine with the
         ///known fiat invitation amount to get total fiat sent when initiated.
-        let approxRatesWhenInitiated: ExchangeRates = [.BTC: 1, .USD: transaction.dayAveragePrice?.doubleValue ?? 1]
-        let currencyPair = CurrencyPair(primary: .BTC, fiat: .USD)
-        let fiatFeeConverter = CurrencyConverter(rates: approxRatesWhenInitiated, fromAmount: btcNetworkFee, currencyPair: currencyPair)
-        let fiatFeeWhenInitiated = fiatFeeConverter.fiatAmount
-        primaryFiatAmountWhenInitiated = fiatTxAmount.adding(fiatFeeWhenInitiated)
+        if let approxRateWhenInitiated: ExchangeRate = transaction.exchangeRate(for: invite.fiatMoney.currency) {
+          let fiatFeeConverter = CurrencyConverter(fromBtcAmount: btcNetworkFee, rate: approxRateWhenInitiated)
+          let totalAmount = invite.fiatMoney.amount.adding(fiatFeeConverter.fiatAmount)
+          primaryFiatMoneyWhenInitiated = Money(amount: totalAmount, currency: invite.fiatMoney.currency)
+        }
       }
     }
   }
 
   init(walletEntry: CKMWalletEntry,
-       fiatCurrency: CurrencyCode,
-       currentRates: ExchangeRates,
+       fiatCurrency: Currency,
+       currentRate: ExchangeRate,
        transferType: LightningTransferType?) {
     self.fiatCurrency = fiatCurrency
-    self.currentRate = currentRates[fiatCurrency] ?? 1
+    self.currentRate = currentRate
     self.walletTxType = .lightning
     self.transferType = transferType
 
-    self.netWalletAmount = NSDecimalNumber(integerAmount: walletEntry.netWalletAmount, currency: .BTC)
+    self.netWalletAmount = NSDecimalNumber(sats: walletEntry.netWalletAmount)
 
     if let ledgerEntry = walletEntry.ledgerEntry {
       switch ledgerEntry.type {
       case .btc:
-        self.bitcoinNetworkFee = NSDecimalNumber(integerAmount: ledgerEntry.networkFee, currency: .BTC)
+        self.bitcoinNetworkFee = NSDecimalNumber(sats: ledgerEntry.networkFee)
       case .lightning:
-        self.lightningNetworkFee = NSDecimalNumber(integerAmount: ledgerEntry.networkFee, currency: .BTC)
+        self.lightningNetworkFee = NSDecimalNumber(sats: ledgerEntry.networkFee)
       }
 
-      self.dropBitFee = NSDecimalNumber(integerAmount: ledgerEntry.processingFee, currency: .BTC)
+      self.dropBitFee = NSDecimalNumber(sats: ledgerEntry.processingFee)
     }
 
-    if let invite = walletEntry.invitation {
-      self.primaryFiatAmountWhenInitiated = NSDecimalNumber(integerAmount: invite.fiatAmount, currency: .USD)
-    }
+    self.rateWhenTransacted = walletEntry.exchangeRate(for: fiatCurrency)
+    self.primaryFiatMoneyWhenInitiated = walletEntry.invitation?.fiatMoney
   }
 
   init(tempSentTx: CKMTemporarySentTransaction,
-       fiatCurrency: CurrencyCode,
-       currentRates: ExchangeRates,
+       fiatCurrency: Currency,
+       currentRate: ExchangeRate,
        transferType: LightningTransferType) {
     self.fiatCurrency = fiatCurrency
-    self.currentRate = currentRates[fiatCurrency] ?? 1
+    self.currentRate = currentRate
     self.walletTxType = .lightning
     self.transferType = transferType
 
     let netWalletSats = tempSentTx.amount + tempSentTx.feeAmount
-    self.netWalletAmount = NSDecimalNumber(integerAmount: netWalletSats, currency: .BTC)
+    self.netWalletAmount = NSDecimalNumber(sats: netWalletSats)
   }
 
   var netAtCurrentAmounts: ConvertedAmounts {
@@ -150,8 +148,8 @@ struct TransactionAmountsFactory: TransactionAmountsFactoryType {
   }
 
   var netWhenInitiatedAmounts: ConvertedAmounts? {
-    guard let fiatAmount = primaryFiatAmountWhenInitiated else { return nil }
-    return ConvertedAmounts(btc: netWalletAmount, fiat: fiatAmount, fiatCurrency: fiatCurrency)
+    guard let money = primaryFiatMoneyWhenInitiated else { return nil }
+    return ConvertedAmounts(btc: netWalletAmount, fiat: money.amount, fiatCurrency: money.currency)
   }
 
   var netWhenTransactedAmounts: ConvertedAmounts? {
@@ -203,10 +201,8 @@ struct TransactionAmountsFactory: TransactionAmountsFactoryType {
     return convertedAmounts(withRate: currentRate, btcAmount: fee)
   }
 
-  private func convertedAmounts(withRate rate: Double, btcAmount: NSDecimalNumber) -> ConvertedAmounts {
-    let converter = CurrencyConverter(fromBtcTo: fiatCurrency,
-                                      fromAmount: btcAmount,
-                                      rates: [.BTC: 1, fiatCurrency: rate])
+  private func convertedAmounts(withRate rate: ExchangeRate, btcAmount: NSDecimalNumber) -> ConvertedAmounts {
+    let converter = CurrencyConverter(fromBtcAmount: btcAmount, rate: rate)
     return ConvertedAmounts(converter: converter)
   }
 
@@ -218,8 +214,6 @@ struct TransactionAmountsFactory: TransactionAmountsFactoryType {
   }
 
 }
-
-public typealias Satoshis = Int
 
 // MARK: - Computed Amounts
 extension CKMTransaction {

@@ -16,32 +16,28 @@ import XCTest
 class NetworkManagerIntegrationTests: XCTestCase {
 
   var sut: NetworkManager!
-  var persistenceManager: PersistenceManagerType!
   var cnProvider: MockCoinNinjaProvider!
 
   override func setUp() {
     super.setUp()
-    persistenceManager = MockPersistenceManager()
     cnProvider = MockCoinNinjaProvider()
-    self.sut = NetworkManager(persistenceManager: self.persistenceManager,
-                              analyticsManager: MockAnalyticsManager(),
+    self.sut = NetworkManager(analyticsManager: MockAnalyticsManager(),
                               coinNinjaProvider: cnProvider)
   }
 
   override func tearDown() {
     self.sut = nil
-    self.persistenceManager = nil
     self.cnProvider = nil
     super.tearDown()
   }
 
   func testNegativeTransactionPriceThrowsError() {
-    let response = PriceTransactionResponse(average: -100)
+    let response = PriceTransactionResponse(average: -100, currency: .emptyInstance())
     cnProvider.appendResponseStub(data: response.asData())
 
     let expectation = XCTestExpectation(description: "throw error for negative price")
 
-    self.sut.fetchDayAveragePrice(for: "")
+    self.sut.fetchPrices(at: Date())
       .done { _ in
         XCTFail("Should not return valid response")
       }.catch { error in
@@ -67,7 +63,7 @@ class NetworkManagerIntegrationTests: XCTestCase {
     let sample = CheckInResponse.sampleInstance()!
     let invalidFee = FeesResponse.validFeeCeiling + 1
     let testFees = FeesResponse(fast: 1, med: 1, slow: invalidFee)
-    let testCheckInResponse = CheckInResponse(blockheight: sample.blockheight, fees: testFees, pricing: sample.pricing)
+    let testCheckInResponse = CheckInResponse(blockheight: sample.blockheight, fees: testFees, pricing: sample.pricing, currency: sample.currency)
     cnProvider.appendResponseStub(data: testCheckInResponse.asData())
 
     let expectation = XCTestExpectation(description: "throw error for max fees")

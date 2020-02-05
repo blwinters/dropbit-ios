@@ -16,6 +16,7 @@ class MockPreferencesBroker: CKPersistenceBroker, PreferencesBrokerType {
   var dustProtectionIsEnabled: Bool = false
   var yearlyPriceHighNotificationIsEnabled: Bool = false
   var selectedCurrency: SelectedCurrency = .BTC
+  var fiatCurrency: Currency = .USD
   var dontShowShareTransaction: Bool = false
   var dontShowLightningRefill: Bool = false
   var didOptOutOfInvitationPopup: Bool = false

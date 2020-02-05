@@ -32,12 +32,16 @@ public struct MetadataAmount: Decodable, CustomStringConvertible {
 
   let btc: Int?
   let usd: Int?
+  let fiatValue: Int?
+  let fiatCurrency: String?
 
   public var description: String {
     var responseDesc = ""
     let propertyKeyValues: [String] = [
       "btc: \(btc.flatMap { String($0) } ?? "-")",
-      "usd: \(usd.flatMap { String($0) } ?? "-")"
+      "usd: \(usd.flatMap { String($0) } ?? "-")",
+      "fiatValue: \(fiatValue.flatMap { String($0) } ?? "-")",
+      "fiatCurrency: \(fiatCurrency ?? "-")"
     ]
     propertyKeyValues.forEach { desc in
       responseDesc.append("\n\t\(desc)")

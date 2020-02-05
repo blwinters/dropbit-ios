@@ -65,19 +65,22 @@ protocol LightningBrokerType: AnyObject {
   func deleteInvalidLedgerEntries(in context: NSManagedObjectContext)
 
   func getLedgerEntriesWithoutPayloads(matchingIds ids: [String], in context: NSManagedObjectContext) -> [CKMLNLedgerEntry]
+  func walletEntriesNeedingExchangeRates(in context: NSManagedObjectContext) -> [CKMWalletEntry]
 
 }
 
 protocol CheckInBrokerType: AnyObject {
 
-  var cachedBTCUSDRate: Double { get set }
   var cachedBlockHeight: Int { get set }
   var cachedBestFee: Double { get set }
   var cachedBetterFee: Double { get set }
   var cachedGoodFee: Double { get set }
 
-  func processCheckIn(response: CheckInResponse) -> Promise<Void>
   func fee(forType type: TransactionFeeType) -> Double
+  func cachedFiatRate(for currency: Currency) -> Double
+  func allCachedFiatRates() -> ExchangeRates
+  func persistCheckIn(response: CheckInResponse)
+
 }
 
 protocol DeviceBrokerType: AnyObject {
@@ -101,6 +104,7 @@ protocol InvitationBrokerType: AnyObject {
   func getUnacknowledgedInvitations(in context: NSManagedObjectContext) -> [CKMInvitation]
   func getAllInvitations(in context: NSManagedObjectContext) -> [CKMInvitation]
   func persistUnacknowledgedInvitation(withDTO invitationDTO: OutgoingInvitationDTO,
+                                       requestAmount: WalletAddressRequestAmount,
                                        acknowledgmentId: String,
                                        in context: NSManagedObjectContext)
   func addressesProvidedForReceivedPendingDropBits(in context: NSManagedObjectContext) -> [String]
@@ -125,6 +129,7 @@ protocol PreferencesBrokerType: AnyObject {
   var dustProtectionIsEnabled: Bool { get set }
   var yearlyPriceHighNotificationIsEnabled: Bool { get set }
   var selectedCurrency: SelectedCurrency { get set }
+  var fiatCurrency: Currency { get set }
   var dontShowShareTransaction: Bool { get set }
   var didOptOutOfInvitationPopup: Bool { get set }
   var adjustableFeesIsEnabled: Bool { get set }
@@ -164,7 +169,7 @@ protocol TransactionBrokerType: AnyObject {
   func containsRegularTransaction(in context: NSManagedObjectContext) -> IncomingOutgoingTuple
   func containsDropbitTransaction(in context: NSManagedObjectContext) -> IncomingOutgoingTuple
   func deleteTransactions(notIn txids: [String], in context: NSManagedObjectContext)
-  func transactionsWithoutDayAveragePrice(in context: NSManagedObjectContext) -> Promise<[CKMTransaction]>
+  func transactionsWithoutExchangeRates(in context: NSManagedObjectContext) -> [CKMTransaction]
 }
 
 protocol UserBrokerType: AnyObject {

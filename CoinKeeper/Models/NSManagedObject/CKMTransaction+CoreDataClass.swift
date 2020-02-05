@@ -213,6 +213,10 @@ public class CKMTransaction: NSManagedObject {
     return isLightningPath && isFirstUTXO
   }
 
+  func exchangeRate(for currency: Currency) -> ExchangeRate? {
+    self.exchangeRates?.exchangeRate(for: currency)
+  }
+
 }
 
 extension CKMTransaction {

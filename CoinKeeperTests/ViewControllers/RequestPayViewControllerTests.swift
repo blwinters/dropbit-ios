@@ -74,12 +74,12 @@ class RequestPayViewControllerTests: XCTestCase {
   }
 
   func testTappingLabelCopiesAddress() {
-    let sampleRates: ExchangeRates = [.BTC: 1, .USD: 7000]
+    let sampleRate = ExchangeRate(price: 7000, currency: .USD)
     let address = "12A1MyfXbW6RhdRAZEqofac5jCQQjwEPBu"
     let currencyPair = CurrencyPair(primary: .BTC, fiat: .USD)
-    let swappableViewModel = CurrencySwappableEditAmountViewModel(exchangeRates: sampleRates,
+    let swappableViewModel = CurrencySwappableEditAmountViewModel(exchangeRate: sampleRate,
                                                                   primaryAmount: 50,
-                                                                  walletTransactionType: .onChain,
+                                                                  walletTxType: .onChain,
                                                                   currencyPair: currencyPair,
                                                                   delegate: nil)
     self.sut.viewModel = RequestPayViewModel(receiveAddress: address, amountViewModel: swappableViewModel)
@@ -106,6 +106,9 @@ class RequestPayViewControllerTests: XCTestCase {
   // MARK: mock coordinator
   class MockCoordinator: RequestPayViewControllerDelegate {
 
+    let ratesDataWorker = RatesDataWorker(persistenceManager: MockPersistenceManager(),
+                                          networkManager: MockNetworkManager())
+
     func viewControllerDidSelectMemoButton(_ viewController: UIViewController,
                                            memo: String?,
                                            completion: @escaping (String) -> Void) { }
@@ -125,9 +128,9 @@ class RequestPayViewControllerTests: XCTestCase {
       return Promise { _ in }
     }
 
-    func latestExchangeRates(responseHandler: (ExchangeRates) -> Void) {}
-    func latestExchangeRates() -> Promise<ExchangeRates> { Promise { _ in } }
-    func latestFees() -> Promise<Fees> { Promise { _ in } }
+    var preferredFiatCurrency: Currency = .USD
+    func latestExchangeRates() -> ExchangeRates { [:] }
+    func latestFees() -> Fees { [:] }
 
     func viewControllerDidRequestNextReceiveAddress(_ viewController: UIViewController) -> String? {
       return nil

@@ -16,16 +16,12 @@ class MockNetworkManager: NetworkManagerType {
   weak var walletDelegate: WalletDelegateType?
   weak var headerDelegate: HeaderDelegate?
 
-  var persistenceManager: PersistenceManagerType
   var analyticsManager: AnalyticsManagerType
 
   var uiTestArguments: [UITestArgument] = []
   var twitterOAuthManager: OAuth1Swift = OAuth1Swift(consumerKey: "", consumerSecret: "")
 
-  init(persistenceManager: PersistenceManagerType,
-       analyticsManager: AnalyticsManagerType = AnalyticsManager()) {
-
-    self.persistenceManager = persistenceManager
+  init(analyticsManager: AnalyticsManagerType = AnalyticsManager()) {
     self.analyticsManager = analyticsManager
   }
 
@@ -33,7 +29,6 @@ class MockNetworkManager: NetworkManagerType {
 
   var wasAskedToFetchTransactionSummariesForAddresses = false
   var confirmFailedTransactionValueByTxid: [String: Bool] = [:]
-  var latestExchangeRatesWasCalled = false
   var latestFeesWasCalled = false
   var getUserWasCalled = false
   var getWalletWasCalled = false

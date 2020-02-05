@@ -1,5 +1,5 @@
 //
-//  SettingsRecoveryWordsCell.swift
+//  SettingsTitleDetailCell.swift
 //  DropBit
 //
 //  Created by BJ Miller on 5/29/19.
@@ -8,18 +8,15 @@
 
 import UIKit
 
-class SettingsRecoveryWordsCell: SettingsBaseCell {
+class SettingsTitleDetailCell: SettingsBaseCell {
 
   @IBOutlet var titleLabel: SettingsCellTitleLabel!
-  @IBOutlet var notBackedUpLabel: SettingsCellTitleLabel! {
-    didSet {
-      notBackedUpLabel.textColor = .darkPeach
-    }
-  }
+  @IBOutlet var detailLabel: SettingsCellTitleLabel!
 
   override func load(with viewModel: SettingsCellViewModel) {
     titleLabel.text = viewModel.type.titleText
-    notBackedUpLabel.text = viewModel.type.secondaryTitleText
+    detailLabel.text = viewModel.type.secondaryTitleText
+    detailLabel.textColor = viewModel.type.detailTextColor
   }
 
 }

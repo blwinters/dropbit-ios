@@ -46,20 +46,20 @@ class PrivateKeySweepViewController: BaseViewController, PopoverViewControllerTy
 
   static func newInstance(delegate: PrivateKeySweepViewControllerDelegate,
                           privateKey: WIFPrivateKey,
-                          transactionData: CNBCnlibTransactionData) -> PrivateKeySweepViewController {
+                          transactionData: CNBCnlibTransactionData,
+                          exchangeRate: ExchangeRate) -> PrivateKeySweepViewController {
     let viewController = PrivateKeySweepViewController.makeFromStoryboard()
     viewController.delegate = delegate
     viewController.privateKey = privateKey
     viewController.transactionData = transactionData
-    let rates = ExchangeRateManager().exchangeRates
 
     let amount = NSDecimalNumber(integerAmount: transactionData.amount, currency: .BTC)
     let fee = NSDecimalNumber(integerAmount: transactionData.feeAmount, currency: .BTC)
     let total = amount + fee
 
-    let amountConverter = CurrencyConverter(fromBtcTo: .USD, fromAmount: amount, rates: rates)
-    let feeConverter = CurrencyConverter(fromBtcTo: .USD, fromAmount: fee, rates: rates)
-    let totalConverter = CurrencyConverter(fromBtcTo: .USD, fromAmount: total, rates: rates)
+    let amountConverter = CurrencyConverter(fromBtcAmount: amount, rate: exchangeRate)
+    let feeConverter = CurrencyConverter(fromBtcAmount: fee, rate: exchangeRate)
+    let totalConverter = CurrencyConverter(fromBtcAmount: total, rate: exchangeRate)
 
     let amounts = ConvertedAmounts(converter: amountConverter)
     let feeAmounts = ConvertedAmounts(converter: feeConverter)

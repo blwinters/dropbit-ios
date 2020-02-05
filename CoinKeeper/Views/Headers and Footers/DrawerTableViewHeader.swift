@@ -16,21 +16,9 @@ class DrawerTableViewHeader: UITableViewHeaderFooterView {
 
   public weak var currencyValueManager: CurrencyValueDataSourceType? {
     didSet {
-      currencyValueManager?.latestExchangeRates()
-        .done(updateRatesRequest)
-        .catch { log.error($0, message: "Failed to update rates in DrawerTableViewHeader.")}
+      self.refreshDisplayedPrice()
     }
   }
-
-  private lazy var formatter: NumberFormatter = {
-    let formatter = NumberFormatter()
-    formatter.maximumFractionDigits = 2
-    formatter.minimumFractionDigits = 2
-    formatter.locale = .US
-    formatter.usesGroupingSeparator = true
-    formatter.numberStyle = .currency
-    return formatter
-  }()
 
   deinit {
     CKNotificationCenter.unsubscribe(self)
@@ -47,16 +35,13 @@ class DrawerTableViewHeader: UITableViewHeaderFooterView {
     _backgroundView.backgroundColor = .darkBlueBackground
 
     //Need to listen for correct notification
-    CKNotificationCenter.subscribe(self, [.didUpdateExchangeRates: #selector(refreshDisplayedPrice)])
+    CKNotificationCenter.subscribe(self, [.didUpdateExchangeRates: #selector(refreshDisplayedPrice),
+                                          .didUpdatePreferredFiat: #selector(refreshDisplayedPrice)])
   }
 
   @objc private func refreshDisplayedPrice() {
-    currencyValueManager?.latestExchangeRates(responseHandler: updateRatesRequest)
+    guard let fiatRate = currencyValueManager?.preferredExchangeRate() else { return }
+    self.priceLabel.text = fiatRate.displayString
   }
 
-  /// A closure to be called by the delegate during viewDidLoad and when a .didUpdateExchangeRates notification has been received
-  func updateRatesRequest(rates: ExchangeRates) {
-    let value = rates[.USD] as NSNumber? ?? 0.0
-    priceLabel?.text = formatter.string(from: value)
-  }
 }

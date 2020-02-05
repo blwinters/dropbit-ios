@@ -21,7 +21,8 @@ extension AppCoordinator: AdvancedSettingsViewControllerDelegate {
     do {
       let vouts = try CKMVout.findAllUnspent(in: context)
       let utxos = vouts.compactMap(DisplayableUTXO.init)
-      let controller = WalletInfoUTXOsViewController.newInstance(utxos: utxos)
+      let exchangeRate = self.preferredExchangeRate()
+      let controller = WalletInfoUTXOsViewController.newInstance(utxos: utxos, exchangeRate: exchangeRate)
       viewController.navigationController?.pushViewController(controller, animated: true)
     } catch {
       log.error(error, message: "Failed to fetch vouts.")

@@ -16,12 +16,12 @@ extension AppCoordinator: BadgeUpdateDelegate {
 
 extension AppCoordinator: DrawerViewControllerDelegate {
 
-  func closeDrawer() {
-    drawerController?.openCenter(animated: true)
+  var currentConfig: RemoteConfig {
+    remoteConfigManager.latestConfig
   }
 
-  func currentConfig() -> RemoteConfig {
-    return remoteConfigManager.latestConfig
+  func closeDrawer() {
+    drawerController?.openCenter(animated: true)
   }
 
   func earnButtonWasTouched() {

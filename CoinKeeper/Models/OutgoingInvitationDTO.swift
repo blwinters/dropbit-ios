@@ -10,7 +10,7 @@ import Foundation
 
 public struct OutgoingInvitationDTO {
   let contact: ContactType
-  let btcPair: BitcoinUSDPair
+  let amountPair: BitcoinFiatPair
   let fee: Int // in satoshis
   let walletTxType: WalletTransactionType
   let sharedPayloadDTO: SharedPayloadDTO?

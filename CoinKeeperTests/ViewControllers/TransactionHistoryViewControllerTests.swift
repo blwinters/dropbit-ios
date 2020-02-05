@@ -52,13 +52,26 @@ class TransactionHistoryViewControllerTests: XCTestCase {
 
   class MockCoordinator: TransactionHistoryViewControllerDelegate {
 
+    var ratesDataWorker = RatesDataWorker(persistenceManager: MockPersistenceManager(),
+                                          networkManager: MockNetworkManager())
+
+    var preferredFiatCurrency: Currency = .USD
+
+    func latestExchangeRate() -> ExchangeRate {
+      .zeroUSD
+    }
+
+    func latestFees() -> Fees {
+      [:]
+    }
+
     var didSendTweet = false
     func openTwitterURL(withMessage message: String) {
       didSendTweet = true
     }
 
     var didRequestLightningLoad = false
-    func didRequestLightningLoad(withAmount amount: TransferAmount) {
+    func didRequestLightningLoad(withAmount fiatAmount: NSDecimalNumber, selectionIndex: Int) {
       didRequestLightningLoad = true
     }
 
@@ -71,7 +84,7 @@ class TransactionHistoryViewControllerTests: XCTestCase {
     func viewControllerDidTapSpendBitcoin(_ viewController: UIViewController) { }
 
     var currencyController: CurrencyController {
-      return CurrencyController(fiatCurrency: .USD)
+      return CurrencyController()
     }
 
     func viewControllerSummariesDidReload(_ viewController: TransactionHistoryViewController, indexPathsIfNotAll paths: [IndexPath]?) { }
@@ -88,15 +101,14 @@ class TransactionHistoryViewControllerTests: XCTestCase {
     func openURL(_ url: URL, completionHandler completion: CKCompletion?) { }
     func openURLExternally(_ url: URL, completionHandler completion: ((Bool) -> Void)?) { }
 
-    func emptyViewDidRequestRefill(withAmount amount: TransferAmount) { }
-
-    func latestExchangeRates(responseHandler: ExchangeRatesRequest) { }
-    func latestExchangeRates() -> Promise<ExchangeRates> { Promise { _ in } }
-    func latestFees() -> Promise<Fees> { Promise { _ in } }
-
     func viewControllerDidSelectSummaryHeader(_ viewController: UIViewController) { }
     func summaryHeaderType(for viewController: UIViewController) -> SummaryHeaderType? {
       return nil
     }
+
+    func lightningLoadPresetAmounts(for currency: Currency) -> [NSDecimalNumber] {
+      return []
+    }
+
   }
 }

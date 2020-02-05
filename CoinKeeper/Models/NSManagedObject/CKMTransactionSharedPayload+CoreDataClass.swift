@@ -43,8 +43,8 @@ public class CKMTransactionSharedPayload: NSManagedObject {
   convenience init?(sharedPayloadDTO dto: SharedPayloadDTO, insertInto context: NSManagedObjectContext) {
     guard let amountInfo = dto.amountInfo else { return nil }
     self.init(sharingDesired: dto.sharingDesired,
-              fiatAmount: amountInfo.fiatAmount,
-              fiatCurrency: amountInfo.fiatCurrencyCode.rawValue,
+              fiatAmount: amountInfo.usdAmount,
+              fiatCurrency: amountInfo.fiatCurrency.code,
               receivedPayload: nil,
               insertInto: context)
   }

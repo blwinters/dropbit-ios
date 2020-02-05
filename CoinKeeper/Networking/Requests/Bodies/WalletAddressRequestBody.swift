@@ -8,11 +8,34 @@
 
 import Foundation
 
-typealias BitcoinUSDPair = (btcAmount: NSDecimalNumber, usdAmount: NSDecimalNumber)
+public struct WalletAddressRequestAmount: Codable {
+  let btc: Satoshis
 
-struct WalletAddressRequestAmount: Codable {
-  let usd: Int
-  let btc: Int
+  ///Always include this for legacy reasons.
+  let usd: Cents
+
+  ///The amount in the user's preferred fiat currency
+  let fiatValue: Cents
+
+  ///The user's preferred fiat currency
+  let fiatCurrency: String
+
+  init(amountPair: BitcoinFiatPair, usdAmount: NSDecimalNumber) {
+    self.btc = amountPair.satoshis
+
+    //server requires a non-zero integer for small amounts, e.g. 1 sat
+    let usdCents = usdAmount.asFractionalUnits(of: .USD)
+    self.usd = max(usdCents, 1)
+    self.fiatValue = max(amountPair.cents, 1)
+
+    self.fiatCurrency = amountPair.fiatCurrency.code
+  }
+}
+
+extension WalletAddressRequestAmount {
+  var fiatCurrencyType: Currency? {
+    Currency(rawValue: fiatCurrency)
+  }
 }
 
 public class UserIdentityBody: Codable {
@@ -106,15 +129,12 @@ public struct WalletAddressRequestBody: Encodable {
   let addressType: String
   var preauthId: String?
 
-  init(amount: BitcoinUSDPair,
+  init(amount: WalletAddressRequestAmount,
        receiver: UserIdentityBody,
        sender: UserIdentityBody,
        requestId: String,
        addressType: WalletAddressType) {
-    let usdCents = amount.usdAmount.asFractionalUnits(of: .USD)
-    let roundedUpCents = max(usdCents, 1) //server requires a non-zero integer for small amounts, e.g. 1 sat
-    self.amount = WalletAddressRequestAmount(usd: roundedUpCents,
-                                             btc: amount.btcAmount.asFractionalUnits(of: .BTC))
+    self.amount = amount
     self.sender = sender
     self.receiver = receiver
     self.requestId = requestId

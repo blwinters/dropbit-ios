@@ -20,11 +20,12 @@ extension CKMTransaction {
   @NSManaged public var confirmations: Int
   @NSManaged public var date: Date?
   @NSManaged public var network: String?
-  @NSManaged public var dayAveragePrice: NSDecimalNumber? //average price of 1 BTC in USD, for the day of the transaction
   @NSManaged public var sortDate: Date?
   @NSManaged public var broadcastedAt: Date?
   @NSManaged public var txid: String
   @NSManaged public var isSentToSelf: Bool
+
+  @NSManaged public var exchangeRates: CKMExchangeRates?
   @NSManaged public var addressTransactionSummaries: Set<CKMAddressTransactionSummary>
   @NSManaged public var invitation: CKMInvitation?
   @NSManaged public var temporarySentTransaction: CKMTemporarySentTransaction?

@@ -19,17 +19,20 @@ class SendPaymentViewControllerTests: XCTestCase {
 
   override func setUp() {
     super.setUp()
-    let mockNetworkManager = MockNetworkManager(persistenceManager: MockPersistenceManager())
+    let mockNetworkManager = MockNetworkManager()
     self.mockCoordinator = MockSendPaymentViewControllerCoordinator(networkManager: mockNetworkManager)
 
-    let safeRates: ExchangeRates = [.BTC: 1, .USD: 7000]
+    let usdRate = ExchangeRate(price: 7000, currency: .USD)
     let currencyPair = CurrencyPair(primary: .USD, fiat: .USD)
-    let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRates: safeRates,
+    let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRate: usdRate,
                                                            primaryAmount: 3500,
-                                                           walletTransactionType: .onChain,
+                                                           walletTxType: .onChain,
                                                            currencyPair: currencyPair)
+    let config = TransactionSendingConfig(settings: MockSettingsConfig.default(),
+                                          preferredExchangeRate: usdRate,
+                                          usdExchangeRate: usdRate)
     let viewModel = SendPaymentViewModel(editAmountViewModel: swappableVM,
-                                         walletTransactionType: .onChain,
+                                         config: config,
                                          address: "12A1MyfXbW6RhdRAZEqofac5jCQQjwEPBu",
                                          requiredFeeRate: nil,
                                          memo: nil)
@@ -226,7 +229,7 @@ class SendPaymentViewControllerTests: XCTestCase {
   }
 
   func testTogglingCurrencyChangesViewModel() {
-    let existingPrimaryCurrency = CurrencyCode.USD
+    let existingPrimaryCurrency = Currency.USD
     sut.viewModel.primaryCurrency = existingPrimaryCurrency
     sut.updateViewWithModel()
 
@@ -236,7 +239,7 @@ class SendPaymentViewControllerTests: XCTestCase {
 
     XCTAssertNotEqual(existingPrimaryCurrency, updatedPrimaryCurrency)
     XCTAssertEqual(updatedPrimaryCurrency, .BTC)
-    XCTAssertTrue(sut.editAmountView.primaryAmountTextField.text!.contains(CurrencyCode.BTC.symbol))
+    XCTAssertTrue(sut.editAmountView.primaryAmountTextField.text!.contains(Currency.BTC.symbol))
   }
 
 }

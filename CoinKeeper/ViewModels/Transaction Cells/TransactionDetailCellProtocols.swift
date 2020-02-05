@@ -329,8 +329,8 @@ extension TransactionDetailCellViewModelType {
 
     let secondary = btcAttributedString ?? NSAttributedString(string: "-")
 
-    let historicalText = historicalAmountsAttributedString(fiatWhenTransacted: amounts.netWhenTransacted?.fiat,
-                                                           fiatWhenInvited: amounts.netWhenInitiated?.fiat)
+    let historicalText = historicalAmountsAttributedString(fiatMoneyWhenTransacted: amounts.netWhenTransacted?.fiatMoney,
+                                                           fiatMoneyWhenInvited: amounts.netWhenInitiated?.fiatMoney)
 
     return DetailCellAmountLabels(primaryText: fiatText,
                                   secondaryAttributedText: secondary,
@@ -400,7 +400,11 @@ extension TransactionDetailCellViewModelType {
   }
 
   var displayDate: String {
-    return CKDateFormatter.displayFull.string(from: date)
+    if Locale.current.identifier == Locale.US.identifier {
+      return CKDateFormatter.displayFullUS.string(from: date)
+    } else {
+      return CKDateFormatter.displayFullLocalized.string(from: date)
+    }
   }
 
   var tooltipType: DetailCellTooltip {
@@ -460,23 +464,34 @@ extension TransactionDetailCellViewModelType {
     return stringId.rawValue
   }
 
-  var historicalCurrencyFormatter: NumberFormatter {
+  func historicalCurrencyFormatter(currency: Currency) -> NumberFormatter {
     let formatter = NumberFormatter()
     formatter.numberStyle = .currency
-    formatter.currencySymbol = CurrencyCode.USD.symbol
-    formatter.maximumFractionDigits = CurrencyCode.USD.decimalPlaces
+    formatter.currencySymbol = currency.symbol
+    formatter.maximumFractionDigits = currency.decimalPlaces
     return formatter
   }
 
-  private func historicalAmountsAttributedString(fiatWhenTransacted: NSDecimalNumber?, fiatWhenInvited: NSDecimalNumber?) -> NSAttributedString? {
+  private func historicalAmountsAttributedString(fiatMoneyWhenTransacted: Money?,
+                                                 fiatMoneyWhenInvited: Money?) -> NSAttributedString? {
     // Using bold and regular strings
     let fontSize: CGFloat = 14.0
     let color = UIColor.darkBlueText
     let attributes = TextAttributes(size: fontSize, color: color)
     let attributedString = NSMutableAttributedString.medium("", size: fontSize, color: color)
 
-    let inviteAmount: String? = fiatWhenInvited.flatMap { historicalCurrencyFormatter.string(from: $0.absoluteValue()) }
-    let receivedAmount: String? = fiatWhenTransacted.flatMap { historicalCurrencyFormatter.string(from: $0.absoluteValue()) }
+    var inviteAmount: String?
+    if let inviteMoney = fiatMoneyWhenInvited {
+      let inviteAmountFormatter = historicalCurrencyFormatter(currency: inviteMoney.currency)
+      inviteAmount = inviteAmountFormatter.string(from: inviteMoney.amount.absoluteValue())
+    }
+
+    var receivedAmount: String?
+    if let transactedMoney = fiatMoneyWhenTransacted {
+      let receivedAmountFormatter = historicalCurrencyFormatter(currency: transactedMoney.currency)
+      receivedAmount = receivedAmountFormatter.string(from: transactedMoney.amount.absoluteValue())
+    }
+
     guard inviteAmount != nil || receivedAmount != nil else { return nil }
 
     // Amount descriptions are flipped depending on isIncoming

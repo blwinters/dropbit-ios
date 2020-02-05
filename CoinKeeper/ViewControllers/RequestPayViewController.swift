@@ -57,7 +57,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
 
   @IBAction func sendRequestButtonTapped(_ sender: UIButton) {
     editAmountView.primaryAmountTextField.resignFirstResponder()
-    switch viewModel.walletTransactionType {
+    switch viewModel.walletTxType {
     case .onChain:
       var payload: [Any] = []
       qrImageView.image.flatMap { $0.pngData() }.flatMap { payload.append($0) }
@@ -83,7 +83,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
   }
 
   @IBAction func addressTapped(_ sender: UITapGestureRecognizer) {
-    switch viewModel.walletTransactionType {
+    switch viewModel.walletTxType {
     case .onChain:
       delegate.viewControllerSuccessfullyCopiedToClipboard(message: "Address copied to clipboard!", viewController: self)
       UIPasteboard.general.string = viewModel.receiveAddress
@@ -173,7 +173,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
   }
 
   func setupStyle() {
-    switch viewModel.walletTransactionType {
+    switch viewModel.walletTxType {
     case .onChain:
       expirationLabel.isHidden = true
       receiveAddressBGView.isHidden = false
@@ -246,7 +246,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
   }
 
   func updateViewWithViewModel() {
-    switch viewModel.walletTransactionType {
+    switch viewModel.walletTxType {
     case .lightning:
       if let invoice = viewModel.lightningInvoice {
         receiveAddressLabel.text = invoice.request
@@ -289,7 +289,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
   }
 
   func didUpdateExchangeRateManager(_ exchangeRateManager: ExchangeRateManager) {
-    updateEditAmountView(withRates: exchangeRateManager.exchangeRates)
+    updateEditAmountView(withRate: exchangeRateManager.exchangeRate)
   }
 
   override func unlock() {
@@ -311,13 +311,13 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
 extension RequestPayViewController: WalletToggleViewDelegate {
 
   func bitcoinWalletButtonWasTouched() {
-    viewModel.walletTransactionType = .onChain
+    viewModel.walletTxType = .onChain
     setupStyle()
     updateViewWithViewModel()
   }
 
   func lightningWalletButtonWasTouched() {
-    viewModel.walletTransactionType = .lightning
+    viewModel.walletTxType = .lightning
     setupStyle()
     updateViewWithViewModel()
   }

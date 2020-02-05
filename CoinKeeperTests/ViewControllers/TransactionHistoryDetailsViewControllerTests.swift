@@ -50,16 +50,22 @@ class TransactionHistoryDetailsViewControllerTests: XCTestCase {
   // MARK: private class
   class MockCoordinator: TransactionHistoryDetailsViewControllerDelegate, URLOpener {
 
+    let ratesDataWorker = RatesDataWorker(persistenceManager: MockPersistenceManager(),
+                                          networkManager: MockNetworkManager())
+
     var uiTestIsInProgress: Bool { false }
 
-    let currencyController: CurrencyController = CurrencyController(fiatCurrency: .USD)
+    let currencyController: CurrencyController = CurrencyController()
 
-    func latestExchangeRates(responseHandler: (ExchangeRates) -> Void) {
-      responseHandler(CurrencyConverter.sampleRates)
+    var preferredFiatCurrency: Currency = .USD
+
+    func latestExchangeRates() -> ExchangeRate {
+      .sampleUSD
     }
 
-    func latestExchangeRates() -> Promise<ExchangeRates> { Promise { _ in } }
-    func latestFees() -> Promise<Fees> { Promise { _ in } }
+    func latestFees() -> Fees {
+      return [:]
+    }
 
     func deviceCountryCode() -> Int? {
       return 1

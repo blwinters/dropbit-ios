@@ -17,17 +17,20 @@ class MockSendPaymentViewControllerCoordinator: SendPaymentViewControllerCoordin
 
   var networkManager: NetworkManagerType
   var balanceUpdateManager: BalanceUpdateManager
+  var ratesDataWorker: RatesDataWorker
 
   init(balanceUpdateManager: BalanceUpdateManager = BalanceUpdateManager(),
        networkManager: NetworkManagerType) {
     self.balanceUpdateManager = balanceUpdateManager
     self.networkManager = networkManager
+    self.ratesDataWorker = RatesDataWorker(persistenceManager: MockPersistenceManager(),
+                                           networkManager: MockNetworkManager())
   }
 
   func viewControllerDidSelectCloseShowCharts(_ viewController: UIViewController) { }
 
   func viewControllerDidTapReceivePayment(_ viewController: UIViewController,
-                                          converter: CurrencyConverter, walletTransactionType: WalletTransactionType) {}
+                                          converter: CurrencyConverter, walletTxType: WalletTransactionType) {}
 
   func viewControllerShouldTrackEvent(event: AnalyticsManagerEventType) {}
 
@@ -44,12 +47,12 @@ class MockSendPaymentViewControllerCoordinator: SendPaymentViewControllerCoordin
   func buildNonReplaceableTransactionData(
     btcAmount: NSDecimalNumber,
     address: String,
-    exchangeRates: ExchangeRates) -> PaymentData? {
+    exchangeRate: ExchangeRate) -> PaymentData? {
     return nil
   }
 
   func buildLoadLightningPaymentData(selectedAmount: SelectedBTCAmount,
-                                     exchangeRates: ExchangeRates,
+                                     exchangeRate: ExchangeRate,
                                      in context: NSManagedObjectContext) -> Promise<PaymentData> {
     return Promise { _ in }
   }
@@ -92,9 +95,9 @@ class MockSendPaymentViewControllerCoordinator: SendPaymentViewControllerCoordin
     return WalletBalances(onChain: .zero, lightning: .zero)
   }
 
-  func latestExchangeRates(responseHandler: (ExchangeRates) -> Void) { }
-  func latestExchangeRates() -> Promise<ExchangeRates> { Promise { _ in } }
-  func latestFees() -> Promise<Fees> { Promise.value([:]) }
+  var preferredFiatCurrency: Currency = .USD
+  func latestExchangeRates() -> ExchangeRates { [:] }
+  func latestFees() -> Fees { [:] }
 
   var didTapTwitter = false
   func viewControllerDidPressTwitter(_ viewController: UIViewController & SelectedValidContactDelegate) {
@@ -102,7 +105,7 @@ class MockSendPaymentViewControllerCoordinator: SendPaymentViewControllerCoordin
   }
 
   var didTapScan = false
-  func viewControllerDidPressScan(_ viewController: UIViewController, btcAmount: NSDecimalNumber, primaryCurrency: CurrencyCode) {
+  func viewControllerDidPressScan(_ viewController: UIViewController, btcAmount: NSDecimalNumber, primaryCurrency: Currency) {
     didTapScan = true
   }
 

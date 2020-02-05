@@ -11,16 +11,22 @@ import PromiseKit
 
 extension AppCoordinator: CurrencyValueDataSourceType {
 
-  func latestExchangeRates(responseHandler: ExchangeRatesRequest) {
-    networkManager.latestExchangeRates(responseHandler: responseHandler)
+  var preferredFiatCurrency: Currency {
+    return ratesDataWorker.preferredFiatCurrency
   }
 
-  func latestExchangeRates() -> Promise<ExchangeRates> {
-    networkManager.latestExchangeRates()
+  func latestExchangeRates() -> ExchangeRates {
+    return ratesDataWorker.latestExchangeRates()
   }
 
-  func latestFees() -> Promise<Fees> {
-    networkManager.latestFees()
+  func latestFees() -> Fees {
+    return ratesDataWorker.latestFees()
+  }
+
+  func latestFeeRates() -> Promise<FeeRates> {
+    let fees = latestFees()
+    guard let feeRates = FeeRates(fees: fees) else { return .missingValue(for: "latestFeeRates") }
+    return .value(feeRates)
   }
 
 }

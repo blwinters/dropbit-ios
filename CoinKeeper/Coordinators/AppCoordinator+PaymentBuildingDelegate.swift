@@ -30,7 +30,7 @@ protocol PaymentBuildingDelegate: CurrencyValueDataSourceType {
                                         inputs: SendingDelegateInputs) -> OutgoingTransactionData
 
   func buildLoadLightningPaymentData(selectedAmount: SelectedBTCAmount,
-                                     exchangeRates: ExchangeRates,
+                                     exchangeRate: ExchangeRate,
                                      in context: NSManagedObjectContext) -> Promise<PaymentData>
 
 }
@@ -38,41 +38,44 @@ protocol PaymentBuildingDelegate: CurrencyValueDataSourceType {
 extension AppCoordinator: PaymentBuildingDelegate {
 
   func transactionDataSendingMaxFunds(toAddress destinationAddress: String) -> Promise<CNBCnlibTransactionData> {
-    return latestFees()
-      .compactMap { self.usableFeeRate(from: $0) }
-      .then { feeRate -> Promise<CNBCnlibTransactionData> in
-        guard let wmgr = self.walletManager else { return Promise(error: DBTError.Persistence.noManagedWallet) }
-        return wmgr.transactionDataSendingMax(to: destinationAddress, withFeeRate: feeRate)
+    let fees = self.latestFees()
+    guard let feeRate = self.usableFeeRate(from: fees) else {
+      return .systemMissingValue(for: "usableFeeRate")
     }
+    guard let wmgr = self.walletManager else { return Promise(error: DBTError.Persistence.noManagedWallet) }
+    return wmgr.transactionDataSendingMax(to: destinationAddress, withFeeRate: feeRate)
   }
 
   func buildLoadLightningPaymentData(selectedAmount: SelectedBTCAmount,
-                                     exchangeRates: ExchangeRates,
+                                     exchangeRate: ExchangeRate,
                                      in context: NSManagedObjectContext) -> Promise<PaymentData> {
     let wallet = CKMWallet.findOrCreate(in: context)
     let lightningAccount = self.persistenceManager.brokers.lightning.getAccount(forWallet: wallet, in: context)
-    return networkManager.latestFees().compactMap { FeeRates(fees: $0) }
-      .then { (feeRates: FeeRates) -> Promise<PaymentData> in
-        do {
-          try BitcoinAddressValidator().validate(value: lightningAccount.address)
-          log.info("Lightning load address successfully validated.")
-        } catch {
-          log.error(error, message: "Lightning load address failed validation. Address: \(lightningAccount.address)")
-          return Promise(error: error)
-        }
-        let feeRate: Double = feeRates.low
-        return self.buildNonReplaceableTransactionData(selectedAmount: selectedAmount,
-                                                       address: lightningAccount.address,
-                                                       exchangeRates: exchangeRates,
-                                                       feeRate: feeRate)
+    let fees = self.latestFees()
+    guard let latestFeeRates = FeeRates(fees: fees) else {
+      return .systemMissingValue(for: "feeRates")
     }
+
+    do {
+      try BitcoinAddressValidator().validate(value: lightningAccount.address)
+      log.info("Lightning load address successfully validated.")
+    } catch {
+      log.error(error, message: "Lightning load address failed validation. Address: \(lightningAccount.address)")
+      return Promise(error: error)
+    }
+    let feeRate: Double = latestFeeRates.low
+    return self.buildNonReplaceableTransactionData(selectedAmount: selectedAmount,
+                                                   address: lightningAccount.address,
+                                                   exchangeRate: exchangeRate,
+                                                   feeRate: feeRate)
   }
 
   private func buildNonReplaceableTransactionData(
     selectedAmount: SelectedBTCAmount,
     address: String,
-    exchangeRates: ExchangeRates,
+    exchangeRate: ExchangeRate,
     feeRate: Double) -> Promise<PaymentData> {
+
     var outgoingTransactionData = OutgoingTransactionData.emptyInstance()
     let sharedPayload = SharedPayloadDTO.emptyInstance()
     let rbfOption = RBFOption.mustNotBeRBF
@@ -80,7 +83,7 @@ extension AppCoordinator: PaymentBuildingDelegate {
       primaryCurrency: .BTC,
       walletTxType: .onChain,
       contact: nil,
-      rates: exchangeRates,
+      rate: exchangeRate,
       sharedPayload: sharedPayload,
       rbfReplaceabilityOption: rbfOption)
 

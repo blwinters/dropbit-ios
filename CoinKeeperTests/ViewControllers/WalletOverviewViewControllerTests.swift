@@ -46,10 +46,14 @@ class WalletOverviewViewControllerTests: XCTestCase {
     let badgeManager: BadgeManagerType
     let currencyController: CurrencyController
     let balanceUpdateManager: BalanceUpdateManager
+    let ratesDataWorker: RatesDataWorker
 
     init() {
-      badgeManager = BadgeManager(persistenceManager: MockPersistenceManager())
-      currencyController = CurrencyController(fiatCurrency: .USD)
+      let persistence = MockPersistenceManager()
+      let network = MockNetworkManager()
+      badgeManager = BadgeManager(persistenceManager: persistence)
+      ratesDataWorker = RatesDataWorker(persistenceManager: persistence, networkManager: network)
+      currencyController = CurrencyController()
       balanceUpdateManager = BalanceUpdateManager()
     }
 
@@ -62,7 +66,7 @@ class WalletOverviewViewControllerTests: XCTestCase {
     func viewControllerDidTapReceivePayment(_ viewController: UIViewController, converter: CurrencyConverter) { }
     func viewControllerDidTapSendPayment(_ viewController: UIViewController,
                                          converter: CurrencyConverter,
-                                         walletTransactionType: WalletTransactionType) { }
+                                         walletTxType: WalletTransactionType) { }
     func viewControllerShouldAdjustForBottomSafeArea(_ viewController: UIViewController) -> Bool {
       return true
     }
@@ -76,12 +80,8 @@ class WalletOverviewViewControllerTests: XCTestCase {
 
     func viewControllerDidRequestBadgeUpdate(_ viewController: UIViewController) { }
 
-    func latestExchangeRates(responseHandler: ExchangeRatesRequest) { }
-
-    func latestExchangeRates() -> Promise<ExchangeRates> { Promise { _ in } }
-
     func viewControllerDidTapReceivePayment(_ viewController: UIViewController,
-                                            converter: CurrencyConverter, walletTransactionType: WalletTransactionType) {}
+                                            converter: CurrencyConverter, walletTxType: WalletTransactionType) {}
 
     func viewControllerShouldTrackEvent(event: AnalyticsManagerEventType) {}
 
@@ -89,9 +89,9 @@ class WalletOverviewViewControllerTests: XCTestCase {
 
     func viewControllerShouldTrackProperty(property: MixpanelProperty) {}
 
-    func latestFees() -> Promise<Fees> {
-      return Promise { _ in }
-    }
+    var preferredFiatCurrency: Currency = .USD
+    func latestExchangeRates() -> ExchangeRates { [:] }
+    func latestFees() -> Fees { [:] }
 
     func balancesNetPending() -> WalletBalances {
       return WalletBalances(onChain: .zero, lightning: .zero)

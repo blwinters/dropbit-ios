@@ -31,12 +31,6 @@ final class NewsViewController: BaseViewController, StoryboardInitializable {
 
   private var newsViewControllerDDS: NewsViewControllerDDS?
 
-  lazy var updateRatesRequest: ExchangeRatesRequest = { [weak self] rates in
-    let value = rates[.USD] as NSNumber?
-    self?.newsViewControllerDDS?.newsData.currentPrice = value
-    self?.tableView.reloadData()
-  }
-
   static func newInstance(delegate: NewsViewControllerDelegate) -> NewsViewController {
     let vc = NewsViewController.makeFromStoryboard()
     vc.delegate = delegate
@@ -77,7 +71,7 @@ final class NewsViewController: BaseViewController, StoryboardInitializable {
     delegate.viewControllerWillLoad(self)
 
     CKNotificationCenter.subscribe(self, [.didUpdateExchangeRates: #selector(refreshDisplayedPrice)])
-    currencyValueManager?.latestExchangeRates(responseHandler: updateRatesRequest)
+    refreshDisplayedPrice()
 
     newsViewControllerDDS?.setupDataSet(coordinationDelegate: delegate)
   }
@@ -93,7 +87,9 @@ final class NewsViewController: BaseViewController, StoryboardInitializable {
   }
 
   @objc private func refreshDisplayedPrice() {
-    currencyValueManager?.latestExchangeRates(responseHandler: updateRatesRequest)
+    guard let fiatRate = currencyValueManager?.preferredExchangeRate() else { return }
+    self.newsViewControllerDDS?.newsData.currentPrice = fiatRate
+    self.tableView.reloadData()
   }
 }
 

@@ -47,12 +47,16 @@ extension AppCoordinator: ConfirmPaymentViewControllerDelegate {
         return
       }
 
-      let inviteBody = WalletAddressRequestBody(amount: outgoingInvitationDTO.btcPair,
+      let usdRate = self.exchangeRate(for: .USD)
+      let usdConverter = CurrencyConverter(fromBtcAmount: outgoingInvitationDTO.amountPair.btcAmount, rate: usdRate)
+      let amount = WalletAddressRequestAmount(amountPair: outgoingInvitationDTO.amountPair, usdAmount: usdConverter.fiatAmount)
+
+      let inviteBody = WalletAddressRequestBody(amount: amount,
                                                 receiver: receiverBody,
                                                 sender: senderBody,
                                                 requestId: UUID().uuidString.lowercased(),
                                                 addressType: walletTxType.addressType)
-      self.enqueueSuccessfulInviteVerification(with: inviteBody, outgoingInvitationDTO: outgoingInvitationDTO)
+      self.enqueueSuccessfulInviteVerification(with: inviteBody, outgoingInvitationDTO: outgoingInvitationDTO, requestAmount: amount)
     }
 
     let pinEntryVC = PinEntryViewController.newInstance(delegate: self,
@@ -61,7 +65,9 @@ extension AppCoordinator: ConfirmPaymentViewControllerDelegate {
     presentPinEntryViewController(pinEntryVC)
   }
 
-  private func enqueueSuccessfulInviteVerification(with inviteBody: WalletAddressRequestBody, outgoingInvitationDTO: OutgoingInvitationDTO) {
+  private func enqueueSuccessfulInviteVerification(with inviteBody: WalletAddressRequestBody,
+                                                   outgoingInvitationDTO: OutgoingInvitationDTO,
+                                                   requestAmount: WalletAddressRequestAmount) {
 
     let operation = AsynchronousOperation(operationType: .sendInvitation)
 
@@ -86,6 +92,7 @@ extension AppCoordinator: ConfirmPaymentViewControllerDelegate {
         ///once the WAR creation network request succeeds
         strongSelf.persistenceManager.brokers.invitation.persistUnacknowledgedInvitation(
           withDTO: outgoingInvitationDTO,
+          requestAmount: requestAmount,
           acknowledgmentId: inviteBody.requestId,
           in: bgContext)
         ///Do not save the context here, keep it only in this context until the WAR has been created successfully.
@@ -212,15 +219,16 @@ extension AppCoordinator: ConfirmPaymentViewControllerDelegate {
 
   private func createInviteNotificationSMSComposer(for inviteBody: WalletAddressRequestBody) -> MFMessageComposeViewController? {
     guard MFMessageComposeViewController.canSendText(),
-      let phoneNumber = inviteBody.receiver.globalNumber()
+      let phoneNumber = inviteBody.receiver.globalNumber(),
+      let currency = inviteBody.amount.fiatCurrencyType
       else { return nil }
 
     let composeVC = MFMessageComposeViewController()
     composeVC.messageComposeDelegate = self.messageComposeDelegate
     composeVC.recipients = [phoneNumber.asE164()]
     let downloadURL = CoinNinjaUrlFactory.buildUrl(for: .download)?.absoluteString ?? ""
-    let amount = NSDecimalNumber(integerAmount: inviteBody.amount.usd, currency: .USD)
-    let amountDesc = FiatFormatter(currency: .USD, withSymbol: true).string(fromDecimal: amount) ?? ""
+    let amount = NSDecimalNumber(integerAmount: inviteBody.amount.fiatValue, currency: currency)
+    let amountDesc = FiatFormatter(currency: currency, withSymbol: true).string(fromDecimal: amount) ?? ""
     composeVC.body = """
       I just sent you \(amountDesc) in Bitcoin.
       Download the DropBit app to claim it. \(downloadURL)
@@ -283,7 +291,7 @@ extension AppCoordinator: ConfirmPaymentViewControllerDelegate {
     let outgoingTransactionData = OutgoingTransactionData(
       txid: CKMTransaction.invitationTxidPrefix + response.id,
       destinationAddress: "",
-      amount: invitationDTO.btcPair.btcAmount.asFractionalUnits(of: .BTC),
+      amount: invitationDTO.amountPair.btcAmount.asFractionalUnits(of: .BTC),
       feeAmount: invitationDTO.fee,
       sentToSelf: false,
       requiredFeeRate: nil,

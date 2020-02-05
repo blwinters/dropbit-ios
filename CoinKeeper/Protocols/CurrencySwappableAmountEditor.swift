@@ -59,22 +59,31 @@ extension CurrencySwappableAmountEditor {
 
   /// Editor should call this in response to delegate method calls of CurrencySwappableEditAmountViewModelDelegate
   func refreshBothAmounts() {
-    let txType = editAmountViewModel.walletTransactionType
+    let txType = editAmountViewModel.walletTxType
     let labels = editAmountViewModel.editableDualAmountLabels(walletTxType: txType)
     editAmountView.update(with: labels)
   }
 
   func moveCursorToCorrectLocationIfNecessary() {
     guard let textField = editAmountView.primaryAmountTextField,
-      editAmountViewModel.isEditingSats,
-      let amount = SatsFormatter().stringWithoutSymbol(fromDecimal: editAmountViewModel.primaryAmount),
-      let newPosition = textField.position(from: textField.beginningOfDocument, offset: amount.count)
+      editAmountViewModel.currencySymbolIsTrailing,
+      let amountString = self.primaryAmountString(),
+      let newPosition = textField.position(from: textField.beginningOfDocument, offset: amountString.count)
       else { return }
 
     if editAmountViewModel.primaryAmount == .zero {
       textField.selectedTextRange = textField.textRange(from: textField.beginningOfDocument, to: textField.beginningOfDocument)
     } else {
       textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
+    }
+  }
+
+  private func primaryAmountString() -> String? {
+    let amount = editAmountViewModel.primaryAmount
+    if editAmountViewModel.isEditingSats {
+      return editAmountViewModel.satsFormatter.stringWithoutSymbol(fromDecimal: amount)
+    } else {
+      return editAmountViewModel.fiatFormatter.decimalString(fromDecimal: amount)
     }
   }
 
@@ -93,13 +102,13 @@ extension CurrencySwappableAmountEditor {
 
   func updateQRImage() { } // empty default method
 
-  func updateEditAmountView(withRates rates: ExchangeRates) {
-    editAmountViewModel.exchangeRates = rates
+  func updateEditAmountView(withRate rate: ExchangeRate) {
+    editAmountViewModel.exchangeRate = rate
     refreshSecondaryAmount()
   }
 
   private func refreshSecondaryAmount() {
-    let walletTxType = editAmountViewModel.walletTransactionType
+    let walletTxType = editAmountViewModel.walletTxType
     let secondaryLabel = editAmountViewModel.editableDualAmountLabels(walletTxType: walletTxType).secondary
     editAmountView.secondaryAmountLabel.attributedText = secondaryLabel
   }

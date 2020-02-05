@@ -10,60 +10,59 @@ import Foundation
 
 struct CurrencyConverter {
 
-  static let sampleRates: ExchangeRates = [.BTC: 1, .USD: 7000]
-
-  let rates: ExchangeRates
-  var fromAmount: NSDecimalNumber
-  let currencyPair: CurrencyPair
-
-  var fromCurrency: CurrencyCode {
-    return currencyPair.primary
-  }
-
-  var toCurrency: CurrencyCode {
-    return currencyPair.secondary
-  }
-
-  var fiatCurrency: CurrencyCode {
-    return currencyPair.fiat
-  }
-
-  init(rates: ExchangeRates, fromAmount: NSDecimalNumber, currencyPair: CurrencyPair) {
-    self.rates = rates
-    self.fromAmount = fromAmount
-    self.currencyPair = currencyPair
-  }
+  let rate: ExchangeRate
+  let fromAmount: NSDecimalNumber
+  let fromCurrency: Currency
+  let toCurrency: Currency
 
   /// Copies the existing values from the supplied converter and replaces the fromAmount with the newAmount.
   init(newAmount: NSDecimalNumber, converter: CurrencyConverter) {
+    self.rate = converter.rate
     self.fromAmount = newAmount
-    self.rates = converter.rates
-    self.currencyPair = converter.currencyPair
+    self.fromCurrency = converter.fromCurrency
+    self.toCurrency = converter.toCurrency
   }
 
-  init(btcFromAmount: NSDecimalNumber, converter: CurrencyConverter) {
-    self.fromAmount = btcFromAmount
-    self.rates = converter.rates
-    self.currencyPair = CurrencyPair(primary: .BTC, fiat: converter.fiatCurrency)
+  ///Creates instance for converting the `btcAmount` to the `converter.fiatCurrency` using the `converter.rate`
+  init(fromBtcAmount btcAmount: NSDecimalNumber, converter: CurrencyConverter) {
+    self.init(fromBtcAmount: btcAmount, rate: converter.rate)
   }
 
-  init(fromBtcTo fiatCurrency: CurrencyCode, fromAmount: NSDecimalNumber, rates: ExchangeRates) {
-    self.fromAmount = fromAmount
-    self.rates = rates
-    self.currencyPair = CurrencyPair(primary: .BTC, fiat: fiatCurrency)
+  ///Creates instance for converting the `btcAmount` to the `rate.currency` using the `rate.price`
+  init(fromBtcAmount btcAmount: NSDecimalNumber, rate: ExchangeRate) {
+    self.rate = rate
+    self.fromAmount = btcAmount
+    self.fromCurrency = .BTC
+    self.toCurrency = rate.currency
   }
 
+  ///Creates an instance for converting the `fiatAmount` to BTC using the `rate.price`.
+  init(fromFiatAmount fiatAmount: NSDecimalNumber, rate: ExchangeRate) {
+    self.rate = rate
+    self.fromAmount = fiatAmount
+    self.fromCurrency = rate.currency
+    self.toCurrency = .BTC
+  }
+
+  var isConvertingFromFiat: Bool {
+    return fromCurrency.isFiat
+  }
+
+  var fiatCurrency: Currency {
+    return isConvertingFromFiat ? fromCurrency : toCurrency
+  }
+
+  ///The `fromAmount` converted into the `toCurrency`
   func convertedAmount() -> NSDecimalNumber? {
-    guard fromAmount.isNumber else { return nil }
-    guard let fromDouble = rates[fromCurrency], let toDouble = rates[toCurrency] else { return nil }
+    guard fromAmount.isNumber, rate.price > .zero else { return nil }
 
-    let fromRate = NSDecimalNumber(value: fromDouble)
-    let toRate = NSDecimalNumber(value: toDouble)
+    let targetAmount: NSDecimalNumber
+    if isConvertingFromFiat {
+      targetAmount = fromAmount.dividing(by: rate.price)
+    } else {
+      targetAmount = fromAmount.multiplying(by: rate.price)
+    }
 
-    guard fromRate.isPositiveNumber, toRate.isPositiveNumber else { return nil }
-
-    let baseAmount = fromAmount.dividing(by: fromRate)
-    let targetAmount = baseAmount.multiplying(by: toRate)
     return targetAmount.rounded(forCurrency: toCurrency)
   }
 
@@ -75,21 +74,13 @@ struct CurrencyConverter {
     return amount(forCurrency: fiatCurrency) ?? .zero
   }
 
-  func otherCurrency(forCurrency currency: CurrencyCode) -> CurrencyCode {
-    if currency == .BTC {
-      return self.fiatCurrency
-    } else {
-      return .BTC
-    }
-  }
-
   /*
    The internal functions below are intended to be used by both the computed properties of CurrencyConverter
    as well as other objects where it is more convenient to supply the desired currency,
    if they don't easily know whether they want the fromCurrency or toCurrency.
    */
 
-  func amount(forCurrency currency: CurrencyCode) -> NSDecimalNumber? {
+  func amount(forCurrency currency: Currency) -> NSDecimalNumber? {
     switch currency {
     case fromCurrency:  return fromAmount
     case toCurrency:    return convertedAmount()

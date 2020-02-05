@@ -55,7 +55,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     checkInNetworkManager.checkIn()
       .then { (response: CheckInResponse) -> Promise<[PriceSummaryResponse]> in
-        newsData.currentPrice = response.pricing.last as NSNumber?
+        newsData.currentPrice = ExchangeRate(double: response.pricing.last, currency: .USD)
         return self.newsNetworkManager.requestPriceData(period: .daily)
     }.done { dailyPrice in
       newsData.configureDailyData(data: dailyPrice.reversed())

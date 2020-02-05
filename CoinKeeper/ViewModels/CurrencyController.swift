@@ -8,60 +8,38 @@
 
 import Foundation
 
-enum SelectedCurrency: String {
-  case BTC, fiat
-
-  mutating func toggle() {
-    switch self {
-    case .BTC:  self = .fiat
-    case .fiat: self = .BTC
-    }
-  }
-
-  var description: String {
-    return self.rawValue
-  }
-
-  var code: CurrencyCode {
-    switch self {
-    case .fiat: return .USD
-    case .BTC:  return .BTC
-    }
-  }
-
-}
-
 protocol SelectedCurrencyUpdatable: AnyObject {
   func updateSelectedCurrency(to selectedCurrency: SelectedCurrency)
 }
 
 protocol CurrencyControllerProviding: AnyObject {
   /// Returns the currency selected by toggling currency
-  var selectedCurrencyCode: CurrencyCode { get }
+  var selectedCurrencyCode: Currency { get }
 
-  /// The fiat currency preferred by the user
-  var fiatCurrency: CurrencyCode { get }
-
-  var exchangeRates: ExchangeRates { get set }
+  var exchangeRate: ExchangeRate { get set }
 
   var currencyConverter: CurrencyConverter { get }
 }
 
+extension CurrencyControllerProviding {
+
+  /// The fiat currency preferred by the user
+  var fiatCurrency: Currency { exchangeRate.currency }
+
+}
+
 class CurrencyController: CurrencyControllerProviding {
 
-  var fiatCurrency: CurrencyCode
-  var exchangeRates: ExchangeRates
+  var exchangeRate: ExchangeRate
   var selectedCurrency: SelectedCurrency
 
-  init(fiatCurrency: CurrencyCode,
-       selectedCurrency: SelectedCurrency = .fiat,
-       exchangeRates: ExchangeRates = [:]) {
-    self.fiatCurrency = fiatCurrency
+  init(selectedCurrency: SelectedCurrency = .fiat,
+       exchangeRate: ExchangeRate = .zeroUSD) {
     self.selectedCurrency = selectedCurrency
-    self.exchangeRates = exchangeRates
+    self.exchangeRate = exchangeRate
   }
 
-  var selectedCurrencyCode: CurrencyCode {
+  var selectedCurrencyCode: Currency {
     switch selectedCurrency {
     case .BTC:  return .BTC
     case .fiat: return fiatCurrency
@@ -73,10 +51,15 @@ class CurrencyController: CurrencyControllerProviding {
   }
 
   var currencyConverter: CurrencyConverter {
-    return CurrencyConverter(rates: exchangeRates, fromAmount: .zero, currencyPair: currencyPair)
+    switch selectedCurrency {
+    case .fiat:
+      return CurrencyConverter(fromFiatAmount: .zero, rate: exchangeRate)
+    case .BTC:
+      return CurrencyConverter(fromBtcAmount: .zero, rate: exchangeRate)
+    }
   }
 
-  private var convertedCurrencyCode: CurrencyCode {
+  private var convertedCurrencyCode: Currency {
     switch selectedCurrencyCode {
     case .BTC: return fiatCurrency
     default: return .BTC

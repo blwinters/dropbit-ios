@@ -154,11 +154,11 @@ class CheckInResponseTests: XCTestCase, ResponseStringsTestable {
   }
 
   private func checkIn(withPricing pricing: PriceResponse, sample: CheckInResponse) -> CheckInResponse {
-    return CheckInResponse(blockheight: sample.blockheight, fees: sample.fees, pricing: pricing)
+    return CheckInResponse(blockheight: sample.blockheight, fees: sample.fees, pricing: pricing, currency: sample.currency)
   }
 
   private func checkIn(withFees fees: FeesResponse, sample: CheckInResponse) -> CheckInResponse {
-    return CheckInResponse(blockheight: sample.blockheight, fees: fees, pricing: sample.pricing)
+    return CheckInResponse(blockheight: sample.blockheight, fees: fees, pricing: sample.pricing, currency: sample.currency)
   }
 
   func testEmptyStringThrowsError() {
@@ -177,7 +177,8 @@ extension CheckInResponse: EmptyStringCopyable {
   func copyWithEmptyRequiredStrings() -> CheckInResponse {
     return CheckInResponse(blockheight: self.blockheight,
                            fees: self.fees.copyWithEmptyRequiredStrings(),
-                           pricing: self.pricing.copyWithEmptyRequiredStrings())
+                           pricing: self.pricing.copyWithEmptyRequiredStrings(),
+                           currency: self.currency.copyWithEmptyRequiredStrings())
   }
 }
 
@@ -190,5 +191,12 @@ extension FeesResponse: EmptyStringCopyable {
 extension PriceResponse: EmptyStringCopyable {
   func copyWithEmptyRequiredStrings() -> PriceResponse {
     return PriceResponse(last: self.last)
+  }
+}
+
+extension ExchangeRatesResponse: EmptyStringCopyable {
+  func copyWithEmptyRequiredStrings() -> ExchangeRatesResponse {
+    return ExchangeRatesResponse(aud: self.aud, cad: self.cad, eur: self.eur,
+                            gbp: self.gbp, sek: self.sek, usd: self.usd)
   }
 }

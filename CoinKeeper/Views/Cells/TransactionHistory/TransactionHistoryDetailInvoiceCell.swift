@@ -90,7 +90,7 @@ class TransactionHistoryDetailInvoiceCell: CollectionViewCardCell {
     primaryAmountLabel.font = .regular(layoutConfig.primaryAmountFontSize)
 
     historicalValuesLabel.attributedText = values.detailAmountLabels.historicalPriceAttributedText
-    historicalValuesLabel.isHidden = true //TODO: populate and show this when historical exchange rates are available for invoices
+    historicalValuesLabel.isHidden = values.shouldHideHistoricalValuesLabel
 
     qrCodeImageWidthConstraint.constant = layoutConfig.qrCodeWidth
     qrCodeImageView.image = values.qrImage(withSize: layoutConfig.qrCodeSize)

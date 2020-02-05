@@ -23,6 +23,9 @@ public class CKMInvitation: NSManagedObject {
     self.id = response.id
     self.btcAmount = response.metadata?.amount?.btc ?? 0
     self.usdAmountAtTimeOfInvitation = response.metadata?.amount?.usd ?? 0
+    self.fiatCurrency = response.metadata?.amount?.fiatCurrency
+    self.fiatAmountAtTimeOfInvitation = response.metadata?.amount?.fiatValue ?? 0
+
     self.counterpartyName = nil
     self.sentDate = response.createdAt
     self.side = InvitationSide(requestSide: side)
@@ -61,13 +64,17 @@ public class CKMInvitation: NSManagedObject {
   }
 
   convenience public init(withOutgoingInvitationDTO invitationDTO: OutgoingInvitationDTO,
+                          requestAmount: WalletAddressRequestAmount,
                           acknowledgmentId: String,
                           insertInto context: NSManagedObjectContext) {
     self.init(insertInto: context)
     let contact = invitationDTO.contact
     self.id = CKMInvitation.unacknowledgementPrefix + acknowledgmentId
-    self.btcAmount = invitationDTO.btcPair.btcAmount.asFractionalUnits(of: .BTC)
-    self.usdAmountAtTimeOfInvitation = invitationDTO.btcPair.usdAmount.asFractionalUnits(of: .USD)
+    self.btcAmount = requestAmount.btc
+    self.usdAmountAtTimeOfInvitation = requestAmount.usd
+    self.fiatCurrency = requestAmount.fiatCurrency
+    self.fiatAmountAtTimeOfInvitation = requestAmount.fiatValue
+
     self.side = .sender
     self.walletTxTypeCase = invitationDTO.walletTxType
     self.status = .notSent
@@ -285,8 +292,18 @@ public class CKMInvitation: NSManagedObject {
 }
 
 extension CKMInvitation: AddressRequestUpdateDisplayable {
-  var fiatAmount: Int {
-    return self.usdAmountAtTimeOfInvitation
+
+  ///The amount of fiat currency according to the exchange rate when the invitation was first created.
+  ///Uses the fiat amount if sender's app supported multi-currency, otherwise falls back to legacy USD amount.
+  var fiatMoney: Money {
+    if self.fiatAmountAtTimeOfInvitation != 0,
+      let currency = self.fiatCurrency.flatMap({ code in Currency(rawValue: code) }) {
+      let fiatAmount = NSDecimalNumber(integerAmount: self.fiatAmountAtTimeOfInvitation, currency: currency)
+      return Money(amount: fiatAmount, currency: currency)
+    } else {
+      let usdAmount = NSDecimalNumber(integerAmount: self.usdAmountAtTimeOfInvitation, currency: .USD)
+      return Money(amount: usdAmount, currency: .USD)
+    }
   }
 
   var addressRequestId: String {

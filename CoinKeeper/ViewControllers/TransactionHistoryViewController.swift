@@ -13,7 +13,7 @@ import PromiseKit
 import DZNEmptyDataSet
 
 protocol TransactionHistoryViewControllerDelegate: DeviceCountryCodeProvider &
-  BadgeUpdateDelegate & URLOpener & EmptyStateLightningLoadDelegate & CurrencyValueDataSourceType &
+  BadgeUpdateDelegate & URLOpener & LightningLoadPresetDelegate & CurrencyValueDataSourceType &
   TweetDelegate {
   func viewControllerDidRequestHistoryUpdate(_ viewController: TransactionHistoryViewController)
   func viewControllerDidDisplayTransactions(_ viewController: TransactionHistoryViewController)
@@ -91,7 +91,7 @@ class TransactionHistoryViewController: BaseViewController, StoryboardInitializa
     emptyStateBackgroundView.isHidden = false
     emptyStateBackgroundView.backgroundColor = .whiteBackground
     configureOnChainEmptyStateButtons()
-    if viewModel.walletTransactionType == .onChain {
+    if viewModel.walletTxType == .onChain {
       lockedLightningView.isHidden = true
       lightningUnavailableView.isHidden = true
     }
@@ -123,14 +123,14 @@ class TransactionHistoryViewController: BaseViewController, StoryboardInitializa
   }
 
   override func lock() {
-    if viewModel.walletTransactionType == .lightning {
+    if viewModel.walletTxType == .lightning {
       lockedLightningView.isHidden = false
       lightningUnavailableView.isHidden = true
     }
   }
 
   override func makeUnavailable() {
-    if viewModel.walletTransactionType == .lightning {
+    if viewModel.walletTxType == .lightning {
       lockedLightningView.isHidden = true
       lightningUnavailableView.isHidden = false
     }
@@ -256,8 +256,14 @@ extension TransactionHistoryViewController: DZNEmptyDataSetDelegate, DZNEmptyDat
       transactionHistoryWithBalanceView.isHidden = false
       return transactionHistoryWithBalanceView
     case .lightning:
-      lightningTransactionHistoryEmptyBalanceView.isHidden = false
-      return lightningTransactionHistoryEmptyBalanceView
+      let loadView = lightningTransactionHistoryEmptyBalanceView
+      loadView?.isHidden = false
+      let currency = delegate.preferredFiatCurrency
+      var amounts = delegate.lightningLoadPresetAmounts(for: currency)
+      guard amounts.count == 5 else { return loadView }
+      amounts.remove(at: 1) //remove to only show four amounts
+      loadView?.configure(with: currency, presetAmounts: amounts)
+      return loadView
     case .none:
       return nil
     }

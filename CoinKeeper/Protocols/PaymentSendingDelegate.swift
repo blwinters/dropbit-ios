@@ -22,7 +22,7 @@ protocol OnChainPaymentSendingDelegate: PaymentSendingDelegate {
   func viewControllerDidConfirmOnChainPayment(
     _ viewController: UIViewController,
     transactionData: CNBCnlibTransactionData,
-    rates: ExchangeRates,
+    rate: ExchangeRate,
     outgoingTransactionData: OutgoingTransactionData
   )
 

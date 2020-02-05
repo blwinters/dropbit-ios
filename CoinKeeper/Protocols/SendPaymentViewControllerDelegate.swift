@@ -12,23 +12,23 @@ import enum Result.Result
 import UIKit
 
 struct SendingDelegateInputs {
-  let primaryCurrency: CurrencyCode
+  let primaryCurrency: Currency
   let walletTxType: WalletTransactionType
   let contact: ContactType?
-  let rates: ExchangeRates
+  let rate: ExchangeRate
   let sharedPayload: SharedPayloadDTO
   let rbfReplaceabilityOption: RBFOption
 
-  init(primaryCurrency: CurrencyCode,
+  init(primaryCurrency: Currency,
        walletTxType: WalletTransactionType,
        contact: ContactType?,
-       rates: ExchangeRates,
+       rate: ExchangeRate,
        sharedPayload: SharedPayloadDTO,
        rbfReplaceabilityOption: RBFOption) {
     self.primaryCurrency = primaryCurrency
     self.walletTxType = walletTxType
     self.contact = contact
-    self.rates = rates
+    self.rate = rate
     self.sharedPayload = sharedPayload
     self.rbfReplaceabilityOption = rbfReplaceabilityOption
   }
@@ -38,9 +38,9 @@ struct SendingDelegateInputs {
        payloadDTO: SharedPayloadDTO,
        rbfReplaceabilityOption: RBFOption = .allowed) {
     self.init(primaryCurrency: vm.primaryCurrency,
-              walletTxType: vm.walletTransactionType,
+              walletTxType: vm.walletTxType,
               contact: contact,
-              rates: vm.exchangeRates,
+              rate: vm.exchangeRate,
               sharedPayload: payloadDTO,
               rbfReplaceabilityOption: rbfReplaceabilityOption)
   }
@@ -55,7 +55,7 @@ struct SendOnChainPaymentInputs {
   let address: String
   let contact: ContactType?
   let currencyPair: CurrencyPair
-  let exchangeRates: ExchangeRates
+  let exchangeRate: ExchangeRate
   let rbfReplaceabilityOption: RBFOption
 }
 
@@ -82,7 +82,7 @@ protocol SendPaymentViewControllerRoutingDelegate: PaymentBuildingDelegate {
 protocol SendPaymentViewControllerDelegate: SendPaymentViewControllerRoutingDelegate, DeviceCountryCodeProvider, AlertDelegate {
   func sendPaymentViewControllerDidLoad(_ viewController: UIViewController)
   func sendPaymentViewControllerWillDismiss(_ viewController: UIViewController)
-  func viewControllerDidPressScan(_ viewController: UIViewController, btcAmount: NSDecimalNumber, primaryCurrency: CurrencyCode)
+  func viewControllerDidPressScan(_ viewController: UIViewController, btcAmount: NSDecimalNumber, primaryCurrency: Currency)
   func viewControllerDidPressContacts(_ viewController: UIViewController & SelectedValidContactDelegate)
   func viewControllerDidPressTwitter(_ viewController: UIViewController & SelectedValidContactDelegate)
   func viewControllerDidRequestRegisteredAddress(_ viewController: UIViewController,

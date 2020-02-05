@@ -66,8 +66,7 @@ class ConfirmPaymentViewControllerTests: XCTestCase {
     func viewControllerDidSelectCloseShowCharts(_ viewController: UIViewController) { }
     var alertManager: AlertManagerType = MockAlertManager(notificationManager:
       NotificationManager(permissionManager: PermissionManager(),
-                          networkInteractor: NetworkManager(persistenceManager: PersistenceManager(),
-                                                            analyticsManager: AnalyticsManager())))
+                          networkInteractor: NetworkManager(analyticsManager: AnalyticsManager())))
     var analyticsManager: AnalyticsManagerType = MockAnalyticsManager()
     var persistenceManager: PersistenceManagerType = MockPersistenceManager()
 
@@ -93,7 +92,7 @@ class ConfirmPaymentViewControllerTests: XCTestCase {
     func viewControllerDidConfirmOnChainPayment(
       _ viewController: UIKit.UIViewController,
       transactionData: Cnlib.CNBCnlibTransactionData,
-      rates: ExchangeRates,
+      rate: ExchangeRate,
       outgoingTransactionData: OutgoingTransactionData) { }
 
     func viewControllerDidConfirmInvite(

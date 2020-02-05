@@ -29,7 +29,7 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
     outgoingTxData.amount = txData.amount
     outgoingTxData = configureOutgoingTransactionData(with: outgoingTxData, address: address, inputs: inputs)
 
-    let btcAmount = NSDecimalNumber(integerAmount: outgoingTxData.amount, currency: .BTC)
+    let btcAmount = NSDecimalNumber(sats: outgoingTxData.amount)
     let currencyPair = CurrencyPair(btcPrimaryWith: self.currencyController)
     let feeConfig = TransactionFeeConfig(prefs: self.persistenceManager.brokers.preferences)
 
@@ -37,7 +37,7 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
                                                    contact: inputs.contact,
                                                    btcAmount: btcAmount,
                                                    currencyPair: currencyPair,
-                                                   exchangeRates: inputs.rates,
+                                                   exchangeRate: inputs.rate,
                                                    outgoingTransactionData: outgoingTxData)
 
     if feeConfig.adjustableFeesEnabled {
@@ -58,7 +58,7 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
                                                   feeConfig: TransactionFeeConfig) {
     guard let wmgr = walletManager else { return }
 
-    networkManager.latestFees().compactMap { FeeRates(fees: $0) }
+    self.latestFeeRates()
       .then { (feeRates: FeeRates) -> Promise<ConfirmTransactionFeeModel> in
         //Ignore the previously-generated send max transaction data, get it for all three fee types
         return self.adjustableFeeViewModelSendingMax(
@@ -101,7 +101,7 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
                                                          btcAmount: btcAmount,
                                                          sharedPayload: inputs.sharedPayload,
                                                          currencyPair: currencyPair,
-                                                         exchangeRates: inputs.rates)
+                                                         exchangeRate: inputs.rate)
         self.showConfirmLightningPayment(with: viewModel)
       }
 
@@ -117,7 +117,7 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
         let paymentInputs = SendOnChainPaymentInputs(networkManager: self.networkManager, wmgr: wmgr,
                                                      outgoingTxData: outgoingTxData, btcAmount: btcAmount,
                                                      address: paymentTarget, contact: inputs.contact,
-                                                     currencyPair: currencyPair, exchangeRates: inputs.rates,
+                                                     currencyPair: currencyPair, exchangeRate: inputs.rate,
                                                      rbfReplaceabilityOption: inputs.rbfReplaceabilityOption)
         self.sendOnChainPayment(with: paymentInputs)
       }
@@ -125,7 +125,7 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
   }
 
   private func sendOnChainPayment(with inputs: SendOnChainPaymentInputs) {
-    inputs.networkManager.latestFees().compactMap { FeeRates(fees: $0) }
+    self.latestFeeRates()
       .then { (rates: FeeRates) -> Promise<ConfirmTransactionFeeModel> in
         // Take rates, get fee config, and return a fee mode
         let config = TransactionFeeConfig(prefs: self.persistenceManager.brokers.preferences)
@@ -350,7 +350,7 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
                             contact: ContactType,
                             inputs: SendingDelegateInputs) {
     guard let wmgr = walletManager else { return }
-    networkManager.latestFees().compactMap { FeeRates(fees: $0) }
+    self.latestFeeRates()
       .then { (feeRates: FeeRates) -> Promise<ConfirmTransactionFeeModel> in
         switch inputs.walletTxType {
         case .onChain:
@@ -372,10 +372,10 @@ extension AppCoordinator: SendPaymentViewControllerRoutingDelegate {
 
         let displayConfirmPaymentViewController: CKCompletion = {
           let viewModel = ConfirmPaymentInviteViewModel(contact: contact,
-                                                        walletTransactionType: inputs.walletTxType,
+                                                        walletTxType: inputs.walletTxType,
                                                         btcAmount: btcAmount,
                                                         currencyPair: currencyPair,
-                                                        exchangeRates: inputs.rates,
+                                                        exchangeRate: inputs.rate,
                                                         sharedPayloadDTO: inputs.sharedPayload)
           let confirmPayVC = ConfirmPaymentViewController.newInstance(type: .invite,
                                                                       viewModel: viewModel,

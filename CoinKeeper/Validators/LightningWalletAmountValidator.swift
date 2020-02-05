@@ -8,28 +8,18 @@
 
 import Foundation
 
-enum LightningWalletAmountValidatorError: ValidatorErrorType {
-  case walletMaximum
-  case reloadMinimum
+enum LightningWalletAmountValidatorError: ValidatorErrorType, Equatable {
+  case reloadMinimum(Satoshis)
   case invalidAmount
 
   var displayMessage: String {
     switch self {
     case .invalidAmount:
-      return "There was an unexpected error, please re-sync your wallet in settings."
-    case .walletMaximum:
-      let symbol = LightningWalletAmountValidator.maxWalletValue.currency.symbol
-      let maxAmount = LightningWalletAmountValidator.maxWalletValue.amount
-      let amountDesc = symbol + String(describing: maxAmount)
+      return "Unable to convert amount to fiat, stopping"
+    case .reloadMinimum(let minReload):
+      let formattedAmount = SatsFormatter().stringWithSymbol(fromSats: minReload) ?? ""
       return """
-      DropBit only allows you to load a maximum of \(amountDesc)
-      to your lightning wallet
-      """.removingMultilineLineBreaks()
-    case .reloadMinimum:
-      return """
-      DropBit requires you to load at least
-      \(LightningWalletAmountValidator.minReloadAmount.currency.symbol)
-      \(LightningWalletAmountValidator.minReloadAmount.amount) to your lightning wallet
+      DropBit requires you to load a minimum of \(formattedAmount) to your Lightning wallet.
       """.removingMultilineLineBreaks()
     }
   }
@@ -38,65 +28,39 @@ enum LightningWalletAmountValidatorError: ValidatorErrorType {
 struct LightningWalletValidationOptions: OptionSet {
   let rawValue: Int
 
-  static let maxWalletValue = LightningWalletValidationOptions(rawValue: 1 << 0)
-  static let minReloadAmount = LightningWalletValidationOptions(rawValue: 1 << 1)
+  static let minReloadAmount = LightningWalletValidationOptions(rawValue: 1 << 0)
 }
 
 class LightningWalletAmountValidator: ValidatorType<CurrencyConverter> {
 
-  static let maxWalletValue = Money(amount: NSDecimalNumber(value: 200), currency: .USD)
-  static let minReloadAmount = Money(amount: NSDecimalNumber(value: 5), currency: .USD)
-
   let balancesNetPending: WalletBalances
-  let type: WalletTransactionType
+  let walletTxType: WalletTransactionType
   let ignoringOptions: [LightningWalletValidationOptions]
+  let minReloadBTC: NSDecimalNumber?
 
-  init(balancesNetPending: WalletBalances, walletType: WalletTransactionType, ignoring: [LightningWalletValidationOptions] = []) {
+  init(balancesNetPending: WalletBalances,
+       walletTxType: WalletTransactionType,
+       minReloadBTC: NSDecimalNumber?,
+       ignoring: [LightningWalletValidationOptions] = []) {
     self.balancesNetPending = balancesNetPending
+    self.minReloadBTC = minReloadBTC
+    self.walletTxType = walletTxType
     self.ignoringOptions = ignoring
-    self.type = walletType
     super.init()
   }
 
   override func validate(value: CurrencyConverter) throws {
     let candidateAmountConverter = value
-    guard let usdAmount = candidateAmountConverter.amount(forCurrency: .USD) else {
-      throw LightningWalletAmountValidatorError.invalidAmount
-    }
-
     let candidateBTCAmount = candidateAmountConverter.btcAmount
 
     try validateAmountIsNonZeroNumber(candidateBTCAmount)
-    try validateBalanceNetPendingIsSufficient(forAmount: candidateBTCAmount, balances: balancesNetPending, walletTxType: type)
+    try validateBalanceNetPendingIsSufficient(forAmount: candidateBTCAmount, balances: balancesNetPending, walletTxType: walletTxType)
 
-    if !ignoringOptions.contains(.minReloadAmount) {
-      if usdAmount < LightningWalletAmountValidator.minReloadAmount.amount {
-        throw LightningWalletAmountValidatorError.reloadMinimum
+    if let minReloadValue = minReloadBTC, !ignoringOptions.contains(.minReloadAmount) {
+      if candidateBTCAmount < minReloadValue {
+        let minReloadSats = minReloadValue.asFractionalUnits(of: .BTC)
+        throw LightningWalletAmountValidatorError.reloadMinimum(minReloadSats)
       }
-    }
-
-    if !ignoringOptions.contains(.maxWalletValue) {
-      let rates = candidateAmountConverter.rates
-      let converter = CurrencyConverter(fromBtcTo: .USD, fromAmount: candidateBTCAmount + balancesNetPending.lightning, rates: rates)
-      if usdAmount > LightningWalletAmountValidator.maxWalletValue.amount ||
-      converter.convertedAmount() ?? .zero > LightningWalletAmountValidator.maxWalletValue.amount {
-        throw LightningWalletAmountValidatorError.walletMaximum
-      }
-    }
-  }
-
-  ///Returns a tuple of the max amount that the user can load into their lightning wallet
-  ///and a boolean representing whether the user's on-chain balance was the primary constraint.
-  func maxLoadAmount(using fiatBalances: WalletBalances) -> (amount: NSDecimalNumber, limitIsOnChainBalance: Bool) {
-    let maxLightningBalance = LightningWalletAmountValidator.maxWalletValue.amount
-
-    let lightningBalanceFiatCapacity: NSDecimalNumber = maxLightningBalance.subtracting(fiatBalances.lightning)
-    guard lightningBalanceFiatCapacity.isPositiveNumber else { return (.zero, false) }
-
-    if fiatBalances.onChain < lightningBalanceFiatCapacity {
-      return (fiatBalances.onChain, true)
-    } else {
-      return (lightningBalanceFiatCapacity, false)
     }
   }
 

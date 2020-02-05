@@ -95,7 +95,7 @@ extension LightningQuickLoadViewController: LongPressConfirmButtonDelegate {
 
   func confirmationButtonDidConfirm(_ button: LongPressConfirmButton) {
     let config = viewModel.controlConfigs[button.tag]
-    let shouldSendAllUTXOs = viewModel.maxIsLimitedByOnChainBalance && config.isMax
+    let shouldSendAllUTXOs = config.isMax //max is limited by on-chain balance
     delegate.lightningPaymentData(forFiatAmount: config.amount.amount, isMax: shouldSendAllUTXOs)
       .done { self.delegate.viewControllerDidConfirmLoad(self, paymentData: $0) }.cauterize()
   }

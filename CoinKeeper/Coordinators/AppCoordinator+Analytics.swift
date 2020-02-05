@@ -16,6 +16,7 @@ extension AppCoordinator {
     trackIfUserHasWallet()
     trackIfUserHasWordsBackedUp()
     trackIfDropBitMeIsEnabled()
+    trackPreferredFiatCurrency()
   }
 
   func trackGenericPlatform() {
@@ -52,6 +53,11 @@ extension AppCoordinator {
       let isEnabled = self.persistenceManager.brokers.user.getUserPublicURLInfo(in: bgContext)?.isEnabled ?? false
       self.analyticsManager.track(property: MixpanelProperty(key: .isDropBitMeEnabled, value: isEnabled))
     }
+  }
+
+  func trackPreferredFiatCurrency() {
+    let currencyCode = persistenceManager.brokers.preferences.fiatCurrency.code
+    self.analyticsManager.track(property: MixpanelProperty(key: .preferredFiatCurrency, value: currencyCode))
   }
 
   func trackIfUserHasABalance() {

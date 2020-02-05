@@ -11,14 +11,14 @@ import Foundation
 typealias TransactionCellDisplayable = TransactionSummaryCellDisplayable & TransactionDetailCellDisplayable
 class MockTransactionHistoryDataSource: TransactionHistoryDataSourceType {
 
-  let walletTransactionType: WalletTransactionType
+  let walletTxType: WalletTransactionType
   weak var delegate: TransactionHistoryDataSourceDelegate?
 
   fileprivate var items: [TransactionCellDisplayable] = []
   fileprivate let generator: MockDetailDataGenerator
 
   init(walletTxType: WalletTransactionType) {
-    self.walletTransactionType = walletTxType
+    self.walletTxType = walletTxType
     generator = MockDetailDataGenerator(walletTxType: walletTxType)
   }
 
@@ -27,21 +27,21 @@ class MockTransactionHistoryDataSource: TransactionHistoryDataSourceType {
   }
 
   func summaryCellDisplayableItem(at indexPath: IndexPath,
-                                  rates: ExchangeRates,
+                                  rate: ExchangeRate,
                                   currencies: CurrencyPair,
                                   deviceCountryCode: Int) -> TransactionSummaryCellDisplayable {
     return items[indexPath.row]
   }
 
   func detailCellDisplayableItem(at indexPath: IndexPath,
-                                 rates: ExchangeRates,
+                                 rate: ExchangeRate,
                                  currencies: CurrencyPair,
                                  deviceCountryCode: Int) -> TransactionDetailCellDisplayable {
     return items[indexPath.row]
   }
 
   func detailPopoverDisplayableItem(at indexPath: IndexPath,
-                                    rates: ExchangeRates,
+                                    rate: ExchangeRate,
                                     currencies: CurrencyPair,
                                     deviceCountryCode: Int) -> TransactionDetailPopoverDisplayable? {
     return nil
@@ -67,8 +67,8 @@ class MockTransactionHistoryOnChainDataSource: MockTransactionHistoryDataSource 
     super.init(walletTxType: .onChain)
     items += generator.generatePhoneAndTwitterDropBitItems(categories: MockDataDropBitCategory.allCases)
     items += [
-      generator.lightningTransfer(walletTxType: walletTransactionType, direction: .out), //load
-      generator.lightningTransfer(walletTxType: walletTransactionType, direction: .in), //withdraw
+      generator.lightningTransfer(walletTxType: walletTxType, direction: .out), //load
+      generator.lightningTransfer(walletTxType: walletTxType, direction: .in), //withdraw
       generator.genericOnChainTransactionWithPrivateMemo(direction: .out),
       generator.genericOnChainTransactionWithPrivateMemo(direction: .in)
     ]
@@ -83,8 +83,8 @@ class MockTransactionHistoryLightningDataSource: MockTransactionHistoryDataSourc
     items += [
       generator.lightningInvoice(hours: 42),
       generator.lightningInvoice(hours: nil), //expired
-      generator.lightningTransfer(walletTxType: walletTransactionType, direction: .in), //load
-      generator.lightningTransfer(walletTxType: walletTransactionType, direction: .out) //withdraw
+      generator.lightningTransfer(walletTxType: walletTxType, direction: .in), //load
+      generator.lightningTransfer(walletTxType: walletTxType, direction: .out) //withdraw
     ]
     items += generator.generatePhoneAndTwitterDropBitItems(categories: MockDataDropBitCategory.allCases)
   }

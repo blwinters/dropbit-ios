@@ -16,13 +16,16 @@ class SendPaymentViewModelTests: XCTestCase {
 
   override func setUp() {
     super.setUp()
-    let safeRates: ExchangeRates = [.BTC: 1, .USD: 7000]
+    let usdRate = ExchangeRate(price: 7000, currency: .USD)
     let currencyPair = CurrencyPair(primary: .BTC, fiat: .USD)
-    let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRates: safeRates,
+    let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRate: usdRate,
                                                            primaryAmount: .zero,
-                                                           walletTransactionType: .onChain,
+                                                           walletTxType: .onChain,
                                                            currencyPair: currencyPair)
-    self.sut = SendPaymentViewModel(editAmountViewModel: swappableVM, walletTransactionType: .onChain)
+    let config = TransactionSendingConfig(settings: MockSettingsConfig.default(),
+                                          preferredExchangeRate: usdRate,
+                                          usdExchangeRate: usdRate)
+    self.sut = SendPaymentViewModel(editAmountViewModel: swappableVM, config: config)
   }
 
   override func tearDown() {
@@ -73,7 +76,7 @@ class SendPaymentViewModelTests: XCTestCase {
     let expectedOptions: CurrencyAmountValidationOptions = [.invitationMaximum]
 
     // when
-    let actualOptions = sut.standardIgnoredOptions
+    let actualOptions = sut.standardShouldIgnoreOptions
 
     // then
     XCTAssertEqual(actualOptions, expectedOptions)
@@ -84,7 +87,7 @@ class SendPaymentViewModelTests: XCTestCase {
     let expectedOptions: CurrencyAmountValidationOptions = [.usableBalance]
 
     // when
-    let actualOptions = sut.invitationMaximumIgnoredOptions
+    let actualOptions = sut.invitationMaximumShouldIgnoreOptions
 
     // then
     XCTAssertEqual(actualOptions, expectedOptions)
