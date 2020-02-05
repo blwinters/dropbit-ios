@@ -19,13 +19,13 @@
                             <view contentMode="scaleToFill" verticalHuggingPriority="200" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="HBw-Hi-FEb" userLabel="Amount Centering Container">
                                 <rect key="frame" x="32" y="29" width="311" height="194"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uvr-Kg-91I">
-                                        <rect key="frame" x="140.5" y="87" width="30" height="20"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uvr-Kg-91I" customClass="AddButton" customModule="DropBit" customModuleProvider="target">
+                                        <rect key="frame" x="140.5" y="77" width="30" height="40"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="20" id="QEt-es-jOl"/>
+                                            <constraint firstAttribute="height" constant="40" id="QEt-es-jOl"/>
                                         </constraints>
                                         <connections>
-                                            <action selector="addRequestAmountButtonTapped:" destination="X1G-66-cWY" eventType="touchUpInside" id="QB9-92-M9c"/>
+                                            <action selector="addRequestAmountButtonTapped:" destination="X1G-66-cWY" eventType="touchUpInside" id="He7-Ff-GXA"/>
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N9x-e6-Hoq" customClass="CurrencySwappableEditAmountView" customModule="DropBit" customModuleProvider="target">
@@ -40,7 +40,7 @@
                                 <constraints>
                                     <constraint firstItem="N9x-e6-Hoq" firstAttribute="centerY" secondItem="HBw-Hi-FEb" secondAttribute="centerY" id="8Yo-St-m4b"/>
                                     <constraint firstItem="Uvr-Kg-91I" firstAttribute="centerY" secondItem="HBw-Hi-FEb" secondAttribute="centerY" id="Gag-IK-mx6"/>
-                                    <constraint firstItem="Uvr-Kg-91I" firstAttribute="centerX" secondItem="HBw-Hi-FEb" secondAttribute="centerX" id="Nzc-jo-Ldo"/>
+                                    <constraint firstItem="Uvr-Kg-91I" firstAttribute="centerX" secondItem="HBw-Hi-FEb" secondAttribute="centerX" id="MLI-Tb-k52"/>
                                     <constraint firstItem="N9x-e6-Hoq" firstAttribute="leading" secondItem="HBw-Hi-FEb" secondAttribute="leading" id="TKi-rb-bD8"/>
                                     <constraint firstAttribute="trailing" secondItem="N9x-e6-Hoq" secondAttribute="trailing" id="dc9-CY-pox"/>
                                     <constraint firstItem="N9x-e6-Hoq" firstAttribute="top" secondItem="HBw-Hi-FEb" secondAttribute="top" constant="37" id="maY-Rb-tkW"/>
@@ -174,7 +174,7 @@
                         <viewLayoutGuide key="safeArea" id="JPR-x5-n03"/>
                     </view>
                     <connections>
-                        <outlet property="addAmountButton" destination="Uvr-Kg-91I" id="Smw-5R-8bE"/>
+                        <outlet property="addAmountButton" destination="Uvr-Kg-91I" id="s95-IJ-xrl"/>
                         <outlet property="bottomActionButton" destination="onG-ir-r5H" id="Y6e-hu-tMW"/>
                         <outlet property="closeButton" destination="z64-0B-kx7" id="4XZ-x2-cNW"/>
                         <outlet property="editAmountView" destination="N9x-e6-Hoq" id="PbF-Ek-aiN"/>

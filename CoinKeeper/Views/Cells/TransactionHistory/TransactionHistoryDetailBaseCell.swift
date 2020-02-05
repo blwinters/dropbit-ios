@@ -70,7 +70,7 @@ class TransactionHistoryDetailBaseCell: CollectionViewCardCell {
   @IBOutlet var primaryAmountLabel: TransactionDetailPrimaryAmountLabel!
   @IBOutlet var secondaryAmountLabel: TransactionDetailSecondaryAmountLabel!
   @IBOutlet var historicalValuesLabel: UILabel! //use attributedText
-  @IBOutlet var addMemoButton: UIButton!
+  @IBOutlet var addMemoButton: AddButton!
   @IBOutlet var memoContainerView: ConfirmPaymentMemoView!
   @IBOutlet var dateLabel: TransactionDetailDateLabel!
 
@@ -80,7 +80,7 @@ class TransactionHistoryDetailBaseCell: CollectionViewCardCell {
   override func awakeFromNib() {
     super.awakeFromNib()
 
-    addMemoButton.styleAddButtonWith(title: "Add Memo")
+    addMemoButton.setTitle("Add Memo", for: .normal)
     configureTwitterShareButton()
 
     underlyingContentView.setAccessibilityId(.transactionDetailCell(.page))

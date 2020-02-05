@@ -1017,6 +1017,7 @@
 		B5697273208A8E0A00835F01 /* WalletOverviewTopBarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5697272208A8E0A00835F01 /* WalletOverviewTopBarTests.swift */; };
 		B56A3CCE23EB0B5100C05BF3 /* SelectedCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56A3CCD23EB0B5100C05BF3 /* SelectedCurrency.swift */; };
 		B56A3CCF23EB0B6C00C05BF3 /* SelectedCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56A3CCD23EB0B5100C05BF3 /* SelectedCurrency.swift */; };
+		B56A3CD123EB3E2D00C05BF3 /* AddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56A3CD023EB3E2D00C05BF3 /* AddButton.swift */; };
 		B56B63782200CDD300CCC153 /* CKMTransactionSharedPayload+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56B63772200CDD300CCC153 /* CKMTransactionSharedPayload+CoreDataProperties.swift */; };
 		B56B637A2200CDF100CCC153 /* CKMTransactionSharedPayload+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56B63792200CDF100CCC153 /* CKMTransactionSharedPayload+CoreDataClass.swift */; };
 		B56B6804234E25990073BA0D /* DropBitSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56B6803234E25990073BA0D /* DropBitSnapshot.swift */; };
@@ -2287,6 +2288,7 @@
 		B5697270208A428A00835F01 /* BalanceDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceDisplayable.swift; sourceTree = "<group>"; };
 		B5697272208A8E0A00835F01 /* WalletOverviewTopBarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletOverviewTopBarTests.swift; sourceTree = "<group>"; };
 		B56A3CCD23EB0B5100C05BF3 /* SelectedCurrency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectedCurrency.swift; sourceTree = "<group>"; };
+		B56A3CD023EB3E2D00C05BF3 /* AddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddButton.swift; sourceTree = "<group>"; };
 		B56B63762200C82D00CCC153 /* Model v4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model v4.xcdatamodel"; sourceTree = "<group>"; };
 		B56B63772200CDD300CCC153 /* CKMTransactionSharedPayload+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKMTransactionSharedPayload+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B56B63792200CDF100CCC153 /* CKMTransactionSharedPayload+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKMTransactionSharedPayload+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -4183,6 +4185,7 @@
 			children = (
 				A2952F7922BBBE9500BDCE65 /* TimePeriodButton.swift */,
 				B5F9500920E2D439001495E2 /* UnderlinedTextButton.swift */,
+				B56A3CD023EB3E2D00C05BF3 /* AddButton.swift */,
 				B5B37B18206AD713001816F6 /* CalculatorPaymentButton.swift */,
 				B582409320920E3F005D2F90 /* CompactActionButton.swift */,
 				A2A530BF20936A7700B6F4DE /* LongPressConfirmButton.swift */,
@@ -5318,6 +5321,7 @@
 				A29CE10620A367DF00761B91 /* BitcoinAddressValidator.swift in Sources */,
 				B597B7B923441BAF0020E20F /* TransactionHistoryDetailInvoiceCell.swift in Sources */,
 				3B695C2021CA9F9B007D0741 /* OperationQueueType.swift in Sources */,
+				B56A3CD123EB3E2D00C05BF3 /* AddButton.swift in Sources */,
 				3BF88B87226F5E2500B94474 /* TransactionHistoryDetailBaseCell.swift in Sources */,
 				B555DCAF230B1754006B3462 /* TwitterShareButton.swift in Sources */,
 				B559AF0B2180CA86001D44F2 /* BadgeView.swift in Sources */,

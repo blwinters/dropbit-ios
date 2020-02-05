@@ -36,7 +36,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
   @IBOutlet var receiveAddressBGView: UIView!
   @IBOutlet var tapInstructionLabel: UILabel!
   @IBOutlet var bottomActionButton: PrimaryActionButton!
-  @IBOutlet var addAmountButton: UIButton!
+  @IBOutlet var addAmountButton: AddButton!
 
   @objc private func memoButtonTapped() {
     delegate.viewControllerDidSelectMemoButton(self, memo: memoTextField.text) { [weak self] memo in
@@ -203,7 +203,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
 
     bottomActionButton.setTitle("SEND REQUEST", for: .normal)
 
-    addAmountButton.styleAddButtonWith(title: "Add Receive Amount")
+    addAmountButton.setTitle("Add Receive Amount", for: .normal)
 
     closeButton.isHidden = !isModal
     memoTextField.backgroundColor = .lightGrayBackground
