@@ -18,9 +18,9 @@ protocol WalletOverviewViewControllerDelegate: WalletOverviewTopBarDelegate & Ba
   func setSelectedWalletTransactionType(_ viewController: UIViewController, to selectedType: WalletTransactionType)
   func selectedWalletTransactionType() -> WalletTransactionType
   func viewControllerDidTapReceivePayment(_ viewController: UIViewController,
-                                          converter: CurrencyConverter, walletTxType: WalletTransactionType)
+                                          converter: CurrencyConverter, walletTransactionType: WalletTransactionType)
   func viewControllerDidTapSendPayment(_ viewController: UIViewController, converter: CurrencyConverter,
-                                       walletTxType: WalletTransactionType)
+                                       walletTransactionType: WalletTransactionType)
   func viewControllerShouldAdjustForBottomSafeArea(_ viewController: UIViewController) -> Bool
   func viewControllerDidSelectTransfer(_ viewController: UIViewController)
   func viewControllerDidFinishLoading(_ viewController: WalletOverviewViewController)
@@ -225,7 +225,7 @@ extension WalletOverviewViewController: BalanceDisplayable {
       return .zero
     }
     let balances = provider.balancesNetPending()
-    switch walletTxType {
+    switch walletTransactionType {
     case .onChain:    return balances.onChain
     case .lightning:  return balances.lightning
     }
@@ -245,7 +245,7 @@ extension WalletOverviewViewController: BalanceDisplayable {
     baseViewControllers.compactMap { $0 as? ExchangeRateUpdatable }.forEach { $0.didUpdateExchangeRateManager(exchangeRateManager) }
   }
 
-  var walletTxType: WalletTransactionType {
+  var walletTransactionType: WalletTransactionType {
     return delegate?.selectedWalletTransactionType() ?? .onChain
   }
 }
@@ -322,7 +322,7 @@ extension WalletOverviewViewController: SendReceiveActionViewDelegate {
   func actionViewDidSelectReceive(_ view: UIView) {
     guard let delegate = delegate else { return }
     let converter = delegate.currencyController.currencyConverter
-    delegate.viewControllerDidTapReceivePayment(self, converter: converter, walletTxType: walletTxType)
+    delegate.viewControllerDidTapReceivePayment(self, converter: converter, walletTransactionType: walletTransactionType)
   }
 
   func actionViewDidSelectScan(_ view: UIView) {
@@ -335,7 +335,7 @@ extension WalletOverviewViewController: SendReceiveActionViewDelegate {
     guard let delegate = delegate else { return }
     let converter = delegate.currencyController.currencyConverter
     delegate.viewControllerDidTapSendPayment(self, converter: converter,
-                                                walletTxType: currentWallet)
+                                                walletTransactionType: currentWallet)
   }
 }
 

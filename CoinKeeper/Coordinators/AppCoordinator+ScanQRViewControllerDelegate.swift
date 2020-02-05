@@ -138,7 +138,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
     let currencyPair = CurrencyPair(btcPrimaryWith: self.currencyController)
     let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRate: self.exchangeRate,
                                                            primaryAmount: fallbackBTCAmount,
-                                                           walletTxType: .onChain,
+                                                           walletTransactionType: .onChain,
                                                            currencyPair: currencyPair)
     scanViewController.fallbackPaymentViewModel = SendPaymentViewModel(editAmountViewModel: swappableVM,
                                                                        config: self.txSendingConfig)
@@ -198,13 +198,13 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
   }
 
   private func viewControllerWillProcess(_ viewController: UIViewController, qrCode: OnChainQRCode,
-                                         walletTxType: WalletTransactionType, fallbackViewModel: SendPaymentViewModel?) {
+                                         walletTransactionType: WalletTransactionType, fallbackViewModel: SendPaymentViewModel?) {
     if let paymentRequestURL = qrCode.paymentRequestURL {
       self.resolveMerchantPaymentRequest(withURL: paymentRequestURL) { result in
         switch result {
         case .success(let response):
           guard let fetchedModel = SendPaymentViewModel(response: response,
-                                                        walletTxType: walletTxType,
+                                                        walletTransactionType: walletTransactionType,
                                                         config: self.txSendingConfig,
                                                         delegate: nil)
             else { return }
@@ -216,7 +216,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
           let currencyPair = CurrencyPair(btcPrimaryWith: self.currencyController)
           let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRate: self.exchangeRate,
                                                                  primaryAmount: .zero,
-                                                                 walletTxType: walletTxType,
+                                                                 walletTransactionType: walletTransactionType,
                                                                  currencyPair: currencyPair)
           let viewModel = SendPaymentViewModel(editAmountViewModel: swappableVM, config: self.txSendingConfig)
 
@@ -228,7 +228,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
 
     } else {
       let sendPaymentViewController = self.createSendPaymentViewController(forQRCode: qrCode,
-                                                                           walletTxType: walletTxType,
+                                                                           walletTransactionType: walletTransactionType,
                                                                            fallbackViewModel: fallbackViewModel)
 
       viewController.dismiss(animated: true) { [weak self] in
@@ -260,7 +260,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
     }
   }
 
-  private func createSendPaymentViewController(forQRCode qrCode: OnChainQRCode, walletTxType: WalletTransactionType,
+  private func createSendPaymentViewController(forQRCode qrCode: OnChainQRCode, walletTransactionType: WalletTransactionType,
                                                fallbackViewModel: SendPaymentViewModel?) -> SendPaymentViewController {
     let shouldUseFallback = (qrCode.btcAmount ?? .zero) == .zero
     var qrCodeToUse = qrCode
@@ -272,7 +272,7 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
     }
 
     let viewModel = SendPaymentViewModel(qrCode: qrCodeToUse,
-                                         walletTxType: walletTxType,
+                                         walletTransactionType: walletTransactionType,
                                          config: self.txSendingConfig,
                                          currencyPair: self.currencyController.currencyPair,
                                          delegate: nil)
@@ -287,14 +287,14 @@ extension AppCoordinator: ScanQRViewControllerDelegate {
                                      completion: @escaping CKCompletion) {
     if qrCode.paymentRequestURL != nil {
       viewControllerWillProcess(viewController, qrCode: qrCode,
-                                walletTxType: .onChain,
+                                walletTransactionType: .onChain,
                                 fallbackViewModel: fallbackViewModel)
     } else if let address = qrCode.address {
       do {
         let bitcoinAddressValidator = CompositeValidator<String>(validators: [StringEmptyValidator(), BitcoinAddressValidator()])
         try bitcoinAddressValidator.validate(value: address)
         viewControllerWillProcess(viewController, qrCode: qrCode,
-                                  walletTxType: .onChain,
+                                  walletTransactionType: .onChain,
                                   fallbackViewModel: fallbackViewModel)
         showBalance()
       } catch {

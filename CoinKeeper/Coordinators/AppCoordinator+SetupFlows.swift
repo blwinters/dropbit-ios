@@ -193,7 +193,7 @@ extension AppCoordinator {
 
     let amountVM = CurrencySwappableEditAmountViewModel(exchangeRate: self.currencyController.exchangeRate,
                                                         primaryAmount: .zero,
-                                                        walletTxType: persistenceManager.brokers.preferences.selectedWalletTransactionType,
+                                                        walletTransactionType: persistenceManager.brokers.preferences.selectedWalletTransactionType,
                                                         currencyPair: self.currencyController.currencyPair)
     let vm = RequestPayViewModel(receiveAddress: address, amountViewModel: amountVM)
     return RequestPayViewController.newInstance(delegate: self, viewModel: vm, alertManager: self.alertManager)

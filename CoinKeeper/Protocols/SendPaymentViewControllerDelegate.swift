@@ -38,7 +38,7 @@ struct SendingDelegateInputs {
        payloadDTO: SharedPayloadDTO,
        rbfReplaceabilityOption: RBFOption = .allowed) {
     self.init(primaryCurrency: vm.primaryCurrency,
-              walletTxType: vm.walletTxType,
+              walletTxType: vm.walletTransactionType,
               contact: contact,
               rate: vm.exchangeRate,
               sharedPayload: payloadDTO,

@@ -57,7 +57,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
 
   @IBAction func sendRequestButtonTapped(_ sender: UIButton) {
     editAmountView.primaryAmountTextField.resignFirstResponder()
-    switch viewModel.walletTxType {
+    switch viewModel.walletTransactionType {
     case .onChain:
       var payload: [Any] = []
       qrImageView.image.flatMap { $0.pngData() }.flatMap { payload.append($0) }
@@ -83,7 +83,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
   }
 
   @IBAction func addressTapped(_ sender: UITapGestureRecognizer) {
-    switch viewModel.walletTxType {
+    switch viewModel.walletTransactionType {
     case .onChain:
       delegate.viewControllerSuccessfullyCopiedToClipboard(message: "Address copied to clipboard!", viewController: self)
       UIPasteboard.general.string = viewModel.receiveAddress
@@ -173,7 +173,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
   }
 
   func setupStyle() {
-    switch viewModel.walletTxType {
+    switch viewModel.walletTransactionType {
     case .onChain:
       expirationLabel.isHidden = true
       receiveAddressBGView.isHidden = false
@@ -246,7 +246,7 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
   }
 
   func updateViewWithViewModel() {
-    switch viewModel.walletTxType {
+    switch viewModel.walletTransactionType {
     case .lightning:
       if let invoice = viewModel.lightningInvoice {
         receiveAddressLabel.text = invoice.request
@@ -311,13 +311,13 @@ final class RequestPayViewController: PresentableViewController, StoryboardIniti
 extension RequestPayViewController: WalletToggleViewDelegate {
 
   func bitcoinWalletButtonWasTouched() {
-    viewModel.walletTxType = .onChain
+    viewModel.walletTransactionType = .onChain
     setupStyle()
     updateViewWithViewModel()
   }
 
   func lightningWalletButtonWasTouched() {
-    viewModel.walletTxType = .lightning
+    viewModel.walletTransactionType = .lightning
     setupStyle()
     updateViewWithViewModel()
   }

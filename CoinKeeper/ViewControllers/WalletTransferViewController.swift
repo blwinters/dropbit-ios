@@ -136,7 +136,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
     let walletBalances = balanceDataSource?.balancesNetPending() ?? .empty
     do {
       let validator = LightningWalletAmountValidator(balancesNetPending: walletBalances,
-                                                     walletTxType: .onChain,
+                                                     walletType: .onChain,
                                                      minReloadBTC: viewModel.txSendingConfig.minLightningLoad)
       try validator.validate(value: viewModel.currencyConverter)
       delegate.lightningPaymentData(forBTCAmount: viewModel.btcAmount)
@@ -215,7 +215,7 @@ class WalletTransferViewController: PresentableViewController, StoryboardInitial
         let type = WalletTransactionType.lightning
         let value = CurrencyConverter(fromBtcAmount: amount, rate: rateManager.exchangeRate)
         try LightningWalletAmountValidator(balancesNetPending: walletBalances,
-                                           walletTxType: type,
+                                           walletType: type,
                                            minReloadBTC: viewModel.txSendingConfig.minLightningLoad,
                                            ignoring: [.minReloadAmount]).validate(value: value)
 
@@ -255,7 +255,7 @@ extension WalletTransferViewController: LongPressConfirmButtonDelegate {
   func confirmationButtonDidConfirm(_ button: LongPressConfirmButton) {
     do {
       try CurrencyAmountValidator(balancesNetPending: delegate.balancesNetPending(),
-                                  balanceToCheck: viewModel.walletTxType,
+                                  balanceToCheck: viewModel.walletTransactionType,
                                   config: viewModel.txSendingConfig,
                                   ignoring: [.invitationMaximum]).validate(value:
                                     viewModel.currencyConverter)
@@ -269,7 +269,7 @@ extension WalletTransferViewController: LongPressConfirmButtonDelegate {
       guard let data = data else { return }
       do {
         let validator = LightningWalletAmountValidator(balancesNetPending: walletBalances,
-                                                       walletTxType: .onChain,
+                                                       walletType: .onChain,
                                                        minReloadBTC: viewModel.txSendingConfig.minLightningLoad)
         try validator.validate(value: viewModel.currencyConverter)
         delegate.viewControllerDidConfirmLoad(self, paymentData: data)

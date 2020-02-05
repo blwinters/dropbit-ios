@@ -30,7 +30,7 @@ class MockSendPaymentViewControllerCoordinator: SendPaymentViewControllerCoordin
   func viewControllerDidSelectCloseShowCharts(_ viewController: UIViewController) { }
 
   func viewControllerDidTapReceivePayment(_ viewController: UIViewController,
-                                          converter: CurrencyConverter, walletTxType: WalletTransactionType) {}
+                                          converter: CurrencyConverter, walletTransactionType: WalletTransactionType) {}
 
   func viewControllerShouldTrackEvent(event: AnalyticsManagerEventType) {}
 

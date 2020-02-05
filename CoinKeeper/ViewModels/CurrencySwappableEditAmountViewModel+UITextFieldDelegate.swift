@@ -70,7 +70,7 @@ extension CurrencySwappableEditAmountViewModel: UITextFieldDelegate {
                                              ofType charType: EditAmountCharacterType) throws {
     guard let currentText = textField.text else { return }
 
-    let symbol = primarySymbol(for: walletTxType)?.string ?? ""
+    let symbol = primarySymbol(for: walletTransactionType)?.string ?? ""
     let currentNumberText = currentText.replacingOccurrences(of: symbol, with: "")
 
     switch charType {

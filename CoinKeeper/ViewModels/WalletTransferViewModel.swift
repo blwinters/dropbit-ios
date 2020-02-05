@@ -32,7 +32,7 @@ class WalletTransferViewModel: CurrencySwappableEditAmountViewModel {
 
     super.init(exchangeRate: config.preferredExchangeRate,
                primaryAmount: fiatAmount,
-               walletTxType: walletTxType,
+               walletTransactionType: walletTxType,
                currencyPair: CurrencyPair(primary: fiatCurrency, fiat: fiatCurrency))
   }
 }

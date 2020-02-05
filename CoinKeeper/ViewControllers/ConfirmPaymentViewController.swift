@@ -103,7 +103,7 @@ class ConfirmPaymentViewController: PresentableViewController, StoryboardInitial
     setupViews()
 
     if let viewModel = viewModel {
-      switch viewModel.walletTxType {
+      switch viewModel.walletTransactionType {
       case .onChain:    confirmView.confirmButton.configure(with: .onChain, delegate: self)
       case .lightning:  confirmView.confirmButton.configure(with: .lightning, delegate: self)
       }
@@ -115,7 +115,7 @@ class ConfirmPaymentViewController: PresentableViewController, StoryboardInitial
   }
 
   private func routeConfirmedPayment(for viewModel: BaseConfirmPaymentViewModel, feeModel: ConfirmTransactionFeeModel) {
-    switch viewModel.walletTxType {
+    switch viewModel.walletTransactionType {
     case .onChain:
       guard let onChainVM = viewModel as? ConfirmOnChainPaymentViewModel else { return }
       confirmOnChainPayment(with: onChainVM, feeModel: feeModel)
@@ -162,11 +162,11 @@ class ConfirmPaymentViewController: PresentableViewController, StoryboardInitial
     let outgoingInvitationDTO = OutgoingInvitationDTO(contact: contact,
                                                       amountPair: amountPair,
                                                       fee: feeModel.networkFeeAmount,
-                                                      walletTxType: viewModel.walletTxType,
+                                                      walletTxType: viewModel.walletTransactionType,
                                                       sharedPayloadDTO: viewModel.sharedPayloadDTO)
     delegate.viewControllerDidConfirmInvite(self,
                                             outgoingInvitationDTO: outgoingInvitationDTO,
-                                            walletTxType: viewModel.walletTxType)
+                                            walletTxType: viewModel.walletTransactionType)
   }
 
 }
@@ -209,7 +209,7 @@ extension ConfirmPaymentViewController {
     secondaryAddressLabel.font = .regular(13)
 
     if let viewModel = viewModel {
-      switch viewModel.walletTxType {
+      switch viewModel.walletTransactionType {
       case .lightning:
         networkFeeLabel.isHidden = (feeModel.networkFeeAmount == 0)
         primaryAddressLabel.lineBreakMode = .byTruncatingMiddle
@@ -246,7 +246,7 @@ extension ConfirmPaymentViewController {
   }
 
   fileprivate func updateAmountViews() {
-    let labels = viewModel.dualAmountLabels(walletTxType: viewModel.walletTxType)
+    let labels = viewModel.dualAmountLabels(walletTxType: viewModel.walletTransactionType)
     primaryCurrencyLabel.attributedText = labels.primary
     secondaryCurrencyLabel.attributedText = labels.secondary
   }
@@ -289,7 +289,7 @@ extension ConfirmPaymentViewController {
       primaryAddressLabel.isHidden = false
       primaryAddressLabel.minimumScaleFactor = 0.4
       primaryAddressLabel.adjustsFontSizeToFitWidth = true
-      switch viewModel.walletTxType {
+      switch viewModel.walletTransactionType {
       case .onChain:
         primaryAddressLabel.numberOfLines = 1
       case .lightning:

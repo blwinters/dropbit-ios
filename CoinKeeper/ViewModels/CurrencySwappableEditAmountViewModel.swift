@@ -73,17 +73,17 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
   var fromCurrency: Currency
   var toCurrency: Currency
   var fiatCurrency: Currency
-  var walletTxType: WalletTransactionType
+  var walletTransactionType: WalletTransactionType
 
   weak var delegate: CurrencySwappableEditAmountViewModelDelegate?
 
   init(exchangeRate: ExchangeRate,
        primaryAmount: NSDecimalNumber,
-       walletTxType: WalletTransactionType,
+       walletTransactionType: WalletTransactionType,
        currencyPair: CurrencyPair,
        delegate: CurrencySwappableEditAmountViewModelDelegate? = nil) {
     self.exchangeRate = exchangeRate
-    self.walletTxType = walletTxType
+    self.walletTransactionType = walletTransactionType
     self.fromAmount = primaryAmount
     self.fromCurrency = currencyPair.primary
     self.toCurrency = currencyPair.secondary
@@ -94,7 +94,7 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
   init(viewModel vm: CurrencySwappableEditAmountViewModel) {
     self.exchangeRate = vm.exchangeRate
     self.fromAmount = vm.primaryAmount
-    self.walletTxType = vm.walletTxType
+    self.walletTransactionType = vm.walletTransactionType
     self.fromCurrency = vm.primaryCurrency
     self.toCurrency = vm.secondaryCurrency
     self.fiatCurrency = vm.fiatCurrency
@@ -155,7 +155,7 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
   }
 
   var isEditingSats: Bool {
-    return primaryCurrency == .BTC && walletTxType == .lightning
+    return primaryCurrency == .BTC && walletTransactionType == .lightning
   }
 
   var primaryAttributes: StringAttributes {
@@ -178,7 +178,7 @@ class CurrencySwappableEditAmountViewModel: NSObject, DualAmountEditable {
     let currencyPair = CurrencyPair(primary: .BTC, fiat: .USD)
     return CurrencySwappableEditAmountViewModel(exchangeRate: .zeroUSD,
                                                 primaryAmount: 0,
-                                                walletTxType: .onChain,
+                                                walletTransactionType: .onChain,
                                                 currencyPair: currencyPair)
   }
 

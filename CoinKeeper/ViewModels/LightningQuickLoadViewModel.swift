@@ -28,7 +28,7 @@ struct LightningQuickLoadViewModel {
     //check on chain balance exceeds minFiatAmount
     let balanceValidator = LightningWalletAmountValidator(
       balancesNetPending: spendableBalances,
-      walletTxType: .onChain,
+      walletType: .onChain,
       minReloadBTC: nil //ignore reload min for balance validation
     )
 
@@ -45,7 +45,7 @@ struct LightningQuickLoadViewModel {
 
     //check lightning wallet has capacity for the minFiatAmount
     let minReloadValidator = LightningWalletAmountValidator(balancesNetPending: spendableBalances,
-                                                            walletTxType: .onChain,
+                                                            walletType: .onChain,
                                                             minReloadBTC: config.minLightningLoad,
                                                             ignoring: [.minReloadAmount])
     try minReloadValidator.validate(value: minStandardAmountConverter)

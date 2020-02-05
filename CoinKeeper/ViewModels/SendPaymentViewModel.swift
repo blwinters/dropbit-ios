@@ -112,7 +112,7 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
     let amount = NSDecimalNumber(sats: decodedInvoice.numSatoshis ?? 0)
     let viewModel = CurrencySwappableEditAmountViewModel(exchangeRate: config.preferredExchangeRate,
                                                          primaryAmount: amount,
-                                                         walletTxType: .lightning,
+                                                         walletTransactionType: .lightning,
                                                          currencyPair: currencyPair,
                                                          delegate: delegate)
     self.txSendingConfig = config
@@ -126,14 +126,14 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
 
   // delegate may be nil at init since the delegate is likely a view controller which requires this view model for its own creation
   init(qrCode: OnChainQRCode,
-       walletTxType: WalletTransactionType,
+       walletTransactionType: WalletTransactionType,
        config: TransactionSendingConfig,
        currencyPair: CurrencyPair,
        delegate: CurrencySwappableEditAmountViewModelDelegate? = nil) {
     let currencyPair = CurrencyPair(primary: .BTC, fiat: currencyPair.fiat)
     let viewModel = CurrencySwappableEditAmountViewModel(exchangeRate: config.preferredExchangeRate,
                                                          primaryAmount: qrCode.btcAmount ?? .zero,
-                                                         walletTxType: walletTxType,
+                                                         walletTransactionType: walletTransactionType,
                                                          currencyPair: currencyPair,
                                                          delegate: delegate)
     self.txSendingConfig = config
@@ -153,7 +153,7 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
   }
 
   convenience init?(response: MerchantPaymentRequestResponse,
-                    walletTxType: WalletTransactionType,
+                    walletTransactionType: WalletTransactionType,
                     config: TransactionSendingConfig,
                     delegate: CurrencySwappableEditAmountViewModelDelegate? = nil) {
     guard let output = response.outputs.first else { return nil }
@@ -161,7 +161,7 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
     let currencyPair = CurrencyPair(primary: .BTC, fiat: config.preferredExchangeRate.currency)
     let viewModel = CurrencySwappableEditAmountViewModel(exchangeRate: config.preferredExchangeRate,
                                                          primaryAmount: btcAmount,
-                                                         walletTxType: walletTxType,
+                                                         walletTransactionType: walletTransactionType,
                                                          currencyPair: currencyPair,
                                                          delegate: delegate)
     self.init(editAmountViewModel: viewModel,
@@ -198,7 +198,7 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
       return type.kind == .registeredUser ? .encrypted : .unencryptedInvite
     }
 
-    if walletTxType == .lightning, let recipient = paymentRecipient {
+    if walletTransactionType == .lightning, let recipient = paymentRecipient {
       switch recipient {
       case .phoneContact(let contactType):    return lnPolicy(for: contactType)
       case .twitterContact(let contactType):  return lnPolicy(for: contactType)
@@ -219,7 +219,7 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
   }
 
   var validPaymentRecipientType: CKRecipientType {
-    switch walletTxType {
+    switch walletTransactionType {
     case .onChain:    return .bitcoinURL
     case .lightning:  return .lightningURL
     }

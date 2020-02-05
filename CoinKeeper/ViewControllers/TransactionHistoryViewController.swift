@@ -91,7 +91,7 @@ class TransactionHistoryViewController: BaseViewController, StoryboardInitializa
     emptyStateBackgroundView.isHidden = false
     emptyStateBackgroundView.backgroundColor = .whiteBackground
     configureOnChainEmptyStateButtons()
-    if viewModel.walletTxType == .onChain {
+    if viewModel.walletTransactionType == .onChain {
       lockedLightningView.isHidden = true
       lightningUnavailableView.isHidden = true
     }
@@ -123,14 +123,14 @@ class TransactionHistoryViewController: BaseViewController, StoryboardInitializa
   }
 
   override func lock() {
-    if viewModel.walletTxType == .lightning {
+    if viewModel.walletTransactionType == .lightning {
       lockedLightningView.isHidden = false
       lightningUnavailableView.isHidden = true
     }
   }
 
   override func makeUnavailable() {
-    if viewModel.walletTxType == .lightning {
+    if viewModel.walletTransactionType == .lightning {
       lockedLightningView.isHidden = true
       lightningUnavailableView.isHidden = false
     }

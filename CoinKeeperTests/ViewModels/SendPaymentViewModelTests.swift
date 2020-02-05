@@ -20,7 +20,7 @@ class SendPaymentViewModelTests: XCTestCase {
     let currencyPair = CurrencyPair(primary: .BTC, fiat: .USD)
     let swappableVM = CurrencySwappableEditAmountViewModel(exchangeRate: usdRate,
                                                            primaryAmount: .zero,
-                                                           walletTxType: .onChain,
+                                                           walletTransactionType: .onChain,
                                                            currencyPair: currencyPair)
     let config = TransactionSendingConfig(settings: MockSettingsConfig.default(),
                                           preferredExchangeRate: usdRate,
