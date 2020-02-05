@@ -131,8 +131,11 @@ class RemoteConfigManager: RemoteConfigManagerType {
 
   private func isEnabledByDefault(for key: RemoteConfig.Key) -> Bool {
     switch key {
-    case .referrals:        return false
-    case .twitterDelegate:  return false
+    case .referrals,
+         .maxLightningBalance,
+         .minLightningReload,
+         .twitterDelegate:
+      return false
     }
   }
 
