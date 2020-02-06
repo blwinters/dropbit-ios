@@ -111,10 +111,11 @@ extension SendPaymentViewController {
 
   private func setupButtons() {
     let titles = viewModel.viewConfig.buttonTitles()
-
     contactsButton.setAttributedTitle(titles.contacts, for: .normal)
     twitterButton.setAttributedTitle(titles.twitter, for: .normal)
     pasteButton.setAttributedTitle(titles.paste, for: .normal)
+
+    sendMaxButton.setTitle(viewModel.viewConfig.sendMaxButtonTitle, for: .normal)
   }
 
   private func formatAddressScanView() {
@@ -197,4 +198,12 @@ struct SendPaymentViewConfig {
       return ButtonTitles(contacts: contacts, twitter: twitter, paste: paste)
     }
   }
+
+  var sendMaxButtonTitle: String {
+    switch relativeSize {
+    case .short:  return "MAX"
+    default:      return "SEND MAX"
+    }
+  }
+
 }
