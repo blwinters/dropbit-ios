@@ -96,6 +96,10 @@ class TransactionHistoryViewController: BaseViewController, StoryboardInitializa
       lightningUnavailableView.isHidden = true
     }
 
+    if UIScreen.main.relativeSize == .short {
+      transactionHistoryNoBalanceView.learnAboutBitcoinButton.isHidden = true
+    }
+
     view.backgroundColor = .clear
     emptyStateBackgroundView.applyCornerRadius(30, toCorners: .top)
     delegate.viewControllerDidRequestBadgeUpdate(self)
