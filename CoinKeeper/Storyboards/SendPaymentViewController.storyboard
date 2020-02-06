@@ -29,7 +29,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JFL-ap-dYz" userLabel="Amounts and Counterparty Container">
-                                <rect key="frame" x="24" y="83" width="327" height="244.5"/>
+                                <rect key="frame" x="24" y="83" width="327" height="222.5"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ag9-A1-S4X" customClass="CurrencySwappableEditAmountView" customModule="DropBit" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="327" height="100"/>
@@ -45,8 +45,8 @@
                                             <action selector="performSendMax" destination="mA3-RJ-Qjv" eventType="touchUpInside" id="9we-wt-hw1"/>
                                         </connections>
                                     </button>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Zoz-wS-Csm">
-                                        <rect key="frame" x="8" y="174.5" width="311" height="41"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Zoz-wS-Csm" userLabel="Recipient Display Stack">
+                                        <rect key="frame" x="8" y="181.5" width="311" height="41"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="La8-Sv-kGN">
                                                 <rect key="frame" x="134.5" y="0.0" width="42" height="20.5"/>
@@ -62,8 +62,8 @@
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="04W-cu-0yT">
-                                        <rect key="frame" x="0.0" y="120.5" width="327" height="100"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="04W-cu-0yT" userLabel="Destination Entry Stack">
+                                        <rect key="frame" x="0.0" y="122.5" width="327" height="100"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vbE-29-4pS">
                                                 <rect key="frame" x="0.0" y="0.0" width="327" height="50"/>
@@ -114,17 +114,17 @@
                                     <constraint firstItem="Zoz-wS-Csm" firstAttribute="leading" secondItem="JFL-ap-dYz" secondAttribute="leading" constant="8" id="JCY-ca-tal"/>
                                     <constraint firstItem="04W-cu-0yT" firstAttribute="leading" secondItem="JFL-ap-dYz" secondAttribute="leading" id="TbT-hD-FNJ"/>
                                     <constraint firstItem="ag9-A1-S4X" firstAttribute="top" secondItem="JFL-ap-dYz" secondAttribute="top" id="bAk-Nc-C2a"/>
-                                    <constraint firstAttribute="bottom" secondItem="04W-cu-0yT" secondAttribute="bottom" constant="24" id="dgF-9k-cmr"/>
+                                    <constraint firstAttribute="bottom" secondItem="04W-cu-0yT" secondAttribute="bottom" id="dgF-9k-cmr"/>
                                     <constraint firstItem="ag9-A1-S4X" firstAttribute="leading" secondItem="JFL-ap-dYz" secondAttribute="leading" id="dyp-E6-f6b"/>
                                     <constraint firstAttribute="trailing" secondItem="2Q4-Um-Y5Z" secondAttribute="trailing" id="hti-oi-6J9"/>
                                     <constraint firstAttribute="trailing" secondItem="Zoz-wS-Csm" secondAttribute="trailing" constant="8" id="ls1-cP-xc6"/>
                                     <constraint firstItem="Zoz-wS-Csm" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ag9-A1-S4X" secondAttribute="bottom" constant="8" id="nlz-Yj-Kpo"/>
                                     <constraint firstItem="2Q4-Um-Y5Z" firstAttribute="centerY" secondItem="ag9-A1-S4X" secondAttribute="centerY" id="rUw-5w-aOe"/>
-                                    <constraint firstAttribute="bottom" secondItem="Zoz-wS-Csm" secondAttribute="bottom" constant="29" id="s8F-TP-Z7e"/>
+                                    <constraint firstAttribute="bottom" secondItem="Zoz-wS-Csm" secondAttribute="bottom" id="s8F-TP-Z7e"/>
                                     <constraint firstAttribute="trailing" secondItem="ag9-A1-S4X" secondAttribute="trailing" id="yIl-YY-q5F"/>
                                 </constraints>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="dQ2-Di-Rho">
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="dQ2-Di-Rho" userLabel="Horizontal Button Stack">
                                 <rect key="frame" x="24" y="341.5" width="327" height="44"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MQN-rV-aED" customClass="CompactActionButton" customModule="DropBit" customModuleProvider="target">
@@ -200,7 +200,7 @@
                             <constraint firstItem="dQ2-Di-Rho" firstAttribute="leading" secondItem="JFL-ap-dYz" secondAttribute="leading" id="SYW-R4-rGQ"/>
                             <constraint firstItem="eLP-S6-dcJ" firstAttribute="trailing" secondItem="JFL-ap-dYz" secondAttribute="trailing" constant="24" id="Soc-zi-vL4"/>
                             <constraint firstItem="eLP-S6-dcJ" firstAttribute="bottom" secondItem="xMy-P4-RBB" secondAttribute="bottom" constant="32" id="TRf-Fn-Phe"/>
-                            <constraint firstItem="dQ2-Di-Rho" firstAttribute="top" secondItem="JFL-ap-dYz" secondAttribute="bottom" constant="14" id="aa0-5F-dkd"/>
+                            <constraint firstItem="dQ2-Di-Rho" firstAttribute="top" secondItem="JFL-ap-dYz" secondAttribute="bottom" constant="36" id="aa0-5F-dkd"/>
                             <constraint firstItem="BpV-7B-gve" firstAttribute="leading" secondItem="JFL-ap-dYz" secondAttribute="leading" id="cVP-Xv-1mu"/>
                             <constraint firstItem="ZK3-ob-Jzc" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9xM-4S-5GO" secondAttribute="trailing" constant="4" id="k5K-Mo-57T"/>
                             <constraint firstItem="xMy-P4-RBB" firstAttribute="leading" secondItem="JFL-ap-dYz" secondAttribute="leading" id="mZh-gb-qFO"/>
@@ -213,6 +213,7 @@
                     </view>
                     <connections>
                         <outlet property="addressScanButtonContainerView" destination="vbE-29-4pS" id="C2T-nD-E2B"/>
+                        <outlet property="buttonStackTopConstraint" destination="aa0-5F-dkd" id="B3w-Ko-WxQ"/>
                         <outlet property="closeButton" destination="ZK3-ob-Jzc" id="qZw-Qx-w2e"/>
                         <outlet property="contactsButton" destination="MQN-rV-aED" id="ZOh-5B-laM"/>
                         <outlet property="destinationButton" destination="uXj-RN-p47" id="ueR-ts-6sw"/>

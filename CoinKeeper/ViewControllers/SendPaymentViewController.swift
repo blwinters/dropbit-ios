@@ -67,6 +67,7 @@ CurrencySwappableAmountEditor {
   @IBOutlet var recipientDisplayNameLabel: UILabel!
   @IBOutlet var recipientDisplayNumberLabel: UILabel!
 
+  @IBOutlet var buttonStackTopConstraint: NSLayoutConstraint!
   @IBOutlet var contactsButton: CompactActionButton!
   @IBOutlet var twitterButton: CompactActionButton!
   @IBOutlet var pasteButton: CompactActionButton!

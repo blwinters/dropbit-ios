@@ -115,6 +115,8 @@ extension SendPaymentViewController {
     twitterButton.setAttributedTitle(titles.twitter, for: .normal)
     pasteButton.setAttributedTitle(titles.paste, for: .normal)
 
+    buttonStackTopConstraint.constant = viewModel.viewConfig.buttonStackTopSpace
+
     sendMaxButton.setTitle(viewModel.viewConfig.sendMaxButtonTitle, for: .normal)
   }
 
@@ -224,4 +226,10 @@ struct SendPaymentViewConfig {
     return "To: \(targetDesc) or \(phoneDesc)"
   }
 
+  var buttonStackTopSpace: CGFloat {
+    switch relativeSize {
+    case .short:  return 18
+    default:      return 36
+    }
+  }
 }
