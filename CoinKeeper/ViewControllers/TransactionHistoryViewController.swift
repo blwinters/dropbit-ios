@@ -96,7 +96,7 @@ class TransactionHistoryViewController: BaseViewController, StoryboardInitializa
       lightningUnavailableView.isHidden = true
     }
 
-    transactionHistoryNoBalanceView.learnAboutBitcoinButton.isHidden = UIScreen.main.isShort
+    transactionHistoryNoBalanceView.learnAboutBitcoinButton.isHidden = self.onChainNoBalanceEmptyDataSetShouldShrink
 
     view.backgroundColor = .clear
     emptyStateBackgroundView.applyCornerRadius(30, toCorners: .top)
@@ -274,8 +274,7 @@ extension TransactionHistoryViewController: DZNEmptyDataSetDelegate, DZNEmptyDat
   }
 
   private func headerAndCellHeight(for dataSetType: TransactionHistoryViewModel.EmptyDataSetType) -> CGFloat {
-    let headerIsShown = delegate.summaryHeaderType(for: self) != nil
-    let headerHeight = headerIsShown ? self.viewModel.warningHeaderHeight : 0
+    let headerHeight = tableHeaderIsShown ? self.viewModel.warningHeaderHeight : 0
     switch dataSetType {
     case .balance:
       let contentHeight = (headerHeight + SummaryCollectionView.cellHeight) / 2
@@ -293,7 +292,8 @@ extension TransactionHistoryViewController: DZNEmptyDataSetDelegate, DZNEmptyDat
     if UIScreen.main.isShort {
       switch dataSetType {
       case .noBalance:
-        return standardOffset + 40
+        let additionalOffset: CGFloat = onChainNoBalanceEmptyDataSetShouldShrink ? 40 : 20
+        return standardOffset + additionalOffset
       case .lightning:
         return standardOffset + 55
       default:
@@ -302,6 +302,14 @@ extension TransactionHistoryViewController: DZNEmptyDataSetDelegate, DZNEmptyDat
     } else {
       return standardOffset
     }
+  }
+
+  var tableHeaderIsShown: Bool {
+    delegate.summaryHeaderType(for: self) != nil
+  }
+
+  var onChainNoBalanceEmptyDataSetShouldShrink: Bool {
+    UIScreen.main.isShort && tableHeaderIsShown
   }
 
   ///These buttons apply a default style during awakeFromNib, which is triggered after these outlets
