@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZK3-ob-Jzc">
-                                <rect key="frame" x="323" y="8" width="44" height="44"/>
+                                <rect key="frame" x="323" y="15.5" width="44" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="TB8-8N-Cjt"/>
                                     <constraint firstAttribute="width" secondItem="ZK3-ob-Jzc" secondAttribute="height" multiplier="1:1" id="ZUc-86-qCP"/>
@@ -197,14 +197,15 @@
                             <constraint firstItem="eLP-S6-dcJ" firstAttribute="trailing" secondItem="ZK3-ob-Jzc" secondAttribute="trailing" constant="8" id="Ig0-Sd-CaY"/>
                             <constraint firstItem="JFL-ap-dYz" firstAttribute="top" secondItem="9xM-4S-5GO" secondAttribute="bottom" constant="28" id="KT5-nL-Ycd"/>
                             <constraint firstItem="BpV-7B-gve" firstAttribute="trailing" secondItem="JFL-ap-dYz" secondAttribute="trailing" id="Nj7-RL-0Jb"/>
-                            <constraint firstItem="ZK3-ob-Jzc" firstAttribute="top" secondItem="eLP-S6-dcJ" secondAttribute="top" constant="8" id="P6v-a1-hPl"/>
                             <constraint firstItem="dQ2-Di-Rho" firstAttribute="leading" secondItem="JFL-ap-dYz" secondAttribute="leading" id="SYW-R4-rGQ"/>
                             <constraint firstItem="eLP-S6-dcJ" firstAttribute="trailing" secondItem="JFL-ap-dYz" secondAttribute="trailing" constant="24" id="Soc-zi-vL4"/>
                             <constraint firstItem="eLP-S6-dcJ" firstAttribute="bottom" secondItem="xMy-P4-RBB" secondAttribute="bottom" constant="32" id="TRf-Fn-Phe"/>
                             <constraint firstItem="dQ2-Di-Rho" firstAttribute="top" secondItem="JFL-ap-dYz" secondAttribute="bottom" constant="14" id="aa0-5F-dkd"/>
                             <constraint firstItem="BpV-7B-gve" firstAttribute="leading" secondItem="JFL-ap-dYz" secondAttribute="leading" id="cVP-Xv-1mu"/>
+                            <constraint firstItem="ZK3-ob-Jzc" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9xM-4S-5GO" secondAttribute="trailing" constant="4" id="k5K-Mo-57T"/>
                             <constraint firstItem="xMy-P4-RBB" firstAttribute="leading" secondItem="JFL-ap-dYz" secondAttribute="leading" id="mZh-gb-qFO"/>
                             <constraint firstItem="9xM-4S-5GO" firstAttribute="centerX" secondItem="WkR-gn-BgX" secondAttribute="centerX" id="n65-HD-XVj"/>
+                            <constraint firstItem="ZK3-ob-Jzc" firstAttribute="centerY" secondItem="9xM-4S-5GO" secondAttribute="centerY" id="tVL-Ui-kKR"/>
                             <constraint firstItem="dQ2-Di-Rho" firstAttribute="trailing" secondItem="JFL-ap-dYz" secondAttribute="trailing" id="uXB-Yv-Cba"/>
                             <constraint firstItem="xMy-P4-RBB" firstAttribute="trailing" secondItem="JFL-ap-dYz" secondAttribute="trailing" id="x7D-Db-KFC"/>
                         </constraints>
