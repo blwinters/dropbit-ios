@@ -313,9 +313,8 @@ extension SendPaymentViewController {
 
   func updateRecipientContainerContentType() {
     guard let recipient = self.viewModel.paymentRecipient else {
-      let isLightning = self.viewModel.walletTxType == .lightning
-      let paymentTargetDesc = isLightning ? "Invoice" : "BTC Address"
-      self.showPaymentTargetRecipient(with: "To: \(paymentTargetDesc) or phone number")
+      let placeholderText = self.viewModel.viewConfig.paymentTargetPlaceholderText(for: viewModel.walletTxType)
+      self.showPaymentTargetRecipient(with: placeholderText)
       return
     }
 

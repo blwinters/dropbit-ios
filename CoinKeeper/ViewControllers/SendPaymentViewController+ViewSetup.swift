@@ -153,6 +153,8 @@ extension SendPaymentViewController {
 
 }
 
+///Provides conditional view configuration, based on more permanent attributes of device,
+///such as screen size or locale.
 struct SendPaymentViewConfig {
 
   let relativeSize = UIScreen.main.relativeSize
@@ -204,6 +206,22 @@ struct SendPaymentViewConfig {
     case .short:  return "MAX"
     default:      return "SEND MAX"
     }
+  }
+
+  func paymentTargetPlaceholderText(for walletTxType: WalletTransactionType) -> String {
+    let targetDesc: String
+    switch walletTxType {
+    case .lightning:  targetDesc = "Invoice"
+    case .onChain:    targetDesc = "BTC Address"
+    }
+
+    let phoneDesc: String
+    switch relativeSize {
+    case .short:  phoneDesc = "phone #"
+    default:      phoneDesc = "phone number"
+    }
+
+    return "To: \(targetDesc) or \(phoneDesc)"
   }
 
 }
