@@ -30,6 +30,9 @@ extension LightningLoadPresetsDisplayable {
     let amountStrings = presetAmounts.compactMap { formatter.string(fromDecimal: $0) }
     let buttonAmounts = zip(amountButtons, amountStrings)
     for (button, amount) in buttonAmounts {
+      button.titleLabel?.minimumScaleFactor = 0.5
+      button.titleLabel?.numberOfLines = 1
+      button.titleLabel?.adjustsFontSizeToFitWidth = true
       button.setTitle(amount, for: .normal)
     }
   }

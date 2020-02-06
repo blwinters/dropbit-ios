@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -112,32 +112,32 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="19" translatesAutoresizingMaskIntoConstraints="NO" id="rGj-2l-nX3">
-                            <rect key="frame" x="36" y="10" width="168" height="190"/>
+                            <rect key="frame" x="30" y="10" width="180" height="190"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ehM-GN-H0i">
-                                    <rect key="frame" x="0.0" y="0.0" width="168" height="20.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="180" height="20.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SNz-Of-VsA">
-                                    <rect key="frame" x="0.0" y="39.5" width="168" height="20.5"/>
+                                    <rect key="frame" x="0.0" y="39.5" width="180" height="20.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="pTG-qY-BBs">
-                                    <rect key="frame" x="0.0" y="79" width="168" height="111"/>
+                                    <rect key="frame" x="0.0" y="79" width="180" height="111"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wep-5O-LIJ" customClass="PrimaryActionButton" customModule="DropBit" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="168" height="51"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="180" height="51"/>
                                             <state key="normal" title="Learn Bitcoin"/>
                                             <connections>
                                                 <action selector="learnAboutBitcoin" destination="Ktw-Zy-1lf" eventType="touchUpInside" id="LmD-IX-YNf"/>
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XXe-17-1Q2" customClass="PrimaryActionButton" customModule="DropBit" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="60" width="168" height="51"/>
+                                            <rect key="frame" x="0.0" y="60" width="180" height="51"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="51" id="nGS-kS-KEi"/>
                                             </constraints>
@@ -158,7 +158,7 @@
                     <constraints>
                         <constraint firstItem="rGj-2l-nX3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="mhD-3j-Kid" secondAttribute="top" constant="8" id="HG6-V5-DdT"/>
                         <constraint firstItem="rGj-2l-nX3" firstAttribute="centerX" secondItem="Ktw-Zy-1lf" secondAttribute="centerX" id="PYw-9h-qeg"/>
-                        <constraint firstItem="rGj-2l-nX3" firstAttribute="width" secondItem="Ktw-Zy-1lf" secondAttribute="width" multiplier="0.7" id="dcQ-HK-isL"/>
+                        <constraint firstItem="rGj-2l-nX3" firstAttribute="width" secondItem="Ktw-Zy-1lf" secondAttribute="width" multiplier="0.75" id="dcQ-HK-isL"/>
                         <constraint firstItem="rGj-2l-nX3" firstAttribute="centerY" secondItem="Ktw-Zy-1lf" secondAttribute="centerY" id="lBP-mW-qWZ"/>
                         <constraint firstItem="mhD-3j-Kid" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="rGj-2l-nX3" secondAttribute="bottom" constant="8" id="vP9-Vw-5ng"/>
                     </constraints>

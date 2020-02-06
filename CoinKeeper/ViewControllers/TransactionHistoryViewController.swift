@@ -96,9 +96,7 @@ class TransactionHistoryViewController: BaseViewController, StoryboardInitializa
       lightningUnavailableView.isHidden = true
     }
 
-    if UIScreen.main.relativeSize == .short {
-      transactionHistoryNoBalanceView.learnAboutBitcoinButton.isHidden = true
-    }
+    transactionHistoryNoBalanceView.learnAboutBitcoinButton.isHidden = UIScreen.main.isShort
 
     view.backgroundColor = .clear
     emptyStateBackgroundView.applyCornerRadius(30, toCorners: .top)
@@ -240,7 +238,8 @@ extension TransactionHistoryViewController: DZNEmptyDataSetDelegate, DZNEmptyDat
 
   func emptyDataSetShouldDisplay(_ scrollView: UIScrollView!) -> Bool {
     let shouldDisplay = viewModel.shouldShowEmptyDataSet
-    let offset = verticalOffset(forEmptyDataSet: scrollView)
+    let dataSetType = viewModel.emptyDataSetToDisplay()
+    let offset = headerAndCellHeight(for: dataSetType)
     emptyStateBackgroundTopConstraint.constant = SummaryCollectionView.topInset + offset
     emptyStateBackgroundView.isHidden = !shouldDisplay
     return shouldDisplay
@@ -274,18 +273,34 @@ extension TransactionHistoryViewController: DZNEmptyDataSetDelegate, DZNEmptyDat
     }
   }
 
-  func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
+  private func headerAndCellHeight(for dataSetType: TransactionHistoryViewModel.EmptyDataSetType) -> CGFloat {
     let headerIsShown = delegate.summaryHeaderType(for: self) != nil
     let headerHeight = headerIsShown ? self.viewModel.warningHeaderHeight : 0
-    let dataSetType = viewModel.emptyDataSetToDisplay()
     switch dataSetType {
     case .balance:
-      let contentOffset = (headerHeight + SummaryCollectionView.cellHeight) / 2
-      let paddedOffset = (contentOffset > 0) ? (contentOffset + 20) : 0
-      return paddedOffset
+      let contentHeight = (headerHeight + SummaryCollectionView.cellHeight) / 2
+      let paddedHeight = (contentHeight > 0) ? (contentHeight + 20) : 0
+      return paddedHeight
 
     default:
       return 0
+    }
+  }
+
+  func verticalOffset(forEmptyDataSet scrollView: UIScrollView!) -> CGFloat {
+    let dataSetType = viewModel.emptyDataSetToDisplay()
+    let standardOffset = headerAndCellHeight(for: dataSetType)
+    if UIScreen.main.isShort {
+      switch dataSetType {
+      case .noBalance:
+        return standardOffset + 40
+      case .lightning:
+        return standardOffset + 55
+      default:
+        return standardOffset
+      }
+    } else {
+      return standardOffset
     }
   }
 

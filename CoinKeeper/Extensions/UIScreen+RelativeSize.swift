@@ -21,4 +21,8 @@ extension UIScreen {
     default:          return .tall //iPhone 8 Plus, XR, 11 Pro Max...
     }
   }
+
+  var isShort: Bool {
+    relativeSize == .short
+  }
 }
