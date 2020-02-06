@@ -45,6 +45,7 @@ enum RecipientDisplayStyle {
 class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
 
   let txSendingConfig: TransactionSendingConfig
+  let viewConfig = SendPaymentViewConfig()
 
   var paymentRecipient: PaymentRecipient? {
     didSet {

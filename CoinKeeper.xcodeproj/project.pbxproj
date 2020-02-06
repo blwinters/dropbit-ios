@@ -777,6 +777,9 @@
 		B500C391232429B7009F7C2D /* MockConfirmLightningPaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B500C390232429B7009F7C2D /* MockConfirmLightningPaymentViewModel.swift */; };
 		B501022221F2325B00D42A71 /* UIColor+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = B501022121F2325B00D42A71 /* UIColor+Init.swift */; };
 		B501022321F2333C00D42A71 /* UIColor+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = B501022121F2325B00D42A71 /* UIColor+Init.swift */; };
+		B502868923EC73FC004EF210 /* SendPaymentViewController+ViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B502868823EC73FC004EF210 /* SendPaymentViewController+ViewSetup.swift */; };
+		B502868B23EC773B004EF210 /* SendPaymentViewController+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B502868A23EC773B004EF210 /* SendPaymentViewController+Delegate.swift */; };
+		B502868D23EC778C004EF210 /* SendPaymentViewController+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B502868C23EC778C004EF210 /* SendPaymentViewController+Validation.swift */; };
 		B503005223D0C21700009835 /* WalletManagerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B503005123D0C21700009835 /* WalletManagerType.swift */; };
 		B503005423D0C31300009835 /* WalletAddressDataWorkerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B503005323D0C31300009835 /* WalletAddressDataWorkerType.swift */; };
 		B50384C620B304780091AB37 /* DBTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50384C520B304780091AB37 /* DBTError.swift */; };
@@ -1043,8 +1046,6 @@
 		B5705450230B4812006DD57F /* Typealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB05AC0209CF407000297E1 /* Typealiases.swift */; };
 		B572E4FF23DFA0D700ACEB90 /* ExchangeRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B538508823AC1A3400997240 /* ExchangeRate.swift */; };
 		B572E50023DFA0F000ACEB90 /* Locale+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BEC1AF32229CC8D00824A35 /* Locale+Constants.swift */; };
-		B572E50223DFA15500ACEB90 /* SelectedCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B572E50123DFA15500ACEB90 /* SelectedCurrency.swift */; };
-		B572E50323DFA15500ACEB90 /* SelectedCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B572E50123DFA15500ACEB90 /* SelectedCurrency.swift */; };
 		B5730E27239FF54A00106E19 /* RemoteConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5730E26239FF54A00106E19 /* RemoteConfigurable.swift */; };
 		B5730E2923A0026700106E19 /* ConfigResponseItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5730E2823A0026700106E19 /* ConfigResponseItems.swift */; };
 		B575B61622E9F68700CECFB7 /* LNLedgerTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B575B61522E9F68700CECFB7 /* LNLedgerTarget.swift */; };
@@ -2050,6 +2051,9 @@
 		AF53DB128FE9F7956F483AE6 /* Pods-DropBitUIDatabaseTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropBitUIDatabaseTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DropBitUIDatabaseTests/Pods-DropBitUIDatabaseTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B500C390232429B7009F7C2D /* MockConfirmLightningPaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockConfirmLightningPaymentViewModel.swift; sourceTree = "<group>"; };
 		B501022121F2325B00D42A71 /* UIColor+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Init.swift"; sourceTree = "<group>"; };
+		B502868823EC73FC004EF210 /* SendPaymentViewController+ViewSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SendPaymentViewController+ViewSetup.swift"; sourceTree = "<group>"; };
+		B502868A23EC773B004EF210 /* SendPaymentViewController+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SendPaymentViewController+Delegate.swift"; sourceTree = "<group>"; };
+		B502868C23EC778C004EF210 /* SendPaymentViewController+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SendPaymentViewController+Validation.swift"; sourceTree = "<group>"; };
 		B503005123D0C21700009835 /* WalletManagerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletManagerType.swift; sourceTree = "<group>"; };
 		B503005323D0C31300009835 /* WalletAddressDataWorkerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAddressDataWorkerType.swift; sourceTree = "<group>"; };
 		B50384C520B304780091AB37 /* DBTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBTError.swift; sourceTree = "<group>"; };
@@ -2309,7 +2313,6 @@
 		B56E15A62167EAE6003B69D4 /* NetworkManager+DeviceRequestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+DeviceRequestable.swift"; sourceTree = "<group>"; };
 		B56F36AB233AB82200984A51 /* ConfirmPaymentMemoViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPaymentMemoViewTests.swift; sourceTree = "<group>"; };
 		B56F3F3A237C614600949B37 /* TransactionNotificationsElasticQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionNotificationsElasticQuery.swift; sourceTree = "<group>"; };
-		B572E50123DFA15500ACEB90 /* SelectedCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedCurrency.swift; sourceTree = "<group>"; };
 		B5730E26239FF54A00106E19 /* RemoteConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigurable.swift; sourceTree = "<group>"; };
 		B5730E2823A0026700106E19 /* ConfigResponseItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigResponseItems.swift; sourceTree = "<group>"; };
 		B575B61522E9F68700CECFB7 /* LNLedgerTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNLedgerTarget.swift; sourceTree = "<group>"; };
@@ -3353,6 +3356,9 @@
 				3BF41AAF20750692008B3D0A /* RequestPayViewController.swift */,
 				5BE594E4207FBE2D00862A0A /* ScanQRViewController.swift */,
 				5B40427D208CCD02005624B0 /* SendPaymentViewController.swift */,
+				B502868A23EC773B004EF210 /* SendPaymentViewController+Delegate.swift */,
+				B502868C23EC778C004EF210 /* SendPaymentViewController+Validation.swift */,
+				B502868823EC73FC004EF210 /* SendPaymentViewController+ViewSetup.swift */,
 				A220A97A20B5E0E400C30149 /* SettingsViewController.swift */,
 				B5D83409224971E400C45ABE /* SettingsViewController+TableView.swift */,
 				B57AF7FF2268A95E00E5B0A6 /* ShareTransactionViewController.swift */,
@@ -5237,6 +5243,7 @@
 				3B82692520331349009B11EC /* KeypadButton.swift in Sources */,
 				B5E7A0B72347D49800A50D58 /* TransactionDetailPopoverDisplayable.swift in Sources */,
 				B558B86122B92F4A0033AFBD /* PreferencesBroker.swift in Sources */,
+				B502868923EC73FC004EF210 /* SendPaymentViewController+ViewSetup.swift in Sources */,
 				3B474159217E5251004DA223 /* DefaultHeaders.swift in Sources */,
 				5BE594E5207FBE2D00862A0A /* ScanQRViewController.swift in Sources */,
 				3B6FDADD205029A40091916A /* Sequence+Shuffled.swift in Sources */,
@@ -5331,6 +5338,7 @@
 				B518226320BF191A00AA3E36 /* CKMServerAddress+CoreDataProperties.swift in Sources */,
 				A268F13B22EA067B00410040 /* SyncSubscribeable.swift in Sources */,
 				B5DDB0F721DE69C100A25929 /* KeychainMigratorFactory.swift in Sources */,
+				B502868D23EC778C004EF210 /* SendPaymentViewController+Validation.swift in Sources */,
 				B54D206420F926110057A694 /* UIImage+Mask.swift in Sources */,
 				B58A6A02232016E700D50298 /* TransactionHistorySummaryFooter.swift in Sources */,
 				B54159CE20A60C720048F495 /* WalletResponse.swift in Sources */,
@@ -5398,6 +5406,7 @@
 				3BAB1447204EE6BB001D41A2 /* BaseViewController.swift in Sources */,
 				B5F9500A20E2D439001495E2 /* UnderlinedTextButton.swift in Sources */,
 				3B0C785A231EDF3600D4C216 /* LightningUpgradeGradientOverlayView.swift in Sources */,
+				B502868B23EC773B004EF210 /* SendPaymentViewController+Delegate.swift in Sources */,
 				3B474165217FB6A4004DA223 /* NotificationTopicSubscriptionInfoTarget.swift in Sources */,
 				A29CE10820A3684700761B91 /* StringEmptyValidator.swift in Sources */,
 				B59E2CA122E8D38900A75AFE /* LNTransactionResponse.swift in Sources */,
