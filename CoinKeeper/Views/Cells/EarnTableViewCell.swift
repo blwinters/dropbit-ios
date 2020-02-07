@@ -17,7 +17,7 @@ protocol EarnTableViewCellDelegate: AnyObject {
   func closeButtonWasTouched()
 }
 
-class EarnTableViewCell: UITableViewCell {
+class EarnTableViewCell: UITableViewCell, AccessibleViewSettable {
 
   @IBOutlet var closeButton: UIButton!
   @IBOutlet var titleLabel: UILabel!
@@ -32,6 +32,10 @@ class EarnTableViewCell: UITableViewCell {
   }
 
   weak var delegate: EarnTableViewCellDelegate?
+
+  func accessibleViewsAndIdentifiers() -> [AccessibleViewElement] {
+    return [(closeButton, .earn(.closeButton))]
+  }
 
   override func awakeFromNib() {
     super.awakeFromNib()
@@ -49,6 +53,7 @@ class EarnTableViewCell: UITableViewCell {
     containerView.applyCornerRadius(20)
 
     setupArrangedViewsForSteps()
+    setAccessibilityIdentifiers()
   }
 
   private func setupArrangedViewsForOther() {

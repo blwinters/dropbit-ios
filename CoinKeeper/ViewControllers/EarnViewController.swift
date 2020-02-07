@@ -35,11 +35,7 @@ class EarnViewController: BaseViewController, StoryboardInitializable {
   }
 
   override func accessibleViewsAndIdentifiers() -> [AccessibleViewElement] {
-    var elements: [AccessibleViewElement] = [(self.view, .earn(.page))]
-    if let button = (tableView.cellForRow(at: IndexPath(item: 0, section: 0)) as? EarnTableViewCell)?.closeButton {
-      elements.append((button, .earn(.closeButton)))
-    }
-    return elements
+    return [(self.view, .earn(.page))]
   }
 
   override func viewDidLoad() {
