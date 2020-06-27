@@ -35,7 +35,6 @@ target 'DropBit' do
   use_frameworks!
 
   # Pods for CoinKeeper
-  pod 'Mixpanel-swift', '~> 2.6.2'
   dropbit_pods
   shared_pods
 

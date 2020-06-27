@@ -924,6 +924,7 @@
 		B54A421B2080066E005B40A9 /* TransactionDetailBottomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54A421A2080066E005B40A9 /* TransactionDetailBottomButton.swift */; };
 		B54BDCEB2086447500B71D6B /* TransactionHistorySummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54BDCE92086447500B71D6B /* TransactionHistorySummaryCell.swift */; };
 		B54BDCEC2086447500B71D6B /* TransactionHistorySummaryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B54BDCEA2086447500B71D6B /* TransactionHistorySummaryCell.xib */; };
+		B54CE3A024A79BEB009CA02C /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54CE39F24A79BEB009CA02C /* AnalyticsManager.swift */; };
 		B54D0F1F234A2584001B89BD /* TransactionDetailInvalidCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54D0F1E234A2584001B89BD /* TransactionDetailInvalidCellViewModel.swift */; };
 		B54D206020F9218A0057A694 /* CKBannerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B54D205F20F9218A0057A694 /* CKBannerView.xib */; };
 		B54D206220F921A20057A694 /* CKBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54D206120F921A20057A694 /* CKBannerView.swift */; };
@@ -950,7 +951,6 @@
 		B552EDFA211E33D000332BB5 /* CKPhoneNumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B552EDE4211E33D000332BB5 /* CKPhoneNumberFormatter.swift */; };
 		B552EDFB211E33D000332BB5 /* CKAlamofireSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B552EDE5211E33D000332BB5 /* CKAlamofireSessionManager.swift */; };
 		B552EDFC211E33D000332BB5 /* WalletAddressDataWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B552EDE6211E33D000332BB5 /* WalletAddressDataWorker.swift */; };
-		B552EDFD211E33D000332BB5 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B552EDE7211E33D000332BB5 /* AnalyticsManager.swift */; };
 		B552EDFE211E33D000332BB5 /* CKNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B552EDE8211E33D000332BB5 /* CKNotificationCenter.swift */; };
 		B553A3AB2362580900814E5F /* CurrencySwappableEditAmountViewModel+UITextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B553A3AA2362580900814E5F /* CurrencySwappableEditAmountViewModel+UITextFieldDelegate.swift */; };
 		B553A3AD2362599400814E5F /* DualAmountDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B553A3AC2362599400814E5F /* DualAmountDisplayable.swift */; };
@@ -2163,6 +2163,7 @@
 		B54A421A2080066E005B40A9 /* TransactionDetailBottomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailBottomButton.swift; sourceTree = "<group>"; };
 		B54BDCE92086447500B71D6B /* TransactionHistorySummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionHistorySummaryCell.swift; sourceTree = "<group>"; };
 		B54BDCEA2086447500B71D6B /* TransactionHistorySummaryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransactionHistorySummaryCell.xib; sourceTree = "<group>"; };
+		B54CE39F24A79BEB009CA02C /* AnalyticsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 		B54D0F1E234A2584001B89BD /* TransactionDetailInvalidCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailInvalidCellViewModel.swift; sourceTree = "<group>"; };
 		B54D205F20F9218A0057A694 /* CKBannerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CKBannerView.xib; sourceTree = "<group>"; };
 		B54D206120F921A20057A694 /* CKBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKBannerView.swift; sourceTree = "<group>"; };
@@ -2189,7 +2190,6 @@
 		B552EDE4211E33D000332BB5 /* CKPhoneNumberFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKPhoneNumberFormatter.swift; sourceTree = "<group>"; };
 		B552EDE5211E33D000332BB5 /* CKAlamofireSessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKAlamofireSessionManager.swift; sourceTree = "<group>"; };
 		B552EDE6211E33D000332BB5 /* WalletAddressDataWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletAddressDataWorker.swift; sourceTree = "<group>"; };
-		B552EDE7211E33D000332BB5 /* AnalyticsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 		B552EDE8211E33D000332BB5 /* CKNotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKNotificationCenter.swift; sourceTree = "<group>"; };
 		B553A3AA2362580900814E5F /* CurrencySwappableEditAmountViewModel+UITextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrencySwappableEditAmountViewModel+UITextFieldDelegate.swift"; sourceTree = "<group>"; };
 		B553A3AC2362599400814E5F /* DualAmountDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DualAmountDisplayable.swift; sourceTree = "<group>"; };
@@ -3941,6 +3941,7 @@
 				3B57207E2233026A0048A8CF /* Persistence */,
 				B552EDD3211E33D000332BB5 /* BiometricAuthenticationManager.swift */,
 				B5EBFD10215C07270008EB4A /* AddressDataSource.swift */,
+				B54CE39F24A79BEB009CA02C /* AnalyticsManager.swift */,
 				B58E781E217FB6C3000F9796 /* BadgeManager.swift */,
 				B552EDD5211E33D000332BB5 /* LaunchStateManager.swift */,
 				B552EDD6211E33D000332BB5 /* CoinNinjaUrlFactory.swift */,
@@ -3966,7 +3967,6 @@
 				B552EDE0211E33D000332BB5 /* WalletManager.swift */,
 				B552EDE3211E33D000332BB5 /* PermissionManager.swift */,
 				B552EDE5211E33D000332BB5 /* CKAlamofireSessionManager.swift */,
-				B552EDE7211E33D000332BB5 /* AnalyticsManager.swift */,
 				B552EDE8211E33D000332BB5 /* CKNotificationCenter.swift */,
 				307DF11C2150394400260369 /* MessagesManager.swift */,
 				30BF4FE621B5BF210018AE87 /* PersistenceCacheDataWorker.swift */,
@@ -5225,6 +5225,7 @@
 				B5DDB0F721DE69C100A25929 /* KeychainMigratorFactory.swift in Sources */,
 				B54D206420F926110057A694 /* UIImage+Mask.swift in Sources */,
 				B58A6A02232016E700D50298 /* TransactionHistorySummaryFooter.swift in Sources */,
+				B54CE3A024A79BEB009CA02C /* AnalyticsManager.swift in Sources */,
 				B54159CE20A60C720048F495 /* WalletResponse.swift in Sources */,
 				A246C82122CA562D00AF1F52 /* NetworkManager+NewsDataRequestable.swift in Sources */,
 				B57B78DD20B4878F007B71CB /* CKDateFormatter.swift in Sources */,
@@ -5706,7 +5707,6 @@
 				3BBEE0C1208A5DA500A7DF9F /* CKMDerivativePath+CoreDataClass.swift in Sources */,
 				A2952F7A22BBBE9500BDCE65 /* TimePeriodButton.swift in Sources */,
 				3B86B6F1224972D000E2706E /* AbstractMigrationWorker.swift in Sources */,
-				B552EDFD211E33D000332BB5 /* AnalyticsManager.swift in Sources */,
 				3B1555E020D27B5000D6A70C /* TransactionVinResponse.swift in Sources */,
 				B57AF8022268C78400E5B0A6 /* AppCoordinator+ShareTransactionViewControllerDelegate.swift in Sources */,
 				A2568E5A23D6496F00CE5F6B /* CKRequestHeadersProvider.swift in Sources */,

@@ -6,7 +6,6 @@
 //  Copyright © 2018 Coin Ninja, LLC. All rights reserved.
 //
 
-import Mixpanel
 import UIKit
 
 enum AnalyticsManagerPropertiesType: String {
@@ -214,6 +213,11 @@ enum AnalyticsRelativeWalletRange: String {
   }
 }
 
+protocol MixpanelType { }
+extension Int: MixpanelType { }
+extension Bool: MixpanelType { }
+extension String: MixpanelType { }
+
 extension AnalyticsRelativeWalletRange: MixpanelType {
   func isValidNestedType() -> Bool {
     return true
@@ -256,41 +260,16 @@ protocol AnalyticsManagerType: AnyObject {
 
 class AnalyticsManager: AnalyticsManagerType {
 
-  func start() {
-    Mixpanel.initialize(token: apiKeys.analyticsKey)
-    Mixpanel.mainInstance().flushInterval = 10.0
-    Mixpanel.mainInstance().identify(distinctId: Mixpanel.mainInstance().distinctId)
-  }
+  func start() {}
 
-  func optOut() {
-    Mixpanel.mainInstance().optOutTracking()
-  }
+  func optOut() {}
 
-  func optIn() {
-    Mixpanel.mainInstance().optInTracking()
-  }
+  func optIn() {}
 
-  func track(event: AnalyticsManagerEventType, with value: AnalyticsEventValue? = nil) {
-    guard let keyString = value?.key.rawValue, let mxValue = value?.value else {
-      Mixpanel.mainInstance().track(event: event.id)
-      return
-    }
+  func track(event: AnalyticsManagerEventType, with value: AnalyticsEventValue? = nil) {}
 
-    Mixpanel.mainInstance().track(event: event.id, properties: [keyString: mxValue])
-  }
+  func track(property: MixpanelProperty) {}
 
-  func track(property: MixpanelProperty) {
-    Mixpanel.mainInstance().people?.set(property: property.key.rawValue, to: property.value)
-  }
-
-  func track(event: AnalyticsManagerEventType, with values: [AnalyticsEventValue]) {
-    var castedValues: [String: String] = [:]
-
-    for value in values {
-      castedValues[value.key.rawValue] = value.value
-    }
-
-    Mixpanel.mainInstance().track(event: event.id, properties: castedValues)
-  }
+  func track(event: AnalyticsManagerEventType, with values: [AnalyticsEventValue]) {}
 
 }
