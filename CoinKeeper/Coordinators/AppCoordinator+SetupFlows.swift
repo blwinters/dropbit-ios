@@ -38,7 +38,7 @@ extension AppCoordinator {
 
     navigationController.isNavigationBarHidden = true
 
-    handlePendingBitcoinURL()
+    handleLaunchUrlIfNecessary()
   }
 
   func continueSetupFlow() {
@@ -166,6 +166,7 @@ extension AppCoordinator {
 
     drawerController.configs.leftPanelWidth = drawerWidth
     drawerController.configs.bounceOnLeftPanelOpen = true
+    drawerController.configs.maxAnimDuration = 0.1
     drawerController.configs.bounceOnLeftPanelClose = false
 
     drawerController.configs.panFromEdge = true

@@ -16,9 +16,6 @@ public enum WalletAddressRequestsTarget: CoinNinjaTargetType {
 
   /// updateWalletAddressRequest params - id: String, request: WalletAddressRequest
   case update(String, WalletAddressRequest)
-
-  case suppressTweet(String, WalletAddressRequest)
-
 }
 
 extension WalletAddressRequestsTarget {
@@ -32,7 +29,6 @@ extension WalletAddressRequestsTarget {
     case .create:                       return nil
     case .get(let side):                return side.urlComponent
     case .update(let id, _):            return id
-    case .suppressTweet(let id, _):     return id
     }
   }
 
@@ -40,8 +36,7 @@ extension WalletAddressRequestsTarget {
     switch self {
     case .create:           return .post
     case .get:              return .get
-    case .update,
-         .suppressTweet:    return .patch
+    case .update:           return .patch
     }
   }
 
@@ -51,13 +46,12 @@ extension WalletAddressRequestsTarget {
       return .requestCustomJSONEncodable(body, encoder: customEncoder)
     case .get:
       return .requestPlain
-    case .update(_, let request),
-         .suppressTweet(_, let request):
+    case .update(_, let request):
       return .requestJSONEncodable(request)
     }
   }
 
-  func customNetworkError(for moyaError: MoyaError) -> DBTError.Network? {
+  func customNetworkError(for moyaError: MoyaError) -> DBTErrorType? {
     // 501: Successfully created address request, but Twilio failed to send SMS
     if let statusCode = moyaError.unacceptableStatusCode,
       let response = moyaError.response,

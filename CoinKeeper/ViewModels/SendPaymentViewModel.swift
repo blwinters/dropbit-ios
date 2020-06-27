@@ -9,26 +9,6 @@
 import Foundation
 import Cnlib
 
-enum WalletTransactionType: String {
-  case onChain
-  case lightning
-
-  var addressType: WalletAddressType {
-    switch self {
-    case .onChain:    return .btc
-    case .lightning:  return .lightning
-    }
-  }
-
-  init(addressType: WalletAddressType) {
-    switch addressType {
-    case .btc:        self = .onChain
-    case .lightning:  self = .lightning
-    }
-  }
-
-}
-
 enum PaymentRecipient {
 
   /// Associated value may be either a BTC address or a lightning invoice.
@@ -74,11 +54,30 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
   var sharedMemoAllowed = true
   var sendMaxTransactionData: CNBCnlibTransactionData?
 
+  private var shouldResetMaxTransactionData = false
+
+  func resetSendMaxTransactionDataIfNeeded() {
+    if shouldResetMaxTransactionData {
+      sendMaxTransactionData = nil
+    }
+    shouldResetMaxTransactionData = false
+  }
+
   func sendMax(with data: CNBCnlibTransactionData) {
     self.sendMaxTransactionData = data
-    let btcAmount = NSDecimalNumber(integerAmount: Int(data.amount), currency: .BTC)
+    let btcAmount = NSDecimalNumber(integerAmount: data.amount, currency: .BTC)
     setBTCAmountAsPrimary(btcAmount)
     delegate?.viewModelNeedsAmountLabelRefresh(self, secondaryOnly: false)
+  }
+
+  private var decodedInvoice: LNDecodePaymentRequestResponse?
+  var isInvoiceExpired: Bool {
+    guard let invoice = decodedInvoice else { return false }
+    return invoice.isExpired
+  }
+  var invoiceExpiration: Date? {
+    guard let invoice = decodedInvoice else { return nil }
+    return invoice.expiresAt
   }
 
   private var _memo: String?
@@ -118,6 +117,7 @@ class SendPaymentViewModel: CurrencySwappableEditAmountViewModel {
     self.requiredFeeRate = nil
     self.memo = decodedInvoice.description
     self.hasInvoiceWithAmount = (decodedInvoice.numSatoshis ?? 0) > 0
+    self.decodedInvoice = decodedInvoice
   }
 
   // delegate may be nil at init since the delegate is likely a view controller which requires this view model for its own creation

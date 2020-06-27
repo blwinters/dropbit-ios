@@ -303,23 +303,6 @@ struct DBTError {
     }
   }
 
-  enum RecipientParser: DBTErrorType {
-    case multipleRecipients
-    case validation(ValidatorErrorType)
-    case noResults
-
-    var displayMessage: String {
-      switch self {
-      case .multipleRecipients:
-        return "Multiplie potential recipients were found in the text."
-      case .validation(let validatorError):
-        return validatorError.displayMessage
-      case .noResults:
-        return "No valid recipients were found in the text."
-      }
-    }
-  }
-
   enum SyncRoutine: String, DBTErrorType {
     case syncRoutineInProgress
     case missingRecoveryWords
@@ -352,16 +335,24 @@ struct DBTError {
     }
   }
 
-  enum TransactionData: DBTErrorType {
-    case insufficientFunds
-    case insufficientFee
-    case noSpendableFunds
+  enum TransactionData: String, DBTErrorType {
+    case insufficientFunds = "insufficient funds"
+    case insufficientFee = "insufficient fee"
+    case noSpendableFunds = "no spendable funds"
+    case dust = "transaction too small"
+    case createTransactionFailure = "failed to create transaction"
+    case unknownAddressFormat = "decoded address is of unknown format"
+    case invalidDestinationAddress = "invalid destination address"
 
     var displayTitle: String {
       switch self {
       case .insufficientFunds: return "Insufficient Funds"
       case .insufficientFee: return "Insufficient Fee"
       case .noSpendableFunds: return "No Spendable Funds"
+      case .dust: return "Dusty Output"
+      case .createTransactionFailure: return "Failed To Create Transaction"
+      case .unknownAddressFormat: return "Failed To Decode Address"
+      case .invalidDestinationAddress: return "Invalid Destination Address"
       }
     }
 
@@ -373,38 +364,16 @@ struct DBTError {
         return "Something went wrong calculating a fee for this DropBit invitation, please try again."
       case .noSpendableFunds:
         return "This wallet has no known unspent transaction outputs."
+      case .dust:
+        return "The Bitcoin network does not support transactions this small. Smaller transactions can be sent using your Lightning wallet."
+      case .createTransactionFailure:
+        return "Failed to create transaction."
+      case .unknownAddressFormat:
+        return "Decoded address is of unknown format."
+      case .invalidDestinationAddress:
+        return "The desired destination address is invalid."
       }
     }
-  }
-
-  enum UserRequest: DBTErrorType {
-    case noData
-    case noConfirmations
-    case codeInvalid
-    case unexpectedStatus(UserVerificationStatus)
-    case userAlreadyExists(String, UserIdentityBody) //user ID, body
-    case twilioError(UserResponse, UserIdentityBody)
-    case resourceAlreadyExists
-    case userNotVerified
-    case noVerificationStatusFound
-
-    var displayMessage: String {
-      switch self {
-      case .noData:                           return "No data"
-      case .noConfirmations:                  return "No confirmations"
-      case .resourceAlreadyExists:            return "Resource already exists"
-      case .codeInvalid:                      return "Verification code was incorrect"
-      case .twilioError:                      return "Received Twilio error for user"
-      case .userAlreadyExists(let id, _):     return "User already exists with ID: \(id)"
-      case .unexpectedStatus(let status):     return "Unexpected verification status: \(status.rawValue)"
-      case .userNotVerified:                  return "Requested user is not a verified DropBit user"
-      case .noVerificationStatusFound:        return "No verification status found for user"
-      }
-    }
-
-    /// Check the response string for this message to determine whether to throw .codeInvalid
-    static let invalidCodeMessage = "verification code invalid"
-
   }
 
   enum Wallet: DBTErrorType {
