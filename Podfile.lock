@@ -142,7 +142,7 @@ DEPENDENCIES:
   - Willow (~> 5.0)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - Charts
     - CHCSVParser
@@ -231,4 +231,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 221541a95bfa4b60709cfb615b76cd52d32e731a
 
-COCOAPODS: 1.7.4
+COCOAPODS: 1.9.1
